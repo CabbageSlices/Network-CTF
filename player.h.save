@@ -128,7 +128,7 @@ class Player {
         const std::vector<Input>& getInputsToSend() const;
 
         const std::vector<float>& getGunshotsToSend() const;
-        
+
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
 
         void clearGunshotQueue();
@@ -149,6 +149,9 @@ class Player {
 
         //fire the gun at the given angle
         void fireGun(const float& angle);
+        
+        //fire a gun and place the bullet at the given location
+        void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
 
         //given the client input simple execute it
         void handleClientInput(Input& clientInput);

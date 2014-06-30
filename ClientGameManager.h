@@ -52,6 +52,7 @@ class ClientGameManager: public GameManager {
         void handleServerUpdates();
 
         void updateUserPlayer(const float& delta, sf::RenderWindow& window);
+        void updateConnectedPlayers(const float& delta);
 
     protected:
 

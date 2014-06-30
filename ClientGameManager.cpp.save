@@ -36,7 +36,7 @@ void ClientGameManager::interpolateEntities() {
     ///delta fraction for user player and other players are different
     ///because userplayer is interpolated based on physics update rate
     ///and other players are updated at a different time interval (time interval is dependant on server, for now its 60 milliseconds)
-    userPlayer.interpolatePosition(calculateDeltaFraction());
+    userPlayer.interpolate(calculateDeltaFraction());
 
     //make sure the denominator isn't 0
     //calculate the delta fraction to interpolate other connected players
@@ -45,7 +45,7 @@ void ClientGameManager::interpolateEntities() {
 
     for(auto player : connectedPlayers) {
 
-        player->interpolatePosition(deltaFraction);
+        player->interpolate(deltaFraction);
     }
 }
 
@@ -120,11 +120,13 @@ void ClientGameManager::handleServerUpdates() {
     }
 }
 
-void ClientGameManager::updateUserPlayer(const float& delta) {
-    
+void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& window) {
+
     userPlayer.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
     userPlayer.updateRotation(window.mapPixelToCoords(sf::Mouse::getPosition(window) ));
 }
+
+void ClientGameManager::updateConnectedPlayers(const float& delta, sf::RenderWindow)
 
 void ClientGameManager::setup() {
 
@@ -151,7 +153,8 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    updateUserPlayer(delta);
+    updateUserPlayer(delta, window);
+    updateConnectedPlayers(delta);
 }
 
 void ClientGameManager::handlePostUpdate() {

@@ -33,13 +33,13 @@ class Gun {
         float rotation;
 
         //calculate the end point of the bullet once fired
-        sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint) const;
+        sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
 
         //set the new position of the line of sight using the player's origin and rotation
         void updateLineOfSight(const sf::Vector2f& origin, const float& rotation);
 
         //creates a bullet using the guns current state
-        void createBullet();
+        void createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
 
     public:
 
@@ -58,6 +58,10 @@ class Gun {
 
         //fire the gun at the given angle, does not change angle of gun
         void fire(const float& angle);
+
+        //fire a gun and place the bullet at the given location
+        void fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
+
 };
 
 #endif // GUN_H_INCLUDED

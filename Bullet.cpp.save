@@ -1,6 +1,8 @@
 #include "Bullet.h"
 #include "LineSegment.h"
 
+using std::tr1::shared_ptr;
+
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine) :
     line(bulletLine),
     LIFE_TIME(sf::milliseconds(50)),
@@ -20,6 +22,11 @@ bool Bullet::isAlive() {
     return elapsedTime < LIFE_TIME;
 }
 
+bool Bullet::checkCanDamage() {
+
+    return canDamage;
+}
+
 void Bullet::disableBullet() {
 
     canDamage = false;
@@ -28,4 +35,14 @@ void Bullet::disableBullet() {
 void Bullet::draw(sf::RenderWindow& window) {
 
     line->draw(window);
+}
+
+void Bullet::setEndPoint(const sf::Vector2f& endPoint) {
+
+    line->setEndPoint(endPoint);
+}
+
+shared_ptr<LineSegment> Bullet::getLine() {
+
+    return line;
 }

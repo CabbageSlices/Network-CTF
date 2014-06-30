@@ -126,6 +126,14 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
     userPlayer.updateRotation(window.mapPixelToCoords(sf::Mouse::getPosition(window) ));
 }
 
+void ClientGameManager::updateConnectedPlayers(const float& delta) {
+
+    for(auto player : connectedPlayers) {
+
+        player->updateGun(delta);
+    }
+}
+
 void ClientGameManager::setup() {
 
     int playerId = 0;
@@ -152,6 +160,7 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
     updateUserPlayer(delta, window);
+    updateConnectedPlayers(delta);
 }
 
 void ClientGameManager::handlePostUpdate() {

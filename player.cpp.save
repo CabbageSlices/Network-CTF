@@ -135,7 +135,7 @@ const vector<float>& Player::getGunshotsToSend() const {
 }
 
 vector<shared_ptr<Bullet> > Player::getBullets() {
-    
+
     return gun->getBullets();
 }
 
@@ -183,6 +183,11 @@ void Player::setInterpolationRotation(const float& newRotation) {
 void Player::fireGun(const float& angle) {
 
     gun->fire(angle);
+}
+
+void Player::fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+    
+    gun->fire(bulletBegin, bulletEnd);
 }
 
 void Player::handleClientInput(Player::Input& clientInput) {

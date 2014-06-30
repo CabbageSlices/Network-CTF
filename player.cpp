@@ -5,6 +5,7 @@
 #include <iostream>
 
 using std::vector;
+using std::tr1::shared_ptr;
 using std::cout;
 using std::endl;
 
@@ -185,6 +186,11 @@ void Player::fireGun(const float& angle) {
     gun->fire(angle);
 }
 
+void Player::fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+
+    gun->fire(bulletBegin, bulletEnd);
+}
+
 void Player::handleClientInput(Player::Input& clientInput) {
 
     //input is valid, process it
@@ -197,6 +203,11 @@ void Player::update(const float& delta, const sf::Vector2f& screenSize) {
 
     //set the destination hitbox to the new position so the current hitbox and interpolate towards it over time
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);
+
+    updateGun(delta);
+}
+
+void Player::updateGun(const float& delta) {
 
     gun->updateBullets(sf::seconds(delta));
 }

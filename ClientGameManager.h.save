@@ -50,8 +50,9 @@ class ClientGameManager: public GameManager {
         void sendInputsToServer();
         void sendGunshotsToServer();
         void handleServerUpdates();
-        
-        void updateUserPlayer(const float& delta);
+
+        void updateUserPlayer(const float& delta, sf::RenderWindow& window);
+        void updateConnectedPlayers(const float& delta, sf::RenderWindow& window);
 
     protected:
 

@@ -47,7 +47,7 @@ vector<shared_ptr<Bullet> > Gun::getBullets() {
 
 float Gun::fire() {
 
-    createBullet();
+    createBullet(lineOfSight[0].position, lineOfSight[1].position);
 
     //this gun just fires in the same place as its rotation
     return rotation;
@@ -55,20 +55,16 @@ float Gun::fire() {
 
 void Gun::fire(const float& angle) {
 
-    //save the old state of the gun before changing
-    //that way it can be restored once gun is fired
-    float oldRotation = rotation;
-    sf::Vector2f oldEndPoint = lineOfSight[1].position;
-
-    rotation = angle;
-    lineOfSight[1].position = calculateEndPoint(lineOfSight[0].position);
+    //calculate the end point of the bullet on the given angle
+    sf::Vector2f endPoint = calculateEndPoint(lineOfSight[0].position, angle);
 
     //fire with new angle
-    createBullet();
+    createBullet(lineOfSight[0].position, endPoint);
+}
 
-    //restore gun to previous state
-    lineOfSight[1].position = oldEndPoint;
-    rotation = oldRotation;
+void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+
+    createBullet(bulletBegin, bulletEnd);
 }
 
 void Gun::updateBullets(const sf::Time& delta) {
@@ -94,22 +90,22 @@ void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation
     lineOfSight[0].position = origin;
 
     //calculate the end point of the line of sight
-    sf::Vector2f endPoint = calculateEndPoint(origin);
+    sf::Vector2f endPoint = calculateEndPoint(origin, rotation);
 
     lineOfSight[1].position = endPoint;
 }
 
-sf::Vector2f Gun::calculateEndPoint(const sf::Vector2f& beginPoint) const {
+sf::Vector2f Gun::calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const {
 
     //using the angle you can figure out the x and y components of the
     //triangle formed form the origin to the end point because you know the
     //lenght of the hypotenuse
-    float xComponent = cos(degreesToRadians(rotation)) * MAX_DISTANCE_FIRED;
+    float xComponent = cos(degreesToRadians(angle)) * MAX_DISTANCE_FIRED;
 
     //in games y is positive towards the bottom and negative towards the top
     //so inverse the sign of the y component because the math calculations assumes
     //y is positive towards the top and negative towards the bottom
-    float yComponent = -sin(degreesToRadians(rotation)) * MAX_DISTANCE_FIRED;
+    float yComponent = -sin(degreesToRadians(angle)) * MAX_DISTANCE_FIRED;
 
     //find final position by addition the components to the initial position
     //because the x and y components are already negative or positive depending on which
@@ -119,10 +115,10 @@ sf::Vector2f Gun::calculateEndPoint(const sf::Vector2f& beginPoint) const {
     return endPoint;
 }
 
-void Gun::createBullet() {
+void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
 
     //create a line for the bullet
-    shared_ptr<LineSegment> bulletLine = createLine(lineOfSight[0].position, lineOfSight[1].position,
+    shared_ptr<LineSegment> bulletLine = createLine(bulletBegin, bulletEnd,
                                                     "", sf::Vector2f(0, 0), sf::Vector2f(0, 0));
     shared_ptr<Bullet> bullet(new Bullet(bulletLine));
 

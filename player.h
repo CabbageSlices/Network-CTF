@@ -150,10 +150,15 @@ class Player {
         //fire the gun at the given angle
         void fireGun(const float& angle);
 
+        //fire a gun and place the bullet at the given location
+        void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
+
         //given the client input simple execute it
         void handleClientInput(Input& clientInput);
 
         void update(const float& delta, const sf::Vector2f& screenSize);
+
+        void updateGun(const float& delta);
 
         //update the player's rotation using the mouse position, not the same as set rotation which jsut sets the rotation of the player
         //uses set rotation
