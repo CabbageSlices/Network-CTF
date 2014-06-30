@@ -1,0 +1,31 @@
+#include "Bullet.h"
+#include "LineSegment.h"
+
+Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine) :
+    line(bulletLine),
+    LIFE_TIME(sf::milliseconds(50)),
+    elapsedTime(sf::seconds(0)),
+    canDamage(true)
+    {
+
+    }
+
+void Bullet::updateElapsedTime(const sf::Time& deltaTime) {
+
+    elapsedTime += deltaTime;
+}
+
+bool Bullet::isAlive() {
+
+    return elapsedTime < LIFE_TIME;
+}
+
+void Bullet::disableBullet() {
+
+    canDamage = false;
+}
+
+void Bullet::draw(sf::RenderWindow& window) {
+
+    line->draw(window);
+}

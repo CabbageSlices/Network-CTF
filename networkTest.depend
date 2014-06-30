@@ -1,0 +1,164 @@
+# depslib dependency file v1.0
+1404075608 source:c:\users\nimesh\desktop\c++\networktest\networktest.cpp
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"ClientGameManager.h"
+	"ServerGameManager.h"
+	<iostream>
+
+1404075582 source:c:\users\nimesh\desktop\c++\networktest\player.cpp
+	"player.h"
+	"Lerp.h"
+	"math.h"
+	<iostream>
+	"Gun.h"
+
+1404075187 c:\users\nimesh\desktop\c++\networktest\player.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+	<tr1/memory>
+
+1401652060 source:c:\users\nimesh\desktop\c++\networktest\client.cpp
+	"Client.h"
+	"PacketIdentification.h"
+	"PacketManipulators.h"
+
+1401650543 c:\users\nimesh\desktop\c++\networktest\client.h
+	"SFML/Network.hpp"
+	"ConnectionManager.h"
+
+1403670888 c:\users\nimesh\desktop\c++\networktest\packetidentification.h
+
+1403670888 source:c:\users\nimesh\desktop\c++\networktest\packetidentification.cpp
+	"PacketIdentification.h"
+
+1401563449 source:c:\users\nimesh\desktop\c++\networktest\gamemanager.cpp
+	"GameManager.h"
+
+1401390316 c:\users\nimesh\desktop\c++\networktest\gamemanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1404075283 source:c:\users\nimesh\desktop\c++\networktest\packetmanipulators.cpp
+	"PacketManipulators.h"
+	"PacketIdentification.h"
+	"player.h"
+	<iostream>
+
+1404071129 c:\users\nimesh\desktop\c++\networktest\packetmanipulators.h
+	"SFML/Network.hpp"
+	"ServerGameManager.h"
+	<vector>
+	<tr1/memory>
+
+1399764435 c:\users\nimesh\desktop\c++\networktest\connectionmanager.h
+	"SFML/Network.hpp"
+
+1399764436 source:c:\users\nimesh\desktop\c++\networktest\connectionmanager.cpp
+	"ConnectionManager.h"
+
+1404075243 source:c:\users\nimesh\desktop\c++\networktest\servergamemanager.cpp
+	"ServerGameManager.h"
+	"PacketIdentification.h"
+	"PacketManipulators.h"
+	<iostream>
+
+1400443516 c:\users\nimesh\desktop\c++\networktest\lerp.h
+
+1401756631 source:c:\users\nimesh\desktop\c++\networktest\lerp.cpp
+	"Lerp.h"
+	<iostream>
+
+1403718315 c:\users\nimesh\desktop\c++\networktest\servergamemanager.h
+	"SFML/Network.hpp"
+	"player.h"
+	"ConnectionManager.h"
+	"GameManager.h"
+	"StateTracker.h"
+	<vector>
+	<tr1/memory>
+
+1404075206 source:c:\users\nimesh\desktop\c++\networktest\clientgamemanager.cpp
+	"ClientGameManager.h"
+	"PacketManipulators.h"
+	"PacketIdentification.h"
+	<iostream>
+
+1404068746 c:\users\nimesh\desktop\c++\networktest\clientgamemanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Client.h"
+	"Player.h"
+	"GameManager.h"
+	<tr1/memory>
+	<vector>
+
+1403718630 c:\users\nimesh\desktop\c++\networktest\statetracker.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+
+1401760784 source:c:\users\nimesh\desktop\c++\networktest\statetracker.cpp
+	"StateTracker.h"
+	"Lerp.h"
+
+1403470262 source:c:\users\nimesh\desktop\c++\networktest\linesegment.cpp
+	"LineSegment.h"
+	"UndefinedLineSegment.h"
+	<cmath>
+
+1403467408 c:\users\nimesh\desktop\c++\networktest\linesegment.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+	<string>
+
+1403386418 c:\users\nimesh\desktop\c++\networktest\undefinedlinesegment.h
+	"LineSegment.h"
+
+1403291748 source:c:\users\nimesh\desktop\c++\networktest\undefinedlinesegment.cpp
+	"UndefinedLineSegment.h"
+	<cmath>
+
+1403474463 source:c:\users\nimesh\desktop\c++\networktest\bullet.cpp
+	"Bullet.h"
+	"LineSegment.h"
+
+1403474463 c:\users\nimesh\desktop\c++\networktest\bullet.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+
+1404069982 source:c:\users\nimesh\desktop\c++\networktest\gun.cpp
+	"Gun.h"
+	"LineSegment.h"
+	"Bullet.h"
+	<cmath>
+	"math.h"
+	<iostream>
+
+1404068616 c:\users\nimesh\desktop\c++\networktest\gun.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+	<vector>
+
+1403636976 c:\users\nimesh\desktop\c++\networktest\math.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1403636904 source:c:\users\nimesh\desktop\c++\networktest\math.cpp
+	"math.h"
+	<cmath>
+
+1403473912 source:c:\users\nimesh\desktop\c++\networktest\collision.cpp
+	"Collision.h"
+	"LineSegment.h"
+	"math.h"
+
+1403473540 c:\users\nimesh\desktop\c++\networktest\collision.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+

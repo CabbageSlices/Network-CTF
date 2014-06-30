@@ -1,0 +1,13 @@
+#ifndef COLLISION_H_INCLUDED
+#define COLLISION_H_INCLUDED
+
+#include "SFML/System.hpp"
+#include <tr1/memory>
+
+class LineSegment;
+
+//check for collision between the rectangle and line and return the point of collision
+bool checkCollision(const sf::FloatRect& rect, std::tr1::shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint);
+
+
+#endif // COLLISION_H_INCLUDED

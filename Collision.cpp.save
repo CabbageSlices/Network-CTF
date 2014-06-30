@@ -1,0 +1,36 @@
+#include "Collision.h"
+#include "LineSegment.h"
+
+using std::tr1::shared_ptr; 
+
+bool checkCollision(const sf::FloatRect& rect, shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint) {
+    
+    //turn each side of the rectangle into a line and check for intersection between the given line and the edge of the rectangle
+    shared_ptr<LineSegment> leftEdge = createLine(sf::Vector2f(rect.left, rect.top), sf::Vector2f(rect.left, rect.top + rect.height) );
+    
+    if(line->intersects(*leftEdge, collisionPoint)) {
+        
+        return true;
+    }
+    
+    shared_ptr<LineSegment> topEdge = createLine(sf::Vector2f(rect.left, rect.top), sf::Vector2f(rect.left + rect.width, rect.top) );
+    
+    if(line->intersects(*topEdge, collisionPoint)) {
+        
+        return true;
+    }
+    
+    shared_ptr<LineSegment> rightEdge = createLine(sf::Vector2f(rect.left + rect.width, rect.top), sf::Vector2f(rect.left + rect.width, rect.top + rect.height) );
+    
+    if(line->intersects(*rightEdge, collisionPoint)) {
+        
+        return true;
+    }
+    
+    shared_ptr<LineSegment> bottomEdge = createLine(sf::Vector2f(rect.left, rect.top + rect.height), sf::Vector2f(rect.left + rect.width, rect.top + rect.height) );
+    
+    if(line->intersects(*rightEdge, collisionPoint)) {
+        
+        return true;
+    }
+}

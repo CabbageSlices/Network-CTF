@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="networkTest" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/networkTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/networkTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Bullet.cpp" />
+		<Unit filename="Bullet.h" />
+		<Unit filename="Client.cpp" />
+		<Unit filename="Client.h" />
+		<Unit filename="ClientGameManager.cpp" />
+		<Unit filename="ClientGameManager.h" />
+		<Unit filename="Collision.cpp" />
+		<Unit filename="Collision.h" />
+		<Unit filename="ConnectionManager.cpp" />
+		<Unit filename="ConnectionManager.h" />
+		<Unit filename="GameManager.cpp" />
+		<Unit filename="GameManager.h" />
+		<Unit filename="Gun.cpp" />
+		<Unit filename="Gun.h" />
+		<Unit filename="Lerp.cpp" />
+		<Unit filename="Lerp.h" />
+		<Unit filename="LineSegment.cpp" />
+		<Unit filename="LineSegment.h" />
+		<Unit filename="PacketIdentification.cpp" />
+		<Unit filename="PacketIdentification.h" />
+		<Unit filename="PacketManipulators.cpp" />
+		<Unit filename="PacketManipulators.h" />
+		<Unit filename="ServerGameManager.cpp" />
+		<Unit filename="ServerGameManager.h" />
+		<Unit filename="StateTracker.cpp" />
+		<Unit filename="StateTracker.h" />
+		<Unit filename="UndefinedLineSegment.cpp" />
+		<Unit filename="UndefinedLineSegment.h" />
+		<Unit filename="math.cpp" />
+		<Unit filename="math.h" />
+		<Unit filename="networkTest.cpp" />
+		<Unit filename="player.cpp" />
+		<Unit filename="player.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

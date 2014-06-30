@@ -1,0 +1,10 @@
+#include "Lerp.h"
+
+const float& interpolate(const float& currentValue, const float& destinationValue, const float& deltaFraction) {
+    
+    //calculate what fraction of the total distance should be moved
+    float totalDistance = destinationValue - currentValue;
+    
+    float distanceToCover = totalDistance * deltaFraction;
+    return distanceToCover;
+}

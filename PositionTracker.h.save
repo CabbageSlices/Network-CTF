@@ -1,0 +1,42 @@
+#ifndef POSITIONTRACKER_H_INCLUDED
+#define POSITIONTRACKER_H_INCLUDED
+
+#include "SFML/System.hpp"
+#include "SFML/Graphics.hpp"
+
+#include <vector>
+
+//server uses to keep track of a player's state up to 1 second in the past
+class StateTracker {
+    
+    private:
+        
+        //tie a position update to a time stamp so its easy to locate a position
+        struct stateUpdate{
+            
+            sf::Uint32 updateId;
+            sf::FloatRect positionRect;
+        };
+        
+        int playerId;
+        
+        std::vector<stateUpdate> pastStates;
+        
+        //max number of updates that should exist in the containers
+        const int maxUpdatesSaved;
+        
+    public:
+        
+        StateTracker(int playerId, const int updatesSave);
+        
+        void insertUpdate(const sf::Uint32& updateId, const sf::Vector2f& position);
+        
+        //approximate the state of the player given the last state and fraction of time passed between given state and next state
+        //finds an approximate position of the player that way you can check for collision or other stuff to see if clients interacted with player
+        //this function returns a position that exists between the given state and the next state
+        ///do not use the state a player is interpolating towards because that is the wrong data
+        sf::FloatRect approximatePosition(const sf::Uint32& idInitalState, const float& deltaFraction);
+        
+};
+
+#endif // POSITIONTRACKER_H_INCLUDED

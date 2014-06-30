@@ -1,0 +1,276 @@
+#include "ServerGameManager.h"
+#include "PacketIdentification.h"
+#include "PacketManipulators.h"
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
+using std::tr1::shared_ptr;
+
+ServerGameManager::ServerGameManager(unsigned short portToBindTo) :
+    GameManager(),
+    server(false),
+    players(),
+    inputConfirmationTime(),
+    inputConfirmationDelay(sf::milliseconds(40)),
+    lastStateUpdateId(0),
+    stateUpdateTimer(),
+    stateUpdateDelay(sf::milliseconds(60)),
+    lastPlayerId(0)
+    {
+        server.bind(portToBindTo);
+    }
+
+void ServerGameManager::handleIncomingData() {
+
+    //try and receive data and if there is any valid data then process it according to the data type
+    sf::Packet incomingData;
+    sf::IpAddress senderIp;
+    unsigned short senderPort;
+
+    if(!server.receiveData(incomingData, senderIp, senderPort)) {
+
+        //no data so exit
+        return;
+    }
+
+    //data is available, check if the sender already has a player connected
+    for(auto player : players) {
+
+        if(player->playerIpAddress == senderIp && player->playerPort == senderPort) {
+
+            handleData(player, incomingData);
+            return;
+        }
+    }
+
+    //data was not handled yet so check the data type and handle accordingly
+    if(checkPacketType(incomingData, CONNECTION_ATTEMPT)) {
+
+        //if connection attempt has not been handled yet it means the player has not been added yet, so add him and respond with the player's id
+        createNewConnection(senderIp, senderPort, ++lastPlayerId);
+
+        //tell the player who connected that he is connected by sending back the connection request packet
+        //except this time add the player's id so the client knows what his own id is
+        incomingData << lastPlayerId;
+        server.sendData(incomingData, senderIp, senderPort);
+    }
+}
+
+void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packet& data) {
+
+    //if the packet is a connection request then just tell the client he has already connected
+    if(checkPacketType(data, CONNECTION_ATTEMPT)) {
+
+        //add the player's id to the end of hte packet so client can figure out its id
+        data << player->player.getId();
+        server.sendData(data, player->playerIpAddress, player->playerPort);
+
+    } else if(checkPacketType(data, PLAYER_INPUT)) {
+
+        handlePlayerInput(player, data);
+    } else if(checkPacketType(data, PLAYER_GUNFIRE)) {
+
+        handlePlayerGunfire(player, data);
+    }
+}
+
+void ServerGameManager::handlePlayerInput(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {
+
+    //first peice of data on the input packet is the packet type because it hasn't been removed yet so remove it
+    int packetType = 0;
+    inputPacket >> packetType;
+
+    //next data is the number of inputs the player created
+    int inputCount = 0;
+    inputPacket >> inputCount;
+
+    //handle inputs until there are no more inputs left to handle
+    for(int inputsCreated = 0; inputsCreated < inputCount; inputsCreated++) {
+
+        //read the input and make the player handle the given input
+        //set initial input to -1 that way if it fails to read the input then player doesn't handle it
+        int playerInput = -1;
+        inputPacket >> playerInput;
+
+        sf::Uint32 inputId = 0;
+        inputPacket >> inputId;
+
+        Player::Input clientInput;
+        clientInput.inputId = inputId;
+        clientInput.action = static_cast<Player::Action>(playerInput);
+
+        //check if this is a newer input, if it isn't then ignore it
+        if(inputId >= player->lastConfirmedInputId) {
+
+            player->player.handleClientInput(clientInput);
+            player->lastConfirmedInputId = inputId;
+        }
+    }
+
+    //last data is the player's rotation
+    float rotation = 0;
+    inputPacket >> rotation;
+    player->player.setRotation(rotation);
+
+}
+
+void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {
+
+    //what fraction of time has passed on the clients side since the server last sent an update
+    float deltaFraction = 0;
+
+    //id of last update the client received from the server in order to figure out where to start interpolating the world from in order
+    //to check for collision with the gunfire
+    sf::Uint32 clientUpdateId = lastStateUpdateId - 1;
+
+    readGunfirePacket(player->player, deltaFraction, clientUpdateId, inputPacket);
+}
+
+void ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId) {
+
+    shared_ptr<ConnectedPlayer> player(new ConnectedPlayer());
+    player->player.setId(playerId);
+
+    player->playerIpAddress = connectedIp;
+    player->playerPort = connectedPort;
+    player->lastConfirmedInputId = 0;
+
+    players.push_back(player);
+}
+
+void ServerGameManager::sendInputConfirmation() {
+
+    //for every client connected send them their position update along with the last input that the server confirmed from them
+    for(auto player : players) {
+
+        sf::Packet playerUpdate;
+        createUpdatePacket(player->player, player->lastConfirmedInputId, playerUpdate);
+
+        //send the info to the player
+        server.sendData(playerUpdate, player->playerIpAddress, player->playerPort);
+    }
+}
+
+void ServerGameManager::sendStateUpdates() {
+
+    sf::Packet stateUpdatePacket;
+
+    //create a state update packet and send it to all clients connected
+    createStateUpdate(players, lastStateUpdateId, stateUpdatePacket);
+
+    //save the state before its sent
+    savePlayerStates(lastStateUpdateId);
+    lastStateUpdateId++;
+
+    for(auto player : players) {
+
+        server.sendData(stateUpdatePacket, player->playerIpAddress, player->playerPort);
+    }
+}
+
+void ServerGameManager::savePlayerStates(const int stateId) {
+
+    //loop through all the players and update their state, if they don't exist then add a state for them
+    for(auto player : players) {
+
+        //find the player's past states and add the current state to the saved states
+        shared_ptr<StateTracker> stateTracker;
+
+        bool playerStateExists = false;
+
+        //check if there is already a record of its past states
+        for(auto playerPastState : pastStates) {
+
+            if(playerPastState->getPlayerId() == player->player.getId()) {
+
+                stateTracker = playerPastState;
+                playerStateExists = true;
+                break;
+            }
+        }
+
+        //a record doesn't exist, so create a new one
+        if(!playerStateExists) {
+
+            stateTracker = shared_ptr<StateTracker>(new StateTracker(player->player.getId(), calculateMaxStatesSaved() ));
+        }
+
+        //update the state
+        stateTracker->insertState(stateId, player->player.getPosition());
+    }
+}
+
+int ServerGameManager::calculateMaxStatesSaved() {
+
+    //number of states saved is equal to the number of updates sent to the clients in one second, rounded up
+    //calculations done in milliseconds
+    return (1000 / stateUpdateDelay.asMilliseconds()) + 1;
+}
+
+void ServerGameManager::drawPlayers(sf::RenderWindow& window) {
+
+    for(auto player : players) {
+
+        player->player.draw(window);
+    }
+}
+
+void ServerGameManager::setup() {
+
+    ///no setup needed
+    ///intentionally blank (for now)
+}
+
+void ServerGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
+
+    ///no components to handle input from just yet
+}
+
+void ServerGameManager::updateComponents(sf::RenderWindow& window) {
+
+    //receive new data
+    handleIncomingData();
+
+    //tell clients what the last input the server confirmed was
+    if(inputConfirmationTime.getElapsedTime() > inputConfirmationDelay) {
+
+        sendInputConfirmation();
+        inputConfirmationTime.restart();
+    }
+
+    //send information about other players to connected clients
+    //however if there are less than 2 players then theres no need to update them
+    //because there are no other player's whose data must be sent
+    if(stateUpdateTimer.getElapsedTime() > stateUpdateDelay && players.size() > 1) {
+
+        sendStateUpdates();
+        stateUpdateTimer.restart();
+    }
+}
+
+void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
+
+    //update the players of all the connected clients
+    for(auto player : players) {
+
+        //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+        player->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+    }
+}
+
+void ServerGameManager::handlePostUpdate() {
+
+    ///nothing to do postupdate just yet, intentionally blank
+    for(auto player : players) {
+
+        //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+        player->player.interpolate(calculateDeltaFraction());
+    }
+}
+
+void ServerGameManager::drawComponents(sf::RenderWindow& window) {
+
+    drawPlayers(window);
+}

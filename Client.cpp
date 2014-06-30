@@ -1,0 +1,79 @@
+#include "Client.h"
+#include "PacketIdentification.h"
+#include "PacketManipulators.h"
+
+Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToConnectTo) :
+    ConnectionManager(),
+    serverIpAddress(ipToConnectTo),
+    serverPort(portToConnectTo)
+    {
+
+    }
+
+bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
+
+    //send a connection request to the server until the server either responds or the time runs out
+    sf::Packet connectionRequest;
+
+    //indicate the packet is a connection attempt packet so server knows its a new connection
+    connectionRequest << CONNECTION_ATTEMPT;
+
+    //keep track of how long you have attempted to connect
+    sf::Clock connectionAttemptTimer;
+
+    //to prevent client from spamming the server with requests put a limit to how often it can send the packets
+    sf::Time requestSendDelay = sf::milliseconds(50);
+
+    //timer to keep track of how much time ahs passed since the last packet was sent
+    sf::Clock packetSendTimer;
+
+    while(connectionAttemptTimer.getElapsedTime() < responseWaitTime) {
+
+        //check if the client has been sent data from the server, indicating his connection request has been accepted
+        sf::Packet exchangePacket;
+
+        //check if the sender sent a response to the connection attempt
+        if(receiveFromServer(exchangePacket) && checkPacketType(exchangePacket, CONNECTION_ATTEMPT)) {
+
+            //read the id given to the client from the server
+            //packet has the packet id and the client id still saved on it so you'll have to download data twice
+            exchangePacket >> clientId;
+            exchangePacket >> clientId;
+
+            //successfully connected
+            return true;
+        }
+
+        //has not responded to connection request so send another packet if possible
+        //if it's not time to send a packet, sleep the remaining time so reduce the wait time while taking little power from the computer
+        if(packetSendTimer.getElapsedTime() < requestSendDelay) {
+
+            sf::sleep(requestSendDelay - packetSendTimer.getElapsedTime());
+        }
+
+        //it is time to send another connection request because it's waited through the delay, so send another packet
+        sendToServer(connectionRequest);
+    }
+
+    //timed out before a proper response
+    return false;
+}
+
+bool Client::sendToServer(sf::Packet& packetToSend) {
+
+    bool dataSentSuccesfully = sendData(packetToSend, serverIpAddress, serverPort);
+
+    return dataSentSuccesfully;
+}
+
+bool Client::receiveFromServer(sf::Packet& destinationPacket) {
+
+    sf::IpAddress senderIp;
+    unsigned short senderPort;
+
+    //true if data was successfuly downloaded from the server
+    bool successfullyReceivedData = receiveData(destinationPacket, senderIp, senderPort);
+    bool senderIsServer = (senderIp == serverIpAddress);
+
+    return(successfullyReceivedData && senderIsServer);
+}

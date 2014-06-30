@@ -1,0 +1,20 @@
+#ifndef SERVER_H_INCLUDED
+#define SERVER_H_INCLUDED
+
+#include "ConnectionManager.h"
+#include "Player"
+
+class Server : public ConnectionManager {
+    
+    
+    //small class to tie a player to his ip and port so server can respond to him easily
+    struct ConnectedPlayer {
+        
+        sf::IpAddress playerIpAddress;
+        unsigned short playerPort;
+        
+        Player player;
+    };
+};
+
+#endif // SERVER_H_INCLUDED
