@@ -21,6 +21,7 @@ int main()
 {
     sf::UdpSocket client;
 
+    cout << "hello" << endl;
     sf::Packet packet;
     unsigned short port = 8080;
     sf::IpAddress ip(sf::IpAddress::getLocalAddress());
