@@ -74,7 +74,8 @@ void Gun::updateBullets(const sf::Time& delta) {
 
         bullets[i]->updateElapsedTime(delta);
 
-        if(!bullets[i]->isAlive()) {
+        //if a bullet can't be drawn it's dead and should be deleted
+        if(!bullets[i]->canDraw()) {
 
             bullets.erase(bullets.begin() + i);
             continue;

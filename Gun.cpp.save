@@ -63,8 +63,8 @@ void Gun::fire(const float& angle) {
 }
 
 void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
-    
-    createBullet(bulletBegin. bulletEnd);
+
+    createBullet(bulletBegin, bulletEnd);
 }
 
 void Gun::updateBullets(const sf::Time& delta) {
@@ -73,8 +73,9 @@ void Gun::updateBullets(const sf::Time& delta) {
     for(unsigned i = 0; i < bullets.size();) {
 
         bullets[i]->updateElapsedTime(delta);
-
-        if(!bullets[i]->isAlive()) {
+        
+        //if a bullet can't be drawn it's dead and should be deleted
+        if(!bullets[i]->canDraw()) {
 
             bullets.erase(bullets.begin() + i);
             continue;
@@ -90,7 +91,7 @@ void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation
     lineOfSight[0].position = origin;
 
     //calculate the end point of the line of sight
-    sf::Vector2f endPoint = calculateEndPoint(origin);
+    sf::Vector2f endPoint = calculateEndPoint(origin, rotation);
 
     lineOfSight[1].position = endPoint;
 }

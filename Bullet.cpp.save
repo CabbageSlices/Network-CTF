@@ -7,7 +7,7 @@ Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine) :
     line(bulletLine),
     LIFE_TIME(sf::milliseconds(50)),
     elapsedTime(sf::seconds(0)),
-    canDamage(true)
+    canCollide(true)
     {
 
     }
@@ -17,19 +17,19 @@ void Bullet::updateElapsedTime(const sf::Time& deltaTime) {
     elapsedTime += deltaTime;
 }
 
-bool Bullet::isAlive() {
+bool Bullet::canDraw() {
 
     return elapsedTime < LIFE_TIME;
 }
 
-bool Bullet::checkCanDamage() {
+bool Bullet::checkCanCollide() {
 
-    return canDamage;
+    return canCollide;
 }
 
-void Bullet::disableBullet() {
+void Bullet::disableCollision() {
 
-    canDamage = false;
+    canCollide = false;
 }
 
 void Bullet::draw(sf::RenderWindow& window) {

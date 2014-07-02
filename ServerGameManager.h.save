@@ -9,6 +9,8 @@
 #include <vector>
 #include <tr1/memory>
 
+class Bullet;
+
 class ServerGameManager : public GameManager {
 
     public:///define stuff here so both public and private functions can utilize these classes
@@ -60,9 +62,16 @@ class ServerGameManager : public GameManager {
 
         //handle a new input given by the player
         void handlePlayerInput(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket);
-        
+
         //handle a player's gunfire packet
-        void handlePlayerGunfire()
+        void handlePlayerGunfire(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket);
+        
+        //take the given player's gunshots and handle collision with all other players and objects
+        //uses delta fraction and update id to move all other players back in time to check for collision 
+        void handleGunfireCollision(std::tr1::shared_ptr<ConnectedPlayer> shootingPlayer, const float& deltaFraction, const sf::Uint32& clientUpdateId);
+        
+        //handle collision with the bullet and the first player it hits (if it hits any)
+        void handleBulletCollision(std::tr1::shared_ptr<ConnectedPlayer> shootingPlayer, std::tr1::shared_ptr<Bullet> bullet, const float& deltaFraction, const sf::Uint32& clientUpdateId);
 
         //new player connected so create info for him
         void createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId);

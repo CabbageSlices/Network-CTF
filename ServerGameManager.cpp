@@ -1,6 +1,8 @@
 #include "ServerGameManager.h"
 #include "PacketIdentification.h"
 #include "PacketManipulators.h"
+#include "Bullet.h"
+#include "LineSegment.h"
 
 #include <iostream>
 
@@ -122,10 +124,56 @@ void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, 
     float deltaFraction = 0;
 
     //id of last update the client received from the server in order to figure out where to start interpolating the world from in order
-    //to check for collision with the gunfire
+    //to check for collision with the gunfire, default value is the latest data
     sf::Uint32 clientUpdateId = lastStateUpdateId - 1;
 
     readGunfirePacket(player->player, deltaFraction, clientUpdateId, inputPacket);
+}
+
+void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> player, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
+
+    //get all of the bullets from the player and check if any of them collide with any other objects
+    vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
+
+    //check if each active bullet collides with anything and determine the first object it collides with
+    for(auto bullet : bullets) {
+
+        if(!bullet->checkCanCollide()) {
+
+            //can't collide so just move on to next bullet
+            continue;
+        }
+
+        ///first check if the bullet collides with any obstacles because when it does it's range is shortened
+        ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
+
+        ///$%@#$@#$@%@%@$%$%    NO BLOCKS TO CHECK FOR COLLISION YET
+
+        //now handle collision with players
+
+    }
+}
+
+void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shootingPlayer, shared_ptr<Bullet> bullet, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
+
+    //move every player back in time to what the client was seeing when he fired the bullet, and check for collision between the bullet
+    //and the player
+    //determine the player that was first hit and handle collision with him
+
+    //default nearest collision is the shooter
+    shared_ptr<ConnectedPlayer> nearestPlayer = shootingPlayer;
+    sf::Vector2f nearestCollisionPoint = bullet->getLine()->getEndPoint();
+
+    for(auto player : players) {
+
+        if(player == shootingPlayer) {
+
+            continue;
+        }
+
+        //get the position of this player at the time the bullet was fired
+        sf::Vector2f pastPosition(player->player.getPosition());
+    }
 }
 
 void ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId) {
@@ -204,7 +252,7 @@ void ServerGameManager::savePlayerStates(const int stateId) {
 
 int ServerGameManager::calculateMaxStatesSaved() {
 
-    //number of states saved is equal to the number of updates sent to the clients in one second, rounded up
+    //number of states saved is equal to the number of updates sent to the clients in one second, rounded up (always)
     //calculations done in milliseconds
     return (1000 / stateUpdateDelay.asMilliseconds()) + 1;
 }
@@ -262,7 +310,6 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
 void ServerGameManager::handlePostUpdate() {
 
-    ///nothing to do postupdate just yet, intentionally blank
     for(auto player : players) {
 
         //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
