@@ -171,7 +171,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
             continue;
         }
 
-        //get the position of this player at the time the bullet was fired
+        //get the position of this player at the time the bullet was fired, default position is the player's current position
         sf::Vector2f pastPosition(player->player.getPosition());
     }
 }

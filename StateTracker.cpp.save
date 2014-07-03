@@ -65,7 +65,12 @@ sf::Vector2f StateTracker::approximatePosition(const sf::Uint32& idInitialState,
     return interpolatedPosition;
 }
 
-const int StateTracker::getPlayerId() {
+unsigned StateTracker::getStateCount() {
     
+    return pastStates.size();
+}
+
+const int StateTracker::getPlayerId() {
+
     return playerId;
 }

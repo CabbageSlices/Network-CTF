@@ -131,47 +131,57 @@ void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, 
 }
 
 void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> player, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
-    
+
     //get all of the bullets from the player and check if any of them collide with any other objects
     vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
-    
+
     //check if each active bullet collides with anything and determine the first object it collides with
     for(auto bullet : bullets) {
-        
+
         if(!bullet->checkCanCollide()) {
-            
+
             //can't collide so just move on to next bullet
             continue;
         }
-        
+
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-        
+
         ///$%@#$@#$@%@%@$%$%    NO BLOCKS TO CHECK FOR COLLISION YET
-        
+
         //now handle collision with players
-        
+
     }
 }
 
 void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shootingPlayer, shared_ptr<Bullet> bullet, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
-    
+
     //move every player back in time to what the client was seeing when he fired the bullet, and check for collision between the bullet
     //and the player
     //determine the player that was first hit and handle collision with him
-    
+
     //default nearest collision is the shooter
     shared_ptr<ConnectedPlayer> nearestPlayer = shootingPlayer;
     sf::Vector2f nearestCollisionPoint = bullet->getLine()->getEndPoint();
-    
+
     for(auto player : players) {
-        
+
         if(player == shootingPlayer) {
-            
+
             continue;
         }
+
+        //get the position of this player at the time the bullet was fired, default position is the player's current position
+        sf::Vector2f pastPosition(player->player.getPosition());
         
-        //get the position of this player in the 
+        //try to get the players position in the past, if a state tracker doesn't exist it means this player has no older positions so just use his current position
+        //make sure there are states saved
+        if(player->state && player->state->getStateCount() > 0) {
+            
+            //client update id is the current state update on the client side, it is the destination state that the entities on the client are interpolating towards
+            //the starting point for the interpolation is the state id - 1
+            pastPosition = player->state->approximatePosition(clientUpdateId - 1, deltaFraction);
+        }
     }
 }
 
@@ -222,30 +232,14 @@ void ServerGameManager::savePlayerStates(const int stateId) {
     //loop through all the players and update their state, if they don't exist then add a state for them
     for(auto player : players) {
 
-        //find the player's past states and add the current state to the saved states
-        shared_ptr<StateTracker> stateTracker;
-
-        bool playerStateExists = false;
-
-        //check if there is already a record of its past states
-        for(auto playerPastState : pastStates) {
-
-            if(playerPastState->getPlayerId() == player->player.getId()) {
-
-                stateTracker = playerPastState;
-                playerStateExists = true;
-                break;
-            }
-        }
-
         //a record doesn't exist, so create a new one
-        if(!playerStateExists) {
+        if(!player->state) {
 
-            stateTracker = shared_ptr<StateTracker>(new StateTracker(player->player.getId(), calculateMaxStatesSaved() ));
+            player->state.reset(new StateTracker(player->player.getId(), calculateMaxStatesSaved())
         }
 
         //update the state
-        stateTracker->insertState(stateId, player->player.getPosition());
+        player->state->insertState(stateId, player->player.getPosition());
     }
 }
 

@@ -35,8 +35,12 @@ class StateTracker {
         //finds an approximate position of the player that way you can check for collision or other stuff to see if clients interacted with player
         //this function returns a position that exists between the given state and the next state
         ///do not use the state a player is interpolating towards because that is the wrong data
+        ///if the player is currently at state n, then you must use this function and start interpolating from state n - 1
         sf::Vector2f approximatePosition(const sf::Uint32& idInitalState, const float& deltaFraction);
         
+        //get the number of states currently saved in the tracker
+        unsigned getStateCount();
+
         const int getPlayerId();
 
 };
