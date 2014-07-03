@@ -173,6 +173,15 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
 
         //get the position of this player at the time the bullet was fired, default position is the player's current position
         sf::Vector2f pastPosition(player->player.getPosition());
+
+        //try to get the players position in the past, if a state tracker doesn't exist it means this player has no older positions so just use his current position
+        //make sure there are states saved
+        if(player->state && player->state->getStateCount() > 0) {
+
+            //client update id is the current state update on the client side, it is the destination state that the entities on the client are interpolating towards
+            //the starting point for the interpolation is the state id - 1
+            pastPosition = player->state->approximatePosition(clientUpdateId - 1, deltaFraction);
+        }
     }
 }
 
@@ -223,30 +232,14 @@ void ServerGameManager::savePlayerStates(const int stateId) {
     //loop through all the players and update their state, if they don't exist then add a state for them
     for(auto player : players) {
 
-        //find the player's past states and add the current state to the saved states
-        shared_ptr<StateTracker> stateTracker;
-
-        bool playerStateExists = false;
-
-        //check if there is already a record of its past states
-        for(auto playerPastState : pastStates) {
-
-            if(playerPastState->getPlayerId() == player->player.getId()) {
-
-                stateTracker = playerPastState;
-                playerStateExists = true;
-                break;
-            }
-        }
-
         //a record doesn't exist, so create a new one
-        if(!playerStateExists) {
+        if(!player->state) {
 
-            stateTracker = shared_ptr<StateTracker>(new StateTracker(player->player.getId(), calculateMaxStatesSaved() ));
+            player->state.reset(new StateTracker(player->player.getId(), calculateMaxStatesSaved())
         }
 
         //update the state
-        stateTracker->insertState(stateId, player->player.getPosition());
+        player->state->insertState(stateId, player->player.getPosition());
     }
 }
 

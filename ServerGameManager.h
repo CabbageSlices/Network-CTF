@@ -24,6 +24,9 @@ class ServerGameManager : public GameManager {
             //id of the last input received from the player that the server has processed
             sf::Uint32 lastConfirmedInputId;
 
+            //past states of this player
+            std::tr1::shared_ptr<StateTracker> state;
+
             Player player;
         };
 
@@ -33,9 +36,6 @@ class ServerGameManager : public GameManager {
         ConnectionManager server;
 
         std::vector<std::tr1::shared_ptr<ConnectedPlayer> > players;
-
-        //seperate container that keeps record of the past positions of all the players up to one second into the past
-        std::vector<std::tr1::shared_ptr<StateTracker> > pastStates;
 
         //keep track of how long it's been since the last input confirmation packet was sent to the players
         //and all players are updated at the same frequency

@@ -38,6 +38,9 @@ class StateTracker {
         ///if the player is currently at state n, then you must use this function and start interpolating from state n - 1
         sf::Vector2f approximatePosition(const sf::Uint32& idInitalState, const float& deltaFraction);
 
+        //get the number of states currently saved in the tracker
+        unsigned getStateCount();
+
         const int getPlayerId();
 
 };
