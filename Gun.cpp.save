@@ -32,7 +32,7 @@ void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& player
 
 void Gun::draw(sf::RenderWindow& window) {
 
-    window.draw(lineOfSight, &lineTexture);
+    ///window.draw(lineOfSight, &lineTexture);
 
     for(auto bullet : bullets) {
 
@@ -71,9 +71,11 @@ void Gun::updateBullets(const sf::Time& delta) {
 
     //update all bullets and remove the ones that are dead
     for(unsigned i = 0; i < bullets.size();) {
+            
+        bull
 
         bullets[i]->updateElapsedTime(delta);
-        
+
         //if a bullet can't be drawn it's dead and should be deleted
         if(!bullets[i]->canDraw()) {
 

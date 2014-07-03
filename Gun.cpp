@@ -73,6 +73,7 @@ void Gun::updateBullets(const sf::Time& delta) {
     for(unsigned i = 0; i < bullets.size();) {
 
         bullets[i]->updateElapsedTime(delta);
+        bullets[i]->disableCollision();
 
         //if a bullet can't be drawn it's dead and should be deleted
         if(!bullets[i]->canDraw()) {

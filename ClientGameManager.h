@@ -11,6 +11,8 @@
 #include <tr1/memory>
 #include <vector>
 
+class Bullet;
+
 class ClientGameManager: public GameManager {
 
     private:
@@ -53,6 +55,9 @@ class ClientGameManager: public GameManager {
 
         void updateUserPlayer(const float& delta, sf::RenderWindow& window);
         void updateConnectedPlayers(const float& delta);
+
+        void handleBulletCollision();
+        void handleBulletPlayerCollision(std::tr1::shared_ptr<Bullet> bullet);
 
     protected:
 

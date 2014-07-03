@@ -371,13 +371,16 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1404175634 source:c:\users\nimesh\network-ctf\network-ctf\clientgamemanager.cpp
+1404427075 source:c:\users\nimesh\network-ctf\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
+	"Bullet.h"
+	"LineSegment.h"
+	"Collision.h"
 	<iostream>
 
-1404175634 c:\users\nimesh\network-ctf\network-ctf\clientgamemanager.h
+1404427075 c:\users\nimesh\network-ctf\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -426,11 +429,11 @@
 1404175634 c:\users\nimesh\network-ctf\network-ctf\undefinedlinesegment.h
 	"LineSegment.h"
 
-1404421270 source:c:\users\nimesh\network-ctf\network-ctf\math.cpp
+1404421888 source:c:\users\nimesh\network-ctf\network-ctf\math.cpp
 	"math.h"
 	<cmath>
 
-1404420480 source:c:\users\nimesh\network-ctf\network-ctf\networktest.cpp
+1404425642 source:c:\users\nimesh\network-ctf\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -461,7 +464,7 @@
 	"Bullet.h"
 	"LineSegment.h"
 
-1404420363 source:c:\users\nimesh\network-ctf\network-ctf\gun.cpp
+1404427075 source:c:\users\nimesh\network-ctf\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -482,7 +485,7 @@
 	<iostream>
 	"Gun.h"
 
-1404421171 source:c:\users\nimesh\network-ctf\network-ctf\servergamemanager.cpp
+1404421888 source:c:\users\nimesh\network-ctf\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"

@@ -1,6 +1,9 @@
 #include "ClientGameManager.h"
 #include "PacketManipulators.h"
 #include "PacketIdentification.h"
+#include "Bullet.h"
+#include "LineSegment.h"
+#include "Collision.h"
 
 #include <iostream>
 
@@ -17,6 +20,7 @@ TO THE SERVER
 using std::tr1::shared_ptr;
 using std::cout;
 using std::endl;
+using std::vector;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
@@ -134,6 +138,47 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
     }
 }
 
+void ClientGameManager::handleBulletCollision() {
+
+    //get the bullets from the player and check for collision with others
+    vector<shared_ptr<Bullet> > bullets = userPlayer.getBullets();
+
+    for(auto bullet : bullets) {
+
+        if(!bullet->checkCanCollide()) {
+
+            continue;
+        }
+
+        //fist check for colision with blocks
+        ///implement later
+
+        //handle collision with other players
+        handleBulletPlayerCollision(bullet);
+    }
+}
+
+void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
+
+    //go through all players and check for collision with them
+    //firgure out the first player it collided with and cut off the line
+    for(auto player : connectedPlayers) {
+
+        sf::FloatRect collisionRect = player->getCollisionRect();
+
+        sf::Vector2f collisionPoint(0, 0);
+
+        if(checkCollision(collisionRect, bullet->getLine(), collisionPoint)) {
+
+            bullet->setEndPoint(collisionPoint);
+            bullet->disableCollision();
+            continue;
+        }
+
+        cout << "no collision" << endl;
+    }
+}
+
 void ClientGameManager::setup() {
 
     int playerId = 0;
@@ -159,6 +204,7 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
+    handleBulletCollision();
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }
