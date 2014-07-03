@@ -34,10 +34,17 @@ class Bullet {
         //a live bullet is just a bullet that can be drawn, if it's dead it should be deleted
         bool isAlive();
 
-        //killing a bullet means to stop it from being able to damage or collide with other entities
+        //checks if a bullet should be used to handle collision
+        bool checkCanDamage();
+
+        //disabling a bullet means to stop it from being able to damage or collide with other entities
         void disableBullet();
 
         void draw(sf::RenderWindow& window);
+
+        void setEndPoint(const sf::Vector2f& endPoint);
+
+        std::tr1::shared_ptr<LineSegment> getLine();
 };
 
 #endif // BULLET_H_INCLUDED

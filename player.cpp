@@ -395,3 +395,8 @@ const sf::Vector2f& Player::getPosition() const {
 
     return destinationHitBox.getPosition();
 }
+
+sf::FloatRect Player::getCollisionRect() const {
+
+    return currentHitBox.getGlobalBounds();
+}

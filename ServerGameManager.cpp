@@ -3,12 +3,15 @@
 #include "PacketManipulators.h"
 #include "Bullet.h"
 #include "LineSegment.h"
+#include "Collision.h"
+#include "math.h"
 
 #include <iostream>
 
 using std::cout;
 using std::endl;
 using std::tr1::shared_ptr;
+using std::vector;
 
 ServerGameManager::ServerGameManager(unsigned short portToBindTo) :
     GameManager(),
@@ -125,9 +128,11 @@ void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, 
 
     //id of last update the client received from the server in order to figure out where to start interpolating the world from in order
     //to check for collision with the gunfire, default value is the latest data
-    sf::Uint32 clientUpdateId = lastStateUpdateId - 1;
+    sf::Uint32 clientUpdateId = lastStateUpdateId;
 
     readGunfirePacket(player->player, deltaFraction, clientUpdateId, inputPacket);
+
+    handleGunfireCollision(player, deltaFraction, clientUpdateId);
 }
 
 void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> player, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
@@ -150,7 +155,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
         ///$%@#$@#$@%@%@$%$%    NO BLOCKS TO CHECK FOR COLLISION YET
 
         //now handle collision with players
-
+        handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
     }
 }
 
@@ -182,6 +187,34 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
             //the starting point for the interpolation is the state id - 1
             pastPosition = player->state->approximatePosition(clientUpdateId - 1, deltaFraction);
         }
+
+        //set the player to this position and check for collision between the bullet and the player
+        sf::FloatRect collisionBox = player->player.getCollisionRect();
+
+        //the collision box has to be centered  at the pastposition because the past position is the center of the player
+        collisionBox.left = pastPosition.x - collisionBox.width / 2;
+        collisionBox.top = pastPosition.y - collisionBox.height / 2;
+
+        //point of collision if there is one
+        sf::Vector2f collisionPoint(0, 0);
+
+        //if there is a collision determine if the player that was shot is the nearest player
+        if(checkCollision(collisionBox, bullet->getLine(), collisionPoint) &&
+            distanceToPoint(bullet->getLine()->getStartPoint(), collisionPoint) < distanceToPoint(bullet->getLine()->getStartPoint(), nearestCollisionPoint)) {
+
+            //this collision point is now the nearest point of collision so this player is the closest
+            nearestPlayer = player;
+            nearestCollisionPoint = collisionPoint;
+        }
+    }
+
+    //now collide with the nearest player if the nearest player is not the shooter
+    if(nearestPlayer != shootingPlayer) {
+
+        //player was hit just make the line smaller and indicate it collided with something
+        ///until there is some health system
+        bullet->setEndPoint(nearestCollisionPoint);
+        bullet->disableCollision();
     }
 }
 
@@ -235,7 +268,7 @@ void ServerGameManager::savePlayerStates(const int stateId) {
         //a record doesn't exist, so create a new one
         if(!player->state) {
 
-            player->state.reset(new StateTracker(player->player.getId(), calculateMaxStatesSaved())
+            player->state.reset(new StateTracker(player->player.getId(), calculateMaxStatesSaved() ));
         }
 
         //update the state

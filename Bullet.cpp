@@ -5,7 +5,7 @@ using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine) :
     line(bulletLine),
-    LIFE_TIME(sf::milliseconds(50)),
+    LIFE_TIME(sf::milliseconds(80)),
     elapsedTime(sf::seconds(0)),
     canCollide(true)
     {

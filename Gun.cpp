@@ -32,7 +32,7 @@ void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& player
 
 void Gun::draw(sf::RenderWindow& window) {
 
-    window.draw(lineOfSight, &lineTexture);
+    ///window.draw(lineOfSight, &lineTexture);
 
     for(auto bullet : bullets) {
 

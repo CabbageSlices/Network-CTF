@@ -77,10 +77,10 @@ float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoi
 }
 
 sf::Vector2f calculateCenter(const sf::FloatRect& rect) {
-    
+
     sf::Vector2f center;
     center.x = rect.left + rect.width / 2;
     center.y = rect.top + rect.height / 2;
-    
+
     return center;
 }

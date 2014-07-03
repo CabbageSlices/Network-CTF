@@ -176,6 +176,9 @@ class Player {
         void draw(sf::RenderWindow& window);
 
         const sf::Vector2f& getPosition() const;
+
+        //just returns the player's current position box, usually jsut used to indicate his properties
+        sf::FloatRect getCollisionRect() const;
 };
 
 #endif // PLAYER_H_INCLUDED
