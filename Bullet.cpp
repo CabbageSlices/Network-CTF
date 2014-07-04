@@ -37,7 +37,7 @@ void Bullet::draw(sf::RenderWindow& window) {
     line->draw(window);
 }
 
-void Bullet::setEndPoint(const sf::Vector2f& endPoint) {
+void Bullet::setEndPoint(const sf::Vector2f endPoint) {
 
     line->setEndPoint(endPoint);
 }

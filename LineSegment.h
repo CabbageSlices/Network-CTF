@@ -80,7 +80,7 @@ class LineSegment {
         const sf::Vector2f getEndPoint() const;
 
         ///assumes the new endpoint is still on the original line formed by this line, meaning the slope and intercepts are the same
-        void setEndPoint(const sf::Vector2f& newEndPoint);
+        void setEndPoint(const sf::Vector2f newEndPoint);
 
         //check if an intersection occurs between this line and the given line
         //inside behaves polymorphically

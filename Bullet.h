@@ -42,7 +42,7 @@ class Bullet {
 
         void draw(sf::RenderWindow& window);
 
-        void setEndPoint(const sf::Vector2f& endPoint);
+        void setEndPoint(const sf::Vector2f endPoint);
 
         std::tr1::shared_ptr<LineSegment> getLine();
 };

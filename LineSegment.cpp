@@ -2,7 +2,10 @@
 #include "UndefinedLineSegment.h"
 
 #include <cmath>
+#include <iostream>
 
+using std::cout;
+using std::endl;
 using std::max;
 using std::min;
 using std::abs;
@@ -112,7 +115,7 @@ const sf::Vector2f LineSegment::getEndPoint() const {
     return endPoint;
 }
 
-void LineSegment::setEndPoint(const sf::Vector2f& newEndPoint) {
+void LineSegment::setEndPoint(const sf::Vector2f newEndPoint) {
 
     endPoint = newEndPoint;
     lineShape[1].position = newEndPoint;

@@ -174,8 +174,6 @@ void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
             bullet->disableCollision();
             continue;
         }
-
-        cout << "no collision" << endl;
     }
 }
 
@@ -200,11 +198,16 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     sendInputsToServer();
     sendGunshotsToServer();
     handleServerUpdates();
+
+    ///handle the bullet collision here isntead of in the time components
+    ///update part because the loop may never run because there isn't enough
+    ///time accumulate for an update loop to occur, if that happens you get
+    ///weird bullet drawins because the bullet never checked for collision
+    handleBulletCollision();
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    handleBulletCollision();
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }

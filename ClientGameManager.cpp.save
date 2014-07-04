@@ -138,13 +138,6 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
     }
 }
 
-void ClientGameManager::handleCollision() {
-
-    //handle collision between player's bullet and other players for drawing
-    //because the collision doesn't really matter on client side
-    handleBulletCollision();
-}
-
 void ClientGameManager::handleBulletCollision() {
 
     //get the bullets from the player and check for collision with others
@@ -181,8 +174,6 @@ void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
             bullet->disableCollision();
             continue;
         }
-        
-        cout << "no collision" << endl;
     }
 }
 
@@ -211,10 +202,9 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
+    handleBulletCollision();
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
-
-    handleCollision();
 }
 
 void ClientGameManager::handlePostUpdate() {
