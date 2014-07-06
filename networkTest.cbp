@@ -45,6 +45,8 @@
 		<Unit filename="GameManager.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
+		<Unit filename="Healthbar.cpp" />
+		<Unit filename="Healthbar.h" />
 		<Unit filename="Lerp.cpp" />
 		<Unit filename="Lerp.h" />
 		<Unit filename="LineSegment.cpp" />

@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "Healthbar.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -69,7 +70,8 @@ class Player {
         float pastRotation;
         float currentRotation;
         float destinationRotation;
-
+        
+        HealthBar health;
 
         std::tr1::shared_ptr<Gun> gun;
 
@@ -176,7 +178,7 @@ class Player {
         void draw(sf::RenderWindow& window);
 
         const sf::Vector2f& getPosition() const;
-        
+
         //just returns the player's current position box, usually jsut used to indicate his properties
         sf::FloatRect getCollisionRect() const;
 };

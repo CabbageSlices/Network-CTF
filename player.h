@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "Healthbar.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -70,6 +71,7 @@ class Player {
         float currentRotation;
         float destinationRotation;
 
+        HealthBar health;
 
         std::tr1::shared_ptr<Gun> gun;
 
