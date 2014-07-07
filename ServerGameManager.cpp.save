@@ -191,9 +191,9 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         //set the player to this position and check for collision between the bullet and the player
         sf::FloatRect collisionBox = player->player.getCollisionRect();
 
-
-        collisionBox.left = pastPosition.x;
-        collisionBox.top = pastPosition.y;
+        //the collision box has to be centered  at the pastposition because the past position is the center of the player
+        collisionBox.left = pastPosition.x - collisionBox.width / 2;
+        collisionBox.top = pastPosition.y - collisionBox.height / 2;
 
         //point of collision if there is one
         sf::Vector2f collisionPoint(0, 0);
@@ -213,6 +213,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
 
         //player was hit just make the line smaller and indicate it collided with something
         ///until there is some health system
+        nearestPlayer->getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
     }

@@ -46,6 +46,8 @@ void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInp
 
     dataDestination << playerPosition.x;
     dataDestination << playerPosition.y;
+
+    dataDestination << player.getHealth();
 }
 
 void applyPlayerUpdate(Player& player, sf::Packet& updatePacket) {
@@ -62,6 +64,10 @@ void applyPlayerUpdate(Player& player, sf::Packet& updatePacket) {
     //create a player state so the player can read the data
     Player::State updatedState;
     updatedState.position = playerPosition;
+
+    //read the players health on the server side
+    int health = 0;
+    updatePacket >> health;
 
     //apply to player
     player.handleServerUpdate(updatedState, inputId);
@@ -82,6 +88,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getId();
         updatePacket << player->player.getPosition().x << player->player.getPosition().y;
         updatePacket << player->player.getRotation();
+        updatePacket << player->player.getHealth();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -179,6 +186,9 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         float playerRotation;
         statePacket >> playerRotation;
 
+        int playerHealth = 0;
+        statePacket >> playerHealth;
+
         //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
         //top left is the begin point, width and heights are the end point
         vector<sf::FloatRect> bullets;
@@ -186,7 +196,7 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         int bulletsFired = 0;
         statePacket >> bulletsFired;
 
-        for(bulletsCreated = 0; bulletsCreated < bulletsFired; bulletsCreated++) {
+        for(int bulletsCreated = 0; bulletsCreated < bulletsFired; bulletsCreated++) {
 
             sf::FloatRect position;
             statePacket >> position.left >> position.top >> position.width >> position.height;
@@ -233,13 +243,14 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         updatedPlayer->setId(playerId);
         updatedPlayer->setInterpolationPosition(playerPosition);
         updatedPlayer->setInterpolationRotation(playerRotation);
-        
+        updatedPlayer->setHealth(playerHealth);
+
         //now create the bullets for this player
-        for(bullet : bullets) {
-            
+        for(auto bullet : bullets) {
+
             sf::Vector2f bulletStart(bullet.left, bullet.top);
             sf::Vector2f bulletEnd(bullet.width, bullet.height);
-            
+
             updatedPlayer->fireGun(bulletStart, bulletEnd);
         }
     }

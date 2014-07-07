@@ -213,6 +213,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
 
         //player was hit just make the line smaller and indicate it collided with something
         ///until there is some health system
+        nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
     }

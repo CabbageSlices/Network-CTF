@@ -45,7 +45,7 @@ class Player {
         struct State {
 
             sf::Vector2f position;
-            float rotation;
+            int health;
         };
 
     private:
@@ -117,6 +117,9 @@ class Player {
         //fire the gun and place rotations into queue
         void fireGun();
 
+        //update teh position of the healthbar, tracks players current hitbox
+        void updateHealthPosition();
+
     public:
 
         Player();
@@ -181,6 +184,14 @@ class Player {
 
         //just returns the player's current position box, usually jsut used to indicate his properties
         sf::FloatRect getCollisionRect() const;
+
+        int getHealth() const;
+
+        //uses sethealth
+        void getHit(int damage);
+
+        //set helath to given value, if its less than current health then run damage animation
+        void setHealth(int value);
 };
 
 #endif // PLAYER_H_INCLUDED

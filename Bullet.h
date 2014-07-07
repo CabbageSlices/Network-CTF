@@ -40,6 +40,9 @@ class Bullet {
         //disabling a bullet means to stop it from being able to damage or collide with other entities
         void disableCollision();
 
+        //amount of damage this bullet should do
+        int getDamage();
+
         void draw(sf::RenderWindow& window);
 
         void setEndPoint(const sf::Vector2f endPoint);

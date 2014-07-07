@@ -21,6 +21,7 @@ Player::Player():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
+    health(),
     gun(new Gun),
     inputBuffer(),
     inputsToSend(),
@@ -116,10 +117,12 @@ void Player::handleServerUpdate(const State& stateUpdate, const sf::Uint32& last
 
     setInterpolationPosition(stateUpdate.position);
 
-    //for whatever reason if the queued input with the same id as the last confirmed input doesn't get deleted so delete it here if it's still there
+    //now load the health from the server update
+    setHealth(stateUpdate.health);
+
+    //for whatever reason the queued input with the same id as the last confirmed input doesn't get deleted so delete it here if it's still there
     if(inputBuffer.size() > 0) {
 
-        ///cout << lastConfirmedInputId << "  " << inputBuffer[0].inputId << endl;
         inputBuffer.erase(inputBuffer.begin());
     }
 
@@ -226,6 +229,19 @@ void Player::forceUpdate(const float& delta, const sf::Vector2f& screenSize) {
     setInterpolationPosition(destinationHitBox.getPosition());
 }
 
+void Player::setInterpolationPosition(const sf::Vector2f& position) {
+
+    ///pastHitBox.setPosition(position);
+    ///currentHitBox.setPosition(position);
+    ///destinationHitBox.setPosition(position);
+
+    ///return;
+
+    currentHitBox.setPosition(pastHitBox.getPosition());
+    pastHitBox.setPosition(destinationHitBox.getPosition());
+    destinationHitBox.setPosition(position);
+}
+
 void Player::interpolate(const float& deltaFraction) {
 
     //calculate how far player should in between the past and destination hit box and set his position to that
@@ -244,9 +260,44 @@ void Player::interpolate(const float& deltaFraction) {
 
 void Player::draw(sf::RenderWindow& window) {
 
-    window.draw(currentHitBox);
+    //update health position justb efore drawing because it could have moved
+    updateHealthPosition();
 
+    window.draw(currentHitBox);
     gun->draw(window);
+
+    health.draw(window);
+}
+
+const sf::Vector2f& Player::getPosition() const {
+
+    return destinationHitBox.getPosition();
+}
+
+sf::FloatRect Player::getCollisionRect() const {
+
+    return currentHitBox.getGlobalBounds();
+}
+
+int Player::getHealth() const {
+
+    return health.getCurrentHealth();
+}
+
+void Player::getHit(int damage) {
+
+    setHealth(health.getCurrentHealth() - damage);
+}
+
+void Player::setHealth(int value) {
+
+    //check if given value is less than current health
+    if(value < health.getCurrentHealth()) {
+
+        ///play damage animation
+    }
+
+    health.setCurrentHealth(value);
 }
 
 const float Player::getHorizontalVelocity() {
@@ -352,19 +403,6 @@ void Player::removeConfirmedInputs(const sf::Uint32& lastConfirmedInputId) {
     }
 }
 
-void Player::setInterpolationPosition(const sf::Vector2f& position) {
-
-    ///pastHitBox.setPosition(position);
-    ///currentHitBox.setPosition(position);
-    ///destinationHitBox.setPosition(position);
-
-    ///return;
-
-    currentHitBox.setPosition(pastHitBox.getPosition());
-    pastHitBox.setPosition(destinationHitBox.getPosition());
-    destinationHitBox.setPosition(position);
-}
-
 Player::Input Player::createInput(const Action& playerAction) {
 
     Input input;
@@ -391,12 +429,13 @@ void Player::fireGun() {
     queuedGunshotRotations.push_back(angle);
 }
 
-const sf::Vector2f& Player::getPosition() const {
+void Player::updateHealthPosition() {
 
-    return destinationHitBox.getPosition();
-}
+    //set the healthbar above the player's current position
+    sf::Vector2f healthPosition(0, 0);
 
-sf::FloatRect Player::getCollisionRect() const {
+    healthPosition.x = currentHitBox.getGlobalBounds().left;
+    healthPosition.y = currentHitBox.getGlobalBounds().top - 10;
 
-    return currentHitBox.getGlobalBounds();
+    health.setPosition(healthPosition);
 }

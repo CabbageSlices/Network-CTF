@@ -29,6 +29,7 @@ void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInp
     -ID OF LAST CONFIRMED INPUT SENT BY PLAYER
     -PLAYER POSITION.x
     -PLAYER POSITION.y
+    -PLAYER HEALTH
 **/
 void applyPlayerUpdate(Player& player, sf::Packet& updatePacket);
 
@@ -43,9 +44,10 @@ void applyPlayerUpdate(Player& player, sf::Packet& updatePacket);
     -ID OF PLAYER
     -PLAYER POSITION (x,y)
     -PLAYER ROTATION
-    
+    -PLAYER HEALTH
+
     -NUMBER OF BULLETS FIRED
-        ---REPEAT THE FOLLOWING FOR EVERY BULLET         
+        ---REPEAT THE FOLLOWING FOR EVERY BULLET
         -BULLET BEGIN POINT
         -BULLET END POINT
 

@@ -341,7 +341,7 @@
 
 1404175634 c:\users\nimesh\network-ctf\network-ctf\packetidentification.h
 
-1404175634 c:\users\nimesh\network-ctf\network-ctf\packetmanipulators.h
+1404763230 c:\users\nimesh\network-ctf\network-ctf\packetmanipulators.h
 	"SFML/Network.hpp"
 	"ServerGameManager.h"
 	<vector>
@@ -356,9 +356,10 @@
 	<vector>
 	<tr1/memory>
 
-1404419897 c:\users\nimesh\network-ctf\network-ctf\player.h
+1404763230 c:\users\nimesh\network-ctf\network-ctf\player.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	"Healthbar.h"
 	<vector>
 	<tr1/memory>
 
@@ -421,7 +422,7 @@
 
 1404175634 c:\users\nimesh\network-ctf\network-ctf\lerp.h
 
-1404449889 source:c:\users\nimesh\network-ctf\network-ctf\linesegment.cpp
+1404450076 source:c:\users\nimesh\network-ctf\network-ctf\linesegment.cpp
 	"LineSegment.h"
 	"UndefinedLineSegment.h"
 	<cmath>
@@ -434,7 +435,7 @@
 	"math.h"
 	<cmath>
 
-1404425642 source:c:\users\nimesh\network-ctf\network-ctf\networktest.cpp
+1404765405 source:c:\users\nimesh\network-ctf\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -444,7 +445,7 @@
 1404175634 source:c:\users\nimesh\network-ctf\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1404175634 source:c:\users\nimesh\network-ctf\network-ctf\packetmanipulators.cpp
+1404765384 source:c:\users\nimesh\network-ctf\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"player.h"
@@ -452,7 +453,7 @@
 	"Bullet.h"
 	"LineSegment.h"
 
-1404449544 c:\users\nimesh\network-ctf\network-ctf\bullet.h
+1404763230 c:\users\nimesh\network-ctf\network-ctf\bullet.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
@@ -461,7 +462,7 @@
 	"UndefinedLineSegment.h"
 	<cmath>
 
-1404449544 source:c:\users\nimesh\network-ctf\network-ctf\bullet.cpp
+1404763230 source:c:\users\nimesh\network-ctf\network-ctf\bullet.cpp
 	"Bullet.h"
 	"LineSegment.h"
 
@@ -479,14 +480,14 @@
 	<tr1/memory>
 	<vector>
 
-1404420063 source:c:\users\nimesh\network-ctf\network-ctf\player.cpp
+1404764201 source:c:\users\nimesh\network-ctf\network-ctf\player.cpp
 	"player.h"
 	"Lerp.h"
 	"math.h"
 	<iostream>
 	"Gun.h"
 
-1404421888 source:c:\users\nimesh\network-ctf\network-ctf\servergamemanager.cpp
+1404763381 source:c:\users\nimesh\network-ctf\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -499,4 +500,11 @@
 1404415671 source:c:\users\nimesh\network-ctf\network-ctf\statetracker.cpp
 	"StateTracker.h"
 	"Lerp.h"
+
+1404677091 c:\users\nimesh\network-ctf\network-ctf\healthbar.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1404765466 source:c:\users\nimesh\network-ctf\network-ctf\healthbar.cpp
+	"Healthbar.h"
 

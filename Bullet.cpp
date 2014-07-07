@@ -32,6 +32,11 @@ void Bullet::disableCollision() {
     canCollide = false;
 }
 
+int Bullet::getDamage() {
+
+    return 10;
+}
+
 void Bullet::draw(sf::RenderWindow& window) {
 
     line->draw(window);

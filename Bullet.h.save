@@ -23,7 +23,7 @@ class Bullet {
         //increased every update loop by delta time
         sf::Time elapsedTime;
 
-        bool canDamage;
+        bool canCollide;
 
     public:
 
@@ -32,17 +32,20 @@ class Bullet {
         void updateElapsedTime(const sf::Time& deltaTime);
 
         //a live bullet is just a bullet that can be drawn, if it's dead it should be deleted
-        bool isAlive();
+        bool canDraw();
 
         //checks if a bullet should be used to handle collision
-        bool checkCanDamage();
+        bool checkCanCollide();
 
         //disabling a bullet means to stop it from being able to damage or collide with other entities
-        void disableBullet();
+        void disableCollision();
+        
+        //amount of damage this bullet should do
+        int getDamage();
 
         void draw(sf::RenderWindow& window);
 
-        void setEndPoint(const sf::Vector2f& endPoint);
+        void setEndPoint(const sf::Vector2f endPoint);
 
         std::tr1::shared_ptr<LineSegment> getLine();
 };

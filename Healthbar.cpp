@@ -8,7 +8,7 @@ HealthBar::HealthBar(int maxValue) :
     MAX_WIDTH(100)
     {
         maxHealthBar.setSize(sf::Vector2f(MAX_WIDTH, 10));
-        maxHealthBar.setFillColor(sf::Color::Black);
+        maxHealthBar.setFillColor(sf::Color::Red);
 
         currentHealthBar.setFillColor(sf::Color::Green);
     }
