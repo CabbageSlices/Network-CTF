@@ -191,8 +191,6 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         int playerHealth = 0;
         statePacket >> playerHealth;
 
-        cout << playerHealth << endl;
-
         //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
         //top left is the begin point, width and heights are the end point
         vector<sf::FloatRect> bullets;
