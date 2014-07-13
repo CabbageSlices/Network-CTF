@@ -212,8 +212,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     if(nearestPlayer != shootingPlayer) {
 
         //player was hit just make the line smaller and indicate it collided with something
-        ///until there is some health system
-        nearestPlayer->getHit(bullet->getDamage());
+        nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
     }
@@ -330,7 +329,6 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     //update the players of all the connected clients
     for(auto player : players) {
 
-        //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
         player->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
     }
 }

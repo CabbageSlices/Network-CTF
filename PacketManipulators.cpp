@@ -1,6 +1,7 @@
 #include "PacketManipulators.h"
 #include "PacketIdentification.h"
-#include "player.h"
+#include "UserPlayer.h"
+#include "InterpolatingPlayer.h"
 
 #include <iostream>
 #include "Bullet.h"
@@ -11,13 +12,13 @@ using std::endl;
 using std::vector;
 using std::tr1::shared_ptr;
 
-bool createInputPacket(const Player& player, sf::Packet& dataDestination) {
+bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
 
     //set the id of the packet
     dataDestination << PLAYER_INPUT;
 
     //package up all of the players input and place them one at a time into a new packet
-    const vector<Player::Input> playerInputs = player.getInputsToSend();
+    const vector<UserPlayer::Input> playerInputs = player.getInputsToSend();
 
     //first thing the input packet should contain is the number of inputs so the server knows how many inputs to read
     dataDestination << playerInputs.size();
@@ -35,14 +36,14 @@ bool createInputPacket(const Player& player, sf::Packet& dataDestination) {
     return playerInputs.size() > 0;
 }
 
-void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
+void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
 
     //set the packet type
     dataDestination << PLAYER_STATE_UPDATE;
 
     dataDestination << lastConfirmedInput;
 
-    sf::Vector2f playerPosition = player.getPosition();
+    sf::Vector2f playerPosition = player.getDestinationPosition();
 
     dataDestination << playerPosition.x;
     dataDestination << playerPosition.y;
@@ -50,7 +51,7 @@ void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInp
     dataDestination << player.getHealth();
 }
 
-void applyPlayerUpdate(Player& player, sf::Packet& updatePacket) {
+void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
 
     sf::Uint32 inputId = 0;
 
@@ -62,7 +63,7 @@ void applyPlayerUpdate(Player& player, sf::Packet& updatePacket) {
     updatePacket >> playerPosition.x >> playerPosition.y;
 
     //create a player state so the player can read the data
-    Player::State updatedState;
+    UserPlayer::State updatedState;
     updatedState.position = playerPosition;
 
     //read the players health on the server side
@@ -88,7 +89,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     for(auto player : players) {
 
         updatePacket << player->player.getId();
-        updatePacket << player->player.getPosition().x << player->player.getPosition().y;
+        updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
         updatePacket << player->player.getRotation();
         updatePacket << player->player.getHealth();
 
@@ -109,7 +110,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     }
 }
 
-void createGunfirePacket(Player& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet) {
+void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet) {
 
     //id the packet
     packet << PLAYER_GUNFIRE;
@@ -128,7 +129,7 @@ void createGunfirePacket(Player& player, const float& deltaFraction, const sf::U
     }
 }
 
-void readGunfirePacket(Player& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
+void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
 
     ///first read packet id since it hasn't been extracted yet
     int packetId = 0;
@@ -157,7 +158,7 @@ void readGunfirePacket(Player& player, float& deltaFraction, sf::Uint32& lastSer
     }
 }
 
-void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
+void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
 
     sf::Uint32 packetStateId = 0;
 
@@ -219,7 +220,7 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         bool playerAlreadyExists = false;
 
         //player who is being updated
-        shared_ptr<Player> updatedPlayer;
+        shared_ptr<InterpolatingPlayer> updatedPlayer;
 
         for(auto player : players) {
 
@@ -234,7 +235,7 @@ void applyStateUpdate(vector<shared_ptr<Player> >& players, Player& userPlayer, 
         if(!playerAlreadyExists) {
 
            //player does not exist so create him
-            shared_ptr<Player> newPlayer(new Player());
+            shared_ptr<InterpolatingPlayer> newPlayer(new InterpolatingPlayer());
             updatedPlayer = newPlayer;
 
             //save the data of the new player

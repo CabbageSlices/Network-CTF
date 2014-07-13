@@ -1,6 +1,7 @@
 #include "player.h"
 #include "Lerp.h"
 #include "math.h"
+#include "Gun.h"
 
 #include <iostream>
 
@@ -8,8 +9,6 @@ using std::vector;
 using std::tr1::shared_ptr;
 using std::cout;
 using std::endl;
-
-#include "Gun.h"
 
 Player::Player():
     INVALID_INPUT_ID(-1),
@@ -221,21 +220,7 @@ void Player::updateRotation(const sf::Vector2f& mousePosition) {
     setRotation(calculateAngle(currentHitBox.getPosition(), mousePosition));
 }
 
-void Player::forceUpdate(const float& delta, const sf::Vector2f& screenSize) {
-
-    //calculate the new position and just set all positions to the new position
-    destinationHitBox.move(velocities.x * delta, velocities.y * delta);
-
-    setInterpolationPosition(destinationHitBox.getPosition());
-}
-
 void Player::setInterpolationPosition(const sf::Vector2f& position) {
-
-    ///pastHitBox.setPosition(position);
-    ///currentHitBox.setPosition(position);
-    ///destinationHitBox.setPosition(position);
-
-    ///return;
 
     currentHitBox.setPosition(pastHitBox.getPosition());
     pastHitBox.setPosition(destinationHitBox.getPosition());
@@ -244,6 +229,7 @@ void Player::setInterpolationPosition(const sf::Vector2f& position) {
 
 void Player::interpolate(const float& deltaFraction) {
 
+    //interpolate the position first
     //calculate how far player should in between the past and destination hit box and set his position to that
     const float& horizontalDistance = ::interpolate(pastHitBox.getPosition().x, destinationHitBox.getPosition().x, deltaFraction);
     const float& verticalDistance = ::interpolate(pastHitBox.getPosition().y, destinationHitBox.getPosition().y, deltaFraction);
@@ -264,7 +250,7 @@ void Player::draw(sf::RenderWindow& window) {
     updateHealthPosition();
 
     window.draw(currentHitBox);
-    gun->draw(window);
+    gun->drawAll(window);
 
     health.draw(window);
 }
@@ -375,8 +361,6 @@ void Player::processInput(const Input& inputToProcess) {
         velocities.y = 0;
 
     }
-
-    cout << velocities.x << "   " << velocities.y << endl;
 }
 
 void Player::placeIntoQueue(Input inputToQueue) {

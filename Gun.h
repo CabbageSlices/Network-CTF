@@ -49,7 +49,11 @@ class Gun {
 
         void updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation);
 
-        void draw(sf::RenderWindow& window);
+        void drawAll(sf::RenderWindow& window);
+
+        //draw gun's line of sight
+        void drawSight(sf::RenderWindow& window);
+        void drawBullets(sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
 

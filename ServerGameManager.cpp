@@ -102,9 +102,9 @@ void ServerGameManager::handlePlayerInput(shared_ptr<ConnectedPlayer> player, sf
         sf::Uint32 inputId = 0;
         inputPacket >> inputId;
 
-        Player::Input clientInput;
+        UserPlayer::Input clientInput;
         clientInput.inputId = inputId;
-        clientInput.action = static_cast<Player::Action>(playerInput);
+        clientInput.action = static_cast<UserPlayer::Action>(playerInput);
 
         //check if this is a newer input, if it isn't then ignore it
         if(inputId >= player->lastConfirmedInputId) {
@@ -176,8 +176,8 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
             continue;
         }
 
-        //get the position of this player at the time the bullet was fired, default position is the player's current position
-        sf::Vector2f pastPosition(player->player.getPosition());
+        //get the position of this player at the time the bullet was fired, default position is the player's destination position
+        sf::Vector2f pastPosition(player->player.getDestinationPosition());
 
         //try to get the players position in the past, if a state tracker doesn't exist it means this player has no older positions so just use his current position
         //make sure there are states saved
@@ -189,7 +189,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         }
 
         //set the player to this position and check for collision between the bullet and the player
-        sf::FloatRect collisionBox = player->player.getCollisionRect();
+        sf::FloatRect collisionBox = player->player.getCurrentHitbox();
 
         //the collision box has to be centered  at the pastposition because the past position is the center of the player
         collisionBox.left = pastPosition.x - collisionBox.width / 2;
@@ -212,7 +212,6 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     if(nearestPlayer != shootingPlayer) {
 
         //player was hit just make the line smaller and indicate it collided with something
-        ///until there is some health system
         nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
@@ -273,7 +272,7 @@ void ServerGameManager::savePlayerStates(const int stateId) {
         }
 
         //update the state
-        player->state->insertState(stateId, player->player.getPosition());
+        player->state->insertState(stateId, player->player.getDestinationPosition());
     }
 }
 
@@ -330,7 +329,6 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     //update the players of all the connected clients
     for(auto player : players) {
 
-        //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
         player->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
     }
 }

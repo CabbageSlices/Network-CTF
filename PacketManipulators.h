@@ -8,7 +8,8 @@
 #include <tr1/memory>
 
 //forward declaration
-class Player;
+class UserPlayer;
+class InterpolatingPlayer;
 
 //all of these functions are helper functions used to make packet creation and reading easier for the users
 
@@ -16,10 +17,10 @@ class Player;
 //return true if there was any data added to indicate whether or not the packet should be sent
 //assumes packet is empty
 //also adds the player's current rotation so server can send player's rotation to other clients
-bool createInputPacket(const Player& player, sf::Packet& dataDestination);
+bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
-void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
+void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
 
 //read the given position and state update from the server and apply the updates to the player
 ///this function assumes the outstream of the ip address has already read the packet id thus it will begin reading from the id of lasat confirmed input sent by player
@@ -31,7 +32,7 @@ void createUpdatePacket(const Player& player, const sf::Uint32& lastConfirmedInp
     -PLAYER POSITION.y
     -PLAYER HEALTH
 **/
-void applyPlayerUpdate(Player& player, sf::Packet& updatePacket);
+void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
 
 //state update packet contains data about all players connected to server
 /**
@@ -56,7 +57,7 @@ void applyPlayerUpdate(Player& player, sf::Packet& updatePacket);
 void createStateUpdate(const std::vector<std::tr1::shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& statePacket);
 
 //assumes packet id has already beenread from the state packet, ignores any packet that is older thant he stateid given
-void applyStateUpdate(std::vector<std::tr1::shared_ptr<Player> >& players, Player& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
+void applyStateUpdate(std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
 
 //player firing data
 /**
@@ -69,11 +70,11 @@ void applyStateUpdate(std::vector<std::tr1::shared_ptr<Player> >& players, Playe
     **repeat the following for every gunshot player has sent
     -PLAYER ROTATION
 **/
-void createGunfirePacket(Player& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet);
+void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet);
 
 //find the player who shot and make him shoot,
 ///assumes id has NOT been read
-void readGunfirePacket(Player& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet);
+void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet);
 
 //reads the packet and returns the packet type, moves the stream operator of hte packet
 int getPacketType(sf::Packet& packet);

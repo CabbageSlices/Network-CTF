@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "LineSegment.h"
 #include "Collision.h"
+#include "InterpolatingPlayer.h"
 
 #include <iostream>
 
@@ -164,7 +165,7 @@ void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
     //firgure out the first player it collided with and cut off the line
     for(auto player : connectedPlayers) {
 
-        sf::FloatRect collisionRect = player->getCollisionRect();
+        sf::FloatRect collisionRect = player->getCurrentHitbox();
 
         sf::Vector2f collisionPoint(0, 0);
 

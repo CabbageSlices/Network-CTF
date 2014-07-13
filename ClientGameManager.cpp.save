@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "LineSegment.h"
 #include "Collision.h"
+#include "InterpolatingPlayer.h"
 
 #include <iostream>
 
@@ -164,7 +165,7 @@ void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
     //firgure out the first player it collided with and cut off the line
     for(auto player : connectedPlayers) {
 
-        sf::FloatRect collisionRect = player->getCollisionRect();
+        sf::FloatRect collisionRect = player->getC();
 
         sf::Vector2f collisionPoint(0, 0);
 
@@ -198,11 +199,16 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     sendInputsToServer();
     sendGunshotsToServer();
     handleServerUpdates();
+
+    ///handle the bullet collision here isntead of in the time components
+    ///update part because the loop may never run because there isn't enough
+    ///time accumulate for an update loop to occur, if that happens you get
+    ///weird bullet drawins because the bullet never checked for collision
+    handleBulletCollision();
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    handleBulletCollision();
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }

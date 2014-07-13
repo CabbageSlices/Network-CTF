@@ -30,9 +30,18 @@ void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& player
     updateLineOfSight(playerPosition, playerRotation);
 }
 
-void Gun::draw(sf::RenderWindow& window) {
+void Gun::drawAll(sf::RenderWindow& window) {
 
-    ///window.draw(lineOfSight, &lineTexture);
+    drawSight(window);
+    drawBullets(window);
+}
+
+void Gun::drawSight(sf::RenderWindow& window) {
+
+    window.draw(lineOfSight, &lineTexture);
+}
+
+void Gun::drawBullets(sf::RenderWindow& window) {
 
     for(auto bullet : bullets) {
 

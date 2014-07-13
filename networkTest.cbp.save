@@ -47,6 +47,8 @@
 		<Unit filename="Gun.h" />
 		<Unit filename="Healthbar.cpp" />
 		<Unit filename="Healthbar.h" />
+		<Unit filename="InterpolatingPlayer.cpp" />
+		<Unit filename="InterpolatingPlayer.h" />
 		<Unit filename="Lerp.cpp" />
 		<Unit filename="Lerp.h" />
 		<Unit filename="LineSegment.cpp" />
@@ -55,12 +57,16 @@
 		<Unit filename="PacketIdentification.h" />
 		<Unit filename="PacketManipulators.cpp" />
 		<Unit filename="PacketManipulators.h" />
+		<Unit filename="PlayerBase.cpp" />
+		<Unit filename="PlayerBase.h" />
 		<Unit filename="ServerGameManager.cpp" />
 		<Unit filename="ServerGameManager.h" />
 		<Unit filename="StateTracker.cpp" />
 		<Unit filename="StateTracker.h" />
 		<Unit filename="UndefinedLineSegment.cpp" />
 		<Unit filename="UndefinedLineSegment.h" />
+		<Unit filename="UserPlayer.cpp" />
+		<Unit filename="UserPlayer.h" />
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="networkTest.cpp" />

@@ -30,10 +30,19 @@ void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& player
     updateLineOfSight(playerPosition, playerRotation);
 }
 
-void Gun::draw(sf::RenderWindow& window) {
+void Gun::drawAll(sf::RenderWindow& window) {
 
-    ///window.draw(lineOfSight, &lineTexture);
+    drawSight(window);
+    drawBullets(window);
+}
 
+void Gun::drawSight(sf::RenderWindow& window) {
+    
+    window.draw(lineOfSight, &lineTexture);
+}
+
+void Gun::drawBullets(sf::RenderWindow& window) {
+    
     for(auto bullet : bullets) {
 
         bullet->draw(window);
@@ -71,10 +80,9 @@ void Gun::updateBullets(const sf::Time& delta) {
 
     //update all bullets and remove the ones that are dead
     for(unsigned i = 0; i < bullets.size();) {
-            
-        bull
 
         bullets[i]->updateElapsedTime(delta);
+        bullets[i]->disableCollision();
 
         //if a bullet can't be drawn it's dead and should be deleted
         if(!bullets[i]->canDraw()) {

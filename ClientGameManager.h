@@ -5,13 +5,14 @@
 #include "SFML/Graphics.hpp"
 
 #include "Client.h"
-#include "Player.h"
+#include "UserPlayer.h"
 #include "GameManager.h"
 
 #include <tr1/memory>
 #include <vector>
 
 class Bullet;
+class InterpolatingPlayer;
 
 class ClientGameManager: public GameManager {
 
@@ -29,10 +30,10 @@ class ClientGameManager: public GameManager {
         Client client;
 
         //player being controlled by the user
-        Player userPlayer;
+        UserPlayer userPlayer;
 
         //other players connected to world, only interpolates does not have physics
-        std::vector<std::tr1::shared_ptr<Player> > connectedPlayers;
+        std::vector<std::tr1::shared_ptr<InterpolatingPlayer> > connectedPlayers;
 
         //time how long its been since last state update from the server in order to calculate interpolation fraction
         sf::Clock stateUpdateTimer;

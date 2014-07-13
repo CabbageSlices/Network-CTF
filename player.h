@@ -169,9 +169,6 @@ class Player {
         //uses set rotation
         void updateRotation(const sf::Vector2f& mousePosition);
 
-        //update without interpolating
-        void forceUpdate(const float& delta, const sf::Vector2f& screenSize);
-
         //make player interpolate from current position to the given position
         void setInterpolationPosition(const sf::Vector2f& position);
 

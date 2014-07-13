@@ -2,7 +2,7 @@
 #define SERVERGAMEMANAGER_H_INCLUDED
 
 #include "SFML/Network.hpp"
-#include "player.h"
+#include "UserPlayer.h"
 #include "ConnectionManager.h"
 #include "GameManager.h"
 #include "StateTracker.h"
@@ -27,7 +27,7 @@ class ServerGameManager : public GameManager {
             //past states of this player
             std::tr1::shared_ptr<StateTracker> state;
 
-            Player player;
+            UserPlayer player;
         };
 
     private:
