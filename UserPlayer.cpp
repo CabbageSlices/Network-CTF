@@ -177,7 +177,6 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
 
         placeIntoQueue(createInput(ROTATION_UPDATE));
         rotationUpdateTimer.restart();
-        cout << "updatedRotation" << endl;
     }
 }
 
