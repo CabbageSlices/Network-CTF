@@ -71,6 +71,12 @@ class PlayerBase {
         //just returns the player's current position box, usually jsut used to indicate his properties
         sf::FloatRect getCurrentHitbox() const;
 
+        sf::FloatRect getCollisionBox() const;
+
+        sf::FloatRect getDestinationBox() const;
+
+        void move(const sf::Vector2f& offset);
+
         int getHealth() const;
 
         //uses sethealth

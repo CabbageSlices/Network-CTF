@@ -27,7 +27,9 @@ class UserPlayer : public PlayerBase{
             RELEASE_LEFT,
             RELEASE_RIGHT,
             RELEASE_UP,
-            RELEASE_DOWN
+            RELEASE_DOWN,
+
+            ROTATION_UPDATE
         };
 
         //information about what the player inputted and when he inputted it
@@ -74,6 +76,13 @@ class UserPlayer : public PlayerBase{
 
         //each input's ide is 1 more than the last so keep track of what id we're on so you can actually give input's ids
         sf::Uint32 nextNewInputId;
+
+        //every few milliseconds the player should send his rotation info to the server so the server can keep track of his orientation
+        //rotations are only updated when player shoots or does an action
+        //so every few milliesconds the player should do an empty action that way the rotation is updated but the players state isn't changed
+        //however only do this if the player isn't sending another input because if there is another input being sent it will automatically update the rotation
+        sf::Clock rotationUpdateTimer;
+        sf::Time rotationUpdateDelay;
 
         const float getHorizontalVelocity();
         const float getVerticalVelocity();

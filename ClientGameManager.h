@@ -58,7 +58,6 @@ class ClientGameManager: public GameManager {
         void updateConnectedPlayers(const float& delta);
 
         void handleBulletCollision();
-        void handleBulletPlayerCollision(std::tr1::shared_ptr<Bullet> bullet);
 
     protected:
 
@@ -81,6 +80,7 @@ class ClientGameManager: public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
+        virtual void handleCollisions();
 
     public:
 

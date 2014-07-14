@@ -2,7 +2,7 @@
 #define SERVERGAMEMANAGER_H_INCLUDED
 
 #include "SFML/Network.hpp"
-#include "player.h"
+#include "UserPlayer.h"
 #include "ConnectionManager.h"
 #include "GameManager.h"
 #include "StateTracker.h"
@@ -23,11 +23,11 @@ class ServerGameManager : public GameManager {
 
             //id of the last input received from the player that the server has processed
             sf::Uint32 lastConfirmedInputId;
-            
+
             //past states of this player
             std::tr1::shared_ptr<StateTracker> state;
 
-            Player player;
+            UserPlayer player;
         };
 
     private:
@@ -113,6 +113,8 @@ class ServerGameManager : public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
+        
+        virtual void handleCollisions();
 
     public:
 

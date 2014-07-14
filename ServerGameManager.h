@@ -114,6 +114,8 @@ class ServerGameManager : public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
+        virtual void handleCollisions();
+
     public:
 
         ServerGameManager(unsigned short portToBindTo = 8080);

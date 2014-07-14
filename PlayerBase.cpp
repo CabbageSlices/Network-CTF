@@ -99,6 +99,21 @@ sf::FloatRect PlayerBase::getCurrentHitbox() const {
     return currentHitBox.getGlobalBounds();
 }
 
+sf::FloatRect PlayerBase::getCollisionBox() const {
+
+    return currentHitBox.getGlobalBounds();
+}
+
+sf::FloatRect PlayerBase::getDestinationBox() const {
+
+    return destinationHitBox.getGlobalBounds();
+}
+
+void PlayerBase::move(const sf::Vector2f& offset) {
+
+    destinationHitBox.move(offset);
+}
+
 int PlayerBase::getHealth() const {
 
     return health.getCurrentHealth();

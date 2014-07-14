@@ -1,11 +1,17 @@
 #include "GameManager.h"
+#include "Block.h"
+
+using std::vector;
+using std::tr1::shared_ptr;
 
 GameManager::GameManager() :
     timer(),
     accumulator(),
-    optimalTimeStep(sf::milliseconds(15))
+    optimalTimeStep(sf::milliseconds(15)),
+    blocks()
     {
-
+        shared_ptr<Block> block(new Block(sf::Vector2f(360, 300) ));
+        blocks.push_back(block);
     }
 
 void GameManager::runGame(sf::RenderWindow& window) {
@@ -56,6 +62,9 @@ void GameManager::updateWorld(sf::RenderWindow& window) {
 
         this->updateTimeComponents(delta, window);
 
+        //after updating objects handle collision between objects
+        this->handleCollisions();
+
         accumulator -= optimalTimeStep;
     }
 
@@ -67,8 +76,22 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
     window.clear();
 
     this->drawComponents(window);
+    drawBlocks(window);
 
     window.display();
+}
+
+void GameManager::drawBlocks(sf::RenderWindow& window) {
+
+    for(auto block : blocks) {
+
+        block->draw(window);
+    }
+}
+
+vector<shared_ptr<Block> >& GameManager::getBlocks() {
+
+    return blocks;
 }
 
 const float GameManager::calculateDeltaFraction() {

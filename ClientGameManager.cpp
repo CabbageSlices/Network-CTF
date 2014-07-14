@@ -152,29 +152,10 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        ///implement later
+        bulletEntityCollision(bullet, getBlocks());
 
         //handle collision with other players
-        handleBulletPlayerCollision(bullet);
-    }
-}
-
-void ClientGameManager::handleBulletPlayerCollision(shared_ptr<Bullet> bullet) {
-
-    //go through all players and check for collision with them
-    //firgure out the first player it collided with and cut off the line
-    for(auto player : connectedPlayers) {
-
-        sf::FloatRect collisionRect = player->getCurrentHitbox();
-
-        sf::Vector2f collisionPoint(0, 0);
-
-        if(checkCollision(collisionRect, bullet->getLine(), collisionPoint)) {
-
-            bullet->setEndPoint(collisionPoint);
-            bullet->disableCollision();
-            continue;
-        }
+        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
     }
 }
 
@@ -226,5 +207,21 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
     for(auto player : connectedPlayers) {
 
         player->draw(window);
+    }
+}
+
+void ClientGameManager::handleCollisions() {
+
+    //no broadphase as of yet, check if player collides with any blocks and handle collision accordingly
+    //check for collision between players and blocks
+    for(auto block : getBlocks()) {
+
+        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
+
+            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
+
+            //make player move the required distance to escape collision
+            userPlayer.move(movementOffset);
+        }
     }
 }

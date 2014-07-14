@@ -102,9 +102,9 @@ void ServerGameManager::handlePlayerInput(shared_ptr<ConnectedPlayer> player, sf
         sf::Uint32 inputId = 0;
         inputPacket >> inputId;
 
-        Player::Input clientInput;
+        UserPlayer::Input clientInput;
         clientInput.inputId = inputId;
-        clientInput.action = static_cast<Player::Action>(playerInput);
+        clientInput.action = static_cast<UserPlayer::Action>(playerInput);
 
         //check if this is a newer input, if it isn't then ignore it
         if(inputId >= player->lastConfirmedInputId) {
@@ -151,8 +151,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-
-        ///$%@#$@#$@%@%@$%$%    NO BLOCKS TO CHECK FOR COLLISION YET
+        bulletEntityCollision(bullet, getBlocks());
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
@@ -176,8 +175,8 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
             continue;
         }
 
-        //get the position of this player at the time the bullet was fired, default position is the player's current position
-        sf::Vector2f pastPosition(player->player.getPosition());
+        //get the position of this player at the time the bullet was fired, default position is the player's destination position
+        sf::Vector2f pastPosition(player->player.getDestinationPosition());
 
         //try to get the players position in the past, if a state tracker doesn't exist it means this player has no older positions so just use his current position
         //make sure there are states saved
@@ -189,7 +188,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         }
 
         //set the player to this position and check for collision between the bullet and the player
-        sf::FloatRect collisionBox = player->player.getCollisionRect();
+        sf::FloatRect collisionBox = player->player.getCurrentHitbox();
 
         //the collision box has to be centered  at the pastposition because the past position is the center of the player
         collisionBox.left = pastPosition.x - collisionBox.width / 2;
@@ -272,7 +271,7 @@ void ServerGameManager::savePlayerStates(const int stateId) {
         }
 
         //update the state
-        player->state->insertState(stateId, player->player.getPosition());
+        player->state->insertState(stateId, player->player.getDestinationPosition());
     }
 }
 
@@ -345,4 +344,22 @@ void ServerGameManager::handlePostUpdate() {
 void ServerGameManager::drawComponents(sf::RenderWindow& window) {
 
     drawPlayers(window);
+}
+
+void ServerGameManager::handleCollisions() {
+
+    //check for collision between players and blocks
+    for(auto player : players) {
+
+        for(auto block : getBlocks()) {
+
+            if(player->player.getDestinationBox().intersects(block->getCollisionBox())) {
+
+                sf::Vector2f movementOffset = calculateCollisionOffset(player->player.getDestinationBox(), block->getCollisionBox());
+
+                //make player move the required distance to escape collision
+                player->player.move(movementOffset);
+            }
+        }
+    }
 }

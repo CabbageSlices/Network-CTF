@@ -1,8 +1,13 @@
 #include "Collision.h"
 #include "LineSegment.h"
 #include "math.h"
+#include "Bullet.h"
+#include <cmath>
 
+using std::vector;
 using std::tr1::shared_ptr;
+using std::min;
+using std::abs;
 
 bool checkCollision(const sf::FloatRect& rect, shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint) {
 
@@ -56,4 +61,37 @@ bool handleEdgeCollision(const sf::Vector2f& edgeBegin, const sf::Vector2f& edge
     }
 
     return false;
+}
+
+sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf::FloatRect& staticRect) {
+
+    //determine the distance required for the first rectangle to move in each direction in order to escape collision
+    ///moveLeft and moveUp are always negative because this offset is added to rectToMoves current position in order to move it
+    ///and in order to move left you have to subtract from its current position and the only way to do that is to add a negative
+    float moveRight = staticRect.left + staticRect.width - rectToMove.left;
+    float moveLeft = staticRect.left - (rectToMove.left + rectToMove.width);
+    float moveUp = staticRect.top - (rectToMove.top + rectToMove.height);
+    float moveDown = staticRect.top + staticRect.height - rectToMove.top;
+
+    //now determine what the shortest distance to move is
+    float shortestHorizontal = moveRight < abs(moveLeft) ? moveRight : moveLeft;
+    float shortestVertical = moveDown < abs(moveUp) ? moveDown : moveUp;
+
+    //now determine whether he needs to move on the horizontal axis or verticla axis
+    sf::Vector2f movementOffset(0, 0);
+
+    if(abs(shortestHorizontal) < abs(shortestVertical)) {
+
+        movementOffset.x = shortestHorizontal;
+    } else if(abs(shortestVertical) < abs(shortestHorizontal)) {
+
+        movementOffset.y = shortestVertical;
+    } else {
+
+        //both horizontal and vertical movement distances are the same so he needs to move both horizontally and vertically because its a corner case
+        movementOffset.x = shortestHorizontal;
+        movementOffset.y = shortestVertical;
+    }
+
+    return movementOffset;
 }

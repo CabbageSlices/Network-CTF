@@ -151,8 +151,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-
-        ///$%@#$@#$@%@%@$%$%    NO BLOCKS TO CHECK FOR COLLISION YET
+        bulletEntityCollision(bullet, getBlocks());
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
@@ -345,4 +344,22 @@ void ServerGameManager::handlePostUpdate() {
 void ServerGameManager::drawComponents(sf::RenderWindow& window) {
 
     drawPlayers(window);
+}
+
+void ServerGameManager::handleCollisions() {
+
+    //check for collision between players and blocks
+    for(auto player : players) {
+
+        for(auto block : getBlocks()) {
+
+            if(player->player.getDestinationBox().intersects(block->getCollisionBox())) {
+
+                sf::Vector2f movementOffset = calculateCollisionOffset(player->player.getDestinationBox(), block->getCollisionBox());
+
+                //make player move the required distance to escape collision
+                player->player.move(movementOffset);
+            }
+        }
+    }
 }

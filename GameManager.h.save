@@ -3,6 +3,11 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "Block.h"
+
+#include <vector>
+#include <tr1/memory>
+
 
 //base game manager class for client and server to derive from
 //the internal functions are virtual because the functions have the same outer appearence but the inner workings are different
@@ -19,6 +24,8 @@ class GameManager {
         //optimal timestep (amount of time passed) for physics simulation to run smoothly
         sf::Time optimalTimeStep;
 
+        std::vector<std::tr1::shared_ptr<Block> > blocks;
+
         ///uses the curent world state to determine what to do in each function
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
@@ -30,6 +37,8 @@ class GameManager {
         void updateWorld(sf::RenderWindow& window);
 
         void drawWorld(sf::RenderWindow& window);
+
+        void drawBlocks(sf::RenderWindow& window);
 
     protected:
 
@@ -51,6 +60,11 @@ class GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
+        
+        //handle collision for any objects
+        virtual void handleCollisions() = 0;
+
+        std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
 
         //calculate what fraction of time has passed since the last physics update to the next physics update
         const float calculateDeltaFraction();

@@ -18,7 +18,9 @@ UserPlayer::UserPlayer():
     inputsToSend(),
     queuedGunshotRotations(),
     currentInputId(0),
-    nextNewInputId(0)
+    nextNewInputId(0),
+    rotationUpdateTimer(),
+    rotationUpdateDelay(sf::milliseconds(40))
     {
 
     }
@@ -78,6 +80,13 @@ void UserPlayer::handleEvent(sf::Event& event) {
 
             placeIntoQueue(createInput(RELEASE_DOWN));
         }
+    }
+    
+    //check if the player should create a blank input in order to update rotation
+    if(rotationUpdateTimer.getElapsedTime() > rotationUpdateDelay) {
+        
+        placeIntoQueue(createInput(ROTATION_UPDATE));
+        rotationUpdateTimer.restart();
     }
 
     //now get the next input in the queue and handle it
@@ -172,7 +181,7 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
 }
 
 void UserPlayer::drawGun(sf::RenderWindow& window) {
-    
+
     gun->drawAll(window);
 }
 
@@ -208,7 +217,7 @@ UserPlayer::Input UserPlayer::getInputToProcess() {
 void UserPlayer::processInput(const Input& inputToProcess) {
 
     //if the given input is invalid then don't process
-    if(inputToProcess.inputId == INVALID_INPUT_ID) {
+    if(inputToProcess.inputId == INVALID_INPUT_ID || inputToProcess.action == ROTATION_UPDATE) {
 
         return;
     }
