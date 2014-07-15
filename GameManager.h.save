@@ -29,6 +29,9 @@ class GameManager {
         ///uses the curent world state to determine what to do in each function
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
+        
+        //handle input based on keyboard and mouse states instead of button presses
+        void handleStateInputs() = 0;
 
         //handles inputs that must be handled regardless of the game state
         void handleCommonInputs(sf::Event& event, sf::RenderWindow& window);
@@ -60,7 +63,7 @@ class GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
-        
+
         //handle collision for any objects
         virtual void handleCollisions() = 0;
 

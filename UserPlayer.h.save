@@ -28,8 +28,6 @@ class UserPlayer : public PlayerBase{
             RELEASE_RIGHT,
             RELEASE_UP,
             RELEASE_DOWN,
-            
-            ROTATION_UPDATE
         };
 
         //information about what the player inputted and when he inputted it
@@ -37,6 +35,19 @@ class UserPlayer : public PlayerBase{
         struct Input {
 
             Action action;
+
+            sf::Uint32 inputId;
+        };
+
+        //information about the players current keystate, send to server incase the server misses an input packet
+        //send periodically
+        //the input id is the id of the last input created, used so server can check if it is reading old data
+        struct KeyState {
+
+            bool pressedLeft;
+            bool pressedRight;
+            bool pressedUp;
+            bool pressedDown;
 
             sf::Uint32 inputId;
         };
@@ -76,12 +87,13 @@ class UserPlayer : public PlayerBase{
 
         //each input's ide is 1 more than the last so keep track of what id we're on so you can actually give input's ids
         sf::Uint32 nextNewInputId;
-        
-        //every few milliseconds the player should send his rotation info to the server so the server can keep track of his orientation
-        //rotations are only updated when player shoots or does an action
-        //so every few milliesconds the player should do an empty action that way the rotation is updated but the players state isn't changed
-        sf::Clock rotationUpdateTimer;
-        sf::Time rotationUpdateDelay;
+
+        //keystate updates snet to server periodocially
+        sf::Clock keystateUpdateTimer;
+        sf::Time keystateUpdateDelay;
+
+        //player's current keystate
+        KeyState keystate;
 
         const float getHorizontalVelocity();
         const float getVerticalVelocity();
@@ -101,6 +113,9 @@ class UserPlayer : public PlayerBase{
 
         Input createInput(const Action& playerAction);
 
+        //using the players current keystate determine his movement
+        void determineMovement();
+
         //fire the gun and place rotations into queue
         void fireGun();
 
@@ -113,7 +128,10 @@ class UserPlayer : public PlayerBase{
         UserPlayer();
 
         //handle any input the player triggered and save them to send to the server
-        void handleEvent(sf::Event& event);
+        void handleEvents(sf::Event& event);
+
+        //checks the keystate on teh keyboard to determine players movements
+        void handleStateEvents();
 
         //update the player's state according to the server's data and replay all events from the last input confirmed by the server
         void handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId);
@@ -121,6 +139,13 @@ class UserPlayer : public PlayerBase{
         const std::vector<Input>& getInputsToSend() const;
 
         const std::vector<float>& getGunshotsToSend() const;
+
+        //check if player should send hsi keystate data
+        bool shouldSendKeystate();
+
+        KeyState getKeystate() const;
+
+        void resetKeystateTimer();
 
         void clearGunshotQueue();
 
@@ -135,6 +160,9 @@ class UserPlayer : public PlayerBase{
 
         //given the client input simple execute it
         void handleClientInput(Input& clientInput);
+        
+        //given the client keystate simply execute it
+        void handleClientKeystate(KeyState& state);
 
         void update(const float& delta, const sf::Vector2f& screenSize);
 

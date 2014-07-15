@@ -76,6 +76,17 @@ void ClientGameManager::sendInputsToServer() {
     }
 
     userPlayer.clearInputsToSend();
+
+    //now send the players state if needed
+    if(userPlayer.shouldSendKeystate()) {
+
+        sf::Packet statePacket;
+        createStatePacket(userPlayer, statePacket);
+        userPlayer.resetKeystateTimer();
+
+        client.sendToServer(statePacket);
+        cout << "sent" << endl;
+    }
 }
 
 void ClientGameManager::sendGunshotsToServer() {
@@ -169,10 +180,15 @@ void ClientGameManager::setup() {
     }
 }
 
+void ClientGameManager::handleStateInputs() {
+
+    ///intentionally left blank for now
+}
+
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
     //handle the player's inputs
-    userPlayer.handleEvent(event);
+    userPlayer.handleEvents(event);
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {
@@ -186,21 +202,6 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     ///time accumulate for an update loop to occur, if that happens you get
     ///weird bullet drawins because the bullet never checked for collision
     handleBulletCollision();
-}
-
-void ClientGameManager::playerBlockCollision() {
-
-    //no broadphase as of yet, check if player collides with any blocks and handle collision accordingly
-    for(auto block : getBlocks()) {
-
-        if(userPlayer.getCollisionBox().intersects(block->getCollisionBox())) {
-
-            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getCollisionBox(), block->getCollisionBox());
-            
-            //make player move the required distance to escape collision
-            
-        }
-    }
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
@@ -227,5 +228,16 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::handleCollisions() {
 
-    playerBlockCollision();
+    //no broadphase as of yet, check if player collides with any blocks and handle collision accordingly
+    //check for collision between players and blocks
+    for(auto block : getBlocks()) {
+
+        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
+
+            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
+
+            //make player move the required distance to escape collision
+            userPlayer.move(movementOffset);
+        }
+    }
 }

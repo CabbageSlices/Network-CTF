@@ -78,6 +78,9 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
     } else if(checkPacketType(data, PLAYER_GUNFIRE)) {
 
         handlePlayerGunfire(player, data);
+    } else if(checkPacketType(data, PLAYER_KEYSTATE_UPDATE)) {
+
+        handlePlayerKeystate(player, data);
     }
 }
 
@@ -119,6 +122,39 @@ void ServerGameManager::handlePlayerInput(shared_ptr<ConnectedPlayer> player, sf
     inputPacket >> rotation;
     player->player.setRotation(rotation);
 
+}
+
+void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player, sf::Packet& statePacket) {
+
+    //packet type hasn't been read from packet so remove it
+    int packetType = 0;
+    statePacket >> packetType;
+
+    //read the keystate now
+    UserPlayer::KeyState keystate;
+
+    statePacket >> keystate.pressedLeft;
+    statePacket >> keystate.pressedRight;
+    statePacket >> keystate.pressedUp;
+    statePacket >> keystate.pressedDown;
+
+    float rotation = 0;
+    statePacket >> rotation;
+
+    //read the id of this state update
+    sf::Uint32 inputId = 0;
+    statePacket >> inputId;
+
+    //if the input id is older than the last input processed by the server it means its old data so ignore
+    if(inputId < player->lastConfirmedInputId) {
+
+        return;
+    }
+
+    player->lastConfirmedInputId = inputId;
+
+    player->player.handleClientKeystate(keystate);
+    player->player.setRotation(rotation);
 }
 
 void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {
@@ -294,6 +330,12 @@ void ServerGameManager::setup() {
 
     ///no setup needed
     ///intentionally blank (for now)
+}
+
+void ServerGameManager::handleStateInputs() {
+
+    ///no state inputs to handle yet
+    ///intentionally left blank
 }
 
 void ServerGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {

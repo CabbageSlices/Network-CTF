@@ -19,6 +19,9 @@ class InterpolatingPlayer;
 //also adds the player's current rotation so server can send player's rotation to other clients
 bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 
+//create a packet that contains the players current keystate
+void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
+
 //create update packet to give to player
 void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
 

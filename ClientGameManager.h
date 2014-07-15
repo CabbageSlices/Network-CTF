@@ -66,6 +66,8 @@ class ClientGameManager: public GameManager {
         //make it virtual so derived classes can modify it to do different things
         virtual void setup();
 
+        virtual void handleStateInputs();
+
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
 

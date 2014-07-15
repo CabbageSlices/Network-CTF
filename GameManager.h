@@ -30,6 +30,9 @@ class GameManager {
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
 
+        //handle input based on keyboard and mouse states instead of button presses
+        virtual void handleStateInputs() = 0;
+
         //handles inputs that must be handled regardless of the game state
         void handleCommonInputs(sf::Event& event, sf::RenderWindow& window);
 

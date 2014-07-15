@@ -36,6 +36,22 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
     return playerInputs.size() > 0;
 }
 
+void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
+
+    UserPlayer::KeyState keystate = player.getKeystate();
+
+    dataDestination << PLAYER_KEYSTATE_UPDATE;
+
+    dataDestination << keystate.pressedLeft;
+    dataDestination << keystate.pressedRight;
+    dataDestination << keystate.pressedUp;
+    dataDestination << keystate.pressedDown;
+
+    dataDestination << player.getRotation();
+
+    dataDestination << keystate.inputId;
+}
+
 void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
 
     //set the packet type

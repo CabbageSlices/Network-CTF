@@ -17,11 +17,11 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    gameManager.runGame(window);
+    ///gameManager.runGame(window);
 
     ServerGameManager serverGameManager;
 
-    ///serverGameManager.runGame(window);
+    serverGameManager.runGame(window);
 
     return 0;
 }

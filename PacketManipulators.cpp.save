@@ -36,6 +36,20 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
     return playerInputs.size() > 0;
 }
 
+void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
+
+    UserPlayer::KeyState keystate = player.getKeystate();
+    
+    dataDestination << PLAYER_KEYSTATE_UPDATE;
+
+    dataDestination << keystate.pressedLeft;
+    dataDestination << keystate.pressedRight;
+    dataDestination << keystate.pressedUp;
+    dataDestination << keystate.pressedDown;
+
+    dataDestination << keystate.inputId;
+}
+
 void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
 
     //set the packet type
@@ -43,7 +57,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
 
     dataDestination << lastConfirmedInput;
 
-    sf::Vector2f playerPosition = player.getPosition();
+    sf::Vector2f playerPosition = player.getDestinationPosition();
 
     dataDestination << playerPosition.x;
     dataDestination << playerPosition.y;
@@ -220,7 +234,7 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         bool playerAlreadyExists = false;
 
         //player who is being updated
-        shared_ptr<Player> updatedPlayer;
+        shared_ptr<InterpolatingPlayer> updatedPlayer;
 
         for(auto player : players) {
 
@@ -235,7 +249,7 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         if(!playerAlreadyExists) {
 
            //player does not exist so create him
-            shared_ptr<Player> newPlayer(new Player());
+            shared_ptr<InterpolatingPlayer> newPlayer(new InterpolatingPlayer());
             updatedPlayer = newPlayer;
 
             //save the data of the new player

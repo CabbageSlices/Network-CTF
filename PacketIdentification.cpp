@@ -1,6 +1,7 @@
 #include "PacketIdentification.h"
 
 const int PLAYER_INPUT = 4;
+const int PLAYER_KEYSTATE_UPDATE = 11;
 const int PLAYER_STATE_UPDATE = 5;
 
 //packet id for packets containing information about the other players connected to the server, does not contain info about the user's player

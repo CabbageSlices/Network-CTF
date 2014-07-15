@@ -5,6 +5,7 @@
 ///how a packet is processed is dependant on the id of the packet
 
 extern const int PLAYER_INPUT;
+extern const int PLAYER_KEYSTATE_UPDATE;
 extern const int PLAYER_STATE_UPDATE;
 
 //packet id for packets containing information about the other players connected to the server, does not contain info about the user's player

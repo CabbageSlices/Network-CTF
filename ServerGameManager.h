@@ -63,6 +63,9 @@ class ServerGameManager : public GameManager {
         //handle a new input given by the player
         void handlePlayerInput(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket);
 
+        //handle a new keystate update from client
+        void handlePlayerKeystate(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& statePacket);
+
         //handle a player's gunfire packet
         void handlePlayerGunfire(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket);
 
@@ -99,6 +102,8 @@ class ServerGameManager : public GameManager {
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
         virtual void setup();
+
+        virtual void handleStateInputs();
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);

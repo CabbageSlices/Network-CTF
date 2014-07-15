@@ -39,6 +39,8 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
 
         this->handleComponentInputs(event, window);
     }
+    
+    this->handleStateInputs();
 }
 
 void GameManager::handleCommonInputs(sf::Event& event, sf::RenderWindow& window) {
@@ -61,7 +63,7 @@ void GameManager::updateWorld(sf::RenderWindow& window) {
         float delta = optimalTimeStep.asSeconds();
 
         this->updateTimeComponents(delta, window);
-        
+
         //after updating objects handle collision between objects
         this->handleCollisions();
 

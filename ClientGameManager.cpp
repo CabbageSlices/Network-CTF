@@ -76,6 +76,16 @@ void ClientGameManager::sendInputsToServer() {
     }
 
     userPlayer.clearInputsToSend();
+
+    //now send the players state if needed
+    if(userPlayer.shouldSendKeystate()) {
+
+        sf::Packet statePacket;
+        createStatePacket(userPlayer, statePacket);
+        userPlayer.resetKeystateTimer();
+
+        client.sendToServer(statePacket);
+    }
 }
 
 void ClientGameManager::sendGunshotsToServer() {
@@ -169,10 +179,15 @@ void ClientGameManager::setup() {
     }
 }
 
+void ClientGameManager::handleStateInputs() {
+
+    ///intentionally left blank for now
+}
+
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
     //handle the player's inputs
-    userPlayer.handleEvent(event);
+    userPlayer.handleEvents(event);
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {

@@ -58,9 +58,6 @@ class ClientGameManager: public GameManager {
         void updateConnectedPlayers(const float& delta);
 
         void handleBulletCollision();
-        
-        //collisions between the user and blocks, just for drawing purposes
-        void playerBlockCollision();
 
     protected:
 
@@ -68,6 +65,8 @@ class ClientGameManager: public GameManager {
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
         virtual void setup();
+        
+        virtual 
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
@@ -82,7 +81,7 @@ class ClientGameManager: public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
-        
+
         virtual void handleCollisions();
 
     public:

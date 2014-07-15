@@ -19,13 +19,14 @@ UserPlayer::UserPlayer():
     queuedGunshotRotations(),
     currentInputId(0),
     nextNewInputId(0),
-    rotationUpdateTimer(),
-    rotationUpdateDelay(sf::milliseconds(150))
+    keystateUpdateTimer(),
+    keystateUpdateDelay(sf::milliseconds(100)),
+    keystate()
     {
 
     }
 
-void UserPlayer::handleEvent(sf::Event& event) {
+void UserPlayer::handleEvents(sf::Event& event) {
 
     //convert all events to an input and place them in the input queue to be handled later, and create an input to send to the server
     if(event.type == sf::Event::KeyPressed) {
@@ -86,6 +87,14 @@ void UserPlayer::handleEvent(sf::Event& event) {
     processInput(getInputToProcess());
 }
 
+void UserPlayer::handleStateEvents() {
+
+    keystate.pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+    keystate.pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+    keystate.pressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+    keystate.pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+}
+
 void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId) {
 
     //if the first input in queue has an id that is greater than the last confirmed input id it means
@@ -127,6 +136,21 @@ const vector<float>& UserPlayer::getGunshotsToSend() const {
     return queuedGunshotRotations;
 }
 
+bool UserPlayer::shouldSendKeystate() {
+
+    return keystateUpdateTimer.getElapsedTime() > keystateUpdateDelay;
+}
+
+UserPlayer::KeyState UserPlayer::getKeystate() const {
+
+    return keystate;
+}
+
+void UserPlayer::resetKeystateTimer() {
+
+    keystateUpdateTimer.restart();
+}
+
 void UserPlayer::clearGunshotQueue() {
 
     queuedGunshotRotations.clear();
@@ -158,7 +182,14 @@ void UserPlayer::handleClientInput(Input& clientInput) {
     processInput(clientInput);
 }
 
+void UserPlayer::handleClientKeystate(KeyState& state) {
+
+    keystate = state;
+}
+
 void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
+
+    determineMovement();
 
     pastHitBox.setPosition(destinationHitBox.getPosition());
 
@@ -171,13 +202,6 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
 
     setRotation(calculateAngle(currentHitBox.getPosition(), mousePosition));
-
-    //check if the player should create a blank input in order to update rotation
-    if(rotationUpdateTimer.getElapsedTime() > rotationUpdateDelay && inputsToSend.size() == 0) {
-
-        placeIntoQueue(createInput(ROTATION_UPDATE));
-        rotationUpdateTimer.restart();
-    }
 }
 
 void UserPlayer::drawGun(sf::RenderWindow& window) {
@@ -217,50 +241,51 @@ UserPlayer::Input UserPlayer::getInputToProcess() {
 void UserPlayer::processInput(const Input& inputToProcess) {
 
     //if the given input is invalid then don't process
-    if(inputToProcess.inputId == INVALID_INPUT_ID || inputToProcess.action == ROTATION_UPDATE) {
+    if(inputToProcess.inputId == INVALID_INPUT_ID) {
 
         return;
     }
+
+    //set the current keystates input id to this id because it is the latest keystate
+    keystate.inputId = inputToProcess.inputId;
 
     Action action = inputToProcess.action;
 
     if(action == PRESS_LEFT) {
 
-        velocities.x = -getHorizontalVelocity();
+        keystate.pressedLeft = true;
 
     }else if(action == PRESS_RIGHT) {
 
-        velocities.x = getHorizontalVelocity();
+        keystate.pressedRight = true;
 
     }else if(action == PRESS_UP) {
 
-        velocities.y = -getVerticalVelocity();
+        keystate.pressedUp = true;
 
     }else if(action == PRESS_DOWN) {
 
-        velocities.y = getVerticalVelocity();
+        keystate.pressedDown = true;
 
     }
 
-    //if the player releases a key and he is moving in the direction of the key press, then stop moving
-    //otherwise he was moving in the opposite direction and releasing left shouldn't stop him from moving right
-    if(action == RELEASE_LEFT && velocities.x < 0) {
+    if(action == RELEASE_LEFT) {
 
-        velocities.x = 0;
+        keystate.pressedLeft = false;
 
-    }else if(action == RELEASE_RIGHT && velocities.x > 0) {
+    } else if(action == RELEASE_RIGHT) {
 
-        velocities.x = 0;
+        keystate.pressedRight = false;
 
-    }else if(action == RELEASE_UP && velocities.y < 0) {
+    } else if(action == RELEASE_UP) {
 
-        velocities.y = 0;
+        keystate.pressedUp = false;
 
-    }else if(action == RELEASE_DOWN && velocities.y > 0) {
+    } else if(action == RELEASE_DOWN) {
 
-        velocities.y = 0;
-
+        keystate.pressedDown = false;
     }
+
 }
 
 void UserPlayer::placeIntoQueue(Input inputToQueue) {
@@ -296,6 +321,35 @@ UserPlayer::Input UserPlayer::createInput(const Action& playerAction) {
     nextNewInputId++;
 
     return input;
+}
+
+void UserPlayer::determineMovement() {
+
+    if(keystate.pressedLeft) {
+
+        velocities.x = -getHorizontalVelocity();
+
+    } else if(keystate.pressedRight) {
+
+        velocities.x = getHorizontalVelocity();
+
+    } else {
+
+        velocities.x = 0;
+    }
+
+    if(keystate.pressedUp) {
+
+        velocities.y = -getVerticalVelocity();
+
+    } else if(keystate.pressedDown) {
+
+        velocities.y = getHorizontalVelocity();
+
+    } else {
+
+        velocities.y = 0;
+    }
 }
 
 void UserPlayer::fireGun() {
