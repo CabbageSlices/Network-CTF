@@ -14,6 +14,11 @@ const sf::FloatRect Block::getCollisionBox() const {
     return collisionBox.getGlobalBounds();
 }
 
+const sf::Vector2f Block::getPosition() const {
+
+    return collisionBox.getPosition();
+}
+
 void Block::draw(sf::RenderWindow& window) {
 
     window.draw(collisionBox);

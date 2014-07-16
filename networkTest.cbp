@@ -53,6 +53,8 @@
 		<Unit filename="InterpolatingPlayer.h" />
 		<Unit filename="Lerp.cpp" />
 		<Unit filename="Lerp.h" />
+		<Unit filename="LevelManager.cpp" />
+		<Unit filename="LevelManager.h" />
 		<Unit filename="LineSegment.cpp" />
 		<Unit filename="LineSegment.h" />
 		<Unit filename="PacketIdentification.cpp" />

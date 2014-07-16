@@ -53,6 +53,8 @@
 		<Unit filename="InterpolatingPlayer.h" />
 		<Unit filename="Lerp.cpp" />
 		<Unit filename="Lerp.h" />
+		<Unit filename="LevelManager.cpp" />
+		<Unit filename="LevelManager.h" />
 		<Unit filename="LineSegment.cpp" />
 		<Unit filename="LineSegment.h" />
 		<Unit filename="PacketIdentification.cpp" />
@@ -72,8 +74,6 @@
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="networkTest.cpp" />
-		<Unit filename="player.cpp" />
-		<Unit filename="player.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

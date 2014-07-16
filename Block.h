@@ -15,6 +15,7 @@ class Block {
         Block(const sf::Vector2f& centerPosition);
 
         const sf::FloatRect getCollisionBox() const;
+        const sf::Vector2f getPosition() const;
 
         void draw(sf::RenderWindow& window);
 };
