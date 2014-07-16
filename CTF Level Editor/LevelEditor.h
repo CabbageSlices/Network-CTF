@@ -1,0 +1,16 @@
+#ifndef LEVELEDITOR_H_INCLUDED
+#define LEVELEDITOR_H_INCLUDED
+
+#include "SFML/System.hpp"
+#include "SFML/Graphics.hpp"
+
+//a class that lets you create, save, and load levels, until this is made just use the simple garbage in main to test level editing
+class LevelEditor {
+
+    private:
+
+    public:
+
+};
+
+#endif // LEVELEDITOR_H_INCLUDED

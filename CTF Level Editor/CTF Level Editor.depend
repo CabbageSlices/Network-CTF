@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1405473671 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.cpp
+	"Block.h"
+	"math.h"
+
+1405473671 c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1405148931 c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1405547256 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.cpp
+	"LevelManager.h"
+	"Block.h"
+	<iostream>
+	<cstdlib>
+
+1405473671 c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<string>
+	<vector>
+	<tr1/memory>
+	<fstream>
+
+1405148931 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.cpp
+	"math.h"
+	<cmath>
+
+1405546893 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\main.cpp
+	"Block.h"
+	"LevelManager.h"
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+	<tr1/memory>
+

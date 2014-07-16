@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "Block.h"
+#include "LevelManager.h"
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -10,8 +11,7 @@ GameManager::GameManager() :
     optimalTimeStep(sf::milliseconds(15)),
     blocks()
     {
-        shared_ptr<Block> block(new Block(sf::Vector2f(360, 300) ));
-        blocks.push_back(block);
+        loadLevel("level", blocks);
     }
 
 void GameManager::runGame(sf::RenderWindow& window) {

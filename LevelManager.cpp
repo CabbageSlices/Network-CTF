@@ -43,7 +43,7 @@ bool saveLevel(const string& levelName, const vector<shared_ptr<Block> >& blocks
 bool saveBlocks(const std::vector<std::tr1::shared_ptr<Block> >& blocks, std::fstream& file) {
 
     //put the blocks tag
-    file << "blocks" << endl;
+    file << BEGIN_BLOCKS << endl;
 
     //now save all of the blocks
     for(auto block : blocks) {
@@ -57,7 +57,7 @@ bool saveBlocks(const std::vector<std::tr1::shared_ptr<Block> >& blocks, std::fs
     }
 
     //indicate the end of the blocks
-    file << "end blocks" << endl;
+    file << END_BLOCKS << endl;
 
     //check if the file is in an error state now
     if(!file.good()) {
@@ -107,8 +107,7 @@ bool loadBlocks(vector<shared_ptr<Block> >& blocks, fstream& file) {
         //read the x and y position and create a block at the given position
         sf::Vector2f position(0, 0);
 
-        //x position
-        getline(file, downloadedData);
+        //x position, x psotiion is read at the beginning of the loop in the condition
         position.x = atoi(downloadedData.c_str());
 
         //y position
