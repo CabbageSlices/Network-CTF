@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <tr1/memory>
+#include <algorithm>
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -21,12 +22,14 @@ int main() {
     vector<shared_ptr<Block> > blocks;
 
     bool creatingBlocks = false;
-    bool destoryingBlocks = false;
+    bool destroyingBlocks = false;
 
     //timer to set delay on how often a block is created or dstoryed while the button is held
     //that way user doens't have to spam click mouse to create a destory, unless they want to
-    sf::Clock buttonPressTimer;
-    sf::Time buttonPressDelay = sf::milliseconds(1);
+    sf::Clock destoryBlockTimer;
+    sf::Time destoryBlockDelay = sf::milliseconds(50);
+
+    loadLevel("level", blocks);
 
     while(window.isOpen()) {
 
@@ -36,53 +39,43 @@ int main() {
 
                 window.close();
             }
-
-            ///use events instead of mousestates for creating and destorying blocks that way you can reset the timer for mouse click everytime the mouse is clicked
-            ///that way spam clicking will be faster than holding down the mouse button if user presses fast enough
-            if(event.type == sf::Event::MouseButtonPressed) {
-
-                if(event.mouseButton.button == sf::Mouse::Left) {
-
-                    creatingBlocks = true;
-                }
-
-                if(event.mouseButton.button == sf::Mouse::Right) {
-
-                    destoryingBlocks = true;
-                }
-            }
-
-            if(event.type == sf::Event::MouseButtonReleased) {
-
-                if(event.mouseButton.button == sf::Mouse::Left) {
-
-                    creatingBlocks = false;
-                }
-
-                if(event.mouseButton.button == sf::Mouse::Right) {
-
-                    destoryingBlocks = false;
-                }
-            }
         }
+
+        creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-        if(creatingBlocks && buttonPressTimer.getElapsedTime() > buttonPressDelay) {
+        if(creatingBlocks) {
 
-            //createa new block at the given position only if there isn't a block there already
-            for(auto block : blocks) {
-                
-                if(block->getCollision)
+            shared_ptr<Block> newBlock(new Block(mousePosition));
+
+            bool collides = false;
+
+//            for(auto block : blocks) {
+//
+//                if(block->getCollisionBox().intersects(newBlock->getCollisionBox())) {
+//
+//                    collides = true;
+//                    break;
+//                }
+//            }
+            std::for_each(blocks.begin(), blocks.end(),
+                          [&](shared_ptr<Block> block1, shared_ptr<Block> block2) {
+                          if(block1->getCollisionBox().intersects(block2->getCollisionBox())) {
+
+                            collides = true;
+                          }
+
+                          });
+
+            if(!collides) {
+
+                blocks.push_back(newBlock);
             }
-            shared_ptr<Block> block(new Block(mousePosition));
-
-            blocks.push_back(block);
-
-            buttonPressTimer.restart();
         }
 
-        if(destoryingBlocks && buttonPressTimer.getElapsedTime() > buttonPressDelay) {
+        if(destroyingBlocks && destoryBlockTimer.getElapsedTime() > destoryBlockDelay) {
 
             //find the block in the given position and delete it, dlete the first one mouse finds
             for(unsigned int index = 0; index < blocks.size(); index++) {
@@ -94,7 +87,7 @@ int main() {
                 }
             }
 
-            buttonPressTimer.restart();
+            destoryBlockTimer.restart();
         }
 
         window.clear();
@@ -106,6 +99,8 @@ int main() {
 
         window.display();
     }
+
+    saveLevel("level", blocks);
 
     return 0;
 }
