@@ -5,7 +5,6 @@
 
 #include <vector>
 #include <tr1/memory>
-#include <algorithm>
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -52,22 +51,14 @@ int main() {
 
             bool collides = false;
 
-//            for(auto block : blocks) {
-//
-//                if(block->getCollisionBox().intersects(newBlock->getCollisionBox())) {
-//
-//                    collides = true;
-//                    break;
-//                }
-//            }
-            std::for_each(blocks.begin(), blocks.end(),
-                          [&](shared_ptr<Block> block1) {
-                          if(block1->getCollisionBox().intersects(newBlock->getCollisionBox())) {
+            for(auto block : blocks) {
 
-                            collides = true;
-                          }
+                if(block->getCollisionBox().intersects(newBlock->getCollisionBox())) {
 
-                          });
+                    collides = true;
+                    break;
+                }
+            }
 
             if(!collides) {
 

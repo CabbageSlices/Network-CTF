@@ -29,12 +29,11 @@
 	"math.h"
 	<cmath>
 
-1405582879 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\main.cpp
+1405546893 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\main.cpp
 	"Block.h"
 	"LevelManager.h"
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<vector>
 	<tr1/memory>
-	<algorithm>
 
