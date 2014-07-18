@@ -26,7 +26,7 @@ class Camera {
 
     public:
 
-        Camera(sf::RenderWindow& window);
+        Camera();
 
         //set the view to the given window
         void applyCamera(sf::RenderWindow& window) const;

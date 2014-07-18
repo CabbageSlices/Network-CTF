@@ -1,9 +1,9 @@
 #include "Camera.h"
 #include "math.h"
 
-Camera::Camera(sf::RenderWindow& window):
-    view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y)),
-    defaultCameraSize(window.getSize().x, window.getSize().y),
+Camera::Camera():
+    view(sf::FloatRect(0, 0, 1, 1)),
+    defaultCameraSize(1, 1),
     zoomLevel(0),
     ZOOM_FACTOR(0.9)
     {

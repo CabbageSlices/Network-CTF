@@ -17,7 +17,7 @@ GameManager::GameManager() :
 void GameManager::runGame(sf::RenderWindow& window) {
 
     //setup is virtual so this will be a polymorphic call depending on what class calls it
-    this->setup();
+    this->setup(window);
 
     sf::Event event;
 
@@ -37,10 +37,10 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
 
         handleCommonInputs(event, window);
 
+        this->handleWindowEvents(event, window);
+
         this->handleComponentInputs(event, window);
     }
-
-    this->handleStateInputs();
 }
 
 void GameManager::handleCommonInputs(sf::Event& event, sf::RenderWindow& window) {
@@ -70,7 +70,7 @@ void GameManager::updateWorld(sf::RenderWindow& window) {
         accumulator -= optimalTimeStep;
     }
 
-    this->handlePostUpdate();
+    this->handlePostUpdate(window);
 }
 
 void GameManager::drawWorld(sf::RenderWindow& window) {

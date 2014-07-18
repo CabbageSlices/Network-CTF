@@ -101,9 +101,9 @@ class ServerGameManager : public GameManager {
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
-        virtual void setup();
+        virtual void setup(sf::RenderWindow& window);
 
-        virtual void handleStateInputs();
+        virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window);
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
@@ -114,7 +114,7 @@ class ServerGameManager : public GameManager {
         virtual void updateTimeComponents(const float& delta, sf::RenderWindow& window);
 
         //handle everything that needs to be called after the update loop is completed
-        virtual void handlePostUpdate();
+        virtual void handlePostUpdate(sf::RenderWindow& window);
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);

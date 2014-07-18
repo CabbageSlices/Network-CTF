@@ -6,6 +6,7 @@
 
 #include "Client.h"
 #include "UserPlayer.h"
+#include "Camera.h"
 #include "GameManager.h"
 
 #include <tr1/memory>
@@ -31,6 +32,9 @@ class ClientGameManager: public GameManager {
 
         //player being controlled by the user
         UserPlayer userPlayer;
+
+        //camera to follow player around
+        Camera camera;
 
         //other players connected to world, only interpolates does not have physics
         std::vector<std::tr1::shared_ptr<InterpolatingPlayer> > connectedPlayers;
@@ -64,9 +68,10 @@ class ClientGameManager: public GameManager {
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
-        virtual void setup();
+        virtual void setup(sf::RenderWindow& window);
 
-        virtual void handleStateInputs();
+        //handle events related to the window, such as resizing
+        virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window);
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
@@ -77,7 +82,7 @@ class ClientGameManager: public GameManager {
         virtual void updateTimeComponents(const float& delta, sf::RenderWindow& window);
 
         //handle everything that needs to be called after the update loop is completed
-        virtual void handlePostUpdate();
+        virtual void handlePostUpdate(sf::RenderWindow& window);
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);

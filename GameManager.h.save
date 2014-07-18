@@ -29,9 +29,6 @@ class GameManager {
         ///uses the curent world state to determine what to do in each function
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
-        
-        //handle input based on keyboard and mouse states instead of button presses
-        void handleStateInputs() = 0;
 
         //handles inputs that must be handled regardless of the game state
         void handleCommonInputs(sf::Event& event, sf::RenderWindow& window);
@@ -48,7 +45,10 @@ class GameManager {
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
-        virtual void setup() = 0;
+        virtual void setup(sf::RenderWindow& window) = 0;
+        
+        //handle events related to the window, such as resizing
+        virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window) = 0;
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window) = 0;
@@ -59,7 +59,7 @@ class GameManager {
         virtual void updateTimeComponents(const float& delta, sf::RenderWindow& window) = 0;
 
         //handle everything that needs to be called after the update loop is completed
-        virtual void handlePostUpdate() = 0;
+        virtual void handlePostUpdate(sf::RenderWindow& window) = 0;
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;

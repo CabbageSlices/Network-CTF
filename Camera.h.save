@@ -5,49 +5,50 @@
 #include "SFML/Graphics.hpp"
 
 class Camera {
-    
+
     private:
-        
+
         sf::View view;
-        
+
         //default view size that way camera can revert any zooms
         //the default view size is always equal ot the windows current resolution
         //so whenever the window's resolution is changed you should change the default view size
-        sf::Vector2f defaultViewSize;
-        
+        sf::Vector2f defaultCameraSize;
+
         //zoom level of the camera, default level is 0, can only zoom in
         unsigned short zoomLevel;
-        
+
         //how much camera zooms in or out every time the zoom function is called
         const float ZOOM_FACTOR;
-        
+
         //apply the zoom level to the camera
         void applyZoom();
-    
+
     public:
-        
-        Camera(sf::RenderWindow& window);
-        
+
+        Camera();
+
         //set the view to the given window
         void applyCamera(sf::RenderWindow& window) const;
-        
+
         //set the default view to the given window
         void applyDefaultCamera(sf::RenderWindow& window) const;
-        
+
         //set the new center position of the camera, the center of the center is basically the center of the target given
         //the center position must be within the given world bounds
         void setCameraCenter(const sf::Vector2f& targetCenter, const sf::FloatRect& worldBounds);
-        
+
         //take the window and use it's dimensions to determine the new default size
+        //resets zoom level
         void setDefaultSize(sf::RenderWindow& window);
-        
+
         void zoomIn();
         void zoomOut();
-        
+
         //set the zoom to the given level if the level is valid
         //don't use unsigned for the argument because if user passes a negative number it will become a very large number
         //check for bounds error when zooming
-        void setZoomLevel(short& zoom);
+        void setZoomLevel(short zoom);
 };
 
 #endif // CAMERA_H_INCLUDED

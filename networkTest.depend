@@ -182,7 +182,7 @@
 	<vector>
 	<tr1/memory>
 
-1405381701 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
+1405716109 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
 	"SFML/Network.hpp"
 	"UserPlayer.h"
 	"ConnectionManager.h"
@@ -198,7 +198,7 @@
 	<vector>
 	<tr1/memory>
 
-1405380417 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1405716109 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Block.h"
@@ -210,7 +210,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1405631275 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1405716109 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -220,11 +220,12 @@
 	"InterpolatingPlayer.h"
 	<iostream>
 
-1405380417 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1405716109 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
 	"UserPlayer.h"
+	"Camera.h"
 	"GameManager.h"
 	<tr1/memory>
 	<vector>
@@ -236,12 +237,13 @@
 	"Bullet.h"
 	<cmath>
 
-1405631275 c:\users\nimesh\documents\github\network-ctf\collision.h
+1405714394 c:\users\nimesh\documents\github\network-ctf\collision.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Bullet.h"
 	<tr1/memory>
 	<vector>
+	<functional>
 
 1405148931 c:\users\nimesh\documents\github\network-ctf\linesegment.h
 	"SFML/System.hpp"
@@ -594,4 +596,12 @@
 	<vector>
 	<tr1/memory>
 	<fstream>
+
+1405716109 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
+	"Camera.h"
+	"math.h"
+
+1405716109 c:\users\nimesh\documents\github\network-ctf\camera.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
 

@@ -28,6 +28,7 @@ ClientGameManager::ClientGameManager() :
     currentState(STATE_PLAYING),
     client("192.168.0.14", 8080),
     userPlayer(),
+    camera(),
     connectedPlayers(),
     stateUpdateTimer(),
     serverUpdateTime(sf::milliseconds(60)),
@@ -162,14 +163,14 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        bulletEntityCollision(bullet, getBlocks());
+        bulletEntityCollision<Block>(bullet, getBlocks());
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
     }
 }
 
-void ClientGameManager::setup() {
+void ClientGameManager::setup(sf::RenderWindow& window) {
 
     int playerId = 0;
 
@@ -177,11 +178,18 @@ void ClientGameManager::setup() {
 
         userPlayer.setId(playerId);
     }
+
+    //setup camera
+    camera.setDefaultSize(window);
 }
 
-void ClientGameManager::handleStateInputs() {
+void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
 
-    ///intentionally left blank for now
+    //window size was changed so change the camera
+    if(event.type == sf::Event::Resized) {
+
+        camera.setDefaultSize(window);
+    }
 }
 
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
@@ -209,10 +217,17 @@ void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     updateConnectedPlayers(delta);
 }
 
-void ClientGameManager::handlePostUpdate() {
+void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
+
+    //move camera to new track players new position
+    ///currently there is no level bounds or properties so just give some default level properties for now
+    camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
+                           sf::FloatRect(-500, -500, 2500, 2500));
+
+    camera.applyCamera(window);
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {

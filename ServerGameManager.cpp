@@ -187,7 +187,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-        bulletEntityCollision(bullet, getBlocks());
+        bulletEntityCollision<Block>(bullet, getBlocks());
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
@@ -326,15 +326,14 @@ void ServerGameManager::drawPlayers(sf::RenderWindow& window) {
     }
 }
 
-void ServerGameManager::setup() {
+void ServerGameManager::setup(sf::RenderWindow& window) {
 
     ///no setup needed
     ///intentionally blank (for now)
 }
 
-void ServerGameManager::handleStateInputs() {
+void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
 
-    ///no state inputs to handle yet
     ///intentionally left blank
 }
 
@@ -374,7 +373,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     }
 }
 
-void ServerGameManager::handlePostUpdate() {
+void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     for(auto player : players) {
 
