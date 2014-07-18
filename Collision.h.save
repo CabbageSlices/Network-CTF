@@ -4,6 +4,8 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Bullet.h"
+
+#include <functional>
 #include <tr1/memory>
 #include <vector>
 
@@ -21,7 +23,7 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
 
 //handle collision between the given bullet and all objects in the given container, only the bullet is changed
 template<class Entity>
-void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std::tr1::shared_ptr<Entity> >& entities) {
+void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std::tr1::shared_ptr<Entity> >& entities, std::function<void(Entity)>) {
 
     //go through all entities and check for collision with them
     //line cuts off after each collision so in the end it will have collided with the nearest object

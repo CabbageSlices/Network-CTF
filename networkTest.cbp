@@ -35,6 +35,8 @@
 		<Unit filename="Block.h" />
 		<Unit filename="Bullet.cpp" />
 		<Unit filename="Bullet.h" />
+		<Unit filename="Camera.cpp" />
+		<Unit filename="Camera.h" />
 		<Unit filename="Client.cpp" />
 		<Unit filename="Client.h" />
 		<Unit filename="ClientGameManager.cpp" />

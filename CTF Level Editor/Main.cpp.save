@@ -2,6 +2,7 @@
 #include "LevelManager.h"
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "Camera.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -21,12 +22,19 @@ int main() {
     vector<shared_ptr<Block> > blocks;
 
     bool creatingBlocks = false;
-    bool destoryingBlocks = false;
+    bool destroyingBlocks = false;
 
     //timer to set delay on how often a block is created or dstoryed while the button is held
     //that way user doens't have to spam click mouse to create a destory, unless they want to
-    sf::Clock buttonPressTimer;
-    sf::Time buttonPressDelay = sf::milliseconds(1);
+    sf::Clock destoryBlockTimer;
+    sf::Time destoryBlockDelay = sf::milliseconds(50);
+
+    loadLevel("level", blocks);
+
+    Camera camera(window);
+
+    sf::Vector2f position(0, 0);
+    sf::Vector2f levelSize(2000, 2000);
 
     while(window.isOpen()) {
 
@@ -36,53 +44,55 @@ int main() {
 
                 window.close();
             }
-
-            ///use events instead of mousestates for creating and destorying blocks that way you can reset the timer for mouse click everytime the mouse is clicked
-            ///that way spam clicking will be faster than holding down the mouse button if user presses fast enough
-            if(event.type == sf::Event::MouseButtonPressed) {
-
-                if(event.mouseButton.button == sf::Mouse::Left) {
-
-                    creatingBlocks = true;
-                }
-
-                if(event.mouseButton.button == sf::Mouse::Right) {
-
-                    destoryingBlocks = true;
-                }
-            }
-
-            if(event.type == sf::Event::MouseButtonReleased) {
-
-                if(event.mouseButton.button == sf::Mouse::Left) {
-
-                    creatingBlocks = false;
-                }
-
-                if(event.mouseButton.button == sf::Mouse::Right) {
-
-                    destoryingBlocks = false;
-                }
-            }
         }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+
+            position.y -= 5;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+
+            position.y += 5;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+
+            position.x -= 5;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+            position.x += 5;
+        }
+
+        creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-        if(creatingBlocks && buttonPressTimer.getElapsedTime() > buttonPressDelay) {
+        if(creatingBlocks) {
 
-            //createa new block at the given position only if there isn't a block there already
+            shared_ptr<Block> newBlock(new Block(mousePosition));
+
+            bool collides = false;
+
             for(auto block : blocks) {
-                
-                if(block->getCollision)
+
+                if(block->getCollisionBox().intersects(newBlock->getCollisionBox())) {
+
+                    collides = true;
+                    break;
+                }
             }
-            shared_ptr<Block> block(new Block(mousePosition));
 
-            blocks.push_back(block);
+            if(!collides) {
 
-            buttonPressTimer.restart();
+                blocks.push_back(newBlock);
+            }
         }
 
-        if(destoryingBlocks && buttonPressTimer.getElapsedTime() > buttonPressDelay) {
+        if(destroyingBlocks && destoryBlockTimer.getElapsedTime() > destoryBlockDelay) {
 
             //find the block in the given position and delete it, dlete the first one mouse finds
             for(unsigned int index = 0; index < blocks.size(); index++) {
@@ -94,8 +104,21 @@ int main() {
                 }
             }
 
-            buttonPressTimer.restart();
+            destoryBlockTimer.restart();
         }
+        
+        if(position.x < 0) {
+            
+            position.x = 0;
+        }
+        
+        if(position.x > levelSize.x) {
+            
+            position.x = level
+        }
+
+        camera.setCameraCenter(position, sf::FloatRect(0, 0, levelSize.x, levelSize.y));
+        camera.applyCamera(window);
 
         window.clear();
 
@@ -106,6 +129,8 @@ int main() {
 
         window.display();
     }
+
+    saveLevel("level", blocks);
 
     return 0;
 }

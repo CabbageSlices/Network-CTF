@@ -85,7 +85,6 @@ void ClientGameManager::sendInputsToServer() {
         userPlayer.resetKeystateTimer();
 
         client.sendToServer(statePacket);
-        cout << "sent" << endl;
     }
 }
 
@@ -166,7 +165,10 @@ void ClientGameManager::handleBulletCollision() {
         bulletEntityCollision(bullet, getBlocks());
 
         //handle collision with other players
-        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
+        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers, 
+                                                   [](){
+                                                        cout << "Collision" << endl;
+                                                   });
     }
 }
 

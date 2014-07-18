@@ -2,6 +2,7 @@
 #include "LevelManager.h"
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "Camera.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -30,6 +31,11 @@ int main() {
 
     loadLevel("level", blocks);
 
+    Camera camera(window);
+
+    sf::Vector2f position(0, 0);
+    sf::Vector2f levelSize(2000, 2000);
+
     while(window.isOpen()) {
 
         while(window.pollEvent(event)) {
@@ -38,6 +44,44 @@ int main() {
 
                 window.close();
             }
+
+            if(event.type == sf::Event::KeyPressed) {
+
+                if(event.key.code == sf::Keyboard::A) {
+
+                    camera.zoomIn();
+                }
+
+                if(event.key.code == sf::Keyboard::S) {
+
+                    camera.zoomOut();
+                }
+            }
+
+            if(event.type == sf::Event::Resized) {
+
+                camera.setDefaultSize(window);
+            }
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+
+            position.y -= 2;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+
+            position.y += 2;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+
+            position.x -= 2;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+            position.x += 2;
         }
 
         creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
@@ -80,6 +124,29 @@ int main() {
 
             destoryBlockTimer.restart();
         }
+
+        if(position.x < 0) {
+
+            position.x = 0;
+        }
+
+        if(position.x > levelSize.x) {
+
+            position.x = levelSize.x;
+        }
+
+        if(position.y < 0) {
+
+            position.y = 0;
+        }
+
+        if(position.y > levelSize.y) {
+
+            position.y = levelSize.y;
+        }
+
+        camera.setCameraCenter(position, sf::FloatRect(0, 0, levelSize.x, levelSize.y));
+        camera.applyCamera(window);
 
         window.clear();
 
