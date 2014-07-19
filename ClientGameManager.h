@@ -34,6 +34,7 @@ class ClientGameManager: public GameManager {
         UserPlayer userPlayer;
 
         //camera to follow player around
+        //camera's zoom is reset every frame that way the zoom level can be determined every frame
         Camera camera;
 
         //other players connected to world, only interpolates does not have physics

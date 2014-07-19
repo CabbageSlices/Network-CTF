@@ -85,6 +85,11 @@ void Camera::setZoomLevel(short zoom) {
     applyZoom();
 }
 
+void Camera::resetZoom() {
+
+    setZoomLevel(0);
+}
+
 void Camera::applyZoom() {
 
     //the zoom level is just the default view size multiplied by a factor

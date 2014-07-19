@@ -47,6 +47,8 @@
 		<Unit filename="ConnectionManager.h" />
 		<Unit filename="GameManager.cpp" />
 		<Unit filename="GameManager.h" />
+		<Unit filename="GameWorld.cpp" />
+		<Unit filename="GameWorld.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
 		<Unit filename="Healthbar.cpp" />

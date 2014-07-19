@@ -17,6 +17,8 @@ PlayerBase::PlayerBase():
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
     health(),
+    playerImage(),
+    playerSprite(),
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
@@ -26,6 +28,10 @@ PlayerBase::PlayerBase():
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
+        
+        playerImage.loadFromFile("player.png");
+        playerSprite.setTexture(playerImage);
+        playerSprite.setOrigin(calculateCenter(playerSprite.getGlobalBounds() ));
     }
 
 vector<shared_ptr<Bullet> > PlayerBase::getBullets() {
@@ -68,6 +74,9 @@ void PlayerBase::interpolate(const float& deltaFraction) {
     const float& verticalDistance = ::interpolate(pastHitBox.getPosition().y, destinationHitBox.getPosition().y, deltaFraction);
 
     currentHitBox.setPosition(pastHitBox.getPosition().x + horizontalDistance, pastHitBox.getPosition().y + verticalDistance);
+    
+    //now update the sprites p
+    updateSpritePosition();
 
     //interpolate the player's rotation
     float rotationDelta = ::interpolate(pastRotation, destinationRotation, deltaFraction);
@@ -81,9 +90,10 @@ void PlayerBase::draw(sf::RenderWindow& window) {
 
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
-    
-    window.draw(currentHitBox);
-    
+
+    ///window.draw(currentHitBox);
+    window.draw(playerSprite);
+
     this->drawGun(window);
 
     health.draw(window);
@@ -97,6 +107,21 @@ const sf::Vector2f& PlayerBase::getDestinationPosition() const {
 sf::FloatRect PlayerBase::getCurrentHitbox() const {
 
     return currentHitBox.getGlobalBounds();
+}
+
+sf::FloatRect PlayerBase::getCollisionBox() const {
+
+    return currentHitBox.getGlobalBounds();
+}
+
+sf::FloatRect PlayerBase::getDestinationBox() const {
+
+    return destinationHitBox.getGlobalBounds();
+}
+
+void PlayerBase::move(const sf::Vector2f& offset) {
+
+    destinationHitBox.move(offset);
 }
 
 int PlayerBase::getHealth() const {
@@ -141,4 +166,9 @@ void PlayerBase::updateHealthPosition() {
     healthPosition.y = currentHitBox.getGlobalBounds().top - 10;
 
     health.setPosition(healthPosition);
+}
+
+void PlayerBase::updateSpritePosition() {
+    
+    playerSprite.setPosition(currentHitBox.getPosition());
 }

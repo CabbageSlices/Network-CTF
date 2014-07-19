@@ -198,10 +198,11 @@
 	<vector>
 	<tr1/memory>
 
-1405716109 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1405802506 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Block.h"
+	"GameWorld.h"
 	<vector>
 	<tr1/memory>
 
@@ -210,7 +211,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1405716109 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1405803185 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -220,7 +221,7 @@
 	"InterpolatingPlayer.h"
 	<iostream>
 
-1405716109 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1405803185 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -258,7 +259,7 @@
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1405547380 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1405802727 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"Block.h"
 	"LevelManager.h"
@@ -292,7 +293,7 @@
 1405382793 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1405382892 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1405716109 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -548,7 +549,7 @@
 	<vector>
 	<tr1/memory>
 
-1405372746 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1405804352 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -597,11 +598,23 @@
 	<tr1/memory>
 	<fstream>
 
-1405716109 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
+1405803185 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
 	"Camera.h"
 	"math.h"
 
-1405716109 c:\users\nimesh\documents\github\network-ctf\camera.h
+1405803185 c:\users\nimesh\documents\github\network-ctf\camera.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+
+1405802741 c:\users\nimesh\documents\github\network-ctf\gameworld.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+	<tr1/memory>
+	<string>
+
+1405802727 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
+	"GameWorld.h"
+	"Block.h"
+	"LevelManager.h"
 

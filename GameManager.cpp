@@ -9,9 +9,9 @@ GameManager::GameManager() :
     timer(),
     accumulator(),
     optimalTimeStep(sf::milliseconds(15)),
-    blocks()
+    world()
     {
-        loadLevel("level", blocks);
+        world.load("level");
     }
 
 void GameManager::runGame(sf::RenderWindow& window) {
@@ -77,23 +77,15 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     window.clear();
 
+    world.drawBackground(window);
     this->drawComponents(window);
-    drawBlocks(window);
 
     window.display();
 }
 
-void GameManager::drawBlocks(sf::RenderWindow& window) {
-
-    for(auto block : blocks) {
-
-        block->draw(window);
-    }
-}
-
 vector<shared_ptr<Block> >& GameManager::getBlocks() {
 
-    return blocks;
+    return world.getBlocks();
 }
 
 const float GameManager::calculateDeltaFraction() {

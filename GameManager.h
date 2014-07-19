@@ -4,6 +4,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Block.h"
+#include "GameWorld.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -24,7 +25,7 @@ class GameManager {
         //optimal timestep (amount of time passed) for physics simulation to run smoothly
         sf::Time optimalTimeStep;
 
-        std::vector<std::tr1::shared_ptr<Block> > blocks;
+        GameWorld world;
 
         ///uses the curent world state to determine what to do in each function
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
@@ -37,8 +38,6 @@ class GameManager {
         void updateWorld(sf::RenderWindow& window);
 
         void drawWorld(sf::RenderWindow& window);
-
-        void drawBlocks(sf::RenderWindow& window);
 
     protected:
 

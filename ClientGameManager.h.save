@@ -32,8 +32,9 @@ class ClientGameManager: public GameManager {
 
         //player being controlled by the user
         UserPlayer userPlayer;
-        
+
         //camera to follow player around
+        //camera's zoom is reset every frame that way the zoom level can be determined every frame
         Camera camera;
 
         //other players connected to world, only interpolates does not have physics
@@ -69,7 +70,7 @@ class ClientGameManager: public GameManager {
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
         virtual void setup(sf::RenderWindow& window);
-        
+
         //handle events related to the window, such as resizing
         virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window);
 

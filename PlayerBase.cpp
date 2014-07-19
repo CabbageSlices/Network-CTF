@@ -13,10 +13,12 @@ using std::endl;
 
 PlayerBase::PlayerBase():
     playerId(0),
-    pastHitBox(sf::Vector2f(50, 50)),
+    pastHitBox(sf::Vector2f(29, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
     health(),
+    playerTexture(),
+    playerSprite(),
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
@@ -26,6 +28,10 @@ PlayerBase::PlayerBase():
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
+
+        playerTexture.loadFromFile("player.png");
+        playerSprite.setTexture(playerTexture);
+        playerSprite.setOrigin(calculateCenter(playerSprite.getGlobalBounds() ));
     }
 
 vector<shared_ptr<Bullet> > PlayerBase::getBullets() {
@@ -69,6 +75,9 @@ void PlayerBase::interpolate(const float& deltaFraction) {
 
     currentHitBox.setPosition(pastHitBox.getPosition().x + horizontalDistance, pastHitBox.getPosition().y + verticalDistance);
 
+    //now update the sprites position
+    updateSpritePosition();
+
     //interpolate the player's rotation
     float rotationDelta = ::interpolate(pastRotation, destinationRotation, deltaFraction);
     currentRotation = pastRotation + rotationDelta;
@@ -82,7 +91,7 @@ void PlayerBase::draw(sf::RenderWindow& window) {
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    window.draw(currentHitBox);
+    window.draw(playerSprite);
 
     this->drawGun(window);
 
@@ -142,9 +151,7 @@ void PlayerBase::updateHitboxRotation() {
     //when doing the calculations the rotations increase counterclockwise
     //so sync the drawing with the calculations
 
-    currentHitBox.setRotation(-currentRotation);
-    pastHitBox.setRotation(-currentRotation);
-    destinationHitBox.setRotation(-currentRotation);
+    playerSprite.setRotation(-currentRotation);
 }
 
 void PlayerBase::updateHealthPosition() {
@@ -152,8 +159,13 @@ void PlayerBase::updateHealthPosition() {
     //set the healthbar above the player's current position
     sf::Vector2f healthPosition(0, 0);
 
-    healthPosition.x = currentHitBox.getGlobalBounds().left;
+    healthPosition.x = currentHitBox.getGlobalBounds().left - currentHitBox.getGlobalBounds().width;
     healthPosition.y = currentHitBox.getGlobalBounds().top - 10;
 
     health.setPosition(healthPosition);
+}
+
+void PlayerBase::updateSpritePosition() {
+
+    playerSprite.setPosition(currentHitBox.getPosition());
 }

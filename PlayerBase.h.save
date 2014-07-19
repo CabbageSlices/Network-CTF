@@ -28,6 +28,11 @@ class PlayerBase {
         sf::RectangleShape destinationHitBox;
 
         HealthBar health;
+        
+        //image for players sprite
+        sf::Image playerImage;
+        
+        sf::Sprite playerSprite;
 
         //rotation of the player in degrees, interolates like the hitbox
         float pastRotation;
@@ -41,6 +46,9 @@ class PlayerBase {
         //update teh position of the healthbar, tracks players current hitbox
         void updateHealthPosition();
         
+        //update the position of the player's sprite, places it at the players hitbox position
+        void updateSpritePosition();
+
         //overload in inherited class to draw differnt part of guns
         virtual void drawGun(sf::RenderWindow& window) = 0;
 
@@ -70,6 +78,12 @@ class PlayerBase {
 
         //just returns the player's current position box, usually jsut used to indicate his properties
         sf::FloatRect getCurrentHitbox() const;
+
+        sf::FloatRect getCollisionBox() const;
+
+        sf::FloatRect getDestinationBox() const;
+
+        void move(const sf::Vector2f& offset);
 
         int getHealth() const;
 

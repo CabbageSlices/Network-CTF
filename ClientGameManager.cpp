@@ -213,6 +213,9 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
+    //reset the cameras zoom before player is updated so after collision detection the zoom level is determined again
+    camera.resetZoom();
+
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }

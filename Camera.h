@@ -49,6 +49,8 @@ class Camera {
         //don't use unsigned for the argument because if user passes a negative number it will become a very large number
         //check for bounds error when zooming
         void setZoomLevel(short zoom);
+
+        void resetZoom();
 };
 
 #endif // CAMERA_H_INCLUDED

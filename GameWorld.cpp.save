@@ -1,0 +1,13 @@
+#include "GameWorld.h"
+#include "Block.h"
+
+GameWorld::GameWorld():
+    blocks()
+    {
+        
+    }
+    
+vector<shared_ptr<Block> >& GameWorld::getBlocks() const {
+    
+    return blocks;
+}

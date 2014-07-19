@@ -178,12 +178,19 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
 
         userPlayer.setId(playerId);
     }
-    
+
     //setup camera
     camera.setDefaultSize(window);
 }
 
-void Clien
+void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
+
+    //window size was changed so change the camera
+    if(event.type == sf::Event::Resized) {
+
+        camera.setDefaultSize(window);
+    }
+}
 
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
@@ -205,7 +212,8 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
-
+    
+    //reset the cameras zoom before player is updated so after coll
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }
@@ -214,12 +222,12 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
-    
+
     //move camera to new track players new position
     ///currently there is no level bounds or properties so just give some default level properties for now
     camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
                            sf::FloatRect(-500, -500, 2500, 2500));
-                           
+
     camera.applyCamera(window);
 }
 
