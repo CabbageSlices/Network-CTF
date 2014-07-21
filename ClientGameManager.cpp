@@ -225,12 +225,13 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
 
+    //apply camera before setting the center that way camera is already resized before it is set in the center
+    camera.applyCamera(window);
+
     //move camera to new track players new position
     ///currently there is no level bounds or properties so just give some default level properties for now
     camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
                            sf::FloatRect(-500, -500, 2500, 2500));
-
-    camera.applyCamera(window);
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {

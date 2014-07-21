@@ -1,16 +1,28 @@
 #include "Camera.h"
 #include "math.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 Camera::Camera():
     view(sf::FloatRect(0, 0, 1, 1)),
     defaultCameraSize(1, 1),
-    zoomLevel(0),
-    ZOOM_FACTOR(0.9)
+    currentCameraSize(defaultCameraSize),
+    destinationCameraSize(currentCameraSize),
+    transitionTimer(),
+    ZOOM_FACTOR(0.8)
     {
 
     }
 
-void Camera::applyCamera(sf::RenderWindow& window) const {
+void Camera::applyCamera(sf::RenderWindow& window) {
+
+    transitionZoom();
+
+    //update the views size
+    view.setSize(currentCameraSize);
 
     window.setView(view);
 }
@@ -61,46 +73,75 @@ void Camera::setDefaultSize(sf::RenderWindow& window) {
     defaultCameraSize.y = window.getSize().y;
 
     //since default size has been changed it means you should reset zoom
-    setZoomLevel(0);
+    resetAll();
 }
 
 void Camera::zoomIn() {
 
-    setZoomLevel(static_cast<short>(zoomLevel + 1));
+    //calculate the destination zoom level
+    destinationCameraSize.x *= ZOOM_FACTOR;
+    destinationCameraSize.y *= ZOOM_FACTOR;
 }
 
 void Camera::zoomOut() {
 
-   setZoomLevel(static_cast<signed short>(zoomLevel) - 1);
-}
-
-void Camera::setZoomLevel(short zoom) {
-
-    if(zoom < 0) {
-
-        zoom = 0;
-    }
-
-    zoomLevel = zoom;
-    applyZoom();
+   destinationCameraSize.x /= ZOOM_FACTOR;
+   destinationCameraSize.y /= ZOOM_FACTOR;
 }
 
 void Camera::resetZoom() {
 
-    setZoomLevel(0);
+    destinationCameraSize = defaultCameraSize;
 }
 
-void Camera::applyZoom() {
+const sf::Vector2f Camera::calculateZoomVelocity() const {
 
-    //the zoom level is just the default view size multiplied by a factor
-    sf::Vector2f viewSize = defaultCameraSize;
+    //i want the camera to be able to zoom to its default size in 1.5 seconds so calculate the speed based on that requirement
+    //the x and y velocities will be different because of different aspect ratios and different resolutions
+    sf::Vector2f zoomVelocity(defaultCameraSize.x / sf::seconds(2).asSeconds(), defaultCameraSize.y / sf::seconds(2).asSeconds() );
 
-    //multiply the view sizes by the zoomfactor ^ zoomlevel to get the current view size at this zoom level
-    for(unsigned multiples = 0; multiples < zoomLevel; multiples++) {
+    //determine if the current size should increase or decrease to reach destination size
+    if(static_cast<int>(currentCameraSize.x) > static_cast<int>(destinationCameraSize.x)) {
 
-        viewSize.x *= ZOOM_FACTOR;
-        viewSize.y *= ZOOM_FACTOR;
+        //size should decrease so velocity should become negative instead of positive
+        zoomVelocity.x *= -1;
+        zoomVelocity.y *= -1;
     }
 
-    view.setSize(viewSize);
+    return zoomVelocity;
+}
+
+void Camera::transitionZoom() {
+
+    //if the camera already reached the destination zoom level then there is nothing to transition
+    if(static_cast<int> (currentCameraSize.x) == static_cast<int> (destinationCameraSize.x)) {
+
+        //restart the timer so there isn't a ton of delta the next time this function is called
+        transitionTimer.restart();
+        return;
+    }
+
+    sf::Vector2f currentZoomVelocity = calculateZoomVelocity();
+
+    float delta = transitionTimer.restart().asSeconds();
+
+    currentCameraSize.x += currentZoomVelocity.x * delta;
+    currentCameraSize.y += currentZoomVelocity.y * delta;
+
+    //determine if the current size exceeded the destination size
+    //first you have to determine whether the camera was shrinking or enlarging
+    if((currentZoomVelocity.x < 0 && currentCameraSize.x < destinationCameraSize.x) ||
+       (currentZoomVelocity.x > 0 && currentCameraSize.x > destinationCameraSize.x)) {
+
+        //camera is too big or too small
+        currentCameraSize = destinationCameraSize;
+    }
+}
+
+void Camera::resetAll() {
+
+    destinationCameraSize = defaultCameraSize;
+    currentCameraSize = defaultCameraSize;
+
+    transitionTimer.restart();
 }

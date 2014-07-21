@@ -31,10 +31,12 @@ int main() {
 
     loadLevel("level", blocks);
 
-    Camera camera(window);
+    Camera camera;
 
     sf::Vector2f position(0, 0);
     sf::Vector2f levelSize(2000, 2000);
+
+    camera.setDefaultSize(window);
 
     while(window.isOpen()) {
 

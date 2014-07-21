@@ -15,8 +15,14 @@ class Camera {
         //so whenever the window's resolution is changed you should change the default view size
         sf::Vector2f defaultCameraSize;
 
-        //zoom level of the camera, default level is 0, can only zoom in
-        unsigned short zoomLevel;
+        //the current viewing area of the camera
+        //this value will move towards the destination camera size in order to have smooth zooming
+        sf::Vector2f currentCameraSize;
+
+        sf::Vector2f destinationCameraSize;
+
+        //timer used to calculate how much to zoom every time the camera is updated
+        sf::Clock transitionTimer;
 
         //how much camera zooms in or out every time the zoom function is called
         const float ZOOM_FACTOR;
@@ -24,12 +30,22 @@ class Camera {
         //apply the zoom level to the camera
         void applyZoom();
 
+        //calculate the spped at which the camera transitions from the current size to the destination size
+        //rate is pixels/second
+        const sf::Vector2f calculateZoomVelocity() const ;
+
+        //move from the current zoom towards the destination zoom
+        void transitionZoom();
+
+        //forcibly resets all sizes
+        void resetAll();
+
     public:
 
-        Camera(sf::RenderWindow& window);
+        Camera();
 
         //set the view to the given window
-        void applyCamera(sf::RenderWindow& window) const;
+        void applyCamera(sf::RenderWindow& window);
 
         //set the default view to the given window
         void applyDefaultCamera(sf::RenderWindow& window) const;
@@ -42,13 +58,11 @@ class Camera {
         //resets zoom level
         void setDefaultSize(sf::RenderWindow& window);
 
+        ///everything that changes the zoom level makes the camera zoom smoothly, meaning the zoom doesn't happen instantly and it will take time
         void zoomIn();
         void zoomOut();
 
-        //set the zoom to the given level if the level is valid
-        //don't use unsigned for the argument because if user passes a negative number it will become a very large number
-        //check for bounds error when zooming
-        void setZoomLevel(short zoom);
+        void resetZoom();
 };
 
 #endif // CAMERA_H_INCLUDED
