@@ -211,7 +211,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1405974206 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1405982260 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -252,7 +252,7 @@
 	<tr1/memory>
 	<string>
 
-1405148931 c:\users\nimesh\documents\github\network-ctf\math.h
+1405981315 c:\users\nimesh\documents\github\network-ctf\math.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
@@ -279,11 +279,12 @@
 1405148931 c:\users\nimesh\documents\github\network-ctf\undefinedlinesegment.h
 	"LineSegment.h"
 
-1405148931 source:c:\users\nimesh\documents\github\network-ctf\math.cpp
+1405982360 source:c:\users\nimesh\documents\github\network-ctf\math.cpp
 	"math.h"
 	<cmath>
+	<cstdlib>
 
-1405974366 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1405982139 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -320,7 +321,7 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1405291840 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
+1405982280 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -328,7 +329,7 @@
 	"math.h"
 	<iostream>
 
-1405291840 c:\users\nimesh\documents\github\network-ctf\gun.h
+1405982593 c:\users\nimesh\documents\github\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
@@ -556,33 +557,33 @@
 	<vector>
 	<tr1/memory>
 
-1405804542 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1405981745 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
 	<iostream>
 	"Gun.h"
 
-1405382200 c:\users\nimesh\documents\github\network-ctf\userplayer.h
+1405978671 c:\users\nimesh\documents\github\network-ctf\userplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1405382721 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1405980546 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
 	<iostream>
 
-1405473671 source:c:\users\nimesh\documents\github\network-ctf\block.cpp
+1405977877 source:c:\users\nimesh\documents\github\network-ctf\block.cpp
 	"Block.h"
-	"math.h"
 
-1405473671 c:\users\nimesh\documents\github\network-ctf\block.h
+1405977877 c:\users\nimesh\documents\github\network-ctf\block.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	"StaticObject.h"
 
 1405547256 source:c:\users\nimesh\documents\github\network-ctf\levelmanager.cpp
 	"LevelManager.h"
@@ -598,9 +599,10 @@
 	<tr1/memory>
 	<fstream>
 
-1405974338 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
+1405975693 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
 	"Camera.h"
 	"math.h"
+	<iostream>
 
 1405974788 c:\users\nimesh\documents\github\network-ctf\camera.h
 	"SFML/System.hpp"
@@ -617,4 +619,12 @@
 	"GameWorld.h"
 	"Block.h"
 	"LevelManager.h"
+
+1405977876 c:\users\nimesh\documents\github\network-ctf\staticobject.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1405977877 source:c:\users\nimesh\documents\github\network-ctf\staticobject.cpp
+	"StaticObject.h"
+	"math.h"
 

@@ -167,6 +167,9 @@ void ClientGameManager::handleBulletCollision() {
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
+
+        //disable the bullets collisoin since it should no longerb e able to collide
+        bullet->disableCollision();
     }
 }
 

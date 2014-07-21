@@ -71,6 +71,8 @@
 		<Unit filename="ServerGameManager.h" />
 		<Unit filename="StateTracker.cpp" />
 		<Unit filename="StateTracker.h" />
+		<Unit filename="StaticObject.cpp" />
+		<Unit filename="StaticObject.h" />
 		<Unit filename="UndefinedLineSegment.cpp" />
 		<Unit filename="UndefinedLineSegment.h" />
 		<Unit filename="UserPlayer.cpp" />

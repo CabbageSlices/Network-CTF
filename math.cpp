@@ -1,5 +1,6 @@
 #include "math.h"
 #include <cmath>
+#include <cstdlib>
 
 using std::abs;
 
@@ -83,4 +84,22 @@ sf::Vector2f calculateCenter(const sf::FloatRect& rect) {
     center.y = rect.top + rect.height / 2;
 
     return center;
+}
+
+int getRand(int max, int min) {
+
+    //if max == 0 you will divide by 0 and it will crash the program so if max is 0 then return 0
+    if(max == 0) {
+
+        return max;
+    }
+
+    ///see header as to why you are subtracting
+    //make sure subtracted is a positive number otherwise the range [max, min] is changed
+    int subtracted = min - 1 > 0 ? min - 1 : 0;
+
+    max -= subtracted;
+    min -= subtracted;
+
+    return (rand() % max + min) + subtracted;
 }

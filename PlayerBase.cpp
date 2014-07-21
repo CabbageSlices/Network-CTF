@@ -56,6 +56,7 @@ const float PlayerBase::getRotation() const {
 
 void PlayerBase::updateGun(const float& delta) {
 
+    gun->updateGunfire(sf::seconds(delta));
     gun->updateBullets(sf::seconds(delta));
 }
 
@@ -91,9 +92,11 @@ void PlayerBase::draw(sf::RenderWindow& window) {
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    window.draw(playerSprite);
-
     this->drawGun(window);
+
+    window.draw(currentHitBox);
+
+    window.draw(playerSprite);
 
     health.draw(window);
 }

@@ -9,6 +9,8 @@ using std::endl;
 
 int main() {
 
+    srand(static_cast<long>(time(0) ));
+
     sf::Vector2f screenSize(1024, 768);
 
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test");

@@ -1,25 +1,19 @@
 #include "Block.h"
-#include "math.h"
 
 Block::Block(const sf::Vector2f& centerPosition):
-    collisionBox(sf::Vector2f(60, 60))
+    StaticObject(centerPosition)
     {
-        collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds() ));
-        collisionBox.setPosition(centerPosition);
-        collisionBox.setFillColor(sf::Color::Blue);
+        setupCollisionBox();
     }
 
-const sf::FloatRect Block::getCollisionBox() const {
+Block::~Block() {
 
-    return collisionBox.getGlobalBounds();
 }
 
-const sf::Vector2f Block::getPosition() const {
+void Block::setupCollisionBox() {
 
-    return collisionBox.getPosition();
-}
-
-void Block::draw(sf::RenderWindow& window) {
-
-    window.draw(collisionBox);
+    collisionBox.setSize(sf::Vector2f(60, 60));
+    collisionBox.setFillColor(sf::Color::Blue);
+    collisionBox.setOutlineThickness(-2.0);
+    collisionBox.setOutlineColor(sf::Color::Red);
 }

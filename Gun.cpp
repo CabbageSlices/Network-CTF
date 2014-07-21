@@ -15,7 +15,12 @@ Gun::Gun() :
     lineTexture(),
     bullets(),
     MAX_DISTANCE_FIRED(2000.f),
-    rotation(0.0)
+    rotation(0.0),
+    accuracyModifier(0, 0),
+    queuedRotations(),
+    fired(false),
+    timeSinceFired(sf::seconds(0)),
+    fireDelay(sf::milliseconds(200))
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0), 0.0);
@@ -24,6 +29,49 @@ Gun::Gun() :
 
         lineTexture.loadFromFile("texture.png");
     }
+
+void Gun::handleButtonPress() {
+
+    //being firing and set the time since last fired equal to the fire delay that way gun fires immediately
+    //so spamming the fire button is faster than holding it if user presses fast enough
+    fired = true;
+    timeSinceFired = fireDelay;
+}
+
+void Gun::handleButtonRelease() {
+
+    fired = false;
+}
+
+void Gun::updateGunfire(const sf::Time& delta) {
+
+    timeSinceFired += delta;
+
+    //if gun if firing and the delay is over shoot a bullet
+    if(fired && timeSinceFired > fireDelay) {
+
+        fire();
+        timeSinceFired = sf::seconds(0);
+    }
+}
+
+void Gun::updateBullets(const sf::Time& delta) {
+
+    //update all bullets and remove the ones that are dead
+    for(unsigned i = 0; i < bullets.size();) {
+
+        bullets[i]->updateElapsedTime(delta);
+
+        //if a bullet can't be drawn it's dead and should be deleted
+        if(!bullets[i]->canDraw()) {
+
+            bullets.erase(bullets.begin() + i);
+            continue;
+        }
+
+        i++;
+    }
+}
 
 void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation) {
 
@@ -45,7 +93,13 @@ void Gun::drawBullets(sf::RenderWindow& window) {
 
     for(auto bullet : bullets) {
 
-        bullet->draw(window);
+        //only draw the bullet if it has checked for collision
+        //if it hasn't hcecked for collision then it is a brand new bullet, and new bullets may look as if they are going through all other entities
+        //when infact they check for collision the next update and onlly are cut off
+        if(!bullet->checkCanCollide()) {
+
+            bullet->draw(window);
+        }
     }
 }
 
@@ -54,12 +108,34 @@ vector<shared_ptr<Bullet> > Gun::getBullets() {
     return bullets;
 }
 
+const vector<float>& Gun::getQueuedRotations() const {
+
+    return queuedRotations;
+}
+
+void Gun::clearRotations() {
+
+    queuedRotations.clear();
+}
+
 float Gun::fire() {
 
-    createBullet(lineOfSight[0].position, lineOfSight[1].position);
+    //angle at which gun was fired
+    float gunfireAngle = rotation;
 
-    //this gun just fires in the same place as its rotation
-    return rotation;
+    //modify the rotation by randomly adding and subtracting the accuracy modifier in order to randomly change range
+    //because the range is always positive you have to subtract and add a value manually
+    gunfireAngle -= getRand(accuracyModifier.y, accuracyModifier.x);
+    gunfireAngle += getRand(accuracyModifier.y, accuracyModifier.x);
+
+    sf::Vector2f bulletEndPoint = calculateEndPoint(lineOfSight[0].position, gunfireAngle);
+
+    createBullet(lineOfSight[0].position, bulletEndPoint);
+
+    //now queue the rotation so data can be sent to server later
+    queuedRotations.push_back(gunfireAngle);
+
+    return gunfireAngle;
 }
 
 void Gun::fire(const float& angle) {
@@ -74,25 +150,6 @@ void Gun::fire(const float& angle) {
 void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
 
     createBullet(bulletBegin, bulletEnd);
-}
-
-void Gun::updateBullets(const sf::Time& delta) {
-
-    //update all bullets and remove the ones that are dead
-    for(unsigned i = 0; i < bullets.size();) {
-
-        bullets[i]->updateElapsedTime(delta);
-        bullets[i]->disableCollision();
-
-        //if a bullet can't be drawn it's dead and should be deleted
-        if(!bullets[i]->canDraw()) {
-
-            bullets.erase(bullets.begin() + i);
-            continue;
-        }
-
-        i++;
-    }
 }
 
 void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation) {

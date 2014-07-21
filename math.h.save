@@ -2,6 +2,7 @@
 #define MATH_H_INCLUDED
 
 #include "SFML/System.hpp"
+#include "SFML/Graphics.hpp"
 
 extern const float PI;
 
@@ -19,5 +20,15 @@ float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoi
 
 //calculate the center point of a given rectangle
 sf::Vector2f calculateCenter(const sf::FloatRect& rect);
+
+//normally generate a random number within the range
+//[max - 1 + min, min] where the left side is the maximum number generated, and the right side is the minimum
+///because of the way the maximum range increases if the minimum is greater than 1
+///you must subtract from the minimum range in order to make it equal to 1
+///and at the same time subtract the same amount from the maximum
+///that way the max range is not changed
+///and at the end, add the subtracted value back to the result
+///this way the given random number is not greather than the max range and is still within the range [max, min]
+int getRand(int max, int min);
 
 #endif // MATH_H_INCLUDED

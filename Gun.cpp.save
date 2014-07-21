@@ -15,7 +15,12 @@ Gun::Gun() :
     lineTexture(),
     bullets(),
     MAX_DISTANCE_FIRED(2000.f),
-    rotation(0.0)
+    rotation(0.0),
+    accuracyModifier(0, 3),
+    queuedRotations(),
+    fired(false),
+    timeSinceFired(sf::seconds(0)),
+    fireDelay(sf::milliseconds(250))
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0), 0.0);
@@ -25,55 +30,29 @@ Gun::Gun() :
         lineTexture.loadFromFile("texture.png");
     }
 
-void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation) {
+void Gun::handleButtonPress() {
 
-    updateLineOfSight(playerPosition, playerRotation);
+    //being firing and set the time since last fired equal to the fire delay that way gun fires immediately
+    //so spamming the fire button is faster than holding it if user presses fast enough
+    fired = true;
+    timeSinceFired = fireDelay;
 }
 
-void Gun::drawAll(sf::RenderWindow& window) {
+void Gun::handleButtonRelease() {
 
-    drawSight(window);
-    drawBullets(window);
+    fired = false;
 }
 
-void Gun::drawSight(sf::RenderWindow& window) {
-    
-    window.draw(lineOfSight, &lineTexture);
-}
+void Gun::updateGunfire(const sf::Time& delta) {
 
-void Gun::drawBullets(sf::RenderWindow& window) {
-    
-    for(auto bullet : bullets) {
+    timeSinceFired += delta;
 
-        bullet->draw(window);
+    //if gun if firing and the delay is over shoot a bullet
+    if(fired && timeSinceFired > fireDelay) {
+
+        fire();
+        timeSinceFired = sf::seconds(0);
     }
-}
-
-vector<shared_ptr<Bullet> > Gun::getBullets() {
-
-    return bullets;
-}
-
-float Gun::fire() {
-
-    createBullet(lineOfSight[0].position, lineOfSight[1].position);
-
-    //this gun just fires in the same place as its rotation
-    return rotation;
-}
-
-void Gun::fire(const float& angle) {
-
-    //calculate the end point of the bullet on the given angle
-    sf::Vector2f endPoint = calculateEndPoint(lineOfSight[0].position, angle);
-
-    //fire with new angle
-    createBullet(lineOfSight[0].position, endPoint);
-}
-
-void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
-
-    createBullet(bulletBegin, bulletEnd);
 }
 
 void Gun::updateBullets(const sf::Time& delta) {
@@ -93,6 +72,79 @@ void Gun::updateBullets(const sf::Time& delta) {
 
         i++;
     }
+}
+
+void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation) {
+
+    updateLineOfSight(playerPosition, playerRotation);
+}
+
+void Gun::drawAll(sf::RenderWindow& window) {
+
+    drawSight(window);
+    drawBullets(window);
+}
+
+void Gun::drawSight(sf::RenderWindow& window) {
+
+    window.draw(lineOfSight, &lineTexture);
+}
+
+void Gun::drawBullets(sf::RenderWindow& window) {
+
+    for(auto bullet : bullets) {
+
+        bullet->draw(window);
+    }
+}
+
+vector<shared_ptr<Bullet> > Gun::getBullets() {
+
+    return bullets;
+}
+
+const vector<float>& Gun::getQueuedRotations() const {
+
+    return queuedRotations;
+}
+
+void Gun::clearRotations() {
+
+    queuedRotations.clear();
+}
+
+float Gun::fire() {
+
+    //angle at which gun was fired
+    float gunfireAngle = rotation;
+
+    //modify the rotation by randomly adding and subtracting the accuracy modifier in order to randomly change range
+    //because the range is always positive you have to subtract and add a value manually
+    gunfireAngle -= getRand(accuracyModifier.y, accuracyModifier.x);
+    gunfireAngle += getRand(accuracyModifier.y, accuracyModifier.x);
+
+    sf::Vector2f bulletEndPoint = calculateEndPoint(lineOfSight[0].position, gunfireAngle);
+
+    createBullet(lineOfSight[0].position, bulletEndPoint);
+
+    //now queue the rotation so data can be sent to server later
+    queuedRotations.push_back(gunfireAngle);
+
+    return gunfireAngle;
+}
+
+void Gun::fire(const float& angle) {
+
+    //calculate the end point of the bullet on the given angle
+    sf::Vector2f endPoint = calculateEndPoint(lineOfSight[0].position, angle);
+
+    //fire with new angle
+    createBullet(lineOfSight[0].position, endPoint);
+}
+
+void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+
+    createBullet(bulletBegin, bulletEnd);
 }
 
 void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation) {

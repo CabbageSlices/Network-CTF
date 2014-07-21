@@ -16,7 +16,6 @@ UserPlayer::UserPlayer():
     velocities(0, 0),
     inputBuffer(),
     inputsToSend(),
-    queuedGunshotRotations(),
     currentInputId(0),
     nextNewInputId(0),
     keystateUpdateTimer(),
@@ -56,7 +55,15 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
         if(event.mouseButton.button == sf::Mouse::Left) {
 
-            fireGun();
+            gun->handleButtonPress();
+        }
+    }
+
+    if(event.type == sf::Event::MouseButtonReleased) {
+
+        if(event.mouseButton.button == sf::Mouse::Left) {
+
+            gun->handleButtonRelease();
         }
     }
 
@@ -133,7 +140,7 @@ const vector<UserPlayer::Input>& UserPlayer::getInputsToSend() const {
 
 const vector<float>& UserPlayer::getGunshotsToSend() const {
 
-    return queuedGunshotRotations;
+    return gun->getQueuedRotations();
 }
 
 bool UserPlayer::shouldSendKeystate() {
@@ -153,7 +160,7 @@ void UserPlayer::resetKeystateTimer() {
 
 void UserPlayer::clearGunshotQueue() {
 
-    queuedGunshotRotations.clear();
+    gun->clearRotations();
 }
 
 void UserPlayer::clearInputsToSend() {
@@ -350,12 +357,4 @@ void UserPlayer::determineMovement() {
 
         velocities.y = 0;
     }
-}
-
-void UserPlayer::fireGun() {
-
-    float angle = gun->fire();
-
-    //queue the rotation of the gun when it was fired
-    queuedGunshotRotations.push_back(angle);
 }

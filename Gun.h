@@ -32,6 +32,27 @@ class Gun {
         //this is the angle in standard position
         float rotation;
 
+        //range of values to add or subtract to the gun's rotation while firing
+        //in order to change the trajectory of the bullet to have the guns firing with different accuracies
+        //x value is minimum threshold and y is the max
+        //all in degrees
+        ///always positive
+        sf::Vector2f accuracyModifier;
+
+        //container containing the rotation of the gun when the gun was fired
+        //these rotations can be sent to the server in order to replicate the gunfire on the server
+        //should be cleared when data is sent to server
+        std::vector<float> queuedRotations;
+
+        //flag to determine if the gun is being fired
+        bool fired;
+
+        //timer to keep track of how long it has been since the gun was last fired
+        //time is accumulated through the delta time sent by update loop
+        sf::Time timeSinceFired;
+
+        sf::Time fireDelay;
+
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
 
@@ -45,6 +66,14 @@ class Gun {
 
         Gun();
 
+        //handle a player's mouselick when he tries to fire a gun
+        //have this function in order to have guns that handle button presses differently
+        void handleButtonPress();
+        void handleButtonRelease();
+
+        //determines if it is time to fire again and fires
+        void updateGunfire(const sf::Time& delta);
+
         void updateBullets(const sf::Time& delta);
 
         void updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation);
@@ -53,9 +82,14 @@ class Gun {
 
         //draw gun's line of sight
         void drawSight(sf::RenderWindow& window);
+
+        //draw the bullets that have already checked for collision with other entities
         void drawBullets(sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
+        const std::vector<float>& getQueuedRotations() const;
+
+        void clearRotations();
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

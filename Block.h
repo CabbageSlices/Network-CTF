@@ -4,20 +4,18 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 
-class Block {
+#include "StaticObject.h"
 
-    private:
+class Block : public StaticObject {
 
-        sf::RectangleShape collisionBox;
+    protected:
+
+        virtual void setupCollisionBox();
 
     public:
 
         Block(const sf::Vector2f& centerPosition);
-
-        const sf::FloatRect getCollisionBox() const;
-        const sf::Vector2f getPosition() const;
-
-        void draw(sf::RenderWindow& window);
+        virtual ~Block();
 };
 
 #endif // BLOCK_H_INCLUDED

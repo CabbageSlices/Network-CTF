@@ -78,10 +78,6 @@ class UserPlayer : public PlayerBase{
         //a list of all the events that need to be sent to the server for confirmation this loop iteration
         std::vector<Input> inputsToSend;
 
-        //list of all shots player has fired that haven't been sent to server, however the only data that needs to be saved is the rotation of the player
-        //when the shot was fired so its just a vector of floats
-        std::vector<float> queuedGunshotRotations;
-
         //the id of the input that should be processed
         sf::Uint32 currentInputId;
 
@@ -115,9 +111,6 @@ class UserPlayer : public PlayerBase{
 
         //using the players current keystate determine his movement
         void determineMovement();
-
-        //fire the gun and place rotations into queue
-        void fireGun();
 
     protected:
 
@@ -160,7 +153,7 @@ class UserPlayer : public PlayerBase{
 
         //given the client input simple execute it
         void handleClientInput(Input& clientInput);
-        
+
         //given the client keystate simply execute it
         void handleClientKeystate(KeyState& state);
 

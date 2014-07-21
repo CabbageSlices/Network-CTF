@@ -8,6 +8,8 @@ using std::cout;
 using std::endl;
 
 int main() {
+    
+    srand(static_cast<long>(time(0) ));
 
     sf::Vector2f screenSize(1024, 768);
 
@@ -17,11 +19,11 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    ///gameManager.runGame(window);
+    gameManager.runGame(window);
 
     ServerGameManager serverGameManager;
 
-    serverGameManager.runGame(window);
+    ///serverGameManager.runGame(window);
 
     return 0;
 }
