@@ -1,5 +1,7 @@
 #include "LevelManager.h"
 #include "Block.h"
+#include "ForegroundObject.h"
+#include "StaticObject.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -14,8 +16,10 @@ using std::getline;
 
 const std::string BEGIN_BLOCKS = "start blocks";
 const std::string END_BLOCKS = "end blocks";
+const std::string BEGIN_FOREGROUND = "start foreground";
+const std::string END_FOREGROUND = "end foreground";
 
-bool saveLevel(const string& levelName, const vector<shared_ptr<Block> >& blocks) {
+bool saveLevel(const string& levelName, const vector<shared_ptr<Block> >& blocks, const vector<shared_ptr<ForegroundObject> >& foreground) {
 
     //open the level file
     fstream file;
@@ -29,9 +33,15 @@ bool saveLevel(const string& levelName, const vector<shared_ptr<Block> >& blocks
     }
 
     //level is loaded now save all data
-    if(!saveBlocks(blocks, file)) {
+    if(!saveObjects(blocks, BEGIN_BLOCKS, END_BLOCKS, file)) {
 
         cout << "failed to save Blocks" << endl;
+        return false;
+    }
+
+    if(!saveObjects(foreground, BEGIN_FOREGROUND, END_FOREGROUND, file)) {
+
+        cout << "failed to save foreground" << endl;
         return false;
     }
 
@@ -40,35 +50,7 @@ bool saveLevel(const string& levelName, const vector<shared_ptr<Block> >& blocks
     return true;
 }
 
-bool saveBlocks(const std::vector<std::tr1::shared_ptr<Block> >& blocks, std::fstream& file) {
-
-    //put the blocks tag
-    file << BEGIN_BLOCKS << endl;
-
-    //now save all of the blocks
-    for(auto block : blocks) {
-
-        //only save the position of the block because the size of the block is set by the class itself
-        sf::Vector2f position = block->getPosition();
-
-        //save x position, then a line, then a y position
-        file << position.x << endl;
-        file << position.y << endl;
-    }
-
-    //indicate the end of the blocks
-    file << END_BLOCKS << endl;
-
-    //check if the file is in an error state now
-    if(!file.good()) {
-
-        return false;
-    }
-
-    return true;
-}
-
-bool loadLevel(const string& levelName, vector<shared_ptr<Block> >& blocks) {
+bool loadLevel(const string& levelName, vector<shared_ptr<Block> >& blocks, vector<shared_ptr<ForegroundObject> >& foreground) {
 
     //open the level file
     fstream file;
@@ -81,48 +63,15 @@ bool loadLevel(const string& levelName, vector<shared_ptr<Block> >& blocks) {
         return false;
     }
 
-    if(!loadBlocks(blocks, file)) {
+    if(!loadObjects(BEGIN_BLOCKS, END_BLOCKS, blocks, file)) {
 
         cout << "Failed to load Blocks" << endl;
         return false;
     }
 
-    return true;
-}
+    if(!loadObjects(BEGIN_FOREGROUND, END_FOREGROUND, foreground, file)) {
 
-bool loadBlocks(vector<shared_ptr<Block> >& blocks, fstream& file) {
-
-    //start reading from the beginning of the blocks by using the block tag
-    if(!setFilePosition(BEGIN_BLOCKS, file)) {
-
-        //failed to set position so blocksp robably not saved so exit
-        return false;
-    }
-
-    //read lines until the end blocks tag is read, if its read then there are no more blocks to read or you reach the end of file
-    std::string downloadedData;
-
-    while(getline(file, downloadedData) && downloadedData != END_BLOCKS) {
-
-        //read the x and y position and create a block at the given position
-        sf::Vector2f position(0, 0);
-
-        //x position, x psotiion is read at the beginning of the loop in the condition
-        position.x = atoi(downloadedData.c_str());
-
-        //y position
-        getline(file, downloadedData);
-        position.y = atoi(downloadedData.c_str());
-
-        //create the block
-        shared_ptr<Block> block(new Block(position));
-
-        blocks.push_back(block);
-    }
-
-    //check if the stream is still in a valid state, if it isn't then reading failed
-    if(!file.good()) {
-
+        cout << "Failed to load Foreground" << endl;
         return false;
     }
 

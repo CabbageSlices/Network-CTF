@@ -3,6 +3,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Camera.h"
+#include "ForegroundObject.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -21,20 +22,27 @@ int main() {
     //container containing all of the blocks
     vector<shared_ptr<Block> > blocks;
 
+    vector<shared_ptr<ForegroundObject> > foreground;
+
     bool creatingBlocks = false;
     bool destroyingBlocks = false;
+    
+    bool creatingForeground = false;
+    bool destroyingForeground = false;
 
     //timer to set delay on how often a block is created or dstoryed while the button is held
     //that way user doens't have to spam click mouse to create a destory, unless they want to
     sf::Clock destoryBlockTimer;
-    sf::Time destoryBlockDelay = sf::milliseconds(50);
+    sf::Time destoryBlockDelay = sf::milliseconds(1);
 
-    loadLevel("level", blocks);
+    loadLevel("level", blocks, foreground);
 
-    Camera camera(window);
+    Camera camera;
 
     sf::Vector2f position(0, 0);
     sf::Vector2f levelSize(2000, 2000);
+
+    camera.setDefaultSize(window);
 
     while(window.isOpen()) {
 
@@ -44,30 +52,51 @@ int main() {
 
                 window.close();
             }
+
+            if(event.type == sf::Event::KeyPressed) {
+
+                if(event.key.code == sf::Keyboard::A) {
+
+                    camera.zoomIn();
+                }
+
+                if(event.key.code == sf::Keyboard::S) {
+
+                    camera.zoomOut();
+                }
+            }
+
+            if(event.type == sf::Event::Resized) {
+
+                camera.setDefaultSize(window);
+            }
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 
-            position.y -= 5;
+            position.y -= 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 
-            position.y += 5;
+            position.y += 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 
-            position.x -= 5;
+            position.x -= 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 
-            position.x += 5;
+            position.x += 1.5;
         }
 
         creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
         destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+        
+        creatingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+        destroyingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::X);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -107,14 +136,45 @@ int main() {
             destoryBlockTimer.restart();
         }
         
-        if(position.x < 0) {
+        if(creatingForeground) {
             
+            shared_ptr<ForegroundObject> newforeground(new ForegroundObject(mousePosition));
+
+            bool collides = false;
+
+            for(auto foregroundObj : foreground) {
+
+                if(foregroundObj->getCollisionBox().intersects(newBlock->getCollisionBox())) {
+
+                    collides = true;
+                    break;
+                }
+            }
+
+            if(!collides) {
+
+                blocks.push_back(newBlock);
+            }
+        }
+
+        if(position.x < 0) {
+
             position.x = 0;
         }
-        
+
         if(position.x > levelSize.x) {
-            
-            position.x = level
+
+            position.x = levelSize.x;
+        }
+
+        if(position.y < 0) {
+
+            position.y = 0;
+        }
+
+        if(position.y > levelSize.y) {
+
+            position.y = levelSize.y;
         }
 
         camera.setCameraCenter(position, sf::FloatRect(0, 0, levelSize.x, levelSize.y));
@@ -130,7 +190,7 @@ int main() {
         window.display();
     }
 
-    saveLevel("level", blocks);
+    saveLevel("level", blocks, foreground);
 
     return 0;
 }

@@ -1,4 +1,5 @@
 #include "ForegroundObject.h"
+#include "math.h"
 
 ForegroundObject::ForegroundObject(const sf::Vector2f& centerPosition) :
     StaticObject(centerPosition),
@@ -24,7 +25,8 @@ void ForegroundObject::setHidingPlayer(const bool& playerHidden) {
 
 void ForegroundObject::setupCollisionBox() {
 
-    collisionBox.setSize(sf::Vector2f(100, 100));
+    collisionBox.setSize(sf::Vector2f(250, 250));
+    collisionBox.setOrigin(calculateCenter(collisionBox.getLocalBounds()));
 }
 
 void ForegroundObject::makeSeethrough() {

@@ -1,23 +1,26 @@
 # depslib dependency file v1.0
-1405473671 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.cpp
+1406067412 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.cpp
 	"Block.h"
 	"math.h"
 
-1405473671 c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.h
+1405977877 c:\users\nimesh\documents\github\network-ctf\ctf level editor\block.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"StaticObject.h"
+
+1405981315 c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1405148931 c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.h
-	"SFML/System.hpp"
-	"SFML/Graphics.hpp"
-
-1405547256 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.cpp
+1406065814 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.cpp
 	"LevelManager.h"
 	"Block.h"
+	"ForegroundObject.h"
+	"StaticObject.h"
 	<iostream>
 	<cstdlib>
 
-1405473671 c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.h
+1406065848 c:\users\nimesh\documents\github\network-ctf\ctf level editor\levelmanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<string>
@@ -25,24 +28,44 @@
 	<tr1/memory>
 	<fstream>
 
-1405148931 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.cpp
+1405982360 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.cpp
 	"math.h"
 	<cmath>
+	<cstdlib>
 
-1405975055 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\main.cpp
+1406067081 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\main.cpp
 	"Block.h"
 	"LevelManager.h"
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Camera.h"
+	"ForegroundObject.h"
 	<vector>
 	<tr1/memory>
 
-1405974994 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\camera.cpp
+1405975693 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\camera.cpp
 	"Camera.h"
 	"math.h"
+	<iostream>
 
 1405974788 c:\users\nimesh\documents\github\network-ctf\ctf level editor\camera.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+
+1405977876 c:\users\nimesh\documents\github\network-ctf\ctf level editor\staticobject.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1406067237 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\foregroundobject.cpp
+	"ForegroundObject.h"
+	"math.h"
+
+1406060444 c:\users\nimesh\documents\github\network-ctf\ctf level editor\foregroundobject.h
+	"StaticObject.h"
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1405977877 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\staticobject.cpp
+	"StaticObject.h"
+	"math.h"
 

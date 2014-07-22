@@ -1,4 +1,5 @@
 #include "Block.h"
+#include "math.h"
 
 Block::Block(const sf::Vector2f& centerPosition):
     StaticObject(centerPosition)
@@ -16,4 +17,6 @@ void Block::setupCollisionBox() {
     collisionBox.setFillColor(sf::Color::Blue);
     collisionBox.setOutlineThickness(-2.0);
     collisionBox.setOutlineColor(sf::Color::Red);
+
+    collisionBox.setOrigin(calculateCenter(collisionBox.getLocalBounds()));
 }

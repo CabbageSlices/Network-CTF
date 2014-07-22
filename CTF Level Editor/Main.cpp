@@ -3,6 +3,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Camera.h"
+#include "ForegroundObject.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -21,15 +22,20 @@ int main() {
     //container containing all of the blocks
     vector<shared_ptr<Block> > blocks;
 
+    vector<shared_ptr<ForegroundObject> > foreground;
+
     bool creatingBlocks = false;
     bool destroyingBlocks = false;
+
+    bool creatingForeground = false;
+    bool destroyingForeground = false;
 
     //timer to set delay on how often a block is created or dstoryed while the button is held
     //that way user doens't have to spam click mouse to create a destory, unless they want to
     sf::Clock destoryBlockTimer;
-    sf::Time destoryBlockDelay = sf::milliseconds(50);
+    sf::Time destoryBlockDelay = sf::milliseconds(1);
 
-    loadLevel("level", blocks);
+    loadLevel("level", blocks, foreground);
 
     Camera camera;
 
@@ -68,26 +74,29 @@ int main() {
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 
-            position.y -= 2;
+            position.y -= 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 
-            position.y += 2;
+            position.y += 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 
-            position.x -= 2;
+            position.x -= 1.5;
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 
-            position.x += 2;
+            position.x += 1.5;
         }
 
         creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
         destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+
+        creatingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+        destroyingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::X);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -127,6 +136,42 @@ int main() {
             destoryBlockTimer.restart();
         }
 
+        if(creatingForeground) {
+
+            shared_ptr<ForegroundObject> newForeground(new ForegroundObject(mousePosition));
+
+            bool collides = false;
+
+            for(auto foregroundObj : foreground) {
+
+                if(foregroundObj->getCollisionBox().intersects(newForeground->getCollisionBox())) {
+
+                    collides = true;
+                    break;
+                }
+            }
+
+            if(!collides) {
+
+                foreground.push_back(newForeground);
+            }
+        }
+
+        if(destroyingForeground) {
+
+            //find the block in the given position and delete it, dlete the first one mouse finds
+            for(unsigned int index = 0; index < foreground.size(); index++) {
+
+                if(foreground[index]->getCollisionBox().contains(mousePosition)) {
+
+                    foreground.erase(foreground.begin() + index);
+                    break;
+                }
+            }
+
+            destoryBlockTimer.restart();
+        }
+
         if(position.x < 0) {
 
             position.x = 0;
@@ -157,10 +202,15 @@ int main() {
             block->draw(window);
         }
 
+        for(auto foregroundObj : foreground) {
+
+            foregroundObj->draw(window);
+        }
+
         window.display();
     }
 
-    saveLevel("level", blocks);
+    saveLevel("level", blocks, foreground);
 
     return 0;
 }

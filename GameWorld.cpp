@@ -11,11 +11,7 @@ GameWorld::GameWorld():
     blocks(),
     foregroundObjects()
     {
-        shared_ptr<ForegroundObject> newForeground(new ForegroundObject(sf::Vector2f(300, 300)));
-        foregroundObjects.push_back(newForeground);
 
-        newForeground.reset(new ForegroundObject(sf::Vector2f(350, 300)));
-        foregroundObjects.push_back(newForeground);
     }
 
 vector<shared_ptr<Block> >& GameWorld::getBlocks() {
@@ -30,7 +26,8 @@ vector<shared_ptr<ForegroundObject> >& GameWorld::getForeground() {
 
 bool GameWorld::load(string levelName) {
 
-    return loadLevel(levelName, blocks);
+    clearWorld();
+    return loadLevel(levelName, blocks, foregroundObjects);
 }
 
 void GameWorld::clearWorld() {

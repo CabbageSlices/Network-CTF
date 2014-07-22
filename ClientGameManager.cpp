@@ -251,7 +251,7 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     //move camera to new track players new position
     ///currently there is no level bounds or properties so just give some default level properties for now
     camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
-                           sf::FloatRect(-500, -500, 2500, 2500));
+                           sf::FloatRect(-2000, -2000, 5000, 5000));
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {
