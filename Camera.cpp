@@ -12,7 +12,7 @@ Camera::Camera():
     currentCameraSize(defaultCameraSize),
     destinationCameraSize(currentCameraSize),
     transitionTimer(),
-    ZOOM_FACTOR(0.8)
+    ZOOM_FACTOR(0.75)
     {
 
     }

@@ -78,7 +78,10 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
     window.clear();
 
     world.drawBackground(window);
+
     this->drawComponents(window);
+
+    world.drawForeground(window);
 
     window.display();
 }
@@ -86,6 +89,11 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 vector<shared_ptr<Block> >& GameManager::getBlocks() {
 
     return world.getBlocks();
+}
+
+vector<shared_ptr<ForegroundObject> >& GameManager::getForeground() {
+
+    return world.getForeground();
 }
 
 const float GameManager::calculateDeltaFraction() {

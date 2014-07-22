@@ -74,8 +74,8 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
     float moveDown = staticRect.top + staticRect.height - rectToMove.top;
 
     //now determine what the shortest distance to move is
-    float shortestHorizontal = moveRight < ;
-    float shortestVertical = min(abs(moveUp), moveDown);
+    float shortestHorizontal = moveRight < abs(moveLeft) ? moveRight : moveLeft;
+    float shortestVertical = moveDown < abs(moveUp) ? moveDown : moveUp;
 
     //now determine whether he needs to move on the horizontal axis or verticla axis
     sf::Vector2f movementOffset(0, 0);
@@ -94,4 +94,17 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
     }
 
     return movementOffset;
+}
+
+void playerBlockCollision(UserPlayer& player, vector<shared_ptr<Block> >& blocks) {
+
+    for(auto entity : entities) {
+        
+        //if player collides with block, move player minimum distance required to escape collision
+        if(player.getDestinationBox().intersects(entity->getCollisionBox())) {
+
+            sf::Vector2f movementOffset = calculateCollisionOffset(player.getDestinationBox(), block->getCollisionBox());
+            player.move(movementOffset);
+        }
+    }
 }

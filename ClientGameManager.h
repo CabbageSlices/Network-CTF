@@ -64,6 +64,8 @@ class ClientGameManager: public GameManager {
 
         void handleBulletCollision();
 
+        void playerForegroundCollision();
+
     protected:
 
         //do anything that needs to be done before the game starts running

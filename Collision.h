@@ -9,6 +9,8 @@
 #include <functional>
 
 class LineSegment;
+class UserPlayer;
+class Block;
 
 //check for collision between the rectangle and line and return the point of collision
 bool checkCollision(const sf::FloatRect& rect, std::tr1::shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint);
@@ -19,6 +21,9 @@ bool handleEdgeCollision(const sf::Vector2f& edgeBegin, const sf::Vector2f& edge
 
 //calculate the offset required for the first block to no longer be colliding with the second block
 sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf::FloatRect& staticRect);
+
+//handle collision between players and blocks
+void playerBlockCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Block> >& blocks);
 
 //handle collision between the given bullet and all objects in the given container, only the bullet is changed
 //take a function that is called if the given entity collides with the bullet

@@ -389,18 +389,9 @@ void ServerGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ServerGameManager::handleCollisions() {
 
-    //check for collision between players and blocks
+    //hsndle collision between players and blocks
     for(auto player : players) {
 
-        for(auto block : getBlocks()) {
-
-            if(player->player.getDestinationBox().intersects(block->getCollisionBox())) {
-
-                sf::Vector2f movementOffset = calculateCollisionOffset(player->player.getDestinationBox(), block->getCollisionBox());
-
-                //make player move the required distance to escape collision
-                player->player.move(movementOffset);
-            }
-        }
+        playerBlockCollision(player->player, getBlocks());
     }
 }

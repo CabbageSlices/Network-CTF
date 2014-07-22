@@ -9,6 +9,7 @@
 #include <string>
 
 class Block;
+class ForegroundObject;
 
 //class to manage the game world by keeping track of all of the objects and events
 class GameWorld {
@@ -16,14 +17,14 @@ class GameWorld {
     private:
 
         std::vector<std::tr1::shared_ptr<Block> > blocks;
-
-        void drawBlocks();
+        std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
 
     public:
 
         GameWorld();
 
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
+        std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
 
         //load the given level, indicate success or failure
         bool load(std::string levelName);
@@ -32,6 +33,7 @@ class GameWorld {
         void clearWorld();
 
         void drawBackground(sf::RenderWindow& window);
+        void drawForeground(sf::RenderWindow& window);
 };
 
 #endif // GAMEWORLD_H_INCLUDED

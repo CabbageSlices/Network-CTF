@@ -5,6 +5,7 @@
 #include "LineSegment.h"
 #include "Collision.h"
 #include "InterpolatingPlayer.h"
+#include "ForegroundObject.h"
 
 #include <iostream>
 
@@ -167,7 +168,33 @@ void ClientGameManager::handleBulletCollision() {
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
+
+        //disable the bullets collisoin since it should no longerb e able to collide
+        bullet->disableCollision();
     }
+}
+
+void ClientGameManager::playerBlockCollision() {
+    
+    for(auto block : blocks) {
+        
+        //if pla
+        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
+
+            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
+            userPlayer.move(movementOffset);
+        }
+    }
+}
+
+void ClientGameManager::playerForegroundCollision() {
+
+    playerEntityCollision<UserPlayer, ForegroundObject>(userPlayer, getForeground(), [&](shared_ptr<ForegroundObject>& object){
+
+        //player is hidding so zoom the camera in a bit
+        object->setHidingPlayer(true);
+        camera.zoomIn();
+    });
 }
 
 void ClientGameManager::setup(sf::RenderWindow& window) {
@@ -212,8 +239,10 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
-    
-    //reset the cameras zoom before player is updated so after coll
+
+    //reset the cameras zoom before player is updated so after collision detection the zoom level is determined again
+    camera.resetZoom();
+
     updateUserPlayer(delta, window);
     updateConnectedPlayers(delta);
 }
@@ -223,12 +252,13 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
 
+    //apply camera before setting the center that way camera is already resized before it is set in the center
+    camera.applyCamera(window);
+
     //move camera to new track players new position
     ///currently there is no level bounds or properties so just give some default level properties for now
     camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
                            sf::FloatRect(-500, -500, 2500, 2500));
-
-    camera.applyCamera(window);
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {
@@ -243,16 +273,9 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::handleCollisions() {
 
-    //no broadphase as of yet, check if player collides with any blocks and handle collision accordingly
+    //no broadphase as of yet
     //check for collision between players and blocks
-    for(auto block : getBlocks()) {
+    playerBlockCollision();
 
-        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
-
-            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
-
-            //make player move the required distance to escape collision
-            userPlayer.move(movementOffset);
-        }
-    }
+    playerForegroundCollision();
 }

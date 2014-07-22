@@ -45,6 +45,8 @@
 		<Unit filename="Collision.h" />
 		<Unit filename="ConnectionManager.cpp" />
 		<Unit filename="ConnectionManager.h" />
+		<Unit filename="ForegroundObject.cpp" />
+		<Unit filename="ForegroundObject.h" />
 		<Unit filename="GameManager.cpp" />
 		<Unit filename="GameManager.h" />
 		<Unit filename="GameWorld.cpp" />

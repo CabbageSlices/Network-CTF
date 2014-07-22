@@ -5,6 +5,7 @@
 #include "LineSegment.h"
 #include "Collision.h"
 #include "InterpolatingPlayer.h"
+#include "ForegroundObject.h"
 
 #include <iostream>
 
@@ -173,6 +174,22 @@ void ClientGameManager::handleBulletCollision() {
     }
 }
 
+void ClientGameManager::playerForegroundCollision() {
+
+    for(auto entity : getForeground()) {
+
+        if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
+
+            entity->setHidingPlayer(true);
+            camera.zoomIn();
+
+        } else {
+
+            entity->setHidingPlayer(false);
+        }
+    }
+}
+
 void ClientGameManager::setup(sf::RenderWindow& window) {
 
     int playerId = 0;
@@ -249,16 +266,9 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::handleCollisions() {
 
-    //no broadphase as of yet, check if player collides with any blocks and handle collision accordingly
+    //no broadphase as of yet
     //check for collision between players and blocks
-    for(auto block : getBlocks()) {
+    playerBlockCollision(userPlayer, getBlocks());
 
-        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
-
-            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
-
-            //make player move the required distance to escape collision
-            userPlayer.move(movementOffset);
-        }
-    }
+    playerForegroundCollision();
 }

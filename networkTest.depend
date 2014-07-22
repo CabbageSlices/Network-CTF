@@ -198,7 +198,7 @@
 	<vector>
 	<tr1/memory>
 
-1405802506 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1406061495 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Block.h"
@@ -211,7 +211,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1405982260 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1406061495 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -219,9 +219,10 @@
 	"LineSegment.h"
 	"Collision.h"
 	"InterpolatingPlayer.h"
+	"ForegroundObject.h"
 	<iostream>
 
-1405803185 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1406061495 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -231,14 +232,16 @@
 	<tr1/memory>
 	<vector>
 
-1405373342 source:c:\users\nimesh\documents\github\network-ctf\collision.cpp
+1406061560 source:c:\users\nimesh\documents\github\network-ctf\collision.cpp
 	"Collision.h"
 	"LineSegment.h"
 	"math.h"
 	"Bullet.h"
+	"userPlayer.h"
+	"Block.h"
 	<cmath>
 
-1405714394 c:\users\nimesh\documents\github\network-ctf\collision.h
+1406061509 c:\users\nimesh\documents\github\network-ctf\collision.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Bullet.h"
@@ -259,7 +262,7 @@
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1405802727 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1406060422 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"Block.h"
 	"LevelManager.h"
@@ -294,7 +297,7 @@
 1405382793 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1405716109 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1406061586 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -321,7 +324,7 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1405982280 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
+1405982593 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -599,7 +602,7 @@
 	<tr1/memory>
 	<fstream>
 
-1405975693 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
+1406061167 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
 	"Camera.h"
 	"math.h"
 	<iostream>
@@ -608,17 +611,18 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1405802741 c:\users\nimesh\documents\github\network-ctf\gameworld.h
+1406059024 c:\users\nimesh\documents\github\network-ctf\gameworld.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<vector>
 	<tr1/memory>
 	<string>
 
-1405802727 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
+1406060704 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
 	"GameWorld.h"
 	"Block.h"
 	"LevelManager.h"
+	"ForegroundObject.h"
 
 1405977876 c:\users\nimesh\documents\github\network-ctf\staticobject.h
 	"SFML/System.hpp"
@@ -627,4 +631,12 @@
 1405977877 source:c:\users\nimesh\documents\github\network-ctf\staticobject.cpp
 	"StaticObject.h"
 	"math.h"
+
+1406060493 source:c:\users\nimesh\documents\github\network-ctf\foregroundobject.cpp
+	"ForegroundObject.h"
+
+1406060444 c:\users\nimesh\documents\github\network-ctf\foregroundobject.h
+	"StaticObject.h"
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
 

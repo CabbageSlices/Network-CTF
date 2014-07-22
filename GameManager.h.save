@@ -9,6 +9,8 @@
 #include <vector>
 #include <tr1/memory>
 
+class ForegroundObject;
+
 
 //base game manager class for client and server to derive from
 //the internal functions are virtual because the functions have the same outer appearence but the inner workings are different
@@ -39,8 +41,6 @@ class GameManager {
 
         void drawWorld(sf::RenderWindow& window);
 
-        void drawBlocks(sf::RenderWindow& window);
-
     protected:
 
         //do anything that needs to be done before the game starts running
@@ -65,10 +65,11 @@ class GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
 
-        //handle collision for any objects
+        //handle collision for all objects
         virtual void handleCollisions() = 0;
 
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
+        std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
 
         //calculate what fraction of time has passed since the last physics update to the next physics update
         const float calculateDeltaFraction();

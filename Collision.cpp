@@ -2,6 +2,8 @@
 #include "LineSegment.h"
 #include "math.h"
 #include "Bullet.h"
+#include "userPlayer.h"
+#include "Block.h"
 #include <cmath>
 
 using std::vector;
@@ -94,4 +96,17 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
     }
 
     return movementOffset;
+}
+
+void playerBlockCollision(UserPlayer& player, vector<shared_ptr<Block> >& blocks) {
+
+    for(auto block : blocks) {
+
+        //if player collides with block, move player minimum distance required to escape collision
+        if(player.getDestinationBox().intersects(block->getCollisionBox())) {
+
+            sf::Vector2f movementOffset = calculateCollisionOffset(player.getDestinationBox(), block->getCollisionBox());
+            player.move(movementOffset);
+        }
+    }
 }
