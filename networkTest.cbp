@@ -45,6 +45,8 @@
 		<Unit filename="Collision.h" />
 		<Unit filename="ConnectionManager.cpp" />
 		<Unit filename="ConnectionManager.h" />
+		<Unit filename="FlagManager.cpp" />
+		<Unit filename="FlagManager.h" />
 		<Unit filename="ForegroundObject.cpp" />
 		<Unit filename="ForegroundObject.h" />
 		<Unit filename="GameManager.cpp" />
@@ -75,6 +77,8 @@
 		<Unit filename="StateTracker.h" />
 		<Unit filename="StaticObject.cpp" />
 		<Unit filename="StaticObject.h" />
+		<Unit filename="TeamManager.cpp" />
+		<Unit filename="TeamManager.h" />
 		<Unit filename="UndefinedLineSegment.cpp" />
 		<Unit filename="UndefinedLineSegment.h" />
 		<Unit filename="UserPlayer.cpp" />
