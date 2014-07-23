@@ -63,8 +63,7 @@ class ClientGameManager: public GameManager {
         void updateConnectedPlayers(const float& delta);
 
         void handleBulletCollision();
-        
-        void playerBlockCollision();
+
         void playerForegroundCollision();
 
     protected:

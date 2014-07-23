@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "InterpolatingPlayer.h"
 #include "ForegroundObject.h"
+#include "Block.h"
 
 #include <iostream>
 
@@ -50,7 +51,7 @@ void ClientGameManager::interpolateEntities() {
     //this uses the time between server updates for interpolation rather than time between physics update cycle
     float deltaFraction = calculateServerDelta();
 
-    for(auto player : connectedPlayers) {
+    for(auto& player : connectedPlayers) {
 
         player->interpolate(deltaFraction);
     }
@@ -145,7 +146,7 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
 
 void ClientGameManager::updateConnectedPlayers(const float& delta) {
 
-    for(auto player : connectedPlayers) {
+    for(auto& player : connectedPlayers) {
 
         player->updateGun(delta);
     }
@@ -156,7 +157,7 @@ void ClientGameManager::handleBulletCollision() {
     //get the bullets from the player and check for collision with others
     vector<shared_ptr<Bullet> > bullets = userPlayer.getBullets();
 
-    for(auto bullet : bullets) {
+    for(auto& bullet : bullets) {
 
         if(!bullet->checkCanCollide()) {
 
@@ -176,7 +177,7 @@ void ClientGameManager::handleBulletCollision() {
 
 void ClientGameManager::playerForegroundCollision() {
 
-    for(auto entity : getForeground()) {
+    for(auto& entity : getForeground()) {
 
         if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
 
@@ -258,7 +259,7 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     userPlayer.draw(window);
 
-    for(auto player : connectedPlayers) {
+    for(auto& player : connectedPlayers) {
 
         player->draw(window);
     }

@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "Block.h"
 #include "LevelManager.h"
 
 using std::vector;
@@ -94,6 +93,11 @@ vector<shared_ptr<Block> >& GameManager::getBlocks() {
 vector<shared_ptr<ForegroundObject> >& GameManager::getForeground() {
 
     return world.getForeground();
+}
+
+shared_ptr<FlagManager> GameManager::getFlagManager() {
+
+    return world.getFlagManager();
 }
 
 const float GameManager::calculateDeltaFraction() {

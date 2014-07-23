@@ -1,5 +1,6 @@
 #include "FlagManager.h"
 #include "TeamManager.h"
+#include "math.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -30,6 +31,27 @@ void FlagManager::setFlagPosition(const sf::Vector2f& position, unsigned short t
     }
 }
 
+bool FlagManager::canHoldFlag(unsigned short teamId) {
+
+    //flag can be taken if its not being held already
+    return !flags[teamId]->beingHeld;
+}
+
+void FlagManager::holdFlag(unsigned short teamId) {
+
+    flags[teamId]->beingHeld = true;
+}
+
+void FlagManager::dropFlag(unsigned short teamId) {
+
+    flags[teamId]->beingHeld = false;
+}
+
+map<unsigned short, shared_ptr<FlagManager::Flag> >& FlagManager::getFlags() {
+
+    return flags;
+}
+
 void FlagManager::draw(sf::RenderWindow& window) {
 
     for(auto& flag : flags) {
@@ -43,6 +65,13 @@ void FlagManager::addFlag(const sf::Vector2f& flagSpawnLocation, unsigned short 
     //create a new flag at the given position
     shared_ptr<Flag> flag(new Flag());
     flag->flag.setPosition(flagSpawnLocation);
+    flag->flag.setRadius(30);
+
+    //center the circle of the flag
+    flag->flag.setOrigin(calculateCenter(flag->flag.getLocalBounds() ));
+
+    //colour flag according to teamId
+    flag->flag.setFillColor(sf::Color(155 * teamId, 100 * teamId, 0));
 
     flags[teamId] = flag;
 }

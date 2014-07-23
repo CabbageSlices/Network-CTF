@@ -10,6 +10,7 @@
 
 class Block;
 class ForegroundObject;
+class FlagManager;
 
 //class to manage the game world by keeping track of all of the objects and events
 class GameWorld {
@@ -18,6 +19,7 @@ class GameWorld {
 
         std::vector<std::tr1::shared_ptr<Block> > blocks;
         std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
+        std::tr1::shared_ptr<FlagManager> flagManager;
 
     public:
 
@@ -25,6 +27,7 @@ class GameWorld {
 
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
+        std::tr1::shared_ptr<FlagManager> getFlagManager();
 
         //load the given level, indicate success or failure
         bool load(std::string levelName);

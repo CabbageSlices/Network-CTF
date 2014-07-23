@@ -108,7 +108,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     updatePacket << players.size();
 
     //add all the player's data to the packet
-    for(auto player : players) {
+    for(auto& player : players) {
 
         updatePacket << player->player.getId();
         updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
@@ -121,7 +121,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << bullets.size();
 
         //add teh beginning and end locaitons of all bullets so the clients receiving the packet can create a bullet for this player so player can see where the shot was fired
-        for(auto bullet : bullets) {
+        for(auto& bullet : bullets) {
 
             sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
             sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
@@ -271,7 +271,7 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         updatedPlayer->setHealth(playerHealth);
 
         //now create the bullets for this player
-        for(auto bullet : bullets) {
+        for(auto& bullet : bullets) {
 
             sf::Vector2f bulletStart(bullet.left, bullet.top);
             sf::Vector2f bulletEnd(bullet.width, bullet.height);

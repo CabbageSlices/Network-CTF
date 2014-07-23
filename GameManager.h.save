@@ -3,14 +3,14 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
-#include "Block.h"
 #include "GameWorld.h"
 
 #include <vector>
 #include <tr1/memory>
 
+class Block;
 class ForegroundObject;
-
+class FlagManager;
 
 //base game manager class for client and server to derive from
 //the internal functions are virtual because the functions have the same outer appearence but the inner workings are different
@@ -70,6 +70,7 @@ class GameManager {
 
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
+        std::tr1::shared_ptr<FlagManager> getFlagManager();
 
         //calculate what fraction of time has passed since the last physics update to the next physics update
         const float calculateDeltaFraction();

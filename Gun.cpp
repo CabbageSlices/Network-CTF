@@ -91,7 +91,7 @@ void Gun::drawSight(sf::RenderWindow& window) {
 
 void Gun::drawBullets(sf::RenderWindow& window) {
 
-    for(auto bullet : bullets) {
+    for(auto& bullet : bullets) {
 
         //only draw the bullet if it has checked for collision
         //if it hasn't hcecked for collision then it is a brand new bullet, and new bullets may look as if they are going through all other entities

@@ -50,13 +50,13 @@ void PlayerBase::setId(const int& id) {
     playerId = id;
 }
 
-unsigned short PlayerBase::getTeam() {
-    
+unsigned short PlayerBase::getTeam() const {
+
     return teamId;
 }
 
-void PlayerBase::setTeam(unsigned short team) {
-    
+void PlayerBase::setTeam(const unsigned short& team) {
+
     teamId = team;
 }
 
@@ -73,8 +73,7 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    currentHitBox.setPosition(pastHitBox.getPosition());
-    pastHitBox.setPosition(destinationHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
     destinationHitBox.setPosition(position);
 }
 

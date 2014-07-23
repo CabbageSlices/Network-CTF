@@ -33,7 +33,7 @@ void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std:
 
     //go through all entities and check for collision with them
     //line cuts off after each collision so in the end it will have collided with the nearest object
-    for(auto entity : entities) {
+    for(auto& entity : entities) {
 
         sf::FloatRect collisionRect = entity->getCollisionBox();
 

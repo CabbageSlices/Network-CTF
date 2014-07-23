@@ -3,11 +3,15 @@
 #include "PacketManipulators.h"
 #include "Bullet.h"
 #include "LineSegment.h"
+#include "FlagManager.h"
 #include "Collision.h"
 #include "math.h"
+#include "Block.h"
 
+#include <map>
 #include <iostream>
 
+using std::map;
 using std::cout;
 using std::endl;
 using std::tr1::shared_ptr;
@@ -42,7 +46,7 @@ void ServerGameManager::handleIncomingData() {
     }
 
     //data is available, check if the sender already has a player connected
-    for(auto player : players) {
+    for(auto& player : players) {
 
         if(player->playerIpAddress == senderIp && player->playerPort == senderPort) {
 
@@ -178,7 +182,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
     vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
     //check if each active bullet collides with anything and determine the first object it collides with
-    for(auto bullet : bullets) {
+    for(auto& bullet : bullets) {
 
         if(!bullet->checkCanCollide()) {
 
@@ -205,7 +209,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     shared_ptr<ConnectedPlayer> nearestPlayer = shootingPlayer;
     sf::Vector2f nearestCollisionPoint = bullet->getLine()->getEndPoint();
 
-    for(auto player : players) {
+    for(auto& player : players) {
 
         if(player == shootingPlayer) {
 
@@ -270,7 +274,7 @@ void ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned
 void ServerGameManager::sendInputConfirmation() {
 
     //for every client connected send them their position update along with the last input that the server confirmed from them
-    for(auto player : players) {
+    for(auto& player : players) {
 
         sf::Packet playerUpdate;
         createUpdatePacket(player->player, player->lastConfirmedInputId, playerUpdate);
@@ -291,7 +295,7 @@ void ServerGameManager::sendStateUpdates() {
     savePlayerStates(lastStateUpdateId);
     lastStateUpdateId++;
 
-    for(auto player : players) {
+    for(auto& player : players) {
 
         server.sendData(stateUpdatePacket, player->playerIpAddress, player->playerPort);
     }
@@ -300,7 +304,7 @@ void ServerGameManager::sendStateUpdates() {
 void ServerGameManager::savePlayerStates(const int stateId) {
 
     //loop through all the players and update their state, if they don't exist then add a state for them
-    for(auto player : players) {
+    for(auto& player : players) {
 
         //a record doesn't exist, so create a new one
         if(!player->state) {
@@ -322,9 +326,27 @@ int ServerGameManager::calculateMaxStatesSaved() {
 
 void ServerGameManager::drawPlayers(sf::RenderWindow& window) {
 
-    for(auto player : players) {
+    for(auto& player : players) {
 
         player->player.draw(window);
+    }
+}
+
+void ServerGameManager::playerFlagCollision() {
+
+    for(auto& player : players) {
+
+        //check if the given player collides with any flags, and if he does try and make him grab the flag if he is from the same team
+        auto flags = getFlagManager()->getFlags();
+
+        for(auto flag : flags) {
+
+            //if player collides, check if he can grab the flag and handle grabbing accordingly
+            if(player->player.getCollisionBox().intersects(flag.second->flag.getGlobalBounds()) && !flag.second->beingHeld) {
+
+                getFlagManager()->holdFlag(flag.first);
+            }
+        }
     }
 }
 
@@ -369,7 +391,7 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
 void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
     //update the players of all the connected clients
-    for(auto player : players) {
+    for(auto& player : players) {
 
         player->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
     }
@@ -377,7 +399,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
 void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
-    for(auto player : players) {
+    for(auto& player : players) {
 
         //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
         player->player.interpolate(calculateDeltaFraction());
@@ -392,7 +414,7 @@ void ServerGameManager::drawComponents(sf::RenderWindow& window) {
 void ServerGameManager::handleCollisions() {
 
     //hsndle collision between players and blocks
-    for(auto player : players) {
+    for(auto& player : players) {
 
         playerBlockCollision(player->player, getBlocks());
     }

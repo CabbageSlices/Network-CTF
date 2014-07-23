@@ -45,7 +45,7 @@ bool saveObjects(const std::vector<std::tr1::shared_ptr<Object> >& objects, cons
     file << beginTag << std::endl;
 
     //now save all of the blocks
-    for(auto object : objects) {
+    for(auto& object : objects) {
 
         //only save the position of the block because the size of the block is set by the class itself
         sf::Vector2f position = object->getPosition();

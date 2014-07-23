@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "Block.h"
 #include "LevelManager.h"
 
 using std::vector;
@@ -9,15 +8,15 @@ GameManager::GameManager() :
     timer(),
     accumulator(),
     optimalTimeStep(sf::milliseconds(15)),
-    blocks()
+    world()
     {
-        loadLevel("level", blocks);
+        world.load("level");
     }
 
 void GameManager::runGame(sf::RenderWindow& window) {
 
     //setup is virtual so this will be a polymorphic call depending on what class calls it
-    this->setup(sf::RenderWindow& window);
+    this->setup(window);
 
     sf::Event event;
 
@@ -36,13 +35,11 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
     while(window.pollEvent(event)) {
 
         handleCommonInputs(event, window);
-        
+
         this->handleWindowEvents(event, window);
 
         this->handleComponentInputs(event, window);
     }
-
-    this->handleStateInputs();
 }
 
 void GameManager::handleCommonInputs(sf::Event& event, sf::RenderWindow& window) {
@@ -72,30 +69,35 @@ void GameManager::updateWorld(sf::RenderWindow& window) {
         accumulator -= optimalTimeStep;
     }
 
-    this->handlePostUpdate();
+    this->handlePostUpdate(window);
 }
 
 void GameManager::drawWorld(sf::RenderWindow& window) {
 
     window.clear();
 
+    world.drawBackground(window);
+
     this->drawComponents(window);
-    drawBlocks(window);
+
+    world.drawForeground(window);
 
     window.display();
 }
 
-void GameManager::drawBlocks(sf::RenderWindow& window) {
-
-    for(auto block : blocks) {
-
-        block->draw(window);
-    }
-}
-
 vector<shared_ptr<Block> >& GameManager::getBlocks() {
 
-    return blocks;
+    return world.getBlocks();
+}
+
+vector<shared_ptr<ForegroundObject> >& GameManager::getForeground() {
+
+    return world.getForeground();
+}
+
+shared_ptr<FlagManager> GameManager::getFlagManager() {
+    
+    return world.getFlagManager();
 }
 
 const float GameManager::calculateDeltaFraction() {

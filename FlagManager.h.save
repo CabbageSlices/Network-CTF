@@ -19,6 +19,9 @@ class FlagManager {
 
             //position of the spawn
             sf::Vector2f spawnPosition;
+
+            //if flag is being held no other players may grab it
+            bool beingHeld = false;
         };
 
         //container to hold flags
@@ -30,9 +33,19 @@ class FlagManager {
 
     public:
 
-        voidFlagManager(const sf::Vector2f& teamASpawn, const sf::Vector2f& teamBSpawn);
+        FlagManager(const sf::Vector2f& teamASpawn, const sf::Vector2f& teamBSpawn);
 
         void setFlagPosition(const sf::Vector2f& flagPosition, unsigned short teamId);
+
+        //check if the flag of the given team is taken
+        bool canHoldFlag(unsigned short teamId);
+
+        void holdFlag(unsigned short teamId);
+
+        void dropFlag(unsigned short teamId);
+        
+        //handles collision between the given enity and flags
+        std::map<unsigned short, std::tr1::shared_ptr<Flag> >& getFlags();
 
         //draw the flags
         void draw(sf::RenderWindow& window);

@@ -99,6 +99,9 @@ class ServerGameManager : public GameManager {
 
         void drawPlayers(sf::RenderWindow& window);
 
+        //check and handle collision between players and flags
+        void playerFlagCollision();
+
     protected:
 
         //do anything that needs to be done before the game starts running
