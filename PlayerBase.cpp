@@ -73,8 +73,8 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    currentHitBox.setPosition(pastHitBox.getPosition());
-    pastHitBox.setPosition(destinationHitBox.getPosition());
+    ///currentHitBox.setPosition(pastHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
     destinationHitBox.setPosition(position);
 }
 
