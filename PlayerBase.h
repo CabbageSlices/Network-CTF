@@ -19,6 +19,9 @@ class PlayerBase {
         //id of this player, supplied by the server
         int playerId;
 
+        //id of the team the player is in
+        unsigned short teamId;
+
         //players hit box for drawing, movement, and collision
         //current hitbox is the current position of the player which will interpolate towards the destination box
         //previous hitbox is the past position of the player which interpolates towards the destination box
@@ -60,6 +63,9 @@ class PlayerBase {
 
         int getId();
         void setId(const int& id);
+
+        unsigned short getTeam() const;
+        void setTeam(const unsigned short& team);
 
         const float getRotation() const;
 

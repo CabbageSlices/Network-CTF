@@ -150,6 +150,11 @@ void Gun::fire(const float& angle) {
 void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
 
     createBullet(bulletBegin, bulletEnd);
+
+    //a bullet created using start and end points are bullets sent from the server
+    //meaning thye have already checked for collision
+    //so indcate the bullet has checked for collision, this bullet is the last bullet added to the container
+    bullets[bullets.size() - 1]->disableCollision();
 }
 
 void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation) {

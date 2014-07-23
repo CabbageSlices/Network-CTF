@@ -126,6 +126,9 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
     //now load the health from the server update
     setHealth(stateUpdate.health);
 
+    //now load the team
+    setTeam(stateUpdate.team);
+
     //for whatever reason the queued input with the same id as the last confirmed input doesn't get deleted so delete it here if it's still there
     if(inputBuffer.size() > 0) {
 

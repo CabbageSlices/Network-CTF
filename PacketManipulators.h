@@ -34,6 +34,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
     -PLAYER POSITION.x
     -PLAYER POSITION.y
     -PLAYER HEALTH
+    -PLAYER'S TEAM
 **/
 void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
 

@@ -57,6 +57,9 @@ class UserPlayer : public PlayerBase{
 
             sf::Vector2f position;
             int health;
+
+            //id of the team the player is in
+            unsigned short team;
         };
 
     private:

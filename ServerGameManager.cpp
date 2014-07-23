@@ -22,7 +22,8 @@ ServerGameManager::ServerGameManager(unsigned short portToBindTo) :
     lastStateUpdateId(0),
     stateUpdateTimer(),
     stateUpdateDelay(sf::milliseconds(60)),
-    lastPlayerId(0)
+    lastPlayerId(0),
+    teamManager()
     {
         server.bind(portToBindTo);
     }
@@ -257,6 +258,7 @@ void ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned
 
     shared_ptr<ConnectedPlayer> player(new ConnectedPlayer());
     player->player.setId(playerId);
+    player->player.setTeam(teamManager.addNewPlayer());
 
     player->playerIpAddress = connectedIp;
     player->playerPort = connectedPort;

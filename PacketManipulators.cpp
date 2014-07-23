@@ -65,6 +65,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
     dataDestination << playerPosition.y;
 
     dataDestination << player.getHealth();
+    dataDestination << player.getTeam();
 }
 
 void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
@@ -87,6 +88,11 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
     updatePacket >> health;
 
     updatedState.health = health;
+
+    unsigned short team;
+    updatePacket >> team;
+
+    updatedState.team = team;
 
     //apply to player
     player.handleServerUpdate(updatedState, inputId);

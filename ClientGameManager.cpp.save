@@ -174,27 +174,20 @@ void ClientGameManager::handleBulletCollision() {
     }
 }
 
-void ClientGameManager::playerBlockCollision() {
-    
-    for(auto block : blocks) {
-        
-        //if pla
-        if(userPlayer.getDestinationBox().intersects(block->getCollisionBox())) {
-
-            sf::Vector2f movementOffset = calculateCollisionOffset(userPlayer.getDestinationBox(), block->getCollisionBox());
-            userPlayer.move(movementOffset);
-        }
-    }
-}
-
 void ClientGameManager::playerForegroundCollision() {
 
-    playerEntityCollision<UserPlayer, ForegroundObject>(userPlayer, getForeground(), [&](shared_ptr<ForegroundObject>& object){
+    for(auto entity : getForeground()) {
 
-        //player is hidding so zoom the camera in a bit
-        object->setHidingPlayer(true);
-        camera.zoomIn();
-    });
+        if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
+
+            entity->setHidingPlayer(true);
+            camera.zoomIn();
+
+        } else {
+
+            entity->setHidingPlayer(false);
+        }
+    }
 }
 
 void ClientGameManager::setup(sf::RenderWindow& window) {
@@ -257,8 +250,8 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     //move camera to new track players new position
     ///currently there is no level bounds or properties so just give some default level properties for now
-    camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
-                           sf::FloatRect(-500, -500, 2500, 2500));
+    ///camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
+                           ///sf::FloatRect(-2000, -2000, 5000, 5000));
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {
@@ -275,7 +268,7 @@ void ClientGameManager::handleCollisions() {
 
     //no broadphase as of yet
     //check for collision between players and blocks
-    playerBlockCollision();
+    playerBlockCollision(userPlayer, getBlocks());
 
     playerForegroundCollision();
 }

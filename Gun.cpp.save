@@ -16,11 +16,11 @@ Gun::Gun() :
     bullets(),
     MAX_DISTANCE_FIRED(2000.f),
     rotation(0.0),
-    accuracyModifier(0, 3),
+    accuracyModifier(0, 0),
     queuedRotations(),
     fired(false),
     timeSinceFired(sf::seconds(0)),
-    fireDelay(sf::milliseconds(250))
+    fireDelay(sf::milliseconds(200))
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0), 0.0);
@@ -61,7 +61,6 @@ void Gun::updateBullets(const sf::Time& delta) {
     for(unsigned i = 0; i < bullets.size();) {
 
         bullets[i]->updateElapsedTime(delta);
-        bullets[i]->disableCollision();
 
         //if a bullet can't be drawn it's dead and should be deleted
         if(!bullets[i]->canDraw()) {
@@ -94,7 +93,13 @@ void Gun::drawBullets(sf::RenderWindow& window) {
 
     for(auto bullet : bullets) {
 
-        bullet->draw(window);
+        //only draw the bullet if it has checked for collision
+        //if it hasn't hcecked for collision then it is a brand new bullet, and new bullets may look as if they are going through all other entities
+        //when infact they check for collision the next update and onlly are cut off
+        if(!bullet->checkCanCollide()) {
+
+            bullet->draw(window);
+        }
     }
 }
 
@@ -145,6 +150,11 @@ void Gun::fire(const float& angle) {
 void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
 
     createBullet(bulletBegin, bulletEnd);
+    
+    //a bullet created using start and end points are bullets sent from the server
+    //meaning thye have already checked for collision
+    //so indcate the bullet has checked for collision, this bullet is the last bullet added to the container
+    bullets[bullets.size() - 1]->disableCollision();
 }
 
 void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation) {

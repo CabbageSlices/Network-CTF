@@ -13,6 +13,7 @@ using std::endl;
 
 PlayerBase::PlayerBase():
     playerId(0),
+    teamId(0),
     pastHitBox(sf::Vector2f(29, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
@@ -47,6 +48,16 @@ int PlayerBase::getId() {
 void PlayerBase::setId(const int& id) {
 
     playerId = id;
+}
+
+unsigned short PlayerBase::getTeam() const {
+
+    return teamId;
+}
+
+void PlayerBase::setTeam(const unsigned short& team) {
+
+    teamId = team;
 }
 
 const float PlayerBase::getRotation() const {

@@ -6,6 +6,7 @@
 #include "ConnectionManager.h"
 #include "GameManager.h"
 #include "StateTracker.h"
+#include "TeamManager.h"
 #include <vector>
 #include <tr1/memory>
 
@@ -53,6 +54,8 @@ class ServerGameManager : public GameManager {
 
         //id of last player created, used to assign a unique id to connecting players by increasing the counter
         int lastPlayerId;
+
+        TeamManager teamManager;
 
         //receive and handle any incoming data to the server
         void handleIncomingData();
