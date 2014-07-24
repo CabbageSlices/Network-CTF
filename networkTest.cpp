@@ -19,11 +19,16 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    gameManager.runGame(window);
+    ///gameManager.runGame(window);
 
     ServerGameManager serverGameManager;
 
-    ///serverGameManager.runGame(window);
+    sf::View largeView;
+    largeView.setViewport(sf::FloatRect(0, 0, 1, 1));
+    largeView.setSize(3200, 1800);
+    window.setView(largeView);
+
+    serverGameManager.runGame(window);
 
     return 0;
 }

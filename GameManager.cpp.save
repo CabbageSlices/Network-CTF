@@ -96,8 +96,13 @@ vector<shared_ptr<ForegroundObject> >& GameManager::getForeground() {
 }
 
 shared_ptr<FlagManager> GameManager::getFlagManager() {
-    
+
     return world.getFlagManager();
+}
+
+GameWorld& GameManager::getGameWorld() {
+    
+    return world;
 }
 
 const float GameManager::calculateDeltaFraction() {

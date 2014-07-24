@@ -35,6 +35,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
     -PLAYER POSITION.y
     -PLAYER HEALTH
     -PLAYER'S TEAM
+    -PLAYER HAS FLAG
 **/
 void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
 
@@ -50,6 +51,8 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
     -PLAYER POSITION (x,y)
     -PLAYER ROTATION
     -PLAYER HEALTH
+    -PLAYER TEAM
+    -PLAYER HAS FLAG
 
     -NUMBER OF BULLETS FIRED
         ---REPEAT THE FOLLOWING FOR EVERY BULLET

@@ -100,6 +100,11 @@ shared_ptr<FlagManager> GameManager::getFlagManager() {
     return world.getFlagManager();
 }
 
+GameWorld& GameManager::getGameWorld() {
+
+    return world;
+}
+
 const float GameManager::calculateDeltaFraction() {
 
     return accumulator.asSeconds() / optimalTimeStep.asSeconds();

@@ -3,6 +3,8 @@
 #include "LevelManager.h"
 #include "ForegroundObject.h"
 #include "FlagManager.h"
+#include "TeamManager.h"
+#include "PlayerBase.h"
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -27,7 +29,7 @@ vector<shared_ptr<ForegroundObject> >& GameWorld::getForeground() {
 }
 
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
-    
+
     return flagManager;
 }
 
@@ -47,9 +49,17 @@ void GameWorld::clearWorld() {
     flagManager.reset();
 }
 
+void GameWorld::updateFlagPosition(PlayerBase& player) {
+    
+    if(player.isHoldingFlag()) {
+        
+        flagManager->setFlagPosition(player.getCurrentPosition(), getOpposingTeam(player.getTeam()));
+    }
+}
+
 void GameWorld::drawBackground(sf::RenderWindow& window) {
 
-    for(auto block : blocks) {
+    for(auto& block : blocks) {
 
         block->draw(window);
     }
@@ -59,7 +69,7 @@ void GameWorld::drawBackground(sf::RenderWindow& window) {
 
 void GameWorld::drawForeground(sf::RenderWindow& window) {
 
-    for(auto object : foregroundObjects) {
+    for(auto& object : foregroundObjects) {
 
         object->draw(window);
     }

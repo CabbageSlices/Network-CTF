@@ -44,6 +44,8 @@ class PlayerBase {
 
         std::tr1::shared_ptr<Gun> gun;
 
+        bool holdingFlag;
+
         void updateHitboxRotation();
 
         //update teh position of the healthbar, tracks players current hitbox
@@ -82,6 +84,8 @@ class PlayerBase {
 
         const sf::Vector2f& getDestinationPosition() const;
 
+        const sf::Vector2f& getCurrentPosition() const;
+
         //just returns the player's current position box, usually jsut used to indicate his properties
         sf::FloatRect getCurrentHitbox() const;
 
@@ -98,6 +102,14 @@ class PlayerBase {
 
         //set helath to given value, if its less than current health then run damage animation
         void setHealth(int value);
+
+        bool isHoldingFlag() const;
+
+        void holdFlag();
+
+        void dropFlag();
+
+        void setHoldingFlag(const bool& idHolding);
 };
 
 #endif // PLAYERBASE_H_INCLUDED

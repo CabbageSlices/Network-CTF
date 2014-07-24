@@ -37,13 +37,14 @@ bool FlagManager::canHoldFlag(unsigned short teamId) {
     return !flags[teamId]->beingHeld;
 }
 
+bool FlagManager::flagAtSpawn(unsigned short teamId) {
+
+    return flags[teamId]->atSpawn;
+}
+
 void FlagManager::holdFlag(unsigned short teamId) {
 
-    //if the given flag can be held then let it be held
-    if(canHoldFlag(teamId)) {
-
-        flags[teamId]->beingHeld = true;
-    }
+    flags[teamId]->beingHeld = true;
 }
 
 void FlagManager::dropFlag(unsigned short teamId) {
@@ -51,9 +52,23 @@ void FlagManager::dropFlag(unsigned short teamId) {
     flags[teamId]->beingHeld = false;
 }
 
-map<unsigned short, shared_ptr<Flag> >& FlagManager::getFlags() {
+void FlagManager::resetFlags() {
+
+    flagToSpawn(TEAM_A_ID);
+    flagToSpawn(TEAM_B_ID);
+}
+
+bool FlagManager::checkFlagCollision(const sf::FloatRect& collisionRect, const unsigned short& teamId) {
     
-    return flags;
+    
+    return collisionRect.intersects(flags[teamId]->flag.getGlobalBounds());
+}
+
+void FlagManager::flagToSpawn(const unsigned short& teamId) {
+
+    flags[teamId]->flag.setPosition(flags[teamId]->spawnPosition);
+    flags[teamId]->atSpawn = true;
+    flags[teamId]->beingHeld = false;
 }
 
 void FlagManager::draw(sf::RenderWindow& window) {

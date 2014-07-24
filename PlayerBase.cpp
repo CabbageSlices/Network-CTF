@@ -23,7 +23,8 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Gun())
+    gun(new Gun()),
+    holdingFlag(false)
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -116,6 +117,11 @@ const sf::Vector2f& PlayerBase::getDestinationPosition() const {
     return destinationHitBox.getPosition();
 }
 
+const sf::Vector2f& PlayerBase::getCurrentPosition() const {
+
+    return currentHitBox.getPosition();
+}
+
 sf::FloatRect PlayerBase::getCurrentHitbox() const {
 
     return currentHitBox.getGlobalBounds();
@@ -155,6 +161,41 @@ void PlayerBase::setHealth(int value) {
     }
 
     health.setCurrentHealth(value);
+}
+
+bool PlayerBase::isHoldingFlag() const {
+
+    return holdingFlag;
+}
+
+void PlayerBase::holdFlag() {
+
+    holdingFlag = true;
+}
+
+void PlayerBase::dropFlag() {
+
+    holdingFlag = false;
+}
+
+void PlayerBase::setHoldingFlag(const bool& isHolding) {
+
+    //determines if his holding status changed at all
+    //that way you know whether to drop or pick up flag
+    if(holdingFlag == isHolding) {
+
+        return;
+    }
+
+    //you know the flags status has to change so call the appropriate functions
+    if(isHolding) {
+
+        holdFlag();
+
+    } else {
+
+        dropFlag();
+    }
 }
 
 void PlayerBase::updateHitboxRotation() {

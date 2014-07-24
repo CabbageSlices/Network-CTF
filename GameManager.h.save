@@ -71,6 +71,8 @@ class GameManager {
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
         std::tr1::shared_ptr<FlagManager> getFlagManager();
+        
+        GameWorld& getGameWorld();
 
         //calculate what fraction of time has passed since the last physics update to the next physics update
         const float calculateDeltaFraction();

@@ -176,7 +176,7 @@
 
 1406150219 c:\users\nimesh\documents\github\network-ctf\packetidentification.h
 
-1406150219 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
+1406236886 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
 	"SFML/Network.hpp"
 	"ServerGameManager.h"
 	<vector>
@@ -199,7 +199,7 @@
 	<vector>
 	<tr1/memory>
 
-1406153620 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1406238195 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"GameWorld.h"
@@ -211,7 +211,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1406154630 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1406238195 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -220,6 +220,7 @@
 	"Collision.h"
 	"InterpolatingPlayer.h"
 	"ForegroundObject.h"
+	"TeamManager.h"
 	"Block.h"
 	<iostream>
 
@@ -263,7 +264,7 @@
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1406153620 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1406238195 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
 
@@ -287,7 +288,7 @@
 	<cmath>
 	<cstdlib>
 
-1406151545 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1406239074 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -297,14 +298,17 @@
 1406150219 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1406150219 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1406239430 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
 	"Bullet.h"
 	"LineSegment.h"
+	"FlagManager.h"
 	"Collision.h"
 	"math.h"
+	"Block.h"
+	<map>
 	<iostream>
 
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\statetracker.cpp
@@ -338,7 +342,7 @@
 	<tr1/memory>
 	<vector>
 
-1406154630 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
+1406236925 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -553,14 +557,14 @@
 	<vector>
 	<tr1/memory>
 
-1406150219 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1406238195 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
 	<vector>
 	<tr1/memory>
 
-1406154146 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1406238195 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -614,19 +618,21 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1406153620 c:\users\nimesh\documents\github\network-ctf\gameworld.h
+1406238195 c:\users\nimesh\documents\github\network-ctf\gameworld.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<vector>
 	<tr1/memory>
 	<string>
 
-1406154630 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
+1406238195 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
 	"GameWorld.h"
 	"Block.h"
 	"LevelManager.h"
 	"ForegroundObject.h"
 	"FlagManager.h"
+	"TeamManager.h"
+	"PlayerBase.h"
 
 1406150219 c:\users\nimesh\documents\github\network-ctf\staticobject.h
 	"SFML/System.hpp"
@@ -645,22 +651,22 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1406155564 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
+1406239703 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
 	"FlagManager.h"
 	"TeamManager.h"
 	"math.h"
 	<stdexcept>
 	<iostream>
 
-1406155563 c:\users\nimesh\documents\github\network-ctf\flagmanager.h
+1406237022 c:\users\nimesh\documents\github\network-ctf\flagmanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 	<map>
 
-1406150219 c:\users\nimesh\documents\github\network-ctf\teammanager.h
+1406238195 c:\users\nimesh\documents\github\network-ctf\teammanager.h
 	<map>
 
-1406150219 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
+1406239266 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
 	"TeamManager.h"
 

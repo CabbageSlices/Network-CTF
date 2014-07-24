@@ -10,7 +10,7 @@
 //keeps track of each teams flags and their flag spawn zone
 class FlagManager {
 
-    private:
+    public:
 
         struct Flag {
 
@@ -22,7 +22,12 @@ class FlagManager {
 
             //if flag is being held no other players may grab it
             bool beingHeld = false;
+            
+            //if the flag is at the spawn
+            bool atSpawn = true;
         };
+
+    private:
 
         //container to hold flags
         //the map's key is the id of the team the flag is associated with
@@ -44,8 +49,14 @@ class FlagManager {
 
         void dropFlag(unsigned short teamId);
         
-        //handles collision between the given enity and flags
-        std::map<unsigned short, std::tr1::shared_ptr<Flag> >& getFlags();
+        //return all flags back to spawn locations
+        void resetFlags();
+
+        //check for collision between the given entity and the given flag
+        bool checkFlagCollision(const sf::FloatRect& collisionBox, const unsigned short& teamId);
+        
+        //return the given flag back to the base
+        void flagToSpawn(const unsigned short& teamId);
 
         //draw the flags
         void draw(sf::RenderWindow& window);

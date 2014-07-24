@@ -22,6 +22,9 @@ class FlagManager {
 
             //if flag is being held no other players may grab it
             bool beingHeld = false;
+
+            //if the flag is at the spawn
+            bool atSpawn = true;
         };
 
     private:
@@ -42,12 +45,21 @@ class FlagManager {
         //check if the flag of the given team is taken
         bool canHoldFlag(unsigned short teamId);
 
+        //check if the given flag is at its spawn location
+        bool flagAtSpawn(unsigned short teamId);
+
         void holdFlag(unsigned short teamId);
 
         void dropFlag(unsigned short teamId);
 
-        //handles collision between the given enity and flags
-        std::map<unsigned short, std::tr1::shared_ptr<Flag> >& getFlags();
+        //return all flags back to spawn locations
+        void resetFlags();
+
+        //check for collision between the given entity and the given flag
+        bool checkFlagCollision(const sf::FloatRect& collisionBox, const unsigned short& teamId);
+
+        //return the given flag back to the base
+        void flagToSpawn(const unsigned short& teamId);
 
         //draw the flags
         void draw(sf::RenderWindow& window);

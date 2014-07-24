@@ -3,6 +3,10 @@
 
 #include <map>
 
+extern const unsigned short TEAM_A_ID;
+extern const unsigned short TEAM_B_ID;
+
+
 //class to keep track of how many players are in each team and assign a team to a new player
 class TeamManager {
 
@@ -30,7 +34,7 @@ class TeamManager {
         unsigned short switchTeams(unsigned short currentTeamId);
 };
 
-extern const unsigned short TEAM_A_ID;
-extern const unsigned short TEAM_B_ID;
+//gets the id of the team that is opposing the given team
+unsigned short getOpposingTeam(const unsigned short& currentTeam);
 
 #endif // TEAMMANAGER_H_INCLUDED

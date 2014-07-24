@@ -3,6 +3,11 @@
 const unsigned short TEAM_A_ID = 1;
 const unsigned short TEAM_B_ID = 2;
 
+unsigned short getOpposingTeam(const unsigned short& currentTeam) {
+
+    return (currentTeam == TEAM_A_ID) ? TEAM_B_ID : TEAM_A_ID;
+}
+
 TeamManager::TeamManager():
     numberOfPlayers()
     {
@@ -12,12 +17,13 @@ TeamManager::TeamManager():
 unsigned short TeamManager::addNewPlayer() {
 
     //id of team that the player was added to
-    int team = TEAM_A_ID;
+    int team = TEAM_B_ID;
 
     //add the player to whatever team has the fewer number of players
-    if(numberOfPlayers[TEAM_A_ID] < numberOfPlayers[TEAM_B_ID]) {
+    if(numberOfPlayers[TEAM_A_ID] <= numberOfPlayers[TEAM_B_ID]) {
 
         numberOfPlayers[TEAM_A_ID]++;
+        team = TEAM_A_ID;
 
     } else {
 

@@ -3,6 +3,10 @@
 
 #include <map>
 
+extern const unsigned short TEAM_A_ID;
+extern const unsigned short TEAM_B_ID;
+
+
 //class to keep track of how many players are in each team and assign a team to a new player
 class TeamManager {
 
@@ -10,8 +14,8 @@ class TeamManager {
 
         //counter for the number of players in each team
         //map key is the team id, and the value is the number of players for that team
-        map<unsigned short, int> numberOfPlayers;
-        
+        std::map<unsigned short, int> numberOfPlayers;
+
         void setupPlayerCounter();
 
     public:
@@ -26,10 +30,11 @@ class TeamManager {
         void removePlayer(const unsigned short& teamId);
 
         //take a player from the given team and move it to the other team
-        void switchTeams(unsigned short currentTeamId);
+        //return id of the team that player switched to
+        unsigned short switchTeams(unsigned short currentTeamId);
 };
 
-extern const unsigned short TEAM_A_ID;
-extern const unsigned short TEAM_B_ID;
+//gets the id of the team that is opposing the given team
+unsigned short getOpposingTeam(const unsigned short& currentTeam);
 
 #endif // TEAMMANAGER_H_INCLUDED

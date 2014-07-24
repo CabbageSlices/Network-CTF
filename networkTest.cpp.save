@@ -19,11 +19,14 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    gameManager.runGame(window);
+    ///gameManager.runGame(window);
 
     ServerGameManager serverGameManager;
+    
+    sf::View largeView;
+    largeView.setViewport(0, 0, 1, 1)
 
-    ///serverGameManager.runGame(window);
+    serverGameManager.runGame(window);
 
     return 0;
 }

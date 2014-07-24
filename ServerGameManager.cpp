@@ -336,16 +336,45 @@ void ServerGameManager::playerFlagCollision() {
 
     for(auto& player : players) {
 
-        //check if the given player collides with any flags, and if he does try and make him grab the flag if he is from the same team
-        auto flags = getFlagManager()->getFlags();
+        shared_ptr<FlagManager> flagManager = getFlagManager();
+        bool collidesOwnFlag = flagManager->checkFlagCollision(player->player.getDestinationBox(), player->player.getTeam());
 
-        for(auto flag : flags) {
+        //flag can be returned to his base if no one is holding it and its not already at base
+        bool canReturnFlag = flagManager->canHoldFlag(player->player.getTeam()) && !flagManager->flagAtSpawn(player->player.getTeam());
 
-            //if player collides, check if he can grab the flag and handle grabbing accordingly
-            if(player->player.getCollisionBox().intersects(flag.second->flag.getGlobalBounds()) && !flag.second->beingHeld) {
+        //check for collision between each flag with each player and handle collision accordingly
+        if(collidesOwnFlag && canReturnFlag) {
 
-                getFlagManager()->holdFlag(flag.first);
-            }
+            //player collided with his own teams flag
+            //and no one else is holding it
+            //return it to base if it can
+            flagManager->flagToSpawn(player->player.getTeam());
+
+        } else if(collidesOwnFlag && flagManager->flagAtSpawn(player->player.getTeam()) && player->player.isHoldingFlag()) {
+
+            //player has returne to his base with the opponents flag so return all flags to base and make the player score
+            player->player.dropFlag();
+            flagManager->resetFlags();
+        }
+
+        //if player is holding a flag it means he is already holding the other teams flag so no need to check for collision with it
+        if(player->player.isHoldingFlag()) {
+
+            continue;
+        }
+
+        //id of the team the current player is not on, so the team that is opposing hte players current team
+        unsigned short idOpposingTeam = getOpposingTeam(player->player.getTeam());
+
+        //if he collides with the other teams flag see if he can steal it
+        bool collidesOtherFlag = flagManager->checkFlagCollision(player->player.getDestinationBox(), idOpposingTeam);
+
+        if(collidesOtherFlag && flagManager->canHoldFlag(idOpposingTeam)) {
+
+            //make player start holding the given flag
+            player->player.holdFlag();
+
+            flagManager->holdFlag(idOpposingTeam);
         }
     }
 }
@@ -401,8 +430,8 @@ void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     for(auto& player : players) {
 
-        //player->player.forceUpdate(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
         player->player.interpolate(calculateDeltaFraction());
+        getGameWorld().updateFlagPosition(player->player);
     }
 }
 
@@ -418,4 +447,6 @@ void ServerGameManager::handleCollisions() {
 
         playerBlockCollision(player->player, getBlocks());
     }
+
+    playerFlagCollision();
 }

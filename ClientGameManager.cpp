@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "InterpolatingPlayer.h"
 #include "ForegroundObject.h"
+#include "TeamManager.h"
 #include "Block.h"
 
 #include <iostream>
@@ -46,6 +47,8 @@ void ClientGameManager::interpolateEntities() {
     ///and other players are updated at a different time interval (time interval is dependant on server, for now its 60 milliseconds)
     userPlayer.interpolate(calculateDeltaFraction());
 
+    getGameWorld().updateFlagPosition(userPlayer);
+
     //make sure the denominator isn't 0
     //calculate the delta fraction to interpolate other connected players
     //this uses the time between server updates for interpolation rather than time between physics update cycle
@@ -54,6 +57,8 @@ void ClientGameManager::interpolateEntities() {
     for(auto& player : connectedPlayers) {
 
         player->interpolate(deltaFraction);
+
+        getGameWorld().updateFlagPosition(*player);
     }
 }
 

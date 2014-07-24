@@ -66,6 +66,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
 
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
+    dataDestination << player.isHoldingFlag();
 }
 
 void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
@@ -94,6 +95,11 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
 
     updatedState.team = team;
 
+    bool holdingFlag = false;
+    updatePacket >> holdingFlag;
+
+    player.setHoldingFlag(holdingFlag);
+
     //apply to player
     player.handleServerUpdate(updatedState, inputId);
 }
@@ -114,6 +120,8 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
         updatePacket << player->player.getRotation();
         updatePacket << player->player.getHealth();
+        updatePacket << player->player.getTeam();
+        updatePacket << player->player.isHoldingFlag();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -214,6 +222,12 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         int playerHealth = 0;
         statePacket >> playerHealth;
 
+        unsigned short teamId = 0;
+        statePacket >> teamId;
+
+        bool holdingFlag = false;
+        statePacket >> holdingFlag;
+
         //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
         //top left is the begin point, width and heights are the end point
         vector<sf::FloatRect> bullets;
@@ -269,6 +283,8 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         updatedPlayer->setInterpolationPosition(playerPosition);
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
+        updatedPlayer->setTeam(teamId);
+        updatedPlayer->setHoldingFlag(holdingFlag);
 
         //now create the bullets for this player
         for(auto& bullet : bullets) {

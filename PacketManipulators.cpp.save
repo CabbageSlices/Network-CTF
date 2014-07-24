@@ -66,6 +66,7 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
 
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
+    dataDestination << player.isHoldingFlag();
 }
 
 void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
@@ -89,6 +90,16 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
 
     updatedState.health = health;
 
+    unsigned short team;
+    updatePacket >> team;
+
+    updatedState.team = team;
+    
+    bool holdingFlag = false;
+    updatePacket >> holdingFlag;
+    
+    player.setHoldingFlag(holdingFlag);
+
     //apply to player
     player.handleServerUpdate(updatedState, inputId);
 }
@@ -103,12 +114,14 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     updatePacket << players.size();
 
     //add all the player's data to the packet
-    for(auto player : players) {
+    for(auto& player : players) {
 
         updatePacket << player->player.getId();
         updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
         updatePacket << player->player.getRotation();
         updatePacket << player->player.getHealth();
+        updatePacket << player->player.getTeamId();
+        updatePacket << player->player.isHoldingFlag();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -116,7 +129,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << bullets.size();
 
         //add teh beginning and end locaitons of all bullets so the clients receiving the packet can create a bullet for this player so player can see where the shot was fired
-        for(auto bullet : bullets) {
+        for(auto& bullet : bullets) {
 
             sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
             sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
@@ -208,6 +221,12 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
 
         int playerHealth = 0;
         statePacket >> playerHealth;
+        
+        unsigned short teamId = 0;
+        statePacket >> teamId;
+        
+        bool holdingFlag = false;
+        statePacket >> holdingFlag;
 
         //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
         //top left is the begin point, width and heights are the end point
@@ -264,9 +283,11 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         updatedPlayer->setInterpolationPosition(playerPosition);
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
+        updatedPlayer->setTeam(teamId);
+        updatedPlayer->setHoldingFlag(holdingFlag);
 
         //now create the bullets for this player
-        for(auto bullet : bullets) {
+        for(auto& bullet : bullets) {
 
             sf::Vector2f bulletStart(bullet.left, bullet.top);
             sf::Vector2f bulletEnd(bullet.width, bullet.height);

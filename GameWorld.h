@@ -11,6 +11,7 @@
 class Block;
 class ForegroundObject;
 class FlagManager;
+class PlayerBase;
 
 //class to manage the game world by keeping track of all of the objects and events
 class GameWorld {
@@ -34,6 +35,9 @@ class GameWorld {
 
         //clear everything currently saved
         void clearWorld();
+
+        //update the position of the given that the given player may have
+        void updateFlagPosition(PlayerBase& player);
 
         void drawBackground(sf::RenderWindow& window);
         void drawForeground(sf::RenderWindow& window);
