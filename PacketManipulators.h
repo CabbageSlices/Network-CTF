@@ -10,6 +10,7 @@
 //forward declaration
 class UserPlayer;
 class InterpolatingPlayer;
+class FlagManager;
 
 //all of these functions are helper functions used to make packet creation and reading easier for the users
 
@@ -23,7 +24,7 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
-void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
+void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
 
 //read the given position and state update from the server and apply the updates to the player
 ///this function assumes the outstream of the ip address has already read the packet id thus it will begin reading from the id of lasat confirmed input sent by player
@@ -36,8 +37,12 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
     -PLAYER HEALTH
     -PLAYER'S TEAM
     -PLAYER HAS FLAG
+
+    -------INFO ABOUT FLAGS
+    -IF FLAG FOR TEAM 1 IS AT BASE
+    -IF FLAG FOR TEAM 2 IS AT BASE
 **/
-void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
+void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket);
 
 //state update packet contains data about all players connected to server
 /**
@@ -64,7 +69,7 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket);
 void createStateUpdate(const std::vector<std::tr1::shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& statePacket);
 
 //assumes packet id has already beenread from the state packet, ignores any packet that is older thant he stateid given
-void applyStateUpdate(std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
+void applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
 
 //player firing data
 /**

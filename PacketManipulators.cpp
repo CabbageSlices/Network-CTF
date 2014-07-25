@@ -2,6 +2,9 @@
 #include "PacketIdentification.h"
 #include "UserPlayer.h"
 #include "InterpolatingPlayer.h"
+#include "TeamManager.h"
+#include "PlayerBase.h"
+#include "Flag.h"
 
 #include <iostream>
 #include "Bullet.h"
@@ -11,6 +14,30 @@ using std::cout;
 using std::endl;
 using std::vector;
 using std::tr1::shared_ptr;
+
+//gives or takes a flag from a player depending on update from the server
+void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPosition, PlayerBase& player, shared_ptr<FlagManager> flagManager) {
+
+    //if player picked up a flag then give him a flag
+    if(holdingFlagServer && !player.isHoldingFlag()) {
+
+        player.holdFlag(flagManager->getFlag(getOpposingTeam(player.getTeam()) ));
+
+    } else if(player.isHoldingFlag() && !holdingFlagServer) {
+
+        //player was holding the flag and now he isn't, means he dropped the flag or he scored
+        //drop the flag at the given server position
+        //only way player can drop flag is if he is killed, so if is still alive it means he dropped the flag because he scored
+        bool scored = player.isAlive();
+
+        player.dropFlag(serverPosition);
+
+        if(scored) {
+
+            flagManager->resetFlags();
+        }
+    }
+}
 
 bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
 
@@ -52,7 +79,7 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.inputId;
 }
 
-void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
+void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
 
     //set the packet type
     dataDestination << PLAYER_STATE_UPDATE;
@@ -67,9 +94,11 @@ void createUpdatePacket(const UserPlayer& player, const sf::Uint32& lastConfirme
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
     dataDestination << player.isHoldingFlag();
+
+    dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
 }
 
-void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
 
     sf::Uint32 inputId = 0;
 
@@ -95,13 +124,29 @@ void applyPlayerUpdate(UserPlayer& player, sf::Packet& updatePacket) {
 
     updatedState.team = team;
 
+    //apply to player
+    player.handleServerUpdate(updatedState, inputId);
+
     bool holdingFlag = false;
     updatePacket >> holdingFlag;
 
-    player.setHoldingFlag(holdingFlag);
+    updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
 
-    //apply to player
-    player.handleServerUpdate(updatedState, inputId);
+    //whether any team flags should be returned to base
+    bool flagABase = false;
+    bool flagBBase = false;
+
+    updatePacket >> flagABase >> flagBBase;
+
+    if(flagABase) {
+
+        flagManager->teamAFlag()->reset();
+    }
+
+    if(flagBBase) {
+
+        flagManager->teamBFlag()->reset();
+    }
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {
@@ -188,7 +233,7 @@ void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& las
     }
 }
 
-void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
+void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
 
     sf::Uint32 packetStateId = 0;
 
@@ -284,7 +329,8 @@ void applyStateUpdate(vector<shared_ptr<InterpolatingPlayer> >& players, UserPla
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
-        updatedPlayer->setHoldingFlag(holdingFlag);
+
+        updateFlagInfo(holdingFlag, playerPosition, *updatedPlayer, flagManager);
 
         //now create the bullets for this player
         for(auto& bullet : bullets) {

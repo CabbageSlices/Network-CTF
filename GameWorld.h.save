@@ -35,9 +35,12 @@ class GameWorld {
 
         //clear everything currently saved
         void clearWorld();
-        
+
         //update the position of the given that the given player may have
         void updateFlagPosition(PlayerBase& player);
+        
+        //give the given player a flag
+        void givePlayerFlag(PlayerBase& player, unsigned);
 
         void drawBackground(sf::RenderWindow& window);
         void drawForeground(sf::RenderWindow& window);

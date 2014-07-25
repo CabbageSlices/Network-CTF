@@ -277,7 +277,7 @@ void ServerGameManager::sendInputConfirmation() {
     for(auto& player : players) {
 
         sf::Packet playerUpdate;
-        createUpdatePacket(player->player, player->lastConfirmedInputId, playerUpdate);
+        createUpdatePacket(getFlagManager(), player->player, player->lastConfirmedInputId, playerUpdate);
 
         //send the info to the player
         server.sendData(playerUpdate, player->playerIpAddress, player->playerPort);
@@ -336,46 +336,7 @@ void ServerGameManager::playerFlagCollision() {
 
     for(auto& player : players) {
 
-        shared_ptr<FlagManager> flagManager = getFlagManager();
-        bool collidesOwnFlag = flagManager->checkFlagCollision(player->player.getDestinationBox(), player->player.getTeam());
-
-        //flag can be returned to his base if no one is holding it and its not already at base
-        bool canReturnFlag = flagManager->canHoldFlag(player->player.getTeam()) && !flagManager->flagAtSpawn(player->player.getTeam());
-
-        //check for collision between each flag with each player and handle collision accordingly
-        if(collidesOwnFlag && canReturnFlag) {
-
-            //player collided with his own teams flag
-            //and no one else is holding it
-            //return it to base if it can
-            flagManager->flagToSpawn(player->player.getTeam());
-
-        } else if(collidesOwnFlag && flagManager->flagAtSpawn(player->player.getTeam()) && player->player.isHoldingFlag()) {
-
-            //player has returne to his base with the opponents flag so return all flags to base and make the player score
-            player->player.dropFlag();
-            flagManager->resetFlags();
-        }
-
-        //if player is holding a flag it means he is already holding the other teams flag so no need to check for collision with it
-        if(player->player.isHoldingFlag()) {
-
-            continue;
-        }
-
-        //id of the team the current player is not on, so the team that is opposing hte players current team
-        unsigned short idOpposingTeam = getOpposingTeam(player->player.getTeam());
-
-        //if he collides with the other teams flag see if he can steal it
-        bool collidesOtherFlag = flagManager->checkFlagCollision(player->player.getDestinationBox(), idOpposingTeam);
-
-        if(collidesOtherFlag && flagManager->canHoldFlag(idOpposingTeam)) {
-
-            //make player start holding the given flag
-            player->player.holdFlag();
-
-            flagManager->holdFlag(idOpposingTeam);
-        }
+        collidePlayerFlag(player->player, *getFlagManager());
     }
 }
 

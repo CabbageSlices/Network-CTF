@@ -4,13 +4,14 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Healthbar.h"
+#include "FlagManager.h"
 
 #include <vector>
 #include <tr1/memory>
 
 class Gun;
 class Bullet;
-
+class Flag;
 
 class PlayerBase {
 
@@ -44,7 +45,8 @@ class PlayerBase {
 
         std::tr1::shared_ptr<Gun> gun;
 
-        bool holdingFlag;
+        //flag the player is holding
+        std::tr1::weak_ptr<Flag> flagBeingHeld;
 
         void updateHitboxRotation();
 
@@ -54,12 +56,17 @@ class PlayerBase {
         //update the position of the player's sprite, places it at the players hitbox position
         void updateSpritePosition();
 
+        void die();
+
         //overload in inherited class to draw differnt part of guns
         virtual void drawGun(sf::RenderWindow& window) = 0;
 
     public:
 
         PlayerBase();
+
+        //empty destructor
+        ~PlayerBase(){}
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
 
@@ -83,7 +90,7 @@ class PlayerBase {
         void draw(sf::RenderWindow& window);
 
         const sf::Vector2f& getDestinationPosition() const;
-        
+
         const sf::Vector2f& getCurrentPosition() const;
 
         //just returns the player's current position box, usually jsut used to indicate his properties
@@ -97,6 +104,8 @@ class PlayerBase {
 
         int getHealth() const;
 
+        bool isAlive() const;
+
         //uses sethealth
         void getHit(int damage);
 
@@ -105,9 +114,12 @@ class PlayerBase {
 
         bool isHoldingFlag() const;
 
-        void holdFlag();
+        void holdFlag(std::tr1::shared_ptr<Flag> flagToHold);
 
         void dropFlag();
+
+        //drop the flag at the given position
+        void dropFlag(const sf::Vector2f& position);
 
         void setHoldingFlag(const bool& idHolding);
 };

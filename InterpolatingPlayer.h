@@ -19,6 +19,7 @@ class InterpolatingPlayer : public PlayerBase {
     public:
 
         InterpolatingPlayer();
+        ~InterpolatingPlayer(){}
 
         //sets a rotation for hte player to interpolate towards
         void setInterpolationRotation(const float& newRotation);

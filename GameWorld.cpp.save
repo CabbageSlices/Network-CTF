@@ -50,11 +50,18 @@ void GameWorld::clearWorld() {
 }
 
 void GameWorld::updateFlagPosition(PlayerBase& player) {
-    
+
     if(player.isHoldingFlag()) {
-        
+
         flagManager->setFlagPosition(player.getCurrentPosition(), getOpposingTeam(player.getTeam()));
     }
+}
+
+void GameWorld::givePlayerFlag(PlayerBase& player, unsigned short idOpposingTeam) {
+    
+    //make player start holding the given flag
+    player->player.holdFlag();
+    flagManager->holdFlag(idOpposingTeam);
 }
 
 void GameWorld::drawBackground(sf::RenderWindow& window) {

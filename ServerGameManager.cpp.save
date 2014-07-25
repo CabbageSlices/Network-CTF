@@ -353,6 +353,7 @@ void ServerGameManager::playerFlagCollision() {
         } else if(collidesOwnFlag && flagManager->flagAtSpawn(player->player.getTeam()) && player->player.isHoldingFlag()) {
 
             //player has returne to his base with the opponents flag so return all flags to base and make the player score
+            player->player.dropFlag();
             flagManager->resetFlags();
         }
 
@@ -372,7 +373,6 @@ void ServerGameManager::playerFlagCollision() {
 
             //make player start holding the given flag
             player->player.holdFlag();
-
             flagManager->holdFlag(idOpposingTeam);
         }
     }
@@ -430,12 +430,7 @@ void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
     for(auto& player : players) {
 
         player->player.interpolate(calculateDeltaFraction());
-        
-        //if this player has a flag then move the flag to the given position to draw it
-        if(player->player.isHoldingFlag()) {
-            
-            getFlagManager()->setFlagPosition(player->player.getPosition(), getOpposingTeam(player->player.getTeamId()));
-        }
+        getGameWorld().updateFlagPosition(player->player);
     }
 }
 

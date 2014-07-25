@@ -7,25 +7,11 @@
 #include <tr1/memory>
 #include <map>
 
+class PlayerBase;
+class Flag;
+
 //keeps track of each teams flags and their flag spawn zone
 class FlagManager {
-
-    public:
-
-        struct Flag {
-
-            //flag image to draw
-            sf::CircleShape flag;
-
-            //position of the spawn
-            sf::Vector2f spawnPosition;
-
-            //if flag is being held no other players may grab it
-            bool beingHeld = false;
-
-            //if the flag is at the spawn
-            bool atSpawn = true;
-        };
 
     private:
 
@@ -61,8 +47,23 @@ class FlagManager {
         //return the given flag back to the base
         void flagToSpawn(const unsigned short& teamId);
 
+        std::tr1::shared_ptr<Flag> getFlag(unsigned short teamId);
+
+        std::tr1::shared_ptr<Flag> teamAFlag();
+        std::tr1::shared_ptr<Flag> teamBFlag();
+
         //draw the flags
         void draw(sf::RenderWindow& window);
 };
+
+void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager);
+
+//collide the given player with his own teams flag
+///assumes collisions have occured
+void ownFlagCollision(PlayerBase& player, FlagManager& flagManager);
+
+//collide the given player with the opponents flag
+///assumes collisions have occured
+void opponentFlagCollision(PlayerBase& player, FlagManager& flagManager);
 
 #endif // FLAGMANAGER_H_INCLUDED

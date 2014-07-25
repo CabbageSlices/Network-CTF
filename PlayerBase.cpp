@@ -1,6 +1,8 @@
 #include "PlayerBase.h"
 #include "Lerp.h"
 #include "math.h"
+#include "Flag.h"
+#include "Gun.h"
 
 #include <iostream>
 
@@ -9,7 +11,6 @@ using std::tr1::shared_ptr;
 using std::cout;
 using std::endl;
 
-#include "Gun.h"
 
 PlayerBase::PlayerBase():
     playerId(0),
@@ -24,7 +25,7 @@ PlayerBase::PlayerBase():
     currentRotation(0),
     destinationRotation(0),
     gun(new Gun()),
-    holdingFlag(false)
+    flagBeingHeld()
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -147,6 +148,11 @@ int PlayerBase::getHealth() const {
     return health.getCurrentHealth();
 }
 
+bool PlayerBase::isAlive() const {
+
+    return health.getCurrentHealth() > 0;
+}
+
 void PlayerBase::getHit(int damage) {
 
     setHealth(health.getCurrentHealth() - damage);
@@ -154,48 +160,50 @@ void PlayerBase::getHit(int damage) {
 
 void PlayerBase::setHealth(int value) {
 
+    //save the current health to check if it actually changed
+    int currentHealth = health.getCurrentHealth();
+
     //check if given value is less than current health
-    if(value < health.getCurrentHealth()) {
+    if(value < currentHealth) {
 
         ///play damage animation
     }
 
     health.setCurrentHealth(value);
+
+    //if he has no health and it was because of getting hit, then die
+    if(health.getCurrentHealth() == 0 && health.getCurrentHealth() != currentHealth) {
+
+        die();
+    }
 }
 
 bool PlayerBase::isHoldingFlag() const {
 
-    return holdingFlag;
+    return flagBeingHeld.lock();
 }
 
-void PlayerBase::holdFlag() {
+void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
 
-    holdingFlag = true;
+    flagBeingHeld = flagToHold;
 }
 
 void PlayerBase::dropFlag() {
 
-    holdingFlag = false;
+    //drop the flag at his current position
+    dropFlag(getCurrentPosition());
 }
 
-void PlayerBase::setHoldingFlag(const bool& isHolding) {
+void PlayerBase::dropFlag(const sf::Vector2f& positionToDrop) {
 
-    //determines if his holding status changed at all
-    //that way you know whether to drop or pick up flag
-    if(holdingFlag == isHolding) {
+    //if he has a flag then drop it, also set its last position to the given position
+    if(flagBeingHeld.lock()) {
 
-        return;
+        flagBeingHeld.lock()->setPosition(positionToDrop);
+        flagBeingHeld.lock()->dropFlag();
     }
 
-    //you know the flags status has to change so call the appropriate functions
-    if(isHolding) {
-
-        holdFlag();
-
-    } else {
-
-        dropFlag();
-    }
+    flagBeingHeld.reset();
 }
 
 void PlayerBase::updateHitboxRotation() {
@@ -222,4 +230,9 @@ void PlayerBase::updateHealthPosition() {
 void PlayerBase::updateSpritePosition() {
 
     playerSprite.setPosition(currentHitBox.getPosition());
+}
+
+void PlayerBase::die() {
+
+    dropFlag();
 }
