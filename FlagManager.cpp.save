@@ -146,7 +146,7 @@ void FlagManager::draw(sf::RenderWindow& window) {
 void FlagManager::addFlag(const sf::Vector2f& flagSpawnLocation, unsigned short teamId) {
 
     //create a new flag at the given position
-    shared_ptr<Flag> flag(new Flag(flagSpawnLocation, sf::Color(0, 255 * (teamId - 1), 255 - (255 * (teamId - 1)) )));
+    shared_ptr<Flag> flag(new Flag(flagSpawnLocation,  getTeamColor(teamId) ));
 
     flags[teamId] = flag;
 }

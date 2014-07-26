@@ -288,7 +288,7 @@
 	<cmath>
 	<cstdlib>
 
-1406268213 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1406269685 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -560,7 +560,7 @@
 	<vector>
 	<tr1/memory>
 
-1406269550 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1406407858 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -568,12 +568,13 @@
 	<vector>
 	<tr1/memory>
 
-1406268039 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1406407949 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
 	"Flag.h"
 	"Gun.h"
+	"TeamManager.h"
 	<iostream>
 
 1406260491 c:\users\nimesh\documents\github\network-ctf\userplayer.h
@@ -598,7 +599,7 @@
 	"SFML/Graphics.hpp"
 	"StaticObject.h"
 
-1406150219 source:c:\users\nimesh\documents\github\network-ctf\levelmanager.cpp
+1406407949 source:c:\users\nimesh\documents\github\network-ctf\levelmanager.cpp
 	"LevelManager.h"
 	"Block.h"
 	"ForegroundObject.h"
@@ -606,7 +607,7 @@
 	<iostream>
 	<cstdlib>
 
-1406154630 c:\users\nimesh\documents\github\network-ctf\levelmanager.h
+1406404240 c:\users\nimesh\documents\github\network-ctf\levelmanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<string>
@@ -656,7 +657,7 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1406269550 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
+1406407858 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
 	"FlagManager.h"
 	"TeamManager.h"
 	"math.h"
@@ -671,10 +672,11 @@
 	<tr1/memory>
 	<map>
 
-1406238195 c:\users\nimesh\documents\github\network-ctf\teammanager.h
+1406407858 c:\users\nimesh\documents\github\network-ctf\teammanager.h
 	<map>
+	"SFML/Graphics.hpp"
 
-1406239266 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
+1406407858 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
 	"TeamManager.h"
 
 1406268589 source:c:\users\nimesh\documents\github\network-ctf\flag.cpp

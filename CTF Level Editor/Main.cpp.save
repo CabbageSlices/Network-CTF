@@ -26,7 +26,7 @@ int main() {
 
     bool creatingBlocks = false;
     bool destroyingBlocks = false;
-    
+
     bool creatingForeground = false;
     bool destroyingForeground = false;
 
@@ -64,6 +64,16 @@ int main() {
 
                     camera.zoomOut();
                 }
+                
+                if(event.key.code == sf::Keyboard::Z) {
+                    
+                    creatingForeground = true;
+                }
+                
+                if(event.key.code == sf::Keyboard::X) {
+                    
+                    destroyingForeground = true;
+                }
             }
 
             if(event.type == sf::Event::Resized) {
@@ -94,9 +104,6 @@ int main() {
 
         creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
         destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
-        
-        creatingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
-        destroyingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::X);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -135,16 +142,16 @@ int main() {
 
             destoryBlockTimer.restart();
         }
-        
+
         if(creatingForeground) {
-            
-            shared_ptr<ForegroundObject> newforeground(new ForegroundObject(mousePosition));
+
+            shared_ptr<ForegroundObject> newForeground(new ForegroundObject(mousePosition));
 
             bool collides = false;
 
             for(auto foregroundObj : foreground) {
 
-                if(foregroundObj->getCollisionBox().intersects(newBlock->getCollisionBox())) {
+                if(foregroundObj->getCollisionBox().intersects(newForeground->getCollisionBox())) {
 
                     collides = true;
                     break;
@@ -153,8 +160,23 @@ int main() {
 
             if(!collides) {
 
-                blocks.push_back(newBlock);
+                foreground.push_back(newForeground);
             }
+        }
+
+        if(destroyingForeground) {
+
+            //find the block in the given position and delete it, dlete the first one mouse finds
+            for(unsigned int index = 0; index < foreground.size(); index++) {
+
+                if(foreground[index]->getCollisionBox().contains(mousePosition)) {
+
+                    foreground.erase(foreground.begin() + index);
+                    break;
+                }
+            }
+
+            destoryBlockTimer.restart();
         }
 
         if(position.x < 0) {
@@ -185,6 +207,11 @@ int main() {
         for(auto block : blocks) {
 
             block->draw(window);
+        }
+
+        for(auto foregroundObj : foreground) {
+
+            foregroundObj->draw(window);
         }
 
         window.display();

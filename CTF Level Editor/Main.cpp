@@ -64,6 +64,16 @@ int main() {
 
                     camera.zoomOut();
                 }
+
+                if(event.key.code == sf::Keyboard::Z) {
+
+                    creatingForeground = true;
+                }
+
+                if(event.key.code == sf::Keyboard::X) {
+
+                    destroyingForeground = true;
+                }
             }
 
             if(event.type == sf::Event::Resized) {
@@ -94,9 +104,6 @@ int main() {
 
         creatingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Left);
         destroyingBlocks = sf::Mouse::isButtonPressed(sf::Mouse::Right);
-
-        creatingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
-        destroyingForeground = sf::Keyboard::isKeyPressed(sf::Keyboard::X);
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -140,21 +147,8 @@ int main() {
 
             shared_ptr<ForegroundObject> newForeground(new ForegroundObject(mousePosition));
 
-            bool collides = false;
-
-            for(auto foregroundObj : foreground) {
-
-                if(foregroundObj->getCollisionBox().intersects(newForeground->getCollisionBox())) {
-
-                    collides = true;
-                    break;
-                }
-            }
-
-            if(!collides) {
-
-                foreground.push_back(newForeground);
-            }
+            foreground.push_back(newForeground);
+            creatingForeground = false;
         }
 
         if(destroyingForeground) {
@@ -169,7 +163,7 @@ int main() {
                 }
             }
 
-            destoryBlockTimer.restart();
+            destroyingForeground = false;
         }
 
         if(position.x < 0) {

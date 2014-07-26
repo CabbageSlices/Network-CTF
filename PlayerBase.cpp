@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Flag.h"
 #include "Gun.h"
+#include "TeamManager.h"
 
 #include <iostream>
 
@@ -32,6 +33,9 @@ PlayerBase::PlayerBase():
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
 
+        currentHitBox.setOutlineThickness(4.0);
+        currentHitBox.setFillColor(sf::Color::Transparent);
+
         playerTexture.loadFromFile("player.png");
         playerSprite.setTexture(playerTexture);
         playerSprite.setOrigin(calculateCenter(playerSprite.getGlobalBounds() ));
@@ -60,6 +64,8 @@ unsigned short PlayerBase::getTeam() const {
 void PlayerBase::setTeam(const unsigned short& team) {
 
     teamId = team;
+
+    currentHitBox.setOutlineColor(getTeamColor(team));
 }
 
 const float PlayerBase::getRotation() const {

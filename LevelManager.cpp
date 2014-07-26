@@ -103,3 +103,12 @@ const string addFileExtention(const string& fileName, const string& extention) {
 
     return fileName + extention;
 }
+
+void saveObject(shared_ptr<Block> block, std::fstream& file) {
+
+    sf::Vector2f position = block->getPosition();
+
+    //save position
+    file << position.x << std::endl;
+    file << position.y << std::endl;
+}
