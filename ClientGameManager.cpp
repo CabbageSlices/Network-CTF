@@ -9,6 +9,7 @@
 #include "TeamManager.h"
 #include "Block.h"
 
+#include <cstdlib>
 #include <iostream>
 
 /**
@@ -151,9 +152,15 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
 
 void ClientGameManager::updateConnectedPlayers(const float& delta) {
 
-    for(auto& player : connectedPlayers) {
+    for(unsigned int index = 0; index < connectedPlayers.size();) {
 
-        player->updateGun(delta);
+        if(connectedPlayers[index]->timedOut()) {
+
+            connectedPlayers.erase(connectedPlayers.begin() + index);
+        }
+
+        connectedPlayers[index]->updateGun(delta);
+        ++index;
     }
 }
 
@@ -203,6 +210,11 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     if(client.connectToServer(playerId)) {
 
         userPlayer.setId(playerId);
+
+    } else {
+
+        cout << "Failed to receive data from server.";
+        window.close();
     }
 
     //setup camera

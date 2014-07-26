@@ -9,6 +9,7 @@
 #include "TeamManager.h"
 #include "Block.h"
 
+#include <cstdlib>
 #include <iostream>
 
 /**
@@ -47,6 +48,8 @@ void ClientGameManager::interpolateEntities() {
     ///and other players are updated at a different time interval (time interval is dependant on server, for now its 60 milliseconds)
     userPlayer.interpolate(calculateDeltaFraction());
 
+    getGameWorld().updateFlagPosition(userPlayer);
+
     //make sure the denominator isn't 0
     //calculate the delta fraction to interpolate other connected players
     //this uses the time between server updates for interpolation rather than time between physics update cycle
@@ -55,6 +58,8 @@ void ClientGameManager::interpolateEntities() {
     for(auto& player : connectedPlayers) {
 
         player->interpolate(deltaFraction);
+
+        getGameWorld().updateFlagPosition(*player);
     }
 }
 
@@ -129,12 +134,12 @@ void ClientGameManager::handleServerUpdates() {
     //respond to the packet depending on the type of packet
     if(packetType == PLAYER_STATE_UPDATE) {
 
-        applyPlayerUpdate(userPlayer, downloadedData);
+        applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData);
 
 
     } else if(packetType == WORLD_STATE_UPDATE) {
 
-        applyStateUpdate(connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
+        applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
         serverUpdateTime = stateUpdateTimer.restart();
     }
 }
@@ -147,9 +152,15 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
 
 void ClientGameManager::updateConnectedPlayers(const float& delta) {
 
-    for(auto& player : connectedPlayers) {
+    for(unsigned int index = 0; index < connectedPlayers.size();) {
 
-        player->updateGun(delta);
+        if(connectedPlayers[index]->timedOut()) {
+
+            connectedPlayers.erase(connectedPlayers.begin() + index);
+        }
+
+        connectedPlayers[index]->updateGun(delta);
+        ++index;
     }
 }
 
@@ -199,6 +210,11 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     if(client.connectToServer(playerId)) {
 
         userPlayer.setId(playerId);
+
+    } else {
+
+        cout << "Failed to receive data from server.";
+        ;
     }
 
     //setup camera

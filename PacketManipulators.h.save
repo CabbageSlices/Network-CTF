@@ -24,7 +24,7 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
-void createUpdatePacket(std::tr1::shared_ptr<FileManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
+void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
 
 //read the given position and state update from the server and apply the updates to the player
 ///this function assumes the outstream of the ip address has already read the packet id thus it will begin reading from the id of lasat confirmed input sent by player
@@ -37,10 +37,12 @@ void createUpdatePacket(std::tr1::shared_ptr<FileManager> flagManager, const Use
     -PLAYER HEALTH
     -PLAYER'S TEAM
     -PLAYER HAS FLAG
-    
+
     -------INFO ABOUT FLAGS
     -IF FLAG FOR TEAM 1 IS AT BASE
     -IF FLAG FOR TEAM 2 IS AT BASE
+    -IF FLAG FOR TEAM 1 IS BEING HELD
+    -IF FLAG FOR TEAM 2 IS BEING HELD
 **/
 void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket);
 

@@ -48,6 +48,12 @@ class PlayerBase {
         //flag the player is holding
         std::tr1::weak_ptr<Flag> flagBeingHeld;
 
+        //timer to time how long its been since the last time data about this player was received from either the server or client
+        sf::Clock dataReceiveTimer;
+
+        //maximum amount of time this player should go without receiving data
+        sf::Time maxNoData;
+
         void updateHitboxRotation();
 
         //update teh position of the healthbar, tracks players current hitbox
@@ -65,8 +71,7 @@ class PlayerBase {
 
         PlayerBase();
 
-        //empty destructor
-        ~PlayerBase(){}
+        ~PlayerBase();
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
 
@@ -121,7 +126,8 @@ class PlayerBase {
         //drop the flag at the given position
         void dropFlag(const sf::Vector2f& position);
 
-        void setHoldingFlag(const bool& idHolding);
+        bool timedOut();
+        void resetDataTimer();
 };
 
 #endif // PLAYERBASE_H_INCLUDED

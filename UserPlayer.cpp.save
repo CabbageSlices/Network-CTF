@@ -125,15 +125,17 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
 
     //now load the health from the server update
     setHealth(stateUpdate.health);
-    
+
     //now load the team
-    s
+    setTeam(stateUpdate.team);
 
     //for whatever reason the queued input with the same id as the last confirmed input doesn't get deleted so delete it here if it's still there
     if(inputBuffer.size() > 0) {
 
         inputBuffer.erase(inputBuffer.begin());
     }
+    
+    resetDataTimer();
 }
 
 const vector<UserPlayer::Input>& UserPlayer::getInputsToSend() const {
@@ -190,6 +192,9 @@ void UserPlayer::handleClientInput(Input& clientInput) {
 
     //input is valid, process it
     processInput(clientInput);
+    
+    //update received, restart timer
+    resetDataTimer();
 }
 
 void UserPlayer::handleClientKeystate(KeyState& state) {
@@ -201,7 +206,7 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
-    pastHitBox.setPosition(destinationHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
 
     //set the destination hitbox to the new position so the current hitbox and interpolate towards it over time
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);

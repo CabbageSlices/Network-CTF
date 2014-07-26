@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Flag.h"
 #include "Gun.h"
+#include "TeamManager.h"
 
 #include <iostream>
 
@@ -25,12 +26,17 @@ PlayerBase::PlayerBase():
     currentRotation(0),
     destinationRotation(0),
     gun(new Gun()),
-    flagBeingHeld()
+    flagBeingHeld(),
+    dataReceiveTimer(),
+    maxNoData(sf::seconds(2))
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
+
+        currentHitBox.setOutlineThickness(4.0);
+        currentHitBox.setFillColor(sf::Color::Transparent);
 
         playerTexture.loadFromFile("player.png");
         playerSprite.setTexture(playerTexture);
@@ -60,6 +66,8 @@ unsigned short PlayerBase::getTeam() const {
 void PlayerBase::setTeam(const unsigned short& team) {
 
     teamId = team;
+
+    currentHitBox.setOutlineColor(getTeamColor(team));
 }
 
 const float PlayerBase::getRotation() const {

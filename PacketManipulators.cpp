@@ -96,6 +96,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.isHoldingFlag();
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
+    dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -132,11 +133,13 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
 
-    //whether any team flags should be returned to base
+    //whether any team flags should be returned to base or dropped
     bool flagABase = false;
     bool flagBBase = false;
+    bool flagAHeld = false;
+    bool flagBHeld = false;
 
-    updatePacket >> flagABase >> flagBBase;
+    updatePacket >> flagABase >> flagBBase >> flagAHeld >> flagBHeld;
 
     if(flagABase) {
 
@@ -146,6 +149,19 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     if(flagBBase) {
 
         flagManager->teamBFlag()->reset();
+    }
+
+    //if flags are not held hten make them drop, even if a player is holding a flag if the server says the flag is not being held
+    //if means the player holding the flag disconnected so make the flag drop on client side, its fine to dorp at whatever position its currently at
+    //because most likely the player who held the flag discconnected from the last position the client saw him at
+    if(!flagAHeld) {
+
+        flagManager->teamAFlag()->dropFlag();
+    }
+
+    if(!flagBHeld) {
+
+        flagManager->teamBFlag()->dropFlag();
     }
 }
 

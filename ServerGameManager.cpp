@@ -65,6 +65,7 @@ void ServerGameManager::handleIncomingData() {
         //except this time add the player's id so the client knows what his own id is
         incomingData << lastPlayerId;
         server.sendData(incomingData, senderIp, senderPort);
+        cout << "new connection" << endl;
     }
 }
 
@@ -76,6 +77,8 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
         //add the player's id to the end of hte packet so client can figure out its id
         data << player->player.getId();
         server.sendData(data, player->playerIpAddress, player->playerPort);
+
+        cout << "Connection Attempt" << endl;
 
     } else if(checkPacketType(data, PLAYER_INPUT)) {
 
@@ -380,10 +383,17 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    //update the players of all the connected clients
-    for(auto& player : players) {
+    //update the players of all the connected clients, if any have timed out, delete them
+    for(unsigned index = 0; index < players.size();) {
 
-        player->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+        if(players[index]->player.timedOut()) {
+
+            players.erase(players.begin() + index);
+            continue;
+        }
+
+        players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+        index++;
     }
 }
 

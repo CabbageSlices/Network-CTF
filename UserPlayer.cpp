@@ -134,6 +134,8 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
 
         inputBuffer.erase(inputBuffer.begin());
     }
+
+    resetDataTimer();
 }
 
 const vector<UserPlayer::Input>& UserPlayer::getInputsToSend() const {
@@ -190,11 +192,16 @@ void UserPlayer::handleClientInput(Input& clientInput) {
 
     //input is valid, process it
     processInput(clientInput);
+
+    //update received, restart timer
+    resetDataTimer();
 }
 
 void UserPlayer::handleClientKeystate(KeyState& state) {
 
     keystate = state;
+
+    resetDataTimer();
 }
 
 void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {

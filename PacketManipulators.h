@@ -41,6 +41,8 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -------INFO ABOUT FLAGS
     -IF FLAG FOR TEAM 1 IS AT BASE
     -IF FLAG FOR TEAM 2 IS AT BASE
+    -IF FLAG FOR TEAM 1 IS BEING HELD
+    -IF FLAG FOR TEAM 2 IS BEING HELD
 **/
 void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket);
 

@@ -4,6 +4,7 @@
 #include "InterpolatingPlayer.h"
 #include "TeamManager.h"
 #include "PlayerBase.h"
+#include "Flag.h"
 
 #include <iostream>
 #include "Bullet.h"
@@ -78,7 +79,7 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.inputId;
 }
 
-void createUpdatePacket(shared_ptr<FileManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
+void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
 
     //set the packet type
     dataDestination << PLAYER_STATE_UPDATE;
@@ -93,8 +94,9 @@ void createUpdatePacket(shared_ptr<FileManager> flagManager, const UserPlayer& p
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
     dataDestination << player.isHoldingFlag();
-    
+
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
+    dataDestination << flagManager 
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -125,25 +127,25 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     //apply to player
     player.handleServerUpdate(updatedState, inputId);
-    
+
     bool holdingFlag = false;
     updatePacket >> holdingFlag;
 
     updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
-    
+
     //whether any team flags should be returned to base
     bool flagABase = false;
     bool flagBBase = false;
-    
+
     updatePacket >> flagABase >> flagBBase;
-    
+
     if(flagABase) {
-        
+
         flagManager->teamAFlag()->reset();
     }
-    
+
     if(flagBBase) {
-        
+
         flagManager->teamBFlag()->reset();
     }
 }
@@ -328,6 +330,7 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
+        updatedPlayer->resetDataTimer();
 
         updateFlagInfo(holdingFlag, playerPosition, *updatedPlayer, flagManager);
 

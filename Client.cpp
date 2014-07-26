@@ -2,6 +2,11 @@
 #include "PacketIdentification.h"
 #include "PacketManipulators.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToConnectTo) :
     ConnectionManager(),
     serverIpAddress(ipToConnectTo),
@@ -22,7 +27,7 @@ bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
     sf::Clock connectionAttemptTimer;
 
     //to prevent client from spamming the server with requests put a limit to how often it can send the packets
-    sf::Time requestSendDelay = sf::milliseconds(50);
+    sf::Time requestSendDelay = sf::milliseconds(300);
 
     //timer to keep track of how much time ahs passed since the last packet was sent
     sf::Clock packetSendTimer;
@@ -53,6 +58,8 @@ bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
 
         //it is time to send another connection request because it's waited through the delay, so send another packet
         sendToServer(connectionRequest);
+
+        packetSendTimer.restart();
     }
 
     //timed out before a proper response
