@@ -214,7 +214,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
 
     for(auto& player : players) {
 
-        if(player == shootingPlayer) {
+        if(player == shootingPlayer || player->player.getTeam() == shootingPlayer->player.getTeam() || !player->player.isAlive()) {
 
             continue;
         }

@@ -26,14 +26,21 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
 void playerBlockCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Block> >& blocks);
 
 //handle collision between the given bullet and all objects in the given container, only the bullet is changed
-//take a function that is called if the given entity collides with the bullet
+//take a function that is called to check if the collision response should be handled between the given bullet and the entity that the bullet is colliding with
+//e.g a funciton that tests if the collision should occur in the first place
 template<class Entity>
 void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std::tr1::shared_ptr<Entity> >& entities,
-                           std::function<void(std::tr1::shared_ptr<Entity>& entity)> collisionResponse = [](std::tr1::shared_ptr<Entity>& entity){return;}) {
+                           std::function<bool(std::tr1::shared_ptr<Entity>& entity)> collisionPredicate = [](std::tr1::shared_ptr<Entity>& entity){return true;}) {
 
     //go through all entities and check for collision with them
     //line cuts off after each collision so in the end it will have collided with the nearest object
     for(auto& entity : entities) {
+
+        //collision is only valid if the collision predicate dictates it
+        if(!collisionPredicate(entity)) {
+
+            continue;
+        }
 
         sf::FloatRect collisionRect = entity->getCollisionBox();
 
@@ -43,8 +50,6 @@ void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std:
 
             bullet->setEndPoint(collisionPoint);
             bullet->disableCollision();
-
-            collisionResponse(entity);
         }
     }
 }

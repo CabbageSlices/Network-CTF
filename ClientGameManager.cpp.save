@@ -180,7 +180,11 @@ void ClientGameManager::handleBulletCollision() {
         bulletEntityCollision<Block>(bullet, getBlocks());
 
         //handle collision with other players
-        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers);
+        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
+                                                   [](shared_ptr<InterpolatingPlayer>)->bool {
+                                                    
+                                                    return 
+                                                   });
 
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
@@ -214,7 +218,7 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     } else {
 
         cout << "Failed to receive data from server.";
-        ;
+        window.close();
     }
 
     //setup camera

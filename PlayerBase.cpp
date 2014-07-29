@@ -122,9 +122,8 @@ void PlayerBase::draw(sf::RenderWindow& window) {
 
     this->drawGun(window);
 
-    window.draw(currentHitBox);
-
     window.draw(playerSprite);
+    window.draw(currentHitBox);
 
     health.draw(window);
 }
