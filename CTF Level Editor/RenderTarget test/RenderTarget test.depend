@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1406845443 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\rendertarget test\main.cpp
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
