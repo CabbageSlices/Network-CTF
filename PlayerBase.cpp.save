@@ -28,7 +28,8 @@ PlayerBase::PlayerBase():
     gun(new Gun()),
     flagBeingHeld(),
     dataReceiveTimer(),
-    maxNoData(sf::seconds(2))
+    maxNoData(sf::seconds(3)),
+    maxInterpolationDist(300)
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -42,6 +43,11 @@ PlayerBase::PlayerBase():
         playerSprite.setTexture(playerTexture);
         playerSprite.setOrigin(calculateCenter(playerSprite.getGlobalBounds() ));
     }
+
+PlayerBase::~PlayerBase() {
+
+    dropFlag();
+}
 
 vector<shared_ptr<Bullet> > PlayerBase::getBullets() {
 
@@ -82,9 +88,18 @@ void PlayerBase::updateGun(const float& delta) {
 }
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
-
+    
+    //if the distance to interpolate is too large just set the position to the given position
+    if(distanceToPoint(position, destinationHitBox.getPosition()) > maxInterpolationDist) {
+        
+        
+    }
+    
     pastHitBox.setPosition(currentHitBox.getPosition());
     destinationHitBox.setPosition(position);
+
+    //if interpolation position is set it means its data sent from the server so restart the data recieve timer so player doens't time out
+    resetDataTimer();
 }
 
 void PlayerBase::interpolate(const float& deltaFraction) {
@@ -114,9 +129,8 @@ void PlayerBase::draw(sf::RenderWindow& window) {
 
     this->drawGun(window);
 
-    window.draw(currentHitBox);
-
     window.draw(playerSprite);
+    window.draw(currentHitBox);
 
     health.draw(window);
 }
@@ -212,6 +226,16 @@ void PlayerBase::dropFlag(const sf::Vector2f& positionToDrop) {
     }
 
     flagBeingHeld.reset();
+}
+
+bool PlayerBase::timedOut() {
+
+    return dataReceiveTimer.getElapsedTime() > maxNoData;
+}
+
+void PlayerBase::resetDataTimer() {
+
+    dataReceiveTimer.restart();
 }
 
 void PlayerBase::updateHitboxRotation() {

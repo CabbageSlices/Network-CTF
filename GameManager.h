@@ -29,7 +29,6 @@ class GameManager {
 
         GameWorld world;
 
-        ///uses the curent world state to determine what to do in each function
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
 

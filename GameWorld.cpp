@@ -5,6 +5,7 @@
 #include "FlagManager.h"
 #include "TeamManager.h"
 #include "PlayerBase.h"
+#include "Portal.h"
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -13,6 +14,7 @@ using std::string;
 GameWorld::GameWorld():
     blocks(),
     foregroundObjects(),
+    portals(),
     flagManager()
     {
 
@@ -33,11 +35,18 @@ shared_ptr<FlagManager> GameWorld::getFlagManager() {
     return flagManager;
 }
 
+vector<shared_ptr<Portal> >& GameWorld::getPortals() {
+
+    return portals;
+}
+
 bool GameWorld::load(string levelName) {
 
     clearWorld();
 
     flagManager.reset(new FlagManager(sf::Vector2f(0, 0), sf::Vector2f(500, 800)));
+    portals.push_back(shared_ptr<Portal>(new Portal(sf::Vector2f(-200, 200), sf::Vector2f(600, 800)))   );
+
     return loadLevel(levelName, blocks, foregroundObjects);
 }
 
@@ -62,6 +71,11 @@ void GameWorld::drawBackground(sf::RenderWindow& window) {
     for(auto& block : blocks) {
 
         block->draw(window);
+    }
+
+    for(auto& portal : portals) {
+
+        portal->draw(window);
     }
 
     flagManager->draw(window);

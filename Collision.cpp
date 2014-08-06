@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Bullet.h"
 #include "userPlayer.h"
+#include "Portal.h"
 #include "Block.h"
 #include <cmath>
 
@@ -10,6 +11,19 @@ using std::vector;
 using std::tr1::shared_ptr;
 using std::min;
 using std::abs;
+
+template<class Static>
+void playerStaticCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Static> >& statics,
+                            std::function<void(UserPlayer& player, std::tr1::shared_ptr<Static>& staticObj)> collisionResponse) {
+
+    for(auto staticObj : statics) {
+
+        if(player.getDestinationBox().intersects(staticObj->getCollisionBox() )) {
+
+            collisionResponse(player, staticObj);
+        }
+    }
+}
 
 bool checkCollision(const sf::FloatRect& rect, shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint) {
 
@@ -98,15 +112,21 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
     return movementOffset;
 }
 
-void playerBlockCollision(UserPlayer& player, vector<shared_ptr<Block> >& blocks) {
+void playerBlockCollision(UserPlayer& userPlayer, vector<shared_ptr<Block> >& blocks) {
 
-    for(auto& block : blocks) {
+    playerStaticCollision<Block>(userPlayer, blocks,
+                                 [](UserPlayer& player, shared_ptr<Block> block) {
 
-        //if player collides with block, move player minimum distance required to escape collision
-        if(player.getDestinationBox().intersects(block->getCollisionBox())) {
+                                    sf::Vector2f movementOffset = calculateCollisionOffset(player.getDestinationBox(), block->getCollisionBox());
+                                    player.move(movementOffset);
+                                 });
+}
 
-            sf::Vector2f movementOffset = calculateCollisionOffset(player.getDestinationBox(), block->getCollisionBox());
-            player.move(movementOffset);
-        }
-    }
+void playerPortalCollision(UserPlayer& userPlayer, std::vector<std::tr1::shared_ptr<Portal> >& portals) {
+
+    playerStaticCollision<Portal>(userPlayer, portals,
+                                 [](UserPlayer& player, shared_ptr<Portal> portal) {
+
+                                    player.setInterpolationPosition(portal->getTeleportPosition());
+                                 });
 }

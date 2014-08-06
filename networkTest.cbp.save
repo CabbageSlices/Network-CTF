@@ -73,6 +73,8 @@
 		<Unit filename="PacketManipulators.h" />
 		<Unit filename="PlayerBase.cpp" />
 		<Unit filename="PlayerBase.h" />
+		<Unit filename="Portal.cpp" />
+		<Unit filename="Portal.h" />
 		<Unit filename="ServerGameManager.cpp" />
 		<Unit filename="ServerGameManager.h" />
 		<Unit filename="StateTracker.cpp" />

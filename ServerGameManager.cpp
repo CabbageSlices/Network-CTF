@@ -417,6 +417,7 @@ void ServerGameManager::handleCollisions() {
     for(auto& player : players) {
 
         playerBlockCollision(player->player, getBlocks());
+        playerPortalCollision(player->player, getGameWorld().getPortals());
     }
 
     playerFlagCollision();

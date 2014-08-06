@@ -54,6 +54,9 @@ class PlayerBase {
         //maximum amount of time this player should go without receiving data
         sf::Time maxNoData;
 
+        //maximum distance the player can interpolate to
+        const float maxInterpolationDist;
+
         void updateHitboxRotation();
 
         //update teh position of the healthbar, tracks players current hitbox
