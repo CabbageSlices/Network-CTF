@@ -339,6 +339,13 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             players.push_back(newPlayer);
         }
 
+        //check if the updated player respawned, that is, he was dead previously and now his health is greater than 0
+        bool respawned = !updatedPlayer->isAlive() && (playerHealth > 0);
+
+        if(respawned) {
+
+            updatedPlayer->respawn(playerPosition);
+        }
 
         updatedPlayer->setId(playerId);
         updatedPlayer->setInterpolationPosition(playerPosition);

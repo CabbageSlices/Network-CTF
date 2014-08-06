@@ -54,8 +54,15 @@ class PlayerBase {
         //maximum amount of time this player should go without receiving data
         sf::Time maxNoData;
 
-        //maximum distance the player can interpolate to
+        //timer to respawn player after he is dead
+        sf::Clock respawnTimer;
+        sf::Time respawnDelay;
+
+        //maximum distance the player can interpolate to, this is the squared distnace
         const float maxInterpolationDist;
+
+        //sets position without interpolation
+        void setPosition(const sf::Vector2f& position);
 
         void updateHitboxRotation();
 
@@ -95,6 +102,8 @@ class PlayerBase {
         //interpolate from previous position to the destination position
         ///time passed is what fraction of time has passed from the physics update to the next physics update, not the actual time passed
         void interpolate(const float& deltaFraction);
+        void stopInterpolation();
+
         void draw(sf::RenderWindow& window);
 
         const sf::Vector2f& getDestinationPosition() const;
@@ -113,6 +122,9 @@ class PlayerBase {
         int getHealth() const;
 
         bool isAlive() const;
+        bool shouldRespawn() const;
+
+        void respawn(const sf::Vector2f& spawnPosition);
 
         //uses sethealth
         void getHit(int damage);

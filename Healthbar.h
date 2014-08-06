@@ -27,6 +27,7 @@ class HealthBar {
         const int getCurrentHealth() const;
 
         void reduceHealth(const int& value);
+        void refillHealth();
 
         void setPosition(const sf::Vector2f& position);
 

@@ -258,7 +258,12 @@ void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     //reset the cameras zoom before player is updated so after collision detection the zoom level is determined again
     camera.resetZoom();
 
-    updateUserPlayer(delta, window);
+    //only update the player if he is alive
+    if(userPlayer.isAlive()) {
+
+        updateUserPlayer(delta, window);
+    }
+
     updateConnectedPlayers(delta);
 }
 
@@ -270,10 +275,13 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     //apply camera before setting the center that way camera is already resized before it is set in the center
     camera.applyCamera(window);
 
-    //move camera to new track players new position
+    //move camera to new track players new position, unless he died then leave it as is
     ///currently there is no level bounds or properties so just give some default level properties for now
-    camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
+    if(userPlayer.isAlive()) {
+
+        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
                            sf::FloatRect(-2000, -2000, 5000, 5000));
+    }
 }
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {

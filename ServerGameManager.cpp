@@ -392,7 +392,17 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
             continue;
         }
 
-        players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+        //if the player if alive update him, otherwise try to respawn him
+        if(players[index]->player.isAlive()) {
+
+            players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+
+        } else if(players[index]->player.shouldRespawn()) {
+
+            players[index]->player.respawn(sf::Vector2f(200, 300));
+        }
+
+
         index++;
     }
 }

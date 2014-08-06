@@ -29,7 +29,9 @@ PlayerBase::PlayerBase():
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
-    maxInterpolationDist(250)
+    respawnTimer(),
+    respawnDelay(sf::seconds(2)),
+    maxInterpolationDist(65000)
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -94,7 +96,7 @@ void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
     //if the distance to interpolate is too large just set the position to the given position
     //only past hitbox's position needs to be forcibly set because it interpolates from the past hitbox
-    if(distanceToPoint(position, destinationHitBox.getPosition()) > maxInterpolationDist) {
+    if(distanceToPoint(position, pastHitBox.getPosition()) > maxInterpolationDist) {
 
         pastHitBox.setPosition(position);
     }
@@ -121,6 +123,13 @@ void PlayerBase::interpolate(const float& deltaFraction) {
 
     updateHitboxRotation();
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
+}
+
+void PlayerBase::stopInterpolation() {
+
+    destinationHitBox.setPosition(currentHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
+    destinationRotation = pastRotation;
 }
 
 void PlayerBase::draw(sf::RenderWindow& window) {
@@ -174,6 +183,17 @@ int PlayerBase::getHealth() const {
 bool PlayerBase::isAlive() const {
 
     return health.getCurrentHealth() > 0;
+}
+
+bool PlayerBase::shouldRespawn() const {
+
+    return respawnTimer.getElapsedTime() > respawnDelay;
+}
+
+void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
+
+    setPosition(spawnPosition);
+    health.refillHealth();
 }
 
 void PlayerBase::getHit(int damage) {
@@ -239,6 +259,14 @@ void PlayerBase::resetDataTimer() {
     dataReceiveTimer.restart();
 }
 
+void PlayerBase::setPosition(const sf::Vector2f& position) {
+
+    pastHitBox.setPosition(position);
+    destinationHitBox.setPosition(position);
+    currentHitBox.setPosition(position);
+
+}
+
 void PlayerBase::updateHitboxRotation() {
 
     //multiply the rotation by negative one because
@@ -268,4 +296,9 @@ void PlayerBase::updateSpritePosition() {
 void PlayerBase::die() {
 
     dropFlag();
+
+    //stop interpolating completely
+    stopInterpolation();
+
+    respawnTimer.restart();
 }

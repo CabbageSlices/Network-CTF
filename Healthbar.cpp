@@ -40,6 +40,11 @@ void HealthBar::reduceHealth(const int& value) {
     setCurrentHealth(getCurrentHealth() - value);
 }
 
+void HealthBar::refillHealth() {
+
+    setCurrentHealth(maxHealth);
+}
+
 void HealthBar::setPosition(const sf::Vector2f& position) {
 
     maxHealthBar.setPosition(position);
