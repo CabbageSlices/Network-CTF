@@ -17,9 +17,11 @@ const sf::Color getTeamColor(const unsigned short& team) {
 }
 
 TeamManager::TeamManager():
-    numberOfPlayers()
+    numberOfPlayers(),
+    teamScores()
     {
         setupPlayerCounter();
+        setupScores();
     }
 
 unsigned short TeamManager::addNewPlayer() {
@@ -60,8 +62,30 @@ short unsigned int TeamManager::switchTeams(unsigned short currentTeam) {
     return destinationTeam;
 }
 
+void TeamManager::increaseTeamScore(const unsigned short& team) {
+
+    ++teamScores[team];
+}
+
+void TeamManager::resetScores() {
+
+    //reseting scores is setting them to 0 which the setup function already does
+    setupScores();
+}
+
+unsigned short TeamManager::getTeamScore(const unsigned short& team) {
+
+    return teamScores[team];
+}
+
 void TeamManager::setupPlayerCounter() {
 
     numberOfPlayers[TEAM_A_ID] = 0;
     numberOfPlayers[TEAM_B_ID] = 0;
+}
+
+void TeamManager::setupScores() {
+
+    teamScores[TEAM_A_ID] = 0;
+    teamScores[TEAM_B_ID] = 0;
 }

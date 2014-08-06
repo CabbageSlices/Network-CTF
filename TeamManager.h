@@ -20,7 +20,11 @@ class TeamManager {
         //map key is the team id, and the value is the number of players for that team
         std::map<unsigned short, int> numberOfPlayers;
 
+        //keep track of each teams scores
+        std::map<unsigned short, unsigned short> teamScores;
+
         void setupPlayerCounter();
+        void setupScores();
 
     public:
 
@@ -36,6 +40,12 @@ class TeamManager {
         //take a player from the given team and move it to the other team
         //return id of the team that player switched to
         unsigned short switchTeams(unsigned short currentTeamId);
+
+        void increaseTeamScore(const unsigned short& team);
+
+        void resetScores();
+
+        unsigned short getTeamScore(const unsigned short& team);
 };
 
 //gets the id of the team that is opposing the given team

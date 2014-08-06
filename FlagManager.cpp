@@ -14,24 +14,24 @@ using std::cout;
 using std::endl;
 using std::tr1::shared_ptr;
 
-void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager) {
+void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager) {
 
     bool collidesOwnFlag = flagManager.checkFlagCollision(player.getCollisionBox(), player.getTeam());
 
     if(collidesOwnFlag) {
 
-        ownFlagCollision(player, flagManager);
+        ownFlagCollision(player, flagManager, teamManager);
     }
 
     bool collidesOpponentFlag = flagManager.checkFlagCollision(player.getCollisionBox(), getOpposingTeam(player.getTeam()));
 
     if(collidesOpponentFlag) {
 
-        opponentFlagCollision(player, flagManager);
+        opponentFlagCollision(player, flagManager, teamManager);
     }
 }
 
-void ownFlagCollision(PlayerBase& player, FlagManager& flagManager) {
+void ownFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager) {
 
     //flag can be returned to his base if no one is holding it and its not already at base
     bool canReturnFlag = flagManager.canHoldFlag(player.getTeam()) && !flagManager.flagAtSpawn(player.getTeam());
@@ -44,14 +44,15 @@ void ownFlagCollision(PlayerBase& player, FlagManager& flagManager) {
 
     } else if(flagManager.flagAtSpawn(player.getTeam()) && player.isHoldingFlag()) {
 
-        //player is bringing the opponent's flag to base and his teams flag is already at his base
-        //scores, reset all flags
+        //player is bringing the opponent's flag to base and his team's flag is already at his base
+        //so this player scores scores, reset all flags
         player.dropFlag();
         flagManager.resetFlags();
+        teamManager.increaseTeamScore(player.getTeam());
     }
 }
 
-void opponentFlagCollision(PlayerBase& player, FlagManager& flagManager) {
+void opponentFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager) {
 
     //id of the team the current player is not on, so the team that is opposing hte players current team
     unsigned short idOpposingTeam = getOpposingTeam(player.getTeam());

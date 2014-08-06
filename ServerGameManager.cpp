@@ -339,7 +339,7 @@ void ServerGameManager::playerFlagCollision() {
 
     for(auto& player : players) {
 
-        collidePlayerFlag(player->player, *getFlagManager());
+        collidePlayerFlag(player->player, *getFlagManager(), teamManager);
     }
 }
 

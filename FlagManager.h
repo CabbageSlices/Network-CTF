@@ -9,6 +9,7 @@
 
 class PlayerBase;
 class Flag;
+class TeamManager;
 
 //keeps track of each teams flags and their flag spawn zone
 class FlagManager {
@@ -56,14 +57,14 @@ class FlagManager {
         void draw(sf::RenderWindow& window);
 };
 
-void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager);
+void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager);
 
 //collide the given player with his own teams flag
 ///assumes collisions have occured
-void ownFlagCollision(PlayerBase& player, FlagManager& flagManager);
+void ownFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager);
 
 //collide the given player with the opponents flag
 ///assumes collisions have occured
-void opponentFlagCollision(PlayerBase& player, FlagManager& flagManager);
+void opponentFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager);
 
 #endif // FLAGMANAGER_H_INCLUDED
