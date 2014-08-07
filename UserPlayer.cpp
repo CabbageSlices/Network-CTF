@@ -376,7 +376,7 @@ void UserPlayer::determineMovement() {
     //if playeri s holding flag reduce his velocity
     if(isHoldingFlag()) {
 
-       /// velocities.x *= getVelocityReduction();
-        ///velocities.y *= getVelocityReduction();
+       velocities.x *= getVelocityReduction();
+       velocities.y *= getVelocityReduction();
     }
 }
