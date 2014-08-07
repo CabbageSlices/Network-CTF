@@ -96,6 +96,9 @@ class UserPlayer : public PlayerBase{
 
         const float getHorizontalVelocity();
         const float getVerticalVelocity();
+        
+        //what factor to reduce velocity by when player ish olding flag
+        const float getVelocityReduc
 
         //find the next input to process if there is any, if there is none then return an invalid input
         //advances the current input id up 1 if an input is found
@@ -122,7 +125,7 @@ class UserPlayer : public PlayerBase{
     public:
 
         UserPlayer();
-        ~UserPlayer(){}
+        ~UserPlayer(){};
 
         //handle any input the player triggered and save them to send to the server
         void handleEvents(sf::Event& event);

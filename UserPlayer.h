@@ -94,8 +94,11 @@ class UserPlayer : public PlayerBase{
         //player's current keystate
         KeyState keystate;
 
-        const float getHorizontalVelocity();
-        const float getVerticalVelocity();
+        const float getHorizontalVelocity() const;
+        const float getVerticalVelocity() const;
+
+        //what factor to reduce velocity by when player ish olding flag
+        const float getVelocityReduction() const;
 
         //find the next input to process if there is any, if there is none then return an invalid input
         //advances the current input id up 1 if an input is found

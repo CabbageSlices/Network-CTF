@@ -134,7 +134,7 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
 
         inputBuffer.erase(inputBuffer.begin());
     }
-    
+
     resetDataTimer();
 }
 
@@ -192,7 +192,7 @@ void UserPlayer::handleClientInput(Input& clientInput) {
 
     //input is valid, process it
     processInput(clientInput);
-    
+
     //update received, restart timer
     resetDataTimer();
 }
@@ -200,6 +200,8 @@ void UserPlayer::handleClientInput(Input& clientInput) {
 void UserPlayer::handleClientKeystate(KeyState& state) {
 
     keystate = state;
+
+    resetDataTimer();
 }
 
 void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
@@ -224,14 +226,19 @@ void UserPlayer::drawGun(sf::RenderWindow& window) {
     gun->drawAll(window);
 }
 
-const float UserPlayer::getHorizontalVelocity() {
+const float UserPlayer::getHorizontalVelocity() const {
 
     return 200;
 }
 
-const float UserPlayer::getVerticalVelocity() {
+const float UserPlayer::getVerticalVelocity() const {
 
     return 200;
+}
+
+const float UserPlayer::getVelocityReduction() const {
+
+    return 0.70;
 }
 
 UserPlayer::Input UserPlayer::getInputToProcess() {
@@ -364,5 +371,12 @@ void UserPlayer::determineMovement() {
     } else {
 
         velocities.y = 0;
+    }
+
+    //if playeri s holding flag reduce his velocity
+    if(isHoldingFlag()) {
+
+       /// velocities.x *= getVelocityReduction();
+        ///velocities.y *= getVelocityReduction();
     }
 }

@@ -30,7 +30,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client("192.168.0.14", 8080),
+    client(sf::IpAddress::getLocalAddress(), 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),

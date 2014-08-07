@@ -226,14 +226,19 @@ void UserPlayer::drawGun(sf::RenderWindow& window) {
     gun->drawAll(window);
 }
 
-const float UserPlayer::getHorizontalVelocity() {
+const float UserPlayer::getHorizontalVelocity() const {
 
     return 200;
 }
 
-const float UserPlayer::getVerticalVelocity() {
+const float UserPlayer::getVerticalVelocity() const {
 
     return 200;
+}
+
+const float UserPlayer::getVelocityReduction() const {
+
+    return 0.70;
 }
 
 UserPlayer::Input UserPlayer::getInputToProcess() {
@@ -366,5 +371,12 @@ void UserPlayer::determineMovement() {
     } else {
 
         velocities.y = 0;
+    }
+
+    //if playeri s holding flag reduce his velocity
+    if(isHoldingFlag()) {
+
+       /// velocities.x *= getVelocityReduction();
+        ///velocities.y *= getVelocityReduction();
     }
 }
