@@ -94,10 +94,15 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
     dataDestination << player.isHoldingFlag();
+    
+    dataDestination << player.getKills();
+    dataDestination << player.getDeaths();
+    dataDestination << player.getFlagCaptures();
+    dataDestination << player.getFlagReturns();
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
-    
+
     dataDestination << flagManager->teamAFlag()->getPosition().x << flagManager->teamAFlag()->getPosition().y;
     dataDestination << flagManager->teamBFlag()->getPosition().x << flagManager->teamBFlag()->getPosition().y;
 }
@@ -135,7 +140,19 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> holdingFlag;
 
     updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
-
+    
+    unsigned short kills = 0;
+    unsigned short deaths = 0;
+    unsigned short flagCaptures = 0;
+    unsigned short flagReturns = 0;
+    
+    updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
+    
+    player.setKills(kills);
+    player.setDeaths(deaths);
+    player.setCaptures(flagCaptures);
+    player.setReturns(flagReturns);
+    
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;
     bool flagBBase = false;
@@ -166,11 +183,22 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
         flagManager->teamBFlag()->dropFlag();
     }
-    
+
     sf::Vector2f flagAPosition;
     sf::Vector2f flagBPosition;
-    
-    updatePacket >> flagAPosition.x >> 
+
+    updatePacket >> flagAPosition.x >> flagAPosition.y;
+    updatePacket >> flagBPosition.x >> flagBPosition.y;
+
+    if(!flagABase && !flagAHeld) {
+
+        flagManager->teamAFlag()->setPosition(flagAPosition);
+    }
+
+    if(!flagBBase && !flagBHeld) {
+
+        flagManager->teamBFlag()->setPosition(flagBPosition);
+    }
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {

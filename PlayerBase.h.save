@@ -57,6 +57,11 @@ class PlayerBase {
         //timer to respawn player after he is dead
         sf::Clock respawnTimer;
         sf::Time respawnDelay;
+        
+        unsigned short kills;
+        unsigned short deaths;
+        unsigned short flagCaptures;
+        unsigned short flagReturns;
 
         //maximum distance the player can interpolate to, this is the squared distnace
         const float maxInterpolationDist;
@@ -143,6 +148,16 @@ class PlayerBase {
 
         bool timedOut();
         void resetDataTimer();
+        
+        const unsigned short& getKills() const;
+        const unsigned short& getDeaths() const;
+        const unsigned short& getFlagCaptures() const;
+        const unsigned short& getFlagReturns() const;
+        
+        void setKills(const unsigned short& amount);
+        void setDeaths(const unsigned short& amount);
+        void setCaptures(const unsigned short& amount);
+        void setReturns(const unsigned short& amount);
 };
 
 #endif // PLAYERBASE_H_INCLUDED

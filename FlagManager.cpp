@@ -36,11 +36,12 @@ void ownFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager&
     //flag can be returned to his base if no one is holding it and its not already at base
     bool canReturnFlag = flagManager.canHoldFlag(player.getTeam()) && !flagManager.flagAtSpawn(player.getTeam());
 
-    //check for collision between each flag with each player and handle collision accordingly
     if(canReturnFlag) {
 
-        //return flag to base
         flagManager.flagToSpawn(player.getTeam());
+
+        //returned flag to base so increase his returns count
+        player.setReturns(player.getFlagReturns() + 1);
 
     } else if(flagManager.flagAtSpawn(player.getTeam()) && player.isHoldingFlag()) {
 
@@ -49,6 +50,9 @@ void ownFlagCollision(PlayerBase& player, FlagManager& flagManager, TeamManager&
         player.dropFlag();
         flagManager.resetFlags();
         teamManager.increaseTeamScore(player.getTeam());
+
+        //scored so increase his score count
+        player.setCaptures(player.getFlagCaptures() + 1);
     }
 }
 

@@ -95,6 +95,11 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getTeam();
     dataDestination << player.isHoldingFlag();
 
+    dataDestination << player.getKills();
+    dataDestination << player.getDeaths();
+    dataDestination << player.getFlagCaptures();
+    dataDestination << player.getFlagReturns();
+
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
 
@@ -135,6 +140,18 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> holdingFlag;
 
     updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
+
+    unsigned short kills = 0;
+    unsigned short deaths = 0;
+    unsigned short flagCaptures = 0;
+    unsigned short flagReturns = 0;
+
+    updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
+
+    player.setKills(kills);
+    player.setDeaths(deaths);
+    player.setCaptures(flagCaptures);
+    player.setReturns(flagReturns);
 
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;

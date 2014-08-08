@@ -258,6 +258,13 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
+        
+        //if the player being hit died then increase the kill count for the shooter
+        //if the nearest player was hit it means he was alive before getting hit because of previous for loop
+        if(!nearestPlayer->player.isAlive()) {
+            
+            shootingPlayer->player.setKills(shootingPlayer->player.getKills() + 1);
+        }
     }
 }
 
@@ -391,18 +398,18 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
             players.erase(players.begin() + index);
             continue;
         }
-        
+
         //if the player if alive update him, otherwise try to respawn him
-        if(players[index]->player.isAlive() && ) {
-            
+        if(players[index]->player.isAlive()) {
+
             players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
-            
+
         } else if(players[index]->player.shouldRespawn()) {
-            
+
             players[index]->player.respawn(sf::Vector2f(200, 300));
         }
-        
-        
+
+
         index++;
     }
 }

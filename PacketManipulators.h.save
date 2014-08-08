@@ -37,6 +37,10 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -PLAYER HEALTH
     -PLAYER'S TEAM
     -PLAYER HAS FLAG
+    -PLAYER'S KILLS
+    -PLAYER'S DEATHS
+    -PLAYER'S FLAG CAPTURES
+    -PLAYER'S FLAG RETURNS
 
     -------INFO ABOUT FLAGS
     -IF FLAG FOR TEAM 1 IS AT BASE

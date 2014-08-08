@@ -31,6 +31,10 @@ PlayerBase::PlayerBase():
     maxNoData(sf::seconds(3)),
     respawnTimer(),
     respawnDelay(sf::seconds(2)),
+    kills(0),
+    deaths(0),
+    flagCaptures(0),
+    flagReturns(0),
     maxInterpolationDist(65000)
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
@@ -259,6 +263,47 @@ void PlayerBase::resetDataTimer() {
     dataReceiveTimer.restart();
 }
 
+const unsigned short& PlayerBase::getKills() const {
+
+    return kills;
+}
+
+
+const unsigned short& PlayerBase::getDeaths() const {
+
+    return deaths;
+}
+
+const unsigned short& PlayerBase::getFlagCaptures() const {
+
+    return flagCaptures;
+}
+
+const unsigned short& PlayerBase::getFlagReturns() const {
+
+    return flagReturns;
+}
+
+void PlayerBase::setKills(const unsigned short& amount) {
+
+    kills = amount;
+}
+
+void PlayerBase::setDeaths(const unsigned short& amount) {
+
+    deaths = amount;
+}
+
+void PlayerBase::setCaptures(const unsigned short& amount) {
+
+    flagCaptures = amount;
+}
+
+void PlayerBase::setReturns(const unsigned short& amount) {
+
+    flagReturns = amount;
+}
+
 void PlayerBase::setPosition(const sf::Vector2f& position) {
 
     pastHitBox.setPosition(position);
@@ -301,4 +346,7 @@ void PlayerBase::die() {
     stopInterpolation();
 
     respawnTimer.restart();
+
+    //increase the amount of deaths
+    setDeaths(getDeaths() + 1);
 }

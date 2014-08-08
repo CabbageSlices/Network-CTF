@@ -258,6 +258,13 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
+
+        //if the player being hit died then increase the kill count for the shooter
+        //if the nearest player was hit it means he was alive before getting hit because of previous for loop
+        if(!nearestPlayer->player.isAlive()) {
+
+            shootingPlayer->player.setKills(shootingPlayer->player.getKills() + 1);
+        }
     }
 }
 
