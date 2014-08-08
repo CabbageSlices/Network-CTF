@@ -36,9 +36,9 @@
 			<Cursor1 position="514" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="networkTest.cpp" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="networkTest.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="484" topLine="0" />
+			<Cursor1 position="463" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="GameWorld.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -121,9 +121,9 @@
 			<Cursor1 position="545" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="ClientGameManager.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="606" zoom_1="0" zoom_2="0">
+	<File name="ClientGameManager.cpp" open="1" top="1" tabpos="8" split="0" active="1" splitpos="606" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7371" topLine="238" />
+			<Cursor1 position="7083" topLine="217" />
 		</Cursor>
 	</File>
 	<File name="math.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -206,6 +206,11 @@
 			<Cursor1 position="670" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="Camera.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="386" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="Portal.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="781" topLine="0" />
@@ -236,9 +241,9 @@
 			<Cursor1 position="4345" topLine="79" />
 		</Cursor>
 	</File>
-	<File name="ForegroundObject.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ForegroundObject.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="471" topLine="2" />
+			<Cursor1 position="490" topLine="5" />
 		</Cursor>
 	</File>
 	<File name="Block.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">

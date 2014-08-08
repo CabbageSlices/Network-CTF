@@ -30,7 +30,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client("192.168.0.14", 8080),
+    client(sf::IpAddress::getLocalAddress(), 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),
@@ -194,11 +194,13 @@ void ClientGameManager::handleBulletCollision() {
 void ClientGameManager::playerForegroundCollision() {
 
     for(auto& entity : getForeground()) {
-
+        
+        bool hidingplayer = false;
+        
+        //check if the player is hiding behind the cover, if he 
         if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
 
-            entity->setHidingPlayer(true);
-            camera.zoomIn();
+            hidingplayer = true;
 
         } else {
 
@@ -255,15 +257,12 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    //reset the cameras zoom before player is updated so after collision detection the zoom level is determined again
-    camera.resetZoom();
-    
     //only update the player if he is alive
     if(userPlayer.isAlive()) {
-        
+
         updateUserPlayer(delta, window);
     }
-    
+
     updateConnectedPlayers(delta);
 }
 
@@ -273,12 +272,13 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     interpolateEntities();
 
     //apply camera before setting the center that way camera is already resized before it is set in the center
+    //because applycamera causes camera to zoom in or out if the camera started zooming
     camera.applyCamera(window);
 
     //move camera to new track players new position, unless he died then leave it as is
     ///currently there is no level bounds or properties so just give some default level properties for now
     if(userPlayer.isAlive()) {
-        
+
         camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
                            sf::FloatRect(-2000, -2000, 5000, 5000));
     }

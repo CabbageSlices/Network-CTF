@@ -193,17 +193,28 @@ void ClientGameManager::handleBulletCollision() {
 
 void ClientGameManager::playerForegroundCollision() {
 
+    //if the player or his teammates are hidinging behind something make it visible so you can see
     for(auto& entity : getForeground()) {
 
+        bool hidingPlayer = false;
+
+        //check if the player is hiding behind the cover
         if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
 
-            entity->setHidingPlayer(true);
-            camera.zoomIn();
+            hidingPlayer = true;
 
-        } else {
-
-            entity->setHidingPlayer(false);
         }
+
+        //check if any of your teammates are hiding behind the foreground
+        for(auto player : connectedPlayers) {
+
+            if(player->getDestinationBox().intersects(entity->getCollisionBox()) && player->getTeam() == userPlayer.getTeam()) {
+
+                hidingPlayer = true;
+            }
+        }
+
+        entity->setHidingPlayer(hidingPlayer);
     }
 }
 
@@ -255,9 +266,6 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
 
-    //reset the cameras zoom before player is updated so after collision detection the zoom level is determined again
-    camera.resetZoom();
-
     //only update the player if he is alive
     if(userPlayer.isAlive()) {
 
@@ -273,6 +281,7 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     interpolateEntities();
 
     //apply camera before setting the center that way camera is already resized before it is set in the center
+    //because applycamera causes camera to zoom in or out if the camera started zooming
     camera.applyCamera(window);
 
     //move camera to new track players new position, unless he died then leave it as is
