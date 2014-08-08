@@ -288,8 +288,7 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     ///currently there is no level bounds or properties so just give some default level properties for now
     if(userPlayer.isAlive()) {
 
-        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
-                           sf::FloatRect(-2000, -2000, 5000, 5000));
+        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top));
     }
 }
 

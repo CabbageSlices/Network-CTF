@@ -52,7 +52,7 @@ class Camera {
 
         //set the new center position of the camera, the center of the center is basically the center of the target given
         //the center position must be within the given world bounds
-        void setCameraCenter(const sf::Vector2f& targetCenter, const sf::FloatRect& worldBounds);
+        void setCameraCenter(const sf::Vector2f& targetCenter);
 
         //take the window and use it's dimensions to determine the new default size
         //resets zoom level
