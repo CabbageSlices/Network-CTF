@@ -56,6 +56,11 @@ const sf::FloatRect Flag::getCollisionBox() const {
     return flag.getGlobalBounds();
 }
 
+const sf::Vector2f Flag::getPosition() const {
+    
+    return flag.getPosition();
+}
+
 void Flag::setHeld(bool held) {
 
     beingHeld = held;

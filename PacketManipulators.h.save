@@ -43,6 +43,8 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -IF FLAG FOR TEAM 2 IS AT BASE
     -IF FLAG FOR TEAM 1 IS BEING HELD
     -IF FLAG FOR TEAM 2 IS BEING HELD
+    -FLAG TEAM A POSITION   ----the flag positions are only used if the flag is not at base and it's not being held
+    -FLAG TEAM B POSITION   ----if flag is not at base and its not being held it means someone carried the flag somewhere else but the client doesn't know about it
 **/
 void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket);
 

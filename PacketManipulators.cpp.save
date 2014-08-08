@@ -97,6 +97,9 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
+    
+    dataDestination << flagManager->teamAFlag()->getPosition().x << flagManager->teamAFlag()->getPosition().y;
+    dataDestination << flagManager->teamBFlag()->getPosition().x << flagManager->teamBFlag()->getPosition().y;
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -163,6 +166,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
         flagManager->teamBFlag()->dropFlag();
     }
+    
+    sf::Vector2f flagAPosition;
+    sf::Vector2f flagBPosition;
+    
+    updatePacket >> flagAPosition.x >> 
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {
@@ -338,9 +346,14 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             //save the data of the new player
             players.push_back(newPlayer);
         }
-        
+
         //check if the updated player respawned, that is, he was dead previously and now his health is greater than 0
-        bool respawned = !updatedPlayer->isAlive() && playerhea
+        bool respawned = !updatedPlayer->isAlive() && (playerHealth > 0);
+
+        if(respawned) {
+
+            updatedPlayer->respawn(playerPosition);
+        }
 
         updatedPlayer->setId(playerId);
         updatedPlayer->setInterpolationPosition(playerPosition);

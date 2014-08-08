@@ -97,6 +97,9 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
+
+    dataDestination << flagManager->teamAFlag()->getPosition().x << flagManager->teamAFlag()->getPosition().y;
+    dataDestination << flagManager->teamBFlag()->getPosition().x << flagManager->teamBFlag()->getPosition().y;
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -162,6 +165,22 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     if(!flagBHeld) {
 
         flagManager->teamBFlag()->dropFlag();
+    }
+
+    sf::Vector2f flagAPosition;
+    sf::Vector2f flagBPosition;
+
+    updatePacket >> flagAPosition.x >> flagAPosition.y;
+    updatePacket >> flagBPosition.x >> flagBPosition.y;
+
+    if(!flagABase && !flagAHeld) {
+
+        flagManager->teamAFlag()->setPosition(flagAPosition);
+    }
+
+    if(!flagBBase && !flagBHeld) {
+
+        flagManager->teamBFlag()->setPosition(flagBPosition);
     }
 }
 

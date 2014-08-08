@@ -36,6 +36,7 @@ class Flag {
         const bool& isAtSpawn() const;
 
         const sf::FloatRect getCollisionBox() const;
+        const sf::Vector2f getPosition() const;
 
         void setHeld(bool held);
 };
