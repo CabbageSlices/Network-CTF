@@ -1,0 +1,28 @@
+Be able to pick up different weapons on the ground
+	-start off with pistol and pick up different guns from the ground to replace their current gun
+	-if you pick up a gun that you are currently holding you replenish your ammo
+	
+	types of guns
+		-pistol, basic automatic gun, 10 - 20% health damage (undecided), can kill one person before reloading
+		-shotgun, spread shot, each bullet does 5 - 10% damage, terrible long range accuracy. maybe 2 - 3 shots before reloading
+		-sniper, 2 bullets, each does more than 50% damage, high accuracy, long reload times
+
+Guns should have ammo capacity and reloading
+
+Add spawn zones for each team, heal in spawn zones
+	-each teams side should have an area. in this area they can spawn randomly at any position in the area
+	-while in the spawn zones players regenerate health slowly
+
+Add a Minimap
+	-in minimap you can see the whole level except for underground parts
+	-you can see the flags at all time except when its underground
+	-In the minimap you can always see your teammates, however you can't see players of the other team unless they are close to your teammates
+
+
+
+
+
+
+
+***done***keep track of how many kills, deaths, flag captures, and flag returns each player has
+***done***when your teammates are hiding make the foreground they are hiding in, visible so that you too can see whats inside.

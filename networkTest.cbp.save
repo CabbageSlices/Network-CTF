@@ -67,6 +67,8 @@
 		<Unit filename="LevelManager.h" />
 		<Unit filename="LineSegment.cpp" />
 		<Unit filename="LineSegment.h" />
+		<Unit filename="Minimap.cpp" />
+		<Unit filename="Minimap.h" />
 		<Unit filename="PacketIdentification.cpp" />
 		<Unit filename="PacketIdentification.h" />
 		<Unit filename="PacketManipulators.cpp" />

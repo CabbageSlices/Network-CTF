@@ -302,6 +302,12 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
     }
 }
 
+void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
+
+    //for now just redraw everything
+    drawComponents(window);
+}
+
 void ClientGameManager::handleCollisions() {
 
     //no broadphase as of yet

@@ -4,6 +4,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "GameWorld.h"
+#include "Minimap.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -29,6 +30,11 @@ class GameManager {
 
         GameWorld world;
 
+        Minimap minimap;
+
+        //view that uses the current window size, in order to draw UI and stuff onto the screen
+        sf::View currentWindow;
+
         //handling input function runs the input loop, all other input functions have to work assuming its inside the input loop
         void handleInputs(sf::Event& event, sf::RenderWindow& window);
 
@@ -40,15 +46,17 @@ class GameManager {
 
         void drawWorld(sf::RenderWindow& window);
 
+        void setupCurrentWindow(sf::RenderWindow& window);
+
     protected:
 
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
-        virtual void setup(sf::RenderWindow& window) = 0;
+        virtual void setup(sf::RenderWindow& window);
 
         //handle events related to the window, such as resizing
-        virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window) = 0;
+        virtual void handleWindowEvents(sf::Event& event, sf::RenderWindow& window);
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window) = 0;
@@ -63,6 +71,8 @@ class GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
+
+        virtual void drawMinimap(sf::RenderWindow& window);
 
         //handle collision for all objects
         virtual void handleCollisions() = 0;

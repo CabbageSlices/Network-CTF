@@ -27,7 +27,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-ClientGameManager::ClientGameManager() :
+ClientGameManager::ClientGameManager(sf::RenderWindow& window) :
     GameManager(),
     currentState(STATE_PLAYING),
     client(sf::IpAddress::getLocalAddress(), 8080),
@@ -193,19 +193,28 @@ void ClientGameManager::handleBulletCollision() {
 
 void ClientGameManager::playerForegroundCollision() {
 
+    //if the player or his teammates are hidinging behind something make it visible so you can see
     for(auto& entity : getForeground()) {
-        
-        bool hidingplayer = false;
-        
-        //check if the player is hiding behind the cover, if he 
+
+        bool hidingPlayer = false;
+
+        //check if the player is hiding behind the cover
         if(userPlayer.getDestinationBox().intersects(entity->getCollisionBox())) {
 
-            hidingplayer = true;
+            hidingPlayer = true;
 
-        } else {
-
-            entity->setHidingPlayer(false);
         }
+
+        //check if any of your teammates are hiding behind the foreground
+        for(auto player : connectedPlayers) {
+
+            if(player->getDestinationBox().intersects(entity->getCollisionBox()) && player->getTeam() == userPlayer.getTeam()) {
+
+                hidingPlayer = true;
+            }
+        }
+
+        entity->setHidingPlayer(hidingPlayer);
     }
 }
 
@@ -279,8 +288,7 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     ///currently there is no level bounds or properties so just give some default level properties for now
     if(userPlayer.isAlive()) {
 
-        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top),
-                           sf::FloatRect(-2000, -2000, 5000, 5000));
+        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top));
     }
 }
 
@@ -292,6 +300,12 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
         player->draw(window);
     }
+}
+
+void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
+
+    //for now just redraw everything
+    drawComponents(window);
 }
 
 void ClientGameManager::handleCollisions() {

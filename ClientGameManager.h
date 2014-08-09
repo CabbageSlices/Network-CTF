@@ -90,6 +90,8 @@ class ClientGameManager: public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
+        virtual void drawMinimap(sf::RenderWindow& window);
+
         virtual void handleCollisions();
 
     public:
