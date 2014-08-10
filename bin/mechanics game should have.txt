@@ -13,10 +13,15 @@ Add spawn zones for each team, heal in spawn zones
 	-each teams side should have an area. in this area they can spawn randomly at any position in the area
 	-while in the spawn zones players regenerate health slowly
 
+All background objects, that is blocks and anything that players can collide with but not hide behind, should be predrawn, and the collision boxes will be added later
+
+Add an underground system, add tags for all entities that indicate whether its underground or overground and things can only collide with things in the same plane
+	-things in the underground are only drawn if the player is underground
+
 Add a Minimap
 	-in minimap you can see the whole level except for underground parts
 	-you can see the flags at all time except when its underground
-	-In the minimap you can always see your teammates, however you can't see players of the other team unless they are close to your teammates
+	***done***-In the minimap you can always see your teammates, however you can't see players of the other team unless they are close to your teammates
 
 
 
