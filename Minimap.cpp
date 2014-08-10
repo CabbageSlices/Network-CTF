@@ -5,8 +5,8 @@ Minimap::Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize
     border(),
     levelSize(1024, 768)
     {
-        //position the minmap at the bottom right of the screen
-        view.setViewport(sf::FloatRect(1 - minimapSize.x, 1 - minimapSize.y, minimapSize.x, minimapSize.y));
+        //position the minmap at the bottom right of the screen, subtract a small amount from everything in order to move it slightly to the left so you can see the edges
+        view.setViewport(sf::FloatRect(1 - minimapSize.x - 0.005, 1 - minimapSize.y - 0.005, minimapSize.x - 0.005, minimapSize.y - 0.005));
 
         border.setOutlineThickness(3.0);
         border.setOutlineColor(sf::Color::Green);
