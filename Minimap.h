@@ -14,6 +14,9 @@ class Minimap {
         //size of the level that way everything is drawn onto the minimap properly
         sf::Vector2f levelSize;
 
+        //% of the total screen size to move the minimap by from the bototm right of the screen
+        const float movementOffset;
+
     public:
 
         Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize);

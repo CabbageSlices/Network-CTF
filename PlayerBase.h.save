@@ -57,7 +57,7 @@ class PlayerBase {
         //timer to respawn player after he is dead
         sf::Clock respawnTimer;
         sf::Time respawnDelay;
-        
+
         unsigned short kills;
         unsigned short deaths;
         unsigned short flagCaptures;
@@ -110,6 +110,9 @@ class PlayerBase {
         void stopInterpolation();
 
         void draw(sf::RenderWindow& window);
+        
+        //drawing components to show on minimap
+        void drawMinimap(sf::RenderWindow& window);
 
         const sf::Vector2f& getDestinationPosition() const;
 
@@ -148,12 +151,12 @@ class PlayerBase {
 
         bool timedOut();
         void resetDataTimer();
-        
+
         const unsigned short& getKills() const;
         const unsigned short& getDeaths() const;
         const unsigned short& getFlagCaptures() const;
         const unsigned short& getFlagReturns() const;
-        
+
         void setKills(const unsigned short& amount);
         void setDeaths(const unsigned short& amount);
         void setCaptures(const unsigned short& amount);

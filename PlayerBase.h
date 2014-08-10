@@ -111,6 +111,9 @@ class PlayerBase {
 
         void draw(sf::RenderWindow& window);
 
+        //drawing components to show on minimap
+        void drawMinimap(sf::RenderWindow& window);
+
         const sf::Vector2f& getDestinationPosition() const;
 
         const sf::Vector2f& getCurrentPosition() const;

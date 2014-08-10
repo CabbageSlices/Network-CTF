@@ -137,16 +137,22 @@ void PlayerBase::stopInterpolation() {
 }
 
 void PlayerBase::draw(sf::RenderWindow& window) {
-
+    
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
-
+    
     this->drawGun(window);
 
     window.draw(playerSprite);
     window.draw(currentHitBox);
 
     health.draw(window);
+}
+
+void PlayerBase::drawMinimap(sf::RenderWindow& window) {
+    
+    //for now just draw the hitbox on minimap
+    window.draw(currentHitBox);
 }
 
 const sf::Vector2f& PlayerBase::getDestinationPosition() const {
@@ -346,7 +352,7 @@ void PlayerBase::die() {
     stopInterpolation();
 
     respawnTimer.restart();
-    
+
     //increase the amount of deaths
     setDeaths(getDeaths() + 1);
 }

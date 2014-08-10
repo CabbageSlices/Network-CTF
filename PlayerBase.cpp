@@ -80,6 +80,7 @@ void PlayerBase::setTeam(const unsigned short& team) {
     teamId = team;
 
     currentHitBox.setOutlineColor(getTeamColor(team));
+    currentHitBox.setFillColor(getTeamColor(team));
 }
 
 const float PlayerBase::getRotation() const {
@@ -143,10 +144,16 @@ void PlayerBase::draw(sf::RenderWindow& window) {
 
     this->drawGun(window);
 
-    window.draw(playerSprite);
     window.draw(currentHitBox);
+    window.draw(playerSprite);
 
     health.draw(window);
+}
+
+void PlayerBase::drawMinimap(sf::RenderWindow& window) {
+
+    //for now just draw the hitbox on minimap
+    window.draw(currentHitBox);
 }
 
 const sf::Vector2f& PlayerBase::getDestinationPosition() const {

@@ -27,7 +27,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-ClientGameManager::ClientGameManager(sf::RenderWindow& window) :
+ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
     client(sf::IpAddress::getLocalAddress(), 8080),
@@ -304,8 +304,31 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
 
-    //for now just redraw everything
-    drawComponents(window);
+    userPlayer.drawMinimap(window);
+
+    //only draw another player on the minimap if they are on the players team, or they are near someone on the players team
+    for(auto& player : connectedPlayers) {
+
+        if(player->getTeam() == userPlayer.getTeam() || player->getCollisionBox().intersects(camera.getCameraBounds())) {
+
+            player->drawMinimap(window);
+
+        } else {
+
+            //not on player's team, so figure out if he is near a teammate
+            for(auto teammate : connectedPlayers) {
+
+                //if the player is within the screens of the user's team mate then draw him on the minimap
+                if(teammate->getTeam() == userPlayer.getTeam() && player->getCollisionBox().intersects(camera.getCameraBounds(teammate->getCurrentPosition()))) {
+
+                    player->drawMinimap(window);
+
+                    //already drawn so leave loop
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void ClientGameManager::handleCollisions() {

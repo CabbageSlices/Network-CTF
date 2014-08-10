@@ -33,17 +33,25 @@ void Camera::applyDefaultCamera(sf::RenderWindow& window) const {
     window.setView(sf::View(sf::FloatRect(0, 0, defaultCameraSize.x, defaultCameraSize.y) ));
 }
 
+const sf::FloatRect Camera::getCameraBounds() const {
+
+    return getCameraBounds(view.getCenter());
+}
+
+const sf::FloatRect Camera::getCameraBounds(const sf::Vector2f& cameraCenter) const {
+
+    sf::FloatRect bounds{cameraCenter.x - view.getSize().x / 2,
+                         cameraCenter.y - view.getSize().y / 2,
+                         view.getSize().x,
+                         view.getSize().y};
+
+    return bounds;
+}
+
 void Camera::setCameraCenter(const sf::Vector2f& targetCenter) {
 
-    //calculate the new bounds of the camera given the new center
-    sf::FloatRect cameraBounds(0, 0, 0, 0);
-    cameraBounds.left = targetCenter.x - view.getSize().x / 2;
-    cameraBounds.top = targetCenter.y - view.getSize().y / 2;
-    cameraBounds.width = view.getSize().x;
-    cameraBounds.height = view.getSize().y;
-
     //set the camera properties
-    view.setCenter(calculateCenter(cameraBounds));
+    view.setCenter(targetCenter);
 }
 
 void Camera::setDefaultSize(sf::RenderWindow& window) {
