@@ -1,0 +1,49 @@
+Load a level by entering a level nme
+	-Enter a level name and it will load a level that might exist in the level directory
+
+save level
+	-save the level in a file with the same name as the name the user set for the level
+	-will replace any other level with the same name
+
+
+-----level editing-------
+
+
+enter name for level
+	-allow user to give the level a name
+
+set background
+	-let user type in the name of a background to use for the level
+	-the background must be placed in the levels folder
+	-will set this background as the level's background
+	-background will be set for whatever floor the user is editing
+		-if they are workign on overground, then the background will be set for the overground portion, if underground, it will be set for the underground portion
+
+clear background
+	-clears the background of whatever floor user is editing
+
+levels will be mirrord horizontally along the center of the level ~~~~~(unless indicated, all things are mirrored)~~~~~~~~~~~~~~~
+	-calculate the center of the level according to the size of the background
+	-whatever object you place on either side will also be created at the other side of the level
+
+allow users to create collision boxes
+	-when creating collision boxes, users click and drag on the screen to create a box with whatever properties they desire
+	-these boxes will appear transparent in the level editor but ingame it will be invisible
+	-will be mirrored
+
+Users choose if they are working on the underground or the overground part
+	-users will be able to switch between overground and underground
+	-any level changes will only be applied to whatever floor they are working on
+
+user can add foreground objects
+	-users can choose to add foreground objects, unlike collisionboxes the foreground objects are actual objects which are placed where ever the player clicks and have a set collisionbox
+
+user can add spawn areas for a team
+	-user can choose a team to add a spawn area for, just like collision box user creates a rectangle which will be used to create the spawn zones
+
+user can add flag spawn locations
+	-user can choose a team to add a flag for
+	~~~~not mirrored
+
+user can add weapons
+	-user can place a weapon changer on the map as they would a foreground object

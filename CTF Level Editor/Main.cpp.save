@@ -7,9 +7,13 @@
 
 #include <vector>
 #include <tr1/memory>
+#include <iostream>
 
 using std::vector;
 using std::tr1::shared_ptr;
+using std::cin;
+using std::cout;
+using std::endl;
 
 int main() {
 
@@ -44,6 +48,10 @@ int main() {
 
     camera.setDefaultSize(window);
 
+    bool beginRect = false;
+    sf::Vector2f rectOrigin(0, 0);
+    sf::Vector2f rectEnd(0, 0);
+
     while(window.isOpen()) {
 
         while(window.pollEvent(event)) {
@@ -64,14 +72,14 @@ int main() {
 
                     camera.zoomOut();
                 }
-                
+
                 if(event.key.code == sf::Keyboard::Z) {
-                    
+
                     creatingForeground = true;
                 }
-                
+
                 if(event.key.code == sf::Keyboard::X) {
-                    
+
                     destroyingForeground = true;
                 }
             }
@@ -80,6 +88,25 @@ int main() {
 
                 camera.setDefaultSize(window);
             }
+
+            if(event.type == sf::Event::MouseButtonPressed) {
+
+                beginRect = true;
+
+                rectOrigin = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            }
+
+            if(event.type == sf::Event::MouseButtonReleased) {
+
+                beginRect = false;
+
+
+            }
+        }
+
+        if(beginRect) {
+
+            rectEnd = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -147,21 +174,8 @@ int main() {
 
             shared_ptr<ForegroundObject> newForeground(new ForegroundObject(mousePosition));
 
-            bool collides = false;
-
-            for(auto foregroundObj : foreground) {
-
-                if(foregroundObj->getCollisionBox().intersects(newForeground->getCollisionBox())) {
-
-                    collides = true;
-                    break;
-                }
-            }
-
-            if(!collides) {
-
-                foreground.push_back(newForeground);
-            }
+            foreground.push_back(newForeground);
+            creatingForeground = false;
         }
 
         if(destroyingForeground) {
@@ -176,7 +190,7 @@ int main() {
                 }
             }
 
-            destoryBlockTimer.restart();
+            destroyingForeground = false;
         }
 
         if(position.x < 0) {
@@ -202,17 +216,19 @@ int main() {
         camera.setCameraCenter(position, sf::FloatRect(0, 0, levelSize.x, levelSize.y));
         camera.applyCamera(window);
 
+        sf::RectangleShape rect(sf::Vector2f(rectEnd.x - rectOrigin.x, rectEnd.y - rectOrigin.y));
+        rect.setPosition(rectOrigin);
+
+        cout << "Rect x position: " << rect.getPosition().x << " Rect width " << rect.getSize().x << endl;
+
+        sf::RectangleShape coll(sf::Vector2f(50, 50));
+        coll.setPosition(500, 300);
+        
+        if(coll.getGlobalBounds().intersects())
+
         window.clear();
 
-        for(auto block : blocks) {
-
-            block->draw(window);
-        }
-
-        for(auto foregroundObj : foreground) {
-
-            foregroundObj->draw(window);
-        }
+        window.draw(rect);
 
         window.display();
     }

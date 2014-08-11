@@ -7,9 +7,13 @@
 
 #include <vector>
 #include <tr1/memory>
+#include <iostream>
 
 using std::vector;
 using std::tr1::shared_ptr;
+using std::cin;
+using std::cout;
+using std::endl;
 
 int main() {
 
@@ -43,6 +47,10 @@ int main() {
     sf::Vector2f levelSize(2000, 2000);
 
     camera.setDefaultSize(window);
+
+    bool beginRect = false;
+    sf::Vector2f rectOrigin(0, 0);
+    sf::Vector2f rectEnd(0, 0);
 
     while(window.isOpen()) {
 
@@ -80,6 +88,25 @@ int main() {
 
                 camera.setDefaultSize(window);
             }
+
+            if(event.type == sf::Event::MouseButtonPressed) {
+
+                beginRect = true;
+
+                rectOrigin = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            }
+
+            if(event.type == sf::Event::MouseButtonReleased) {
+
+                beginRect = false;
+
+
+            }
+        }
+
+        if(beginRect) {
+
+            rectEnd = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -189,17 +216,24 @@ int main() {
         camera.setCameraCenter(position, sf::FloatRect(0, 0, levelSize.x, levelSize.y));
         camera.applyCamera(window);
 
+        sf::RectangleShape rect(sf::Vector2f(rectEnd.x - rectOrigin.x, rectEnd.y - rectOrigin.y));
+        rect.setPosition(rectOrigin);
+
+        cout << "x: " << rect.getPosition().x << " Rect width " << rect.getSize().x;
+        cout << " global x: " << rect.getGlobalBounds().left << " bounds width " << rect.getGlobalBounds().width << endl;
+
+        sf::RectangleShape coll(sf::Vector2f(-50, -50));
+        coll.setPosition(500, 300);
+
+        if(coll.getGlobalBounds().intersects(rect.getGlobalBounds())) {
+
+            cout << "collision" << endl;
+        }
+
         window.clear();
 
-        for(auto block : blocks) {
-
-            block->draw(window);
-        }
-
-        for(auto foregroundObj : foreground) {
-
-            foregroundObj->draw(window);
-        }
+        window.draw(coll);
+        window.draw(rect);
 
         window.display();
     }
