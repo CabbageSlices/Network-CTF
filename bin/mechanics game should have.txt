@@ -10,7 +10,7 @@ Be able to pick up different weapons on the ground
 Guns should have ammo capacity and reloading
 
 Add spawn zones for each team, heal in spawn zones
-	-each teams side should have an area. in this area they can spawn randomly at any position in the area
+	-each teams side should have a spawn area. in this area they can spawn randomly at any position in the area
 	-while in the spawn zones players regenerate health slowly
 
 All background objects, that is blocks and anything that players can collide with but not hide behind, should be predrawn, and the collision boxes will be added later

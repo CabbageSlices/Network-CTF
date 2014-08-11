@@ -314,6 +314,7 @@ void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
     }
 
 
+    ///only draw players on minimap if they are in the overground section
     //only draw another player on the minimap if they are on the players team, or they are near someone on the players team
     for(auto& player : connectedPlayers) {
 
