@@ -99,6 +99,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getDeaths();
     dataDestination << player.getFlagCaptures();
     dataDestination << player.getFlagReturns();
+    dataDestination << player.getFloor();
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
@@ -147,6 +148,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     unsigned short flagReturns = 0;
 
     updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
+
+    unsigned floor = 0;
+    updatePacket >> floor;
+
+    player.setFloor(floor);
 
     player.setKills(kills);
     player.setDeaths(deaths);
@@ -219,6 +225,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getHealth();
         updatePacket << player->player.getTeam();
         updatePacket << player->player.isHoldingFlag();
+        updatePacket << player->player.getFloor();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -233,6 +240,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
 
             updatePacket << beginPoint.x << beginPoint.y;
             updatePacket << endPoint.x << endPoint.y;
+            updatePacket << bullet->getFloor();
         }
     }
 }
@@ -325,19 +333,30 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         bool holdingFlag = false;
         statePacket >> holdingFlag;
 
-        //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
-        //top left is the begin point, width and heights are the end point
-        vector<sf::FloatRect> bullets;
+        unsigned floor = 0;
+        statePacket >> floor;
+
+        struct BulletData {
+
+            sf::Vector2f beginPosition;
+            sf::Vector2f endPosition;
+            unsigned floor;
+        };
+
+        //read the number of bullets fired by the player
+        vector<BulletData> bullets;
 
         int bulletsFired = 0;
         statePacket >> bulletsFired;
 
         for(int bulletsCreated = 0; bulletsCreated < bulletsFired; bulletsCreated++) {
 
-            sf::FloatRect position;
-            statePacket >> position.left >> position.top >> position.width >> position.height;
+            BulletData data;
+            statePacket >> data.beginPosition.x >> data.beginPosition.y;
+            statePacket >> data.endPosition.x >> data.endPosition.y;
+            statePacket >> floor;
 
-            bullets.push_back(position);
+            bullets.push_back(data);
         }
 
         //don't update him if the given player is also the user player
@@ -388,16 +407,14 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
+        updatedPlayer->setFloor(floor);
 
         updateFlagInfo(holdingFlag, playerPosition, *updatedPlayer, flagManager);
 
         //now create the bullets for this player
         for(auto& bullet : bullets) {
 
-            sf::Vector2f bulletStart(bullet.left, bullet.top);
-            sf::Vector2f bulletEnd(bullet.width, bullet.height);
-
-            updatedPlayer->fireGun(bulletStart, bulletEnd);
+            updatedPlayer->fireGun(bullet.beginPosition, bullet.endPosition, bullet.floor);
         }
     }
 }

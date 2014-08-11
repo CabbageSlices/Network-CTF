@@ -11,6 +11,7 @@
 class LineSegment;
 class UserPlayer;
 class Block;
+class Portal;
 
 //check for collision between the rectangle and line and return the point of collision
 bool checkCollision(const sf::FloatRect& rect, std::tr1::shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint);
@@ -21,13 +22,6 @@ bool handleEdgeCollision(const sf::Vector2f& edgeBegin, const sf::Vector2f& edge
 
 //calculate the offset required for the first block to no longer be colliding with the second block
 sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf::FloatRect& staticRect);
-
-template<class Static>
-void playerStaticCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Static> >& statics,
-                            std::function<void(std::tr1::shared_ptr<Static> static)> collisionResponse) {
-    
-    for(auto static )
-}
 
 //handle collision between players and blocks
 void playerBlockCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Block> >& blocks);
@@ -44,8 +38,8 @@ void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std:
     //line cuts off after each collision so in the end it will have collided with the nearest object
     for(auto& entity : entities) {
 
-        //collision is only valid if the collision predicate dictates it
-        if(!collisionPredicate(entity)) {
+        //collision is only valid if the collision predicate dictates it and if the bullet and entity are in the same floor
+        if(!collisionPredicate(entity) && bullet->getFloor() == entity->getFloor()) {
 
             continue;
         }

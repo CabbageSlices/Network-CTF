@@ -94,11 +94,12 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getHealth();
     dataDestination << player.getTeam();
     dataDestination << player.isHoldingFlag();
-    
+
     dataDestination << player.getKills();
     dataDestination << player.getDeaths();
     dataDestination << player.getFlagCaptures();
     dataDestination << player.getFlagReturns();
+    dataDestination << player.getFloor();
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
@@ -140,19 +141,24 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> holdingFlag;
 
     updateFlagInfo(holdingFlag, playerPosition, player, flagManager);
-    
+
     unsigned short kills = 0;
     unsigned short deaths = 0;
     unsigned short flagCaptures = 0;
     unsigned short flagReturns = 0;
-    
+
     updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
     
+    unsigned floor = 0;
+    updatePacket >> floor;
+    
+    player.setFloor(floor);
+
     player.setKills(kills);
     player.setDeaths(deaths);
     player.setCaptures(flagCaptures);
     player.setReturns(flagReturns);
-    
+
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;
     bool flagBBase = false;
@@ -219,6 +225,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getHealth();
         updatePacket << player->player.getTeam();
         updatePacket << player->player.isHoldingFlag();
+        updatePacket << player->player.getFloor();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -233,6 +240,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
 
             updatePacket << beginPoint.x << beginPoint.y;
             updatePacket << endPoint.x << endPoint.y;
+            updatePacket << bullet->getFloor();
         }
     }
 }
@@ -324,18 +332,27 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         bool holdingFlag = false;
         statePacket >> holdingFlag;
+        
+        unsigned floor = 0;
+        statePacket >> floor;
+        
+        struct BulletData {
+            
+            sf::Vector2f beginPosition;
+            sf::Vector2f endPosition;
+            unsigned floor;
+        };
 
-        //read the number of bullets fired by the player, use floatrects to hold the data for the bullet's begin and end points
-        //top left is the begin point, width and heights are the end point
-        vector<sf::FloatRect> bullets;
+        //read the number of bullets fired by the player
+        vector<BulletData> bullets;
 
         int bulletsFired = 0;
         statePacket >> bulletsFired;
 
         for(int bulletsCreated = 0; bulletsCreated < bulletsFired; bulletsCreated++) {
 
-            sf::FloatRect position;
-            statePacket >> position.left >> position.top >> position.width >> position.height;
+            BulletData data;
+            statePacket
 
             bullets.push_back(position);
         }

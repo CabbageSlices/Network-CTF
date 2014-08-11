@@ -53,6 +53,9 @@ class Gun {
 
         sf::Time fireDelay;
 
+        //current floor
+        unsigned floor;
+
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
 
@@ -60,7 +63,7 @@ class Gun {
         void updateLineOfSight(const sf::Vector2f& origin, const float& rotation);
 
         //creates a bullet using the guns current state
-        void createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
+        void createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);
 
     public:
 
@@ -91,6 +94,8 @@ class Gun {
 
         void clearRotations();
 
+        void setFloor(const unsigned& floor);
+
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();
 
@@ -98,7 +103,7 @@ class Gun {
         void fire(const float& angle);
 
         //fire a gun and place the bullet at the given location
-        void fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
+        void fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);
 
 };
 

@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "math.h"
 #include "Block.h"
+#include "Floors.h"
 
 #include <map>
 #include <iostream>
@@ -195,7 +196,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-        bulletEntityCollision<Block>(bullet, getBlocks());
+        bulletEntityCollision<Block>(bullet, getBlocks(player->player.getFloor()));
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
@@ -215,6 +216,12 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     for(auto& player : players) {
 
         if(player == shootingPlayer || player->player.getTeam() == shootingPlayer->player.getTeam() || !player->player.isAlive()) {
+
+            continue;
+        }
+
+        //if player and bullet aren't on same floor don't check collision
+        if(player->player.getFloor() != bullet->getFloor()) {
 
             continue;
         }
@@ -428,13 +435,18 @@ void ServerGameManager::drawComponents(sf::RenderWindow& window) {
     drawPlayers(window);
 }
 
+const unsigned ServerGameManager::getFloor() const {
+
+    return OVERGROUND_FLOOR;
+}
+
 void ServerGameManager::handleCollisions() {
 
     //hsndle collision between players and blocks
     for(auto& player : players) {
 
-        playerBlockCollision(player->player, getBlocks());
-        playerPortalCollision(player->player, getGameWorld().getPortals());
+        playerBlockCollision(player->player, getBlocks(player->player.getFloor()));
+        playerPortalCollision(player->player, getPortals(player->player.getFloor()));
     }
 
     playerFlagCollision();

@@ -128,5 +128,6 @@ void playerPortalCollision(UserPlayer& userPlayer, std::vector<std::tr1::shared_
                                  [](UserPlayer& player, shared_ptr<Portal> portal) {
 
                                     player.setInterpolationPosition(portal->getTeleportPosition());
+                                    player.setFloor(portal->getDestinationFloor());
                                  });
 }

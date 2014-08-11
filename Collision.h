@@ -38,7 +38,7 @@ void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std:
     //line cuts off after each collision so in the end it will have collided with the nearest object
     for(auto& entity : entities) {
 
-        //collision is only valid if the collision predicate dictates it
+        //collision is only valid if the collision predicate dictates it and if the bullet and entity are in the same floor
         if(!collisionPredicate(entity)) {
 
             continue;

@@ -31,8 +31,8 @@ class Gun {
         //angle of player's rotation in degrees
         //this is the angle in standard position
         float rotation;
-        
-        //range of values to add or subtract to the gun's rotation while firing 
+
+        //range of values to add or subtract to the gun's rotation while firing
         //in order to change the trajectory of the bullet to have the guns firing with different accuracies
         //x value is minimum threshold and y is the max
         //all in degrees
@@ -52,6 +52,9 @@ class Gun {
         sf::Time timeSinceFired;
 
         sf::Time fireDelay;
+        
+        //current floor
+        const unsigned floor;
 
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
@@ -82,12 +85,16 @@ class Gun {
 
         //draw gun's line of sight
         void drawSight(sf::RenderWindow& window);
+
+        //draw the bullets that have already checked for collision with other entities
         void drawBullets(sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
         const std::vector<float>& getQueuedRotations() const;
 
         void clearRotations();
+        
+        void setFloor(unsigned )
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

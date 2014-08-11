@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Flag.h"
 #include "Gun.h"
+#include "Floors.h"
 #include "TeamManager.h"
 
 #include <iostream>
@@ -35,7 +36,8 @@ PlayerBase::PlayerBase():
     deaths(0),
     flagCaptures(0),
     flagReturns(0),
-    maxInterpolationDist(65000)
+    maxInterpolationDist(65000),
+    currentFloor(OVERGROUND_FLOOR)
     {
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -246,6 +248,17 @@ void PlayerBase::dropFlag() {
 
     //drop the flag at his current position
     dropFlag(getCurrentPosition());
+}
+
+void PlayerBase::setFloor(const unsigned& destinationFloor) {
+
+    currentFloor = destinationFloor;
+    gun->setFloor(destinationFloor);
+}
+
+const unsigned PlayerBase::getFloor() const {
+
+    return currentFloor;
 }
 
 void PlayerBase::dropFlag(const sf::Vector2f& positionToDrop) {

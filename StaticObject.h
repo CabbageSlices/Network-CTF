@@ -21,6 +21,7 @@ class StaticObject {
         const sf::FloatRect getCollisionBox() const;
         const sf::Vector2f getPosition() const;
 
+
         virtual void draw(sf::RenderWindow& window);
 };
 

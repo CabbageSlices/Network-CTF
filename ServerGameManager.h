@@ -127,6 +127,8 @@ class ServerGameManager : public GameManager {
 
         virtual void drawMinimap(sf::RenderWindow& window) {}
 
+        virtual const unsigned getFloor() const;
+
         virtual void handleCollisions();
 
     public:

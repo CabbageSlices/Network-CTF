@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "GameWorld.h"
 #include "Minimap.h"
+#include "Floors.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -31,7 +32,7 @@ class GameManager {
         GameWorld world;
 
         Minimap minimap;
-        
+
         //view that uses the current window size, in order to draw UI and stuff onto the screen
         sf::View currentWindow;
 
@@ -45,7 +46,7 @@ class GameManager {
         void updateWorld(sf::RenderWindow& window);
 
         void drawWorld(sf::RenderWindow& window);
-        
+
         void setupCurrentWindow(sf::RenderWindow& window);
 
     protected:
@@ -76,6 +77,9 @@ class GameManager {
 
         //handle collision for all objects
         virtual void handleCollisions() = 0;
+
+        //get the current floor to draw
+        virtual const unsigned getFloor() const = 0;
 
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();

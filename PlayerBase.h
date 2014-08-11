@@ -66,6 +66,9 @@ class PlayerBase {
         //maximum distance the player can interpolate to, this is the squared distnace
         const float maxInterpolationDist;
 
+        //current floor of the player, can only interact with others in the same floor
+        unsigned short currentFloor;
+
         //sets position without interpolation
         void setPosition(const sf::Vector2f& position);
 
@@ -148,6 +151,9 @@ class PlayerBase {
 
         //drop the flag at the given position
         void dropFlag(const sf::Vector2f& position);
+
+        void setFloor(const unsigned& destinationFloor);
+        const unsigned getFloor() const;
 
         bool timedOut();
         void resetDataTimer();

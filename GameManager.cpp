@@ -82,11 +82,11 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     window.clear();
 
-    world.drawBackground(window);
+    world.drawBackground(window, getFloor());
 
     this->drawComponents(window);
 
-    world.drawForeground(window);
+    world.drawForeground(window, getFloor());
 
     GameManager::drawMinimap(window);
 
@@ -128,25 +128,30 @@ void GameManager::drawMinimap(sf::RenderWindow& window) {
     //set the minimaps view
     minimap.applyMinimap(window);
 
-    world.drawBackground(window);
+    world.drawBackground(window, getFloor());
 
     //draw the derived class's minimap components
     this->drawMinimap(window);
 
-    world.drawForeground(window);
+    world.drawForeground(window, getFloor());
 
     //re-apply old view
     window.setView(previousView);
 }
 
-vector<shared_ptr<Block> >& GameManager::getBlocks() {
+vector<shared_ptr<Block> >& GameManager::getBlocks(const unsigned& floor) {
 
-    return world.getBlocks();
+    return world.getBlocks(floor);
 }
 
-vector<shared_ptr<ForegroundObject> >& GameManager::getForeground() {
+vector<shared_ptr<ForegroundObject> >& GameManager::getForeground(const unsigned& floor) {
 
-    return world.getForeground();
+    return world.getForeground(floor);
+}
+
+vector<shared_ptr<Portal> >& GameManager::getPortals(const unsigned& floor) {
+
+    return world.getPortals(floor);
 }
 
 shared_ptr<FlagManager> GameManager::getFlagManager() {

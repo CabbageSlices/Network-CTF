@@ -177,13 +177,13 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getBlocks());
+        bulletEntityCollision<Block>(bullet, getBlocks(userPlayer.getFloor()));
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
                                                    [&](shared_ptr<InterpolatingPlayer> player)->bool {
 
-                                                    return !(player->getTeam() == userPlayer.getTeam()) && player->isAlive();
+                                                    return !(player->getTeam() == userPlayer.getTeam()) && player->isAlive() && player->getFloor() == bullet->getFloor();
                                                    });
 
         //disable the bullets collisoin since it should no longerb e able to collide
@@ -194,7 +194,7 @@ void ClientGameManager::handleBulletCollision() {
 void ClientGameManager::playerForegroundCollision() {
 
     //if the player or his teammates are hidinging behind something make it visible so you can see
-    for(auto& entity : getForeground()) {
+    for(auto& entity : getForeground(userPlayer.getFloor())) {
 
         bool hidingPlayer = false;
 
@@ -298,18 +298,26 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     for(auto& player : connectedPlayers) {
 
-        player->draw(window);
+        if(player->getFloor() == userPlayer.getFloor()) {
+
+            player->draw(window);
+        }
     }
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
 
-    userPlayer.drawMinimap(window);
+    //only draw on minimap if they are on the overground floor
+    if(userPlayer.getFloor() == OVERGROUND_FLOOR) {
+
+        userPlayer.drawMinimap(window);
+    }
+
 
     //only draw another player on the minimap if they are on the players team, or they are near someone on the players team
     for(auto& player : connectedPlayers) {
 
-        if(player->getTeam() == userPlayer.getTeam() || player->getCollisionBox().intersects(camera.getCameraBounds())) {
+        if((player->getTeam() == userPlayer.getTeam() || player->getCollisionBox().intersects(camera.getCameraBounds())) && player->getFloor() == OVERGROUND_FLOOR) {
 
             player->drawMinimap(window);
 
@@ -318,8 +326,9 @@ void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
             //not on player's team, so figure out if he is near a teammate
             for(auto teammate : connectedPlayers) {
 
-                //if the player is within the screens of the user's team mate then draw him on the minimap
-                if(teammate->getTeam() == userPlayer.getTeam() && player->getCollisionBox().intersects(camera.getCameraBounds(teammate->getCurrentPosition()))) {
+                //if the player is within the screens of the user's team mate and they are on the overground floor then draw him on the minimap
+                if(teammate->getTeam() == userPlayer.getTeam() && player->getCollisionBox().intersects(camera.getCameraBounds(teammate->getCurrentPosition())) &&
+                   player->getFloor() == OVERGROUND_FLOOR && teammate->getFloor() == OVERGROUND_FLOOR) {
 
                     player->drawMinimap(window);
 
@@ -331,11 +340,16 @@ void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
     }
 }
 
+const unsigned ClientGameManager::getFloor() const {
+
+    return userPlayer.getFloor();
+}
+
 void ClientGameManager::handleCollisions() {
 
     //no broadphase as of yet
     //check for collision between players and blocks
-    playerBlockCollision(userPlayer, getBlocks());
+    playerBlockCollision(userPlayer, getBlocks(userPlayer.getFloor()));
 
     playerForegroundCollision();
 }

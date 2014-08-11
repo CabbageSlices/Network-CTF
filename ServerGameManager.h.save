@@ -98,7 +98,7 @@ class ServerGameManager : public GameManager {
         void updatePlayers(const float& delta);
 
         void drawPlayers(sf::RenderWindow& window);
-        
+
         //check and handle collision between players and flags
         void playerFlagCollision();
 
@@ -124,6 +124,10 @@ class ServerGameManager : public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
+
+        virtual void drawMinimap(sf::RenderWindow& window) {}
+        
+        virtual const unsigned getFloor() const;
 
         virtual void handleCollisions();
 

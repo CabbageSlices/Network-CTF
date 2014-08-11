@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "GameWorld.h"
 #include "Minimap.h"
+#include "Floors.h"
 
 #include <vector>
 #include <tr1/memory>
@@ -77,8 +78,13 @@ class GameManager {
         //handle collision for all objects
         virtual void handleCollisions() = 0;
 
-        std::vector<std::tr1::shared_ptr<Block> >& getBlocks();
-        std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground();
+        //get the current floor to draw
+        virtual const unsigned getFloor() const = 0;
+
+        std::vector<std::tr1::shared_ptr<Block> >& getBlocks(const unsigned& floor = OVERGROUND_FLOOR);
+        std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground(const unsigned& floor = OVERGROUND_FLOOR);
+        std::vector<std::tr1::shared_ptr<Portal> >& getPortals(const unsigned& floor = OVERGROUND_FLOOR);
+
         std::tr1::shared_ptr<FlagManager> getFlagManager();
 
         GameWorld& getGameWorld();

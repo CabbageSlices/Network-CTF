@@ -25,7 +25,7 @@ class InterpolatingPlayer : public PlayerBase {
         void setInterpolationRotation(const float& newRotation);
 
         //fire a gun and place the bullet at the given location
-        void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd);
+        void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);
 };
 
 #endif // INTERPOLATINGPLAYER_H_INCLUDED

@@ -1,32 +1,41 @@
 #include "Portal.h"
+#include "Floors.h"
 
-Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation):
-    StaticObject(centerPosition),
-    teleportPosition(sf::Vector2f(50, 50))
+Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation, const unsigned locatedFloor, const unsigned targetFloor):
+    StaticObject(centerPosition, locatedFloor),
+    teleportPosition(sf::Vector2f(50, 50)),
+    destinationFloor(targetFloor)
     {
-        teleportLocation.setFillColor(sf::Color::Magenta);
+        teleportPosition.setFillColor(sf::Color::Magenta);
         teleportPosition.setPosition(teleportLocation);
     }
 
 Portal::Portal(const sf::Vector2f& centerPosition):
-    StaticObject(centerPosition),
-    teleportPosition(sf::Vector2f(50, 50))
+    StaticObject(centerPosition, OVERGROUND_FLOOR),
+    teleportPosition(sf::Vector2f(50, 50)),
+    destinationFloor(UNDERGROUND_FLOOR)
     {
-        teleportLocation.setFillColor(sf::Color::Magenta);
+        teleportPosition.setFillColor(sf::Color::Magenta);
     }
 
-void Portal::setTeleportPosition(const sf::Vector2f& position) {
+void Portal::setTeleportPosition(const sf::Vector2f& position, const unsigned targetFloor) {
 
-    teleportPosition = position;
+    teleportPosition.setPosition(position);
+    destinationFloor = targetFloor;
 }
 
 const sf::Vector2f& Portal::getTeleportPosition() const {
 
-    return teleportPosition;
+    return teleportPosition.getPosition();
+}
+
+const unsigned Portal::getDestinationFloor() const {
+
+    return destinationFloor;
 }
 
 void Portal::draw(sf::RenderWindow& window) {
-    
+
     StaticObject::draw(window);
     window.draw(teleportPosition);
 }

@@ -25,9 +25,12 @@ class Bullet {
 
         bool canCollide;
 
+        //floor the bullet was fired on
+        unsigned floor;
+
     public:
 
-        Bullet(std::tr1::shared_ptr<LineSegment> bulletLine);
+        Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor);
 
         void updateElapsedTime(const sf::Time& deltaTime);
 
@@ -42,6 +45,8 @@ class Bullet {
 
         //amount of damage this bullet should do
         int getDamage();
+
+        const unsigned getFloor() const;
 
         void draw(sf::RenderWindow& window);
 

@@ -12,22 +12,22 @@ using std::tr1::shared_ptr;
 using std::string;
 
 GameWorld::GameWorld():
-    blocks(),
-    foregroundObjects(),
-    portals(),
+    floors(),
     flagManager()
     {
-
+        //create new floors
+        floors[OVERGROUND_FLOOR] = shared_ptr<GameFloor>(new GameFloor());
+        floors[UNDERGROUND_FLOOR] = shared_ptr<GameFloor>(new GameFloor());
     }
 
-vector<shared_ptr<Block> >& GameWorld::getBlocks() {
+vector<shared_ptr<Block> >& GameWorld::getBlocks(const unsigned& floor) {
 
-    return blocks;
+    return floors[floor]->blocks;
 }
 
-vector<shared_ptr<ForegroundObject> >& GameWorld::getForeground() {
+vector<shared_ptr<ForegroundObject> >& GameWorld::getForeground(const unsigned& floor) {
 
-    return foregroundObjects;
+    return floors[floor]->foregroundObjects;
 }
 
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
@@ -35,9 +35,9 @@ shared_ptr<FlagManager> GameWorld::getFlagManager() {
     return flagManager;
 }
 
-vector<shared_ptr<Portal> >& GameWorld::getPortals() {
+vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
 
-    return portals;
+    return floors[floor]->portals;
 }
 
 bool GameWorld::load(string levelName) {
@@ -45,16 +45,21 @@ bool GameWorld::load(string levelName) {
     clearWorld();
 
     flagManager.reset(new FlagManager(sf::Vector2f(0, 0), sf::Vector2f(500, 800)));
-    portals.push_back(shared_ptr<Portal>(new Portal(sf::Vector2f(-200, 200), sf::Vector2f(600, 800)))   );
+    floors[OVERGROUND_FLOOR]->portals.push_back(shared_ptr<Portal>(new Portal(sf::Vector2f(-200, 200), sf::Vector2f(600, 800), UNDERGROUND_FLOOR)));
 
-    return loadLevel(levelName, blocks, foregroundObjects);
+    return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }
 
 void GameWorld::clearWorld() {
 
-    //clear all entities
-    blocks.clear();
-    foregroundObjects.clear();
+    //clear all floors
+    for(auto floor : floors) {
+
+        floor.second->blocks.clear();
+        floor.second->foregroundObjects.clear();
+        floor.second->portals.clear();
+    }
+
     flagManager.reset();
 }
 
@@ -66,14 +71,14 @@ void GameWorld::updateFlagPosition(PlayerBase& player) {
     }
 }
 
-void GameWorld::drawBackground(sf::RenderWindow& window) {
+void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) {
 
-    for(auto& block : blocks) {
+    for(auto& block : floors[floor]->blocks) {
 
         block->draw(window);
     }
 
-    for(auto& portal : portals) {
+    for(auto& portal : floors[floor]->portals) {
 
         portal->draw(window);
     }
@@ -81,9 +86,9 @@ void GameWorld::drawBackground(sf::RenderWindow& window) {
     flagManager->draw(window);
 }
 
-void GameWorld::drawForeground(sf::RenderWindow& window) {
+void GameWorld::drawForeground(sf::RenderWindow& window, const unsigned& floor) {
 
-    for(auto& object : foregroundObjects) {
+    for(auto& object : floors[floor]->foregroundObjects) {
 
         object->draw(window);
     }

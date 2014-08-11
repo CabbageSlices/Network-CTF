@@ -177,7 +177,11 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getBlocks());
+        bulletEntityCollision<Block>(bullet, getBlocks(),
+                                                   [&](shared_ptr<InterpolatingPlayer> player)->bool {
+
+                                                    return !(player->getTeam() == userPlayer.getTeam()) && player->isAlive();
+                                                   });
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
@@ -298,7 +302,10 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     for(auto& player : connectedPlayers) {
 
-        player->draw(window);
+        if(player->getFloor() == userPlayer.getFloor()) {
+
+            player->draw(window);
+        }
     }
 }
 
@@ -329,6 +336,11 @@ void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
             }
         }
     }
+}
+
+const unsigned ClientGameManager::getFloor() const {
+
+    return userPlayer.getFloor();
 }
 
 void ClientGameManager::handleCollisions() {

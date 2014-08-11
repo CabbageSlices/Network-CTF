@@ -41,6 +41,7 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -PLAYER'S DEATHS
     -PLAYER'S FLAG CAPTURES
     -PLAYER'S FLAG RETURNS
+    -PLAYER'S FLOOR
 
     -------INFO ABOUT FLAGS
     -IF FLAG FOR TEAM 1 IS AT BASE
@@ -66,11 +67,13 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
     -PLAYER HEALTH
     -PLAYER TEAM
     -PLAYER HAS FLAG
+    -PLAYER FLOOR
 
     -NUMBER OF BULLETS FIRED
         ---REPEAT THE FOLLOWING FOR EVERY BULLET
         -BULLET BEGIN POINT
         -BULLET END POINT
+        -BULLET FLOOR
 
 **/
 ///its up to the receiving client to determine which player's data should not be used

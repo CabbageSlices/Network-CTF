@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include <cmath>
 #include "math.h"
+#include "Floors.h"
 #include <iostream>
 
 using std::cos;
@@ -20,7 +21,8 @@ Gun::Gun() :
     queuedRotations(),
     fired(false),
     timeSinceFired(sf::seconds(0)),
-    fireDelay(sf::milliseconds(200))
+    fireDelay(sf::milliseconds(200)),
+    floor(OVERGROUND_FLOOR)
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0), 0.0);
@@ -118,6 +120,11 @@ void Gun::clearRotations() {
     queuedRotations.clear();
 }
 
+void Gun::setFloor(const unsigned& newFloor) {
+
+    floor = newFloor;
+}
+
 float Gun::fire() {
 
     //angle at which gun was fired
@@ -130,7 +137,7 @@ float Gun::fire() {
 
     sf::Vector2f bulletEndPoint = calculateEndPoint(lineOfSight[0].position, gunfireAngle);
 
-    createBullet(lineOfSight[0].position, bulletEndPoint);
+    createBullet(lineOfSight[0].position, bulletEndPoint, floor);
 
     //now queue the rotation so data can be sent to server later
     queuedRotations.push_back(gunfireAngle);
@@ -144,12 +151,12 @@ void Gun::fire(const float& angle) {
     sf::Vector2f endPoint = calculateEndPoint(lineOfSight[0].position, angle);
 
     //fire with new angle
-    createBullet(lineOfSight[0].position, endPoint);
+    createBullet(lineOfSight[0].position, endPoint, floor);
 }
 
-void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& bulletFloor) {
 
-    createBullet(bulletBegin, bulletEnd);
+    createBullet(bulletBegin, bulletEnd, bulletFloor);
 
     //a bullet created using start and end points are bullets sent from the server
     //meaning thye have already checked for collision
@@ -188,12 +195,12 @@ sf::Vector2f Gun::calculateEndPoint(const sf::Vector2f& beginPoint, const float&
     return endPoint;
 }
 
-void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd) {
+void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& bulletFloor) {
 
     //create a line for the bullet
     shared_ptr<LineSegment> bulletLine = createLine(bulletBegin, bulletEnd,
                                                     "", sf::Vector2f(0, 0), sf::Vector2f(0, 0));
-    shared_ptr<Bullet> bullet(new Bullet(bulletLine));
+    shared_ptr<Bullet> bullet(new Bullet(bulletLine, bulletFloor));
 
     bullets.push_back(bullet);
 }
