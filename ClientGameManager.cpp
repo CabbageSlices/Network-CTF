@@ -229,7 +229,7 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     } else {
 
         cout << "Failed to receive data from server.";
-        window.close();
+        ///window.close();
     }
 
     //setup camera

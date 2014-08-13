@@ -2,7 +2,8 @@
 #include "Lerp.h"
 #include "math.h"
 #include "Flag.h"
-#include "Gun.h"
+#include "Sniper.h"
+#include "Pistol.h"
 #include "Floors.h"
 #include "TeamManager.h"
 
@@ -26,7 +27,7 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Gun()),
+    gun(new Sniper()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
@@ -251,12 +252,13 @@ void PlayerBase::dropFlag() {
 }
 
 void PlayerBase::setFloor(const unsigned& destinationFloor) {
-    
+
     currentFloor = destinationFloor;
+    gun->setFloor(destinationFloor);
 }
 
 const unsigned PlayerBase::getFloor() const {
-    
+
     return currentFloor;
 }
 

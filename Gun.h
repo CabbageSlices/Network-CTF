@@ -14,9 +14,11 @@ class Bullet;
 //when idle gun will show direction player is aiming
 class Gun {
 
-    private:
+    protected:
 
         //line used to show direction of player's aim
+        ///the position of the first point of the line of sight is also the position of the gun
+        ///and the origin of all bullets
         sf::VertexArray lineOfSight;
 
         //texture for the line of sight to give it graphics
@@ -34,10 +36,10 @@ class Gun {
 
         //range of values to add or subtract to the gun's rotation while firing
         //in order to change the trajectory of the bullet to have the guns firing with different accuracies
-        //x value is minimum threshold and y is the max
+        //range is from 0 to accuracy modifier
         //all in degrees
         ///always positive
-        sf::Vector2f accuracyModifier;
+        float accuracyModifier;
 
         //container containing the rotation of the gun when the gun was fired
         //these rotations can be sent to the server in order to replicate the gunfire on the server
@@ -56,26 +58,33 @@ class Gun {
         //current floor
         unsigned floor;
 
+        int bulletDamage;
+
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
 
         //set the new position of the line of sight using the player's origin and rotation
-        void updateLineOfSight(const sf::Vector2f& origin, const float& rotation);
+        virtual void updateLineOfSight(const sf::Vector2f& origin);
 
         //creates a bullet using the guns current state
         void createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);
 
+        //get the accuracy modifier to use when firing the gun
+        //different guns might use different accuracy modifier than the default one
+        virtual const float getAccuracyModifier() const;
+
     public:
 
-        Gun();
+        Gun(const int& damage = 10, const float& maxDist = 2000.f, const sf::Time& fireDelay = sf::milliseconds(200), const float& accuracyMod = 5);
+        virtual ~Gun(){}
 
         //handle a player's mouselick when he tries to fire a gun
         //have this function in order to have guns that handle button presses differently
-        void handleButtonPress();
-        void handleButtonRelease();
+        virtual void handleButtonPress();
+        virtual void handleButtonRelease();
 
         //determines if it is time to fire again and fires
-        void updateGunfire(const sf::Time& delta);
+        virtual void updateGunfire(const sf::Time& delta);
 
         void updateBullets(const sf::Time& delta);
 
@@ -84,7 +93,7 @@ class Gun {
         void drawAll(sf::RenderWindow& window);
 
         //draw gun's line of sight
-        void drawSight(sf::RenderWindow& window);
+        virtual void drawSight(sf::RenderWindow& window);
 
         //draw the bullets that have already checked for collision with other entities
         void drawBullets(sf::RenderWindow& window);

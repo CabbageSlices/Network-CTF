@@ -3,11 +3,12 @@
 
 using std::tr1::shared_ptr;
 
-Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor) :
+Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :
     line(bulletLine),
-    LIFE_TIME(sf::milliseconds(80)),
+    LIFE_TIME(sf::milliseconds(160)),
     elapsedTime(sf::seconds(0)),
     canCollide(true),
+    damage(bulletDamage),
     floor(originFloor)
     {
 
@@ -35,7 +36,7 @@ void Bullet::disableCollision() {
 
 int Bullet::getDamage() {
 
-    return 10;
+    return damage;
 }
 
 const unsigned Bullet::getFloor() const {

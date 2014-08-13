@@ -87,6 +87,10 @@ LineSegment::LineSegment(const sf::Vector2f& start, const sf::Vector2f& end, con
         if(textureFile != "") {
 
             texture.loadFromFile(textureFile);
+        } else {
+
+            //no texture so its probably a bullet so make it fade out
+            lineShape[1].color = sf::Color::Transparent;
         }
 
     }

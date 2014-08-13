@@ -1,0 +1,19 @@
+#ifndef SHOTGUN_H_INCLUDED
+#define SHOTGUN_H_INCLUDED
+
+#include "Gun"
+
+class Shotgun : public Gun {
+    
+    private:
+    
+        //number of bullet
+    public:
+        
+        Shotgun();
+        virtual ~Shotgun(){}
+        
+        virtual void updateGunFire(const sf::Time& delta);
+};
+
+#endif // SHOTGUN_H_INCLUDED

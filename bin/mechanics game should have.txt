@@ -2,7 +2,7 @@ Be able to pick up different weapons on the ground
 	-start off with pistol and pick up different guns from the ground to replace their current gun
 	-if you pick up a gun that you are currently holding you replenish your ammo
 	
-	types of guns
+	***done***types of guns
 		-pistol, basic automatic gun, 10 - 20% health damage (undecided), can kill one person before reloading
 		-shotgun, spread shot, each bullet does 5 - 10% damage, terrible long range accuracy. maybe 2 - 3 shots before reloading
 		-sniper, 2 bullets, each does more than 50% damage, high accuracy, long reload times

@@ -1,0 +1,20 @@
+#include "Shotgun.h"
+
+Shotgun::Shotgun() :
+    Gun(13, 800, sf::milliseconds(750), 14)
+    {
+        
+    }
+    
+void Shotgun::updateGunFire(const sf::Time& delta) {
+    
+    timeSinceFired += delta;
+
+    //if gun if firing and the delay is over shoot a bullet
+    if(fired && timeSinceFired > fireDelay) {
+        
+        //shotgun fires multiple bullets so fire multiple times
+        fire();
+        timeSinceFired = sf::seconds(0);
+    }
+}

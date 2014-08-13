@@ -214,7 +214,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1407788149 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1407877874 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -293,7 +293,7 @@
 	<cmath>
 	<cstdlib>
 
-1407786873 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1407877874 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -325,16 +325,16 @@
 	"UndefinedLineSegment.h"
 	<cmath>
 
-1407782893 source:c:\users\nimesh\documents\github\network-ctf\bullet.cpp
+1407885482 source:c:\users\nimesh\documents\github\network-ctf\bullet.cpp
 	"Bullet.h"
 	"LineSegment.h"
 
-1407785874 c:\users\nimesh\documents\github\network-ctf\bullet.h
+1407880146 c:\users\nimesh\documents\github\network-ctf\bullet.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1407786730 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
+1407885448 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -343,7 +343,7 @@
 	"Floors.h"
 	<iostream>
 
-1407786740 c:\users\nimesh\documents\github\network-ctf\gun.h
+1407883757 c:\users\nimesh\documents\github\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
@@ -575,12 +575,14 @@
 	<vector>
 	<tr1/memory>
 
-1407785466 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1407885051 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
 	"Flag.h"
-	"Gun.h"
+	"Sniper.h"
+	"Pistol.h"
+	"Shotgun.h"
 	"Floors.h"
 	"TeamManager.h"
 	<iostream>
@@ -719,4 +721,22 @@
 
 1407782554 source:c:\users\nimesh\documents\github\network-ctf\floors.cpp
 	"Floors.h"
+
+1407880146 source:c:\users\nimesh\documents\github\network-ctf\pistol.cpp
+	"Pistol.h"
+
+1407882470 c:\users\nimesh\documents\github\network-ctf\pistol.h
+	"Gun.h"
+
+1407883630 c:\users\nimesh\documents\github\network-ctf\sniper.h
+	"Gun.h"
+
+1407884511 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
+	"Sniper.h"
+
+1407885246 c:\users\nimesh\documents\github\network-ctf\shotgun.h
+	"Gun.h"
+
+1407885642 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
+	"Shotgun.h"
 

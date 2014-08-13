@@ -25,12 +25,14 @@ class Bullet {
 
         bool canCollide;
 
+        const int damage;
+
         //floor the bullet was fired on
         unsigned floor;
 
     public:
 
-        Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor);
+        Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage);
 
         void updateElapsedTime(const sf::Time& deltaTime);
 

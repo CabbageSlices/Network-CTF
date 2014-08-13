@@ -11,21 +11,22 @@ using std::sin;
 using std::tr1::shared_ptr;
 using std::vector;
 
-Gun::Gun() :
+Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, const float& accuracyMod) :
     lineOfSight(sf::Lines, 2),
     lineTexture(),
     bullets(),
-    MAX_DISTANCE_FIRED(2000.f),
+    MAX_DISTANCE_FIRED(maxDist),
     rotation(0.0),
-    accuracyModifier(0, 0),
+    accuracyModifier(accuracyMod),
     queuedRotations(),
     fired(false),
     timeSinceFired(sf::seconds(0)),
-    fireDelay(sf::milliseconds(200)),
-    floor(OVERGROUND_FLOOR)
+    fireDelay(firingDelay),
+    floor(OVERGROUND_FLOOR),
+    bulletDamage(damage)
     {
         //set a default location for the line of sight
-        updateLineOfSight(sf::Vector2f(0, 0), 0.0);
+        updateLineOfSight(sf::Vector2f(0, 0));
         lineOfSight[0].texCoords = sf::Vector2f(0, 0);
         lineOfSight[1].texCoords = sf::Vector2f(100, 0);
 
@@ -37,7 +38,6 @@ void Gun::handleButtonPress() {
     //being firing and set the time since last fired equal to the fire delay that way gun fires immediately
     //so spamming the fire button is faster than holding it if user presses fast enough
     fired = true;
-    timeSinceFired = fireDelay;
 }
 
 void Gun::handleButtonRelease() {
@@ -77,7 +77,8 @@ void Gun::updateBullets(const sf::Time& delta) {
 
 void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation) {
 
-    updateLineOfSight(playerPosition, playerRotation);
+    rotation = playerRotation;
+    updateLineOfSight(playerPosition);
 }
 
 void Gun::drawAll(sf::RenderWindow& window) {
@@ -132,8 +133,9 @@ float Gun::fire() {
 
     //modify the rotation by randomly adding and subtracting the accuracy modifier in order to randomly change range
     //because the range is always positive you have to subtract and add a value manually
-    gunfireAngle -= getRand(accuracyModifier.y, accuracyModifier.x);
-    gunfireAngle += getRand(accuracyModifier.y, accuracyModifier.x);
+    //add a minimum that isn't 0 that way it decreases the chances of hitting right in the middle
+    gunfireAngle -= getRand(getAccuracyModifier(), getAccuracyModifier() / 2);
+    gunfireAngle += getRand(getAccuracyModifier(), getAccuracyModifier() / 2);
 
     sf::Vector2f bulletEndPoint = calculateEndPoint(lineOfSight[0].position, gunfireAngle);
 
@@ -164,9 +166,8 @@ void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, c
     bullets[bullets.size() - 1]->disableCollision();
 }
 
-void Gun::updateLineOfSight(const sf::Vector2f& origin, const float& newRotation) {
+void Gun::updateLineOfSight(const sf::Vector2f& origin) {
 
-    rotation = newRotation;
     lineOfSight[0].position = origin;
 
     //calculate the end point of the line of sight
@@ -200,7 +201,12 @@ void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bull
     //create a line for the bullet
     shared_ptr<LineSegment> bulletLine = createLine(bulletBegin, bulletEnd,
                                                     "", sf::Vector2f(0, 0), sf::Vector2f(0, 0));
-    shared_ptr<Bullet> bullet(new Bullet(bulletLine, bulletFloor));
+    shared_ptr<Bullet> bullet(new Bullet(bulletLine, bulletFloor, bulletDamage));
 
     bullets.push_back(bullet);
+}
+
+const float Gun::getAccuracyModifier() const {
+
+    return accuracyModifier;
 }

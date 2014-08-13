@@ -2,7 +2,9 @@
 #include "Lerp.h"
 #include "math.h"
 #include "Flag.h"
-#include "Gun.h"
+#include "Sniper.h"
+#include "Pistol.h"
+#include "Shotgun.h"
 #include "Floors.h"
 #include "TeamManager.h"
 
@@ -26,7 +28,7 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Gun()),
+    gun(new Shotgun()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
