@@ -28,6 +28,8 @@ class UserPlayer : public PlayerBase{
             RELEASE_RIGHT,
             RELEASE_UP,
             RELEASE_DOWN,
+            
+            RELOAD,
         };
 
         //information about what the player inputted and when he inputted it
@@ -94,11 +96,11 @@ class UserPlayer : public PlayerBase{
         //player's current keystate
         KeyState keystate;
 
-        const float getHorizontalVelocity();
-        const float getVerticalVelocity();
-        
+        const float getHorizontalVelocity() const;
+        const float getVerticalVelocity() const;
+
         //what factor to reduce velocity by when player ish olding flag
-        const float getVelocityReduc
+        const float getVelocityReduction() const;
 
         //find the next input to process if there is any, if there is none then return an invalid input
         //advances the current input id up 1 if an input is found
@@ -117,6 +119,8 @@ class UserPlayer : public PlayerBase{
 
         //using the players current keystate determine his movement
         void determineMovement();
+        
+        bool canReload() const;
 
     protected:
 

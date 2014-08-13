@@ -220,6 +220,12 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
             continue;
         }
 
+        //if player and bullet aren't on same floor don't check collision
+        if(player->player.getFloor() != bullet->getFloor()) {
+
+            continue;
+        }
+
         //get the position of this player at the time the bullet was fired, default position is the player's destination position
         sf::Vector2f pastPosition(player->player.getDestinationPosition());
 
@@ -333,6 +339,18 @@ int ServerGameManager::calculateMaxStatesSaved() {
     //number of states saved is equal to the number of updates sent to the clients in one second, rounded up (always)
     //calculations done in milliseconds
     return (1000 / stateUpdateDelay.asMilliseconds()) + 1;
+}
+
+void ServerGameManager::disconnectPlayer(unsigned playerIndex) {
+    
+    if(playerIndex > players.size()) {
+        
+        return;
+    }
+    
+    //rem
+    
+    players.erase(players.begin() + playerIndex);
 }
 
 void ServerGameManager::drawPlayers(sf::RenderWindow& window) {

@@ -341,6 +341,20 @@ int ServerGameManager::calculateMaxStatesSaved() {
     return (1000 / stateUpdateDelay.asMilliseconds()) + 1;
 }
 
+void ServerGameManager::disconnectPlayer(unsigned playerIndex) {
+
+    if(playerIndex > players.size()) {
+
+        return;
+    }
+
+    //remove him from the current team so the teammanager can assign
+    //his team to another player who connects
+    teamManager.removePlayer(players[playerIndex]->player.getTeam());
+
+    players.erase(players.begin() + playerIndex);
+}
+
 void ServerGameManager::drawPlayers(sf::RenderWindow& window) {
 
     for(auto& player : players) {

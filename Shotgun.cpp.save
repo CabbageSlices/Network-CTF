@@ -1,20 +1,28 @@
 #include "Shotgun.h"
 
 Shotgun::Shotgun() :
-    Gun(13, 800, sf::milliseconds(750), 14)
+    Gun(13, 500, sf::milliseconds(200), 80),
+    bulletsPerShot(100 / bulletDamage)
     {
-        
+        maxCurrentMagazine = 4;
+        maxTotalMagazine = 12;
+        currentMagazine = maxCurrentMagazine;
+        totalMagazine = maxTotalMagazine;
     }
-    
-void Shotgun::updateGunFire(const sf::Time& delta) {
-    
+
+void Shotgun::updateGunfire(const sf::Time& delta) {
+
     timeSinceFired += delta;
 
     //if gun if firing and the delay is over shoot a bullet
-    if(fired && timeSinceFired > fireDelay) {
-        
+    if(canFireGun()) {
+
         //shotgun fires multiple bullets so fire multiple times
-        fire();
+        for(int shotsFired = 0; shotsFired < bulletsFired; ++shotsFired) {
+
+            fire();
+        }
+
         timeSinceFired = sf::seconds(0);
     }
 }

@@ -158,6 +158,8 @@ class PlayerBase {
         bool timedOut();
         void resetDataTimer();
 
+        const std::tr1::shared_ptr<Gun> getGun() const;
+
         const unsigned short& getKills() const;
         const unsigned short& getDeaths() const;
         const unsigned short& getFlagCaptures() const;

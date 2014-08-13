@@ -42,6 +42,8 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -PLAYER'S FLAG CAPTURES
     -PLAYER'S FLAG RETURNS
     -PLAYER'S FLOOR
+    -PLAYER'S CURRENT AMMO
+    -PLAYER'S TOTAL AMMO
 
     -------INFO ABOUT FLAGS
     -IF FLAG FOR TEAM 1 IS AT BASE

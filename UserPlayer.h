@@ -28,6 +28,8 @@ class UserPlayer : public PlayerBase{
             RELEASE_RIGHT,
             RELEASE_UP,
             RELEASE_DOWN,
+
+            RELOAD,
         };
 
         //information about what the player inputted and when he inputted it
@@ -117,6 +119,9 @@ class UserPlayer : public PlayerBase{
 
         //using the players current keystate determine his movement
         void determineMovement();
+
+        bool canReload() const;
+        void reload();
 
     protected:
 

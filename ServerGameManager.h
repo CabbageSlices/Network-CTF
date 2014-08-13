@@ -94,8 +94,9 @@ class ServerGameManager : public GameManager {
         //calculate how many updates the server saves before deleting old position data
         int calculateMaxStatesSaved();
 
-        //update all connected players, meaning apply physics, not send data
-        void updatePlayers(const float& delta);
+        //disconnect the given player, that is, remove him from the container of players
+        //take the index of the player in the vector
+        void disconnectPlayer(unsigned playerIndex);
 
         void drawPlayers(sf::RenderWindow& window);
 

@@ -96,6 +96,7 @@ void PlayerBase::updateGun(const float& delta) {
 
     gun->updateGunfire(sf::seconds(delta));
     gun->updateBullets(sf::seconds(delta));
+    gun->animate();
 }
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
@@ -285,11 +286,15 @@ void PlayerBase::resetDataTimer() {
     dataReceiveTimer.restart();
 }
 
+const shared_ptr<Gun> PlayerBase::getGun() const {
+
+    return gun;
+}
+
 const unsigned short& PlayerBase::getKills() const {
 
     return kills;
 }
-
 
 const unsigned short& PlayerBase::getDeaths() const {
 

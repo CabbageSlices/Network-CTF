@@ -1,12 +1,17 @@
 #include "Sniper.h"
 
 Sniper::Sniper() :
-    Gun(75, 2500, sf::milliseconds(1000), 12),
+    Gun(75, 2500, sf::milliseconds(10), 15),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
     accuracyChangeRate(10),
     accuracyRange(sf::Triangles, 3)
     {
+        maxCurrentMagazine = 2;
+        maxTotalMagazine = 10;
+        currentMagazine = maxCurrentMagazine;
+        totalMagazine = maxTotalMagazine;
+
         setupAccuracyRange();
     }
 
@@ -62,12 +67,7 @@ void Sniper::drawSight(sf::RenderWindow& window) {
 
 bool Sniper::canIncreaseAccuracy() {
 
-    return timeSinceFired > fireDelay && holdingFireButton;
-}
-
-bool Sniper::canFireGun() {
-
-    return timeSinceFired > fireDelay && fired;
+    return timeSinceFired > fireDelay && holdingFireButton && !mustReload();
 }
 
 void Sniper::updateLineOfSight(const sf::Vector2f& origin) {

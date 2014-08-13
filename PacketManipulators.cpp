@@ -5,6 +5,7 @@
 #include "TeamManager.h"
 #include "PlayerBase.h"
 #include "Flag.h"
+#include "Gun.h"
 
 #include <iostream>
 #include "Bullet.h"
@@ -100,6 +101,8 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getFlagCaptures();
     dataDestination << player.getFlagReturns();
     dataDestination << player.getFloor();
+    dataDestination << player.getGun()->getCurrentAmmo();
+    dataDestination << player.getGun()->getTotalAmmo();
 
     dataDestination << flagManager->teamAFlag()->isAtSpawn() << flagManager->teamBFlag()->isAtSpawn();
     dataDestination << flagManager->teamAFlag()->isHeld() << flagManager->teamBFlag()->isHeld();
@@ -149,15 +152,23 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
 
+    player.setKills(kills);
+    player.setDeaths(deaths);
+    player.setCaptures(flagCaptures);
+    player.setReturns(flagReturns);
+
     unsigned floor = 0;
     updatePacket >> floor;
 
     player.setFloor(floor);
 
-    player.setKills(kills);
-    player.setDeaths(deaths);
-    player.setCaptures(flagCaptures);
-    player.setReturns(flagReturns);
+    int currentAmmo = 0;
+    int totalAmmo = 0;
+
+    updatePacket >> currentAmmo >> totalAmmo;
+
+    player.getGun()->setCurrentAmmo(currentAmmo);
+    player.getGun()->setTotalAmmo(totalAmmo);
 
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;

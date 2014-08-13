@@ -60,6 +60,32 @@ class Gun {
 
         int bulletDamage;
 
+        //maximum size of the current magazine upon reloading
+        int maxCurrentMagazine;
+
+        //max amount of ammo gun can have in reserve to reload
+        int maxTotalMagazine;
+
+        //ammo for the gun
+        //ammo left
+        int currentMagazine;
+
+        //total ammo is how many rounds of magazines the gun has
+        int totalMagazine;
+
+        bool reloading;
+
+        sf::Clock animationTimer;
+
+        //time to move from one frame of animation to then ext
+        sf::Time frameTime;
+
+        //current frame of animtion
+        int frame;
+
+        ///temporary counters, number of frames for reloading animation in order to reload and have psuedo animations
+        const int reloadingFrameCount;
+
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
 
@@ -72,6 +98,17 @@ class Gun {
         //get the accuracy modifier to use when firing the gun
         //different guns might use different accuracy modifier than the default one
         virtual const float getAccuracyModifier() const;
+
+        bool canFireGun() const;
+
+        //complete the reloading action, actually refills the ammo
+        void finishReloading();
+
+        //reset all drawing state to being a new animation
+        void resetAnimation();
+
+        //different guns might handle ammo use differetly
+        virtual void useAmmo();
 
     public:
 
@@ -90,6 +127,17 @@ class Gun {
 
         void updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation);
 
+        //attempt to reload, returns true if reloading started, that is the gun has ammo left to reload so it can begin to reload
+        //does not complete reloading, that happens once the animation finishes
+        bool reload();
+
+        bool canReload() const;
+
+        //if gun is empty it must absolutely reload
+        bool mustReload() const;
+
+        void animate();
+
         void drawAll(sf::RenderWindow& window);
 
         //draw gun's line of sight
@@ -104,6 +152,13 @@ class Gun {
         void clearRotations();
 
         void setFloor(const unsigned& floor);
+
+        void setCurrentAmmo(const int& amount);
+
+        const int getCurrentAmmo() const;
+
+        void setTotalAmmo(const int& amount);
+        const int getTotalAmmo() const;
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

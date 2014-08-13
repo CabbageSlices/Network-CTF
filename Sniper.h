@@ -30,7 +30,6 @@ class Sniper : public Gun {
         void drawAccuracyRange(sf::RenderWindow& window);
 
         bool canIncreaseAccuracy();
-        bool canFireGun();
 
     protected:
 

@@ -177,13 +177,13 @@
 
 1407452473 c:\users\nimesh\documents\github\network-ctf\packetidentification.h
 
-1407785874 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
+1407967952 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
 	"SFML/Network.hpp"
 	"ServerGameManager.h"
 	<vector>
 	<tr1/memory>
 
-1407782338 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
+1407969126 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
 	"SFML/Network.hpp"
 	"UserPlayer.h"
 	"ConnectionManager.h"
@@ -214,7 +214,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1407877874 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1407967953 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -279,7 +279,7 @@
 
 1405148931 c:\users\nimesh\documents\github\network-ctf\lerp.h
 
-1405148931 source:c:\users\nimesh\documents\github\network-ctf\linesegment.cpp
+1407953503 source:c:\users\nimesh\documents\github\network-ctf\linesegment.cpp
 	"LineSegment.h"
 	"UndefinedLineSegment.h"
 	<cmath>
@@ -293,7 +293,7 @@
 	<cmath>
 	<cstdlib>
 
-1407877874 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1407968804 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -334,7 +334,7 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1407885448 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
+1407968588 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -343,13 +343,13 @@
 	"Floors.h"
 	<iostream>
 
-1407883757 c:\users\nimesh\documents\github\network-ctf\gun.h
+1407965423 c:\users\nimesh\documents\github\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 	<vector>
 
-1407785874 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
+1407967993 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -357,6 +357,7 @@
 	"TeamManager.h"
 	"PlayerBase.h"
 	"Flag.h"
+	"Gun.h"
 	<iostream>
 	"Bullet.h"
 	"LineSegment.h"
@@ -567,7 +568,7 @@
 	<vector>
 	<tr1/memory>
 
-1407782893 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1407968020 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -575,7 +576,7 @@
 	<vector>
 	<tr1/memory>
 
-1407885051 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1407968195 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -587,14 +588,14 @@
 	"TeamManager.h"
 	<iostream>
 
-1407452800 c:\users\nimesh\documents\github\network-ctf\userplayer.h
+1407961466 c:\users\nimesh\documents\github\network-ctf\userplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1407453248 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1407965423 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
@@ -728,15 +729,16 @@
 1407882470 c:\users\nimesh\documents\github\network-ctf\pistol.h
 	"Gun.h"
 
-1407883630 c:\users\nimesh\documents\github\network-ctf\sniper.h
+1407956323 c:\users\nimesh\documents\github\network-ctf\sniper.h
 	"Gun.h"
 
-1407884511 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
+1407966364 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
 	"Sniper.h"
 
-1407885246 c:\users\nimesh\documents\github\network-ctf\shotgun.h
+1407960402 c:\users\nimesh\documents\github\network-ctf\shotgun.h
 	"Gun.h"
 
-1407885642 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
+1407968773 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
 	"Shotgun.h"
+	<iostream>
 

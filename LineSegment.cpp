@@ -90,7 +90,8 @@ LineSegment::LineSegment(const sf::Vector2f& start, const sf::Vector2f& end, con
         } else {
 
             //no texture so its probably a bullet so make it fade out
-            lineShape[1].color = sf::Color(255, 255, 255, 25);
+            lineShape[0].color = sf::Color::Yellow;
+            lineShape[1].color = sf::Color(255, 255, 0, 25);
         }
 
     }

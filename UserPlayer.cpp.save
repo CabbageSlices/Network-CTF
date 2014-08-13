@@ -49,6 +49,11 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
             placeIntoQueue(createInput(PRESS_DOWN));
         }
+
+        if(event.key.code == sf::Keyboard::R) {
+
+            placeIntoQueue(createInput(RELOAD));
+        }
     }
 
     if(event.type == sf::Event::MouseButtonPressed) {
@@ -214,6 +219,8 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);
 
     updateGun(delta);
+    
+    if()
 }
 
 void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
@@ -277,18 +284,21 @@ void UserPlayer::processInput(const Input& inputToProcess) {
 
         keystate.pressedLeft = true;
 
-    }else if(action == PRESS_RIGHT) {
+    } else if(action == PRESS_RIGHT) {
 
         keystate.pressedRight = true;
 
-    }else if(action == PRESS_UP) {
+    } else if(action == PRESS_UP) {
 
         keystate.pressedUp = true;
 
-    }else if(action == PRESS_DOWN) {
+    } else if(action == PRESS_DOWN) {
 
         keystate.pressedDown = true;
 
+    } else if(action == RELOAD && canReload()) {
+
+        reload();
     }
 
     if(action == RELEASE_LEFT) {
@@ -376,7 +386,17 @@ void UserPlayer::determineMovement() {
     //if playeri s holding flag reduce his velocity
     if(isHoldingFlag()) {
 
-       /// velocities.x *= getVelocityReduction();
-        ///velocities.y *= getVelocityReduction();
+       velocities.x *= getVelocityReduction();
+       velocities.y *= getVelocityReduction();
     }
+}
+
+bool UserPlayer::canReload() const {
+
+    return gun->canReload();
+}
+
+void UserPlayer::reload() {
+
+    gun->reload();
 }
