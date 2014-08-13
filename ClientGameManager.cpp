@@ -157,6 +157,7 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
         if(connectedPlayers[index]->timedOut()) {
 
             connectedPlayers.erase(connectedPlayers.begin() + index);
+            continue;
         }
 
         connectedPlayers[index]->updateGun(delta);
