@@ -33,6 +33,11 @@ void Shotgun::updateGunfire(const sf::Time& delta) {
     }
 }
 
+GunTypes Shotgun::getGunType() const {
+
+    return SHOTGUN;
+}
+
 void Shotgun::useAmmo() {
 
     //every time a bullet is fired increase the bullets fired count

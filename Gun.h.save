@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "GunTypes.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -130,8 +131,11 @@ class Gun {
         //attempt to reload, returns true if reloading started, that is the gun has ammo left to reload so it can begin to reload
         //does not complete reloading, that happens once the animation finishes
         bool reload();
-        
+
         bool canReload() const;
+
+        //if gun is empty it must absolutely reload
+        bool mustReload() const;
 
         void animate();
 
@@ -156,6 +160,8 @@ class Gun {
 
         void setTotalAmmo(const int& amount);
         const int getTotalAmmo() const;
+        
+        virtual GunTypes getGunType() const;
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

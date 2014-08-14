@@ -159,6 +159,7 @@ class PlayerBase {
         void resetDataTimer();
 
         const std::tr1::shared_ptr<Gun> getGun() const;
+        void setGun(std::tr1::shared_ptr<Gun> newGun);
 
         const unsigned short& getKills() const;
         const unsigned short& getDeaths() const;

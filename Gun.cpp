@@ -197,6 +197,11 @@ const int Gun::getTotalAmmo() const {
     return totalMagazine;
 }
 
+GunTypes Gun::getGunType() const {
+
+    return PISTOL;
+}
+
 float Gun::fire() {
 
     //angle at which gun was fired

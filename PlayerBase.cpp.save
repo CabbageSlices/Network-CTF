@@ -291,6 +291,11 @@ const shared_ptr<Gun> PlayerBase::getGun() const {
     return gun;
 }
 
+void PlayerBase::setGun(shared_ptr<Gun>& newGun) {
+    
+    gun = newGun;
+}
+
 const unsigned short& PlayerBase::getKills() const {
 
     return kills;

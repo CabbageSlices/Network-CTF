@@ -1,19 +1,23 @@
 #include "Bullet.h"
 #include "LineSegment.h"
 #include "math.h"
-#include "Lerp.h"
 
 using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :
     line(bulletLine),
     bulletTracer(sf::Vector2f(25, 2)),
+    tracerTravelDistance(0, 0),
     LIFE_TIME(sf::milliseconds(200)),
     elapsedTime(sf::seconds(0)),
+    tracerVelocity(0, 0),
     canCollide(true),
     damage(bulletDamage),
     floor(originFloor)
     {
+        tracerVelocity.x = (bulletLine->getEndPoint().x - bulletLine->getStartPoint().x) / LIFE_TIME.asSeconds();
+        tracerVelocity.y = (bulletLine->getEndPoint().y - bulletLine->getStartPoint().y) / LIFE_TIME.asSeconds();
+
         bulletTracer.setPosition(bulletLine->getStartPoint());
         bulletTracer.setOrigin(calculateCenter(bulletTracer.getLocalBounds()));
         bulletTracer.setRotation(-calculateAngle(bulletLine->getStartPoint(), bulletLine->getEndPoint()));
@@ -32,7 +36,7 @@ void Bullet::updateElapsedTime(const sf::Time& deltaTime) {
         return;
     }
 
-    interpolateTracer();
+    moveTracer(deltaTime);
 }
 
 bool Bullet::canDraw() {
@@ -62,7 +66,10 @@ const unsigned Bullet::getFloor() const {
 
 void Bullet::draw(sf::RenderWindow& window) {
 
-    window.draw(bulletTracer);
+    if(shouldDrawTracer()) {
+
+       window.draw(bulletTracer);
+    }
 }
 
 void Bullet::setEndPoint(const sf::Vector2f endPoint) {
@@ -75,11 +82,19 @@ shared_ptr<LineSegment> Bullet::getLine() {
     return line;
 }
 
-void Bullet::interpolateTracer() {
+bool Bullet::shouldDrawTracer() {
+
+    return (distanceToPoint(line->getStartPoint(), line->getEndPoint()) > distanceToPoint(sf::Vector2f(0, 0), tracerTravelDistance));
+}
+
+void Bullet::moveTracer(const sf::Time& delta) {
+
+    float xOffset = tracerVelocity.x * delta.asSeconds();
+    float yOffset = tracerVelocity.y * delta.asSeconds();
 
     //move the tracer closer to the end point of the bullet
-    const float xTransition = interpolate(line->getStartPoint().x, line->getEndPoint().x, elapsedTime.asSeconds() / LIFE_TIME.asSeconds());
-    const float yTransition = interpolate(line->getStartPoint().y, line->getEndPoint().y, elapsedTime.asSeconds() / LIFE_TIME.asSeconds());
+    bulletTracer.move(xOffset, yOffset);
 
-    bulletTracer.setPosition(line->getStartPoint().x + xTransition, line->getStartPoint().y + yTransition);
+    tracerTravelDistance.x += xOffset;
+    tracerTravelDistance.y += yOffset;
 }

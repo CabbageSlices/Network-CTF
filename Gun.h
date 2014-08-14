@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "GunTypes.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -159,6 +160,8 @@ class Gun {
 
         void setTotalAmmo(const int& amount);
         const int getTotalAmmo() const;
+
+        virtual GunTypes getGunType() const;
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

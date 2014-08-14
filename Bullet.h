@@ -21,12 +21,19 @@ class Bullet {
         //to make it look like a bullet was fired
         sf::RectangleShape bulletTracer;
 
+        //total distance tracer has traveled, if tracer travels more than the distance from the bullet's start to end points, stop drawing the tracer
+        sf::Vector2f tracerTravelDistance;
+
         //how long the bullet should live for AFTER IT HAS COLLIDED
         const sf::Time LIFE_TIME;
 
         //how much time has passed since bullet was first fired
         //increased every update loop by delta time
         sf::Time elapsedTime;
+
+        //the speed of the tracer should be such that it can cover the initial distance of the bullet within it's lifetime
+        //that is, the length of the line segment of the bullet before it collides with anything / life time of the bullet = velocity
+        sf::Vector2f tracerVelocity;
 
         bool canCollide;
 
@@ -35,7 +42,9 @@ class Bullet {
         //floor the bullet was fired on
         unsigned floor;
 
-        void interpolateTracer();
+        //the tracer needs to stop drawing once it reaches near the end point
+        bool shouldDrawTracer();
+        void moveTracer(const sf::Time& delta);
 
     public:
 

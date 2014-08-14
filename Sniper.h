@@ -47,6 +47,8 @@ class Sniper : public Gun {
         virtual void updateGunfire(const sf::Time& delta);
 
         virtual void drawSight(sf::RenderWindow& window);
+
+        virtual GunTypes getGunType() const;
 };
 
 #endif // SNIPER_H_INCLUDED

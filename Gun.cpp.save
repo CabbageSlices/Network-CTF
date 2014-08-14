@@ -122,13 +122,6 @@ void Gun::animate() {
 
             finishReloading();
             resetAnimation();
-
-            cout << endl;
-            cout << endl;
-            cout << endl;
-            cout << endl;
-            cout << endl;
-            cout << endl;
         }
     }
 }
@@ -137,11 +130,6 @@ void Gun::drawAll(sf::RenderWindow& window) {
 
     drawSight(window);
     drawBullets(window);
-
-    if(reloading) {
-
-        cout << "reloading " << endl;
-    }
 }
 
 void Gun::drawSight(sf::RenderWindow& window) {
@@ -209,6 +197,11 @@ const int Gun::getTotalAmmo() const {
     return totalMagazine;
 }
 
+GunTypes Gun::getGunType() const {
+    
+    return PISTOL;
+}
+
 float Gun::fire() {
 
     //angle at which gun was fired
@@ -233,10 +226,10 @@ float Gun::fire() {
 }
 
 void Gun::fire(const float& angle) {
-    
+
     //if there are no bullets then don't try to fire
     if(mustReload()) {
-        
+
         return;
     }
 

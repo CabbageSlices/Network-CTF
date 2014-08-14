@@ -65,6 +65,11 @@ void Sniper::drawSight(sf::RenderWindow& window) {
     Gun::drawSight(window);
 }
 
+GunTypes Sniper::getGunType() const {
+
+    return SNIPER;
+}
+
 bool Sniper::canIncreaseAccuracy() {
 
     return timeSinceFired > fireDelay && holdingFireButton && !mustReload();

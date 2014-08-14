@@ -42,6 +42,7 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -PLAYER'S FLAG CAPTURES
     -PLAYER'S FLAG RETURNS
     -PLAYER'S FLOOR
+    -PLAYER'S GUN TYPE
     -PLAYER'S CURRENT AMMO
     -PLAYER'S TOTAL AMMO
 
@@ -70,6 +71,7 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
     -PLAYER TEAM
     -PLAYER HAS FLAG
     -PLAYER FLOOR
+    -PLAYER GUN TYPE
 
     -NUMBER OF BULLETS FIRED
         ---REPEAT THE FOLLOWING FOR EVERY BULLET

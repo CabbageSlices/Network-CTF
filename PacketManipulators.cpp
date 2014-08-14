@@ -6,6 +6,8 @@
 #include "PlayerBase.h"
 #include "Flag.h"
 #include "Gun.h"
+#include "GunHandlers.h"
+#include "GunTypes.h"
 
 #include <iostream>
 #include "Bullet.h"
@@ -37,6 +39,15 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
 
             flagManager->resetFlags();
         }
+    }
+}
+
+//makes sure the given player has the given gun type, if he doesn't then gives him the given type of gun
+void setGunTo(PlayerBase& player, GunTypes gunType) {
+
+    if(!isType(player.getGun(), gunType)) {
+
+        player.setGun(createGun(gunType));
     }
 }
 
@@ -101,6 +112,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getFlagCaptures();
     dataDestination << player.getFlagReturns();
     dataDestination << player.getFloor();
+    dataDestination << player.getGun()->getGunType();
     dataDestination << player.getGun()->getCurrentAmmo();
     dataDestination << player.getGun()->getTotalAmmo();
 
@@ -161,6 +173,12 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> floor;
 
     player.setFloor(floor);
+
+    int gunType = 0;
+    updatePacket >> gunType;
+
+    //if the gun on the server is not the same as the gun on the client, replace the gun on the client
+    setGunTo(player, static_cast<GunTypes>(gunType));
 
     int currentAmmo = 0;
     int totalAmmo = 0;
@@ -237,6 +255,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getTeam();
         updatePacket << player->player.isHoldingFlag();
         updatePacket << player->player.getFloor();
+        updatePacket << player->player.getGun()->getGunType();
 
         vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
 
@@ -253,54 +272,6 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
             updatePacket << endPoint.x << endPoint.y;
             updatePacket << bullet->getFloor();
         }
-    }
-}
-
-void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet) {
-
-    //id the packet
-    packet << PLAYER_GUNFIRE;
-
-    const vector<float> playerGunshotRotations = player.getGunshotsToSend();
-
-    packet << playerGunshotRotations.size();
-
-    packet << deltaFraction;
-
-    packet << lastServerUpdate;
-
-    for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
-
-        packet << playerGunshotRotations[gunshotsCreated];
-    }
-}
-
-void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
-
-    ///first read packet id since it hasn't been extracted yet
-    int packetId = 0;
-
-    packet >> packetId;
-
-    //read the number of gunshots fired
-    unsigned gunshots = 0;
-
-    packet >> gunshots;
-
-    packet >> deltaFraction;
-
-    packet >> lastServerUpdate;
-
-    //create gunshots for this player until there are no more gunshots left to created
-    for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {
-
-        float rotation = 0;
-
-        packet >> rotation;
-
-        player.fireGun(rotation);
-
-        player.setRotation(rotation);
     }
 }
 
@@ -346,6 +317,9 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         unsigned floor = 0;
         statePacket >> floor;
+
+        int gunType = 0;
+        statePacket >> gunType;
 
         struct BulletData {
 
@@ -420,6 +394,8 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setTeam(teamId);
         updatedPlayer->setFloor(floor);
 
+        setGunTo(*updatedPlayer, static_cast<GunTypes>(gunType));
+
         updateFlagInfo(holdingFlag, playerPosition, *updatedPlayer, flagManager);
 
         //now create the bullets for this player
@@ -427,6 +403,54 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
             updatedPlayer->fireGun(bullet.beginPosition, bullet.endPosition, bullet.floor);
         }
+    }
+}
+
+void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet) {
+
+    //id the packet
+    packet << PLAYER_GUNFIRE;
+
+    const vector<float> playerGunshotRotations = player.getGunshotsToSend();
+
+    packet << playerGunshotRotations.size();
+
+    packet << deltaFraction;
+
+    packet << lastServerUpdate;
+
+    for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
+
+        packet << playerGunshotRotations[gunshotsCreated];
+    }
+}
+
+void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
+
+    ///first read packet id since it hasn't been extracted yet
+    int packetId = 0;
+
+    packet >> packetId;
+
+    //read the number of gunshots fired
+    unsigned gunshots = 0;
+
+    packet >> gunshots;
+
+    packet >> deltaFraction;
+
+    packet >> lastServerUpdate;
+
+    //create gunshots for this player until there are no more gunshots left to created
+    for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {
+
+        float rotation = 0;
+
+        packet >> rotation;
+
+        player.fireGun(rotation);
+
+        player.setRotation(rotation);
     }
 }
 
