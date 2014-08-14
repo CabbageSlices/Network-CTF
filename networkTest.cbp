@@ -59,6 +59,9 @@
 		<Unit filename="GameWorld.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
+		<Unit filename="GunHandlers.cpp" />
+		<Unit filename="GunHandlers.h" />
+		<Unit filename="GunTypes.h" />
 		<Unit filename="Healthbar.cpp" />
 		<Unit filename="Healthbar.h" />
 		<Unit filename="InterpolatingPlayer.cpp" />

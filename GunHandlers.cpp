@@ -22,15 +22,15 @@ shared_ptr<Gun> createGun(const GunTypes& gunType) {
 
     if(gunType == SNIPER) {
 
-        shared_ptr<Gun> (new Sniper());
+        return shared_ptr<Gun> (new Sniper());
 
     } else if(gunType == PISTOL) {
 
-        shared_ptr<Gun> (new Pistol());
+        return shared_ptr<Gun> (new Pistol());
 
     } else if(gunType == SHOTGUN) {
 
-        shared_ptr<Gun> (new Shotgun());
+        return shared_ptr<Gun> (new Shotgun());
     }
 
     //by efault create a pistol
