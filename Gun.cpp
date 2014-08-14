@@ -17,6 +17,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     lineOfSight(sf::Lines, 2),
     lineTexture(),
     bullets(),
+    bulletsForClients(),
     MAX_DISTANCE_FIRED(maxDist),
     rotation(0.0),
     accuracyModifier(accuracyMod),
@@ -151,9 +152,14 @@ void Gun::drawBullets(sf::RenderWindow& window) {
     }
 }
 
-vector<shared_ptr<Bullet> > Gun::getBullets() {
+vector<shared_ptr<Bullet> >& Gun::getBullets() {
 
     return bullets;
+}
+
+vector<shared_ptr<Bullet> >& Gun::getBulletsForClients() {
+
+    return bulletsForClients;
 }
 
 const vector<float>& Gun::getQueuedRotations() const {
@@ -239,6 +245,10 @@ void Gun::fire(const float& angle) {
     //fire with new angle
     createBullet(lineOfSight[0].position, endPoint, floor);
 
+    //the new bullet fired needs to be queued to send to the clients
+    //since its the last bullet added to the container, copy the last object to the bulletsForClients
+    bulletsForClients.push_back(bullets[bullets.size() - 1]);
+
     useAmmo();
 }
 
@@ -248,7 +258,7 @@ void Gun::fire(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, c
 
     //a bullet created using start and end points are bullets sent from the server
     //meaning thye have already checked for collision
-    //so indcate the bullet has checked for collision, this bullet is the last bullet added to the container
+    //so indcate the bullet has checked for collision so it can draw, this bullet is the last bullet added to the container
     bullets[bullets.size() - 1]->disableCollision();
 }
 

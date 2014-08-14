@@ -33,6 +33,10 @@ class GameWorld {
 
         std::tr1::shared_ptr<FlagManager> flagManager;
 
+        //spawn zones of each team
+        sf::FloatRect teamASpawn;
+        sf::FloatRect teamBSpawn;
+
     public:
 
         GameWorld();
@@ -42,6 +46,9 @@ class GameWorld {
         std::vector<std::tr1::shared_ptr<Portal> >& getPortals(const unsigned& floor = OVERGROUND_FLOOR);
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
+
+        //get a spawn position for the given team, randomly gets a point wihtin that team's spawn zone
+        const sf::Vector2f getSpawnPoint(const unsigned& team) const;
 
         //load the given level, indicate success or failure
         bool load(std::string levelName);

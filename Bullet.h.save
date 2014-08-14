@@ -20,7 +20,7 @@ class Bullet {
         //because bullets look odd when they are drawn as a line, have this bullet image travel from the origin of the bullet to the end
         //to make it look like a bullet was fired
         sf::RectangleShape bulletTracer;
-        
+
         //total distance tracer has traveled, if tracer travels more than the distance from the bullet's start to end points, stop drawing the tracer
         sf::Vector2f tracerTravelDistance;
 
@@ -36,15 +36,14 @@ class Bullet {
         sf::Vector2f tracerVelocity;
 
         bool canCollide;
-        
-        //the tracer needs to stop drawing once it reaches near the end point
-        bool shouldDrawTracer();
 
         const int damage;
 
         //floor the bullet was fired on
         unsigned floor;
 
+        //the tracer needs to stop drawing once it reaches near the end point
+        bool shouldDrawTracer();
         void moveTracer(const sf::Time& delta);
 
     public:

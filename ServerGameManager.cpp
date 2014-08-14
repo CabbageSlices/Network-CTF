@@ -427,7 +427,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
         } else if(players[index]->player.shouldRespawn()) {
 
-            players[index]->player.respawn(sf::Vector2f(200, 300));
+            players[index]->player.respawn(getGameWorld().getSpawnPoint(players[index]->player.getTeam()));
         }
 
 

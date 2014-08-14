@@ -25,7 +25,12 @@ class Gun {
         //texture for the line of sight to give it graphics
         sf::Texture lineTexture;
 
+        //bullets that have been fired
         std::vector<std::tr1::shared_ptr<Bullet> > bullets;
+
+        //bullets whose data needs to be sent to the clients that way server can keep track of which data it has sent and which ones it hasn't
+        /// FOR SERVER ONLY
+        std::vector<std::tr1::shared_ptr<Bullet> > bulletsForClients;
 
         //maximum distance the gun can shoot in order to draw the line of sight and determine bullet's start and end points
         //that way players can't shoot accross the map
@@ -147,7 +152,9 @@ class Gun {
         //draw the bullets that have already checked for collision with other entities
         void drawBullets(sf::RenderWindow& window);
 
-        std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
+        std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
+        std::vector<std::tr1::shared_ptr<Bullet> >& getBulletsForClients();
+
         const std::vector<float>& getQueuedRotations() const;
 
         void clearRotations();

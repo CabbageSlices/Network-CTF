@@ -43,10 +43,10 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
 }
 
 //makes sure the given player has the given gun type, if he doesn't then gives him the given type of gun
-void setGunTo(UserPlayer& player, GunTypes gunType) {
-    
+void setGunTo(PlayerBase& player, GunTypes gunType) {
+
     if(!isType(player.getGun(), gunType)) {
-        
+
         player.setGun(createGun(gunType));
     }
 }
@@ -257,13 +257,19 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getFloor();
         updatePacket << player->player.getGun()->getGunType();
 
-        vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
+        vector<shared_ptr<Bullet> > bullets = player->player.getGun().getBulletsToClients();
 
         //indicate how many bullets were fired
         updatePacket << bullets.size();
 
         //add teh beginning and end locaitons of all bullets so the clients receiving the packet can create a bullet for this player so player can see where the shot was fired
+        //only send data about bullets if the data hasn't already been sent so clients don't have duplicate bullets
         for(auto& bullet : bullets) {
+
+            if(bullet->checkDataSent()) {
+
+                continue;
+            }
 
             sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
             sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
@@ -271,6 +277,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
             updatePacket << beginPoint.x << beginPoint.y;
             updatePacket << endPoint.x << endPoint.y;
             updatePacket << bullet->getFloor();
+            bullet->setDataSent(true);
         }
     }
 }
@@ -317,9 +324,9 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         unsigned floor = 0;
         statePacket >> floor;
-        
+
         int gunType = 0;
-        statePacket >> gunTy
+        statePacket >> gunType;
 
         struct BulletData {
 
@@ -393,6 +400,8 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
         updatedPlayer->setFloor(floor);
+
+        setGunTo(*updatedPlayer, static_cast<GunTypes>(gunType));
 
         updateFlagInfo(holdingFlag, playerPosition, *updatedPlayer, flagManager);
 

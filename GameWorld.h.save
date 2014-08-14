@@ -20,18 +20,22 @@ class Portal;
 class GameWorld {
 
     private:
-        
+
         //objects that exist in a floor
         struct GameFloor {
-            
+
             std::vector<std::tr1::shared_ptr<Block> > blocks;
             std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
             std::vector<std::tr1::shared_ptr<Portal> > portals;
         };
-        
-        std::map<unsigned, std::tr1::shared_ptr<GameFloor> > floors;
-        
+
+        std::map<const unsigned, std::tr1::shared_ptr<GameFloor> > floors;
+
         std::tr1::shared_ptr<FlagManager> flagManager;
+
+        //spawn zones of each team
+        sf::FloatRect teamASpawn;
+        sf::FloatRect teamBSpawn;
 
     public:
 
@@ -40,8 +44,11 @@ class GameWorld {
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<Portal> >& getPortals(const unsigned& floor = OVERGROUND_FLOOR);
-        
+
         std::tr1::shared_ptr<FlagManager> getFlagManager();
+        
+        //get a spawn position for the given team, randomly gets a point wihtin that team's spawn zone
+        const sf::Vector2f getSpawnPoint(const unsigned& team);
 
         //load the given level, indicate success or failure
         bool load(std::string levelName);
@@ -51,7 +58,7 @@ class GameWorld {
 
         //update the position of the given that the given player may have
         void updateFlagPosition(PlayerBase& player);
-        
+
         //draw the objects of the given floor
         void drawBackground(sf::RenderWindow& window, const unsigned& floor);
         void drawForeground(sf::RenderWindow& window, const unsigned& floor);

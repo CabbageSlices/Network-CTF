@@ -6,14 +6,21 @@
 #include "TeamManager.h"
 #include "PlayerBase.h"
 #include "Portal.h"
+#include "math.h"
+
+#include <iostream>
 
 using std::vector;
 using std::tr1::shared_ptr;
 using std::string;
+using std::cout;
+using std::endl;
 
 GameWorld::GameWorld():
     floors(),
-    flagManager()
+    flagManager(),
+    teamASpawn(0, 0, 0, 0),
+    teamBSpawn(0, 0, 0, 0)
     {
         //create new floors
         floors[OVERGROUND_FLOOR] = shared_ptr<GameFloor>(new GameFloor());
@@ -30,14 +37,31 @@ vector<shared_ptr<ForegroundObject> >& GameWorld::getForeground(const unsigned& 
     return floors[floor]->foregroundObjects;
 }
 
+vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
+
+    return floors[floor]->portals;
+}
+
+
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
 
     return flagManager;
 }
 
-vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
+const sf::Vector2f GameWorld::getSpawnPoint(const unsigned& team) const {
 
-    return floors[floor]->portals;
+    sf::FloatRect spawnAreaToUse = teamASpawn;
+
+    if(team == TEAM_B_ID) {
+
+        spawnAreaToUse = teamBSpawn;
+    }
+
+    //randomly generate an x and y position within the spawn area
+    sf::Vector2f spawnPoint(getRand(spawnAreaToUse.left + spawnAreaToUse.width, spawnAreaToUse.left),
+                             getRand(spawnAreaToUse.top + spawnAreaToUse.height, spawnAreaToUse.top));
+
+    return spawnPoint;
 }
 
 bool GameWorld::load(string levelName) {
@@ -46,6 +70,9 @@ bool GameWorld::load(string levelName) {
 
     flagManager.reset(new FlagManager(sf::Vector2f(0, 0), sf::Vector2f(500, 800)));
     floors[OVERGROUND_FLOOR]->portals.push_back(shared_ptr<Portal>(new Portal(sf::Vector2f(-200, 200), sf::Vector2f(600, 800), UNDERGROUND_FLOOR)));
+
+    teamASpawn = {0, 0, 500, 500};
+    teamBSpawn = {0, 500, 500, 500};
 
     return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }

@@ -257,12 +257,13 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getFloor();
         updatePacket << player->player.getGun()->getGunType();
 
-        vector<shared_ptr<Bullet> > bullets = player->player.getBullets();
+        vector<shared_ptr<Bullet> >& bullets = player->player.getGun()->getBulletsForClients();
 
         //indicate how many bullets were fired
         updatePacket << bullets.size();
 
         //add teh beginning and end locaitons of all bullets so the clients receiving the packet can create a bullet for this player so player can see where the shot was fired
+        //only send data about bullets if the data hasn't already been sent so clients don't have duplicate bullets
         for(auto& bullet : bullets) {
 
             sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
@@ -272,6 +273,9 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
             updatePacket << endPoint.x << endPoint.y;
             updatePacket << bullet->getFloor();
         }
+
+        //empty the container so next time you don't send duplicates
+        bullets.clear();
     }
 }
 
