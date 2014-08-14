@@ -1,22 +1,27 @@
 #include "Bullet.h"
 #include "LineSegment.h"
+#include "math.h"
 
 using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :
     line(bulletLine),
-    LIFE_TIME(sf::milliseconds(80)),
+    bulletTracer(sf::Vector2f(6 2)),
+    LIFE_TIME(sf::milliseconds(160)),
     elapsedTime(sf::seconds(0)),
     canCollide(true),
     damage(bulletDamage),
     floor(originFloor)
     {
-
+        bulletTracer.setOrigin(calculateCenter(bulletTracer.getGlobalBounds()));
+        bulletTracer.setRotation(calculateAngle(bulletLine->getStartPoint(), bulletLine->getEndPoint()));
+        bulletTracer.setFillColor(sf::Color::Yellow);
     }
 
 void Bullet::updateElapsedTime(const sf::Time& deltaTime) {
 
     elapsedTime += deltaTime;
+    interpolateTracer();
 }
 
 bool Bullet::canDraw() {
@@ -57,4 +62,13 @@ void Bullet::setEndPoint(const sf::Vector2f endPoint) {
 shared_ptr<LineSegment> Bullet::getLine() {
 
     return line;
+}
+
+void Bullet::interpolateTracer() {
+    
+    //move the tracer closer to the end point of the bullet
+    const float xTransition = interpolate(line->getStartPoint().x, line->getEndPoint().x, elapsedTime.asSeconds() / LIFE_TIME.asSeconds());
+    const float yTransition = interpolate(line->getStartPoint().y, line->getEndPoint().y, elapsedTime.asSeconds() / LIFE_TIME.asSeconds());
+    
+    bulletTracer.setPosition(line->getStartPoint().x + xTransition, line->getE)
 }

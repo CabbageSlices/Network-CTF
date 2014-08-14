@@ -17,6 +17,11 @@ class Bullet {
         //line of the bullet
         std::tr1::shared_ptr<LineSegment> line;
 
+        //because bullets look odd when they are drawn as a line, have this bullet image travel from the origin of the bullet to the end
+        //to make it look like a bullet was fired
+        sf::RectangleShape bulletTracer;
+
+        //how long the bullet should live for AFTER IT HAS COLLIDED
         const sf::Time LIFE_TIME;
 
         //how much time has passed since bullet was first fired
@@ -29,6 +34,8 @@ class Bullet {
 
         //floor the bullet was fired on
         unsigned floor;
+
+        void interpolateTracer();
 
     public:
 
