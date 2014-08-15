@@ -1,5 +1,7 @@
 #include "StaticObject.h"
 #include "math.h"
+#include "UserPlayer.h"
+#include "Collision.h"
 
 StaticObject::StaticObject(const sf::Vector2f& centerPosition):
     collisionBox(sf::Vector2f(20, 20))
@@ -23,6 +25,13 @@ const sf::FloatRect StaticObject::getCollisionBox() const {
 const sf::Vector2f StaticObject::getPosition() const {
 
     return collisionBox.getPosition();
+}
+
+void StaticObject::handleCollision(UserPlayer& collidingPlayer) {
+
+    sf::Vector2f movementOffset = calculateCollisionOffset(collidingPlayer.getDestinationBox(), collisionBox.getGlobalBounds());
+
+    collidingPlayer.move(movementOffset);
 }
 
 void StaticObject::draw(sf::RenderWindow& window) {

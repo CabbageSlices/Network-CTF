@@ -84,6 +84,7 @@ class GameManager {
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<Portal> >& getPortals(const unsigned& floor = OVERGROUND_FLOOR);
+        std::vector<std::tr1::shared_ptr<GunGiver> >& getGunGivers(const unsigned& floor = OVERGROUND_FLOOR);
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
 

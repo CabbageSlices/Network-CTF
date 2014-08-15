@@ -59,6 +59,8 @@
 		<Unit filename="GameWorld.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
+		<Unit filename="GunGiver.cpp" />
+		<Unit filename="GunGiver.h" />
 		<Unit filename="GunHandlers.cpp" />
 		<Unit filename="GunHandlers.h" />
 		<Unit filename="GunTypes.h" />

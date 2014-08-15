@@ -23,6 +23,14 @@ void ForegroundObject::setHidingPlayer(const bool& playerHidden) {
     }
 }
 
+void ForegroundObject::handleCollision(UserPlayer& collidingPlayer) {
+
+    /**
+
+    intenionally empty
+    **/
+}
+
 void ForegroundObject::setupCollisionBox() {
 
     collisionBox.setSize(sf::Vector2f(250, 250));

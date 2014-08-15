@@ -191,6 +191,7 @@ void UserPlayer::setRotation(const float& newRotation) {
 void UserPlayer::fireGun(const float& angle) {
 
     gun->fire(angle);
+    resetDataTimer();
 }
 
 void UserPlayer::handleClientInput(Input& clientInput) {
@@ -219,8 +220,12 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);
 
     updateGun(delta);
-    
-    if()
+
+    if(gun->mustReload() && canReload()) {
+
+        reload();
+        ///cout << "reloaded" << endl;
+    }
 }
 
 void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {

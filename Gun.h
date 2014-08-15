@@ -7,6 +7,10 @@
 
 #include <tr1/memory>
 #include <vector>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 class LineSegment;
 class Bullet;
@@ -167,6 +171,12 @@ class Gun {
 
         void setTotalAmmo(const int& amount);
         const int getTotalAmmo() const;
+
+        void refillTotalAmmo() {
+
+            totalMagazine = maxTotalMagazine;
+            ///cout << "refillled" << endl;
+        }
 
         virtual GunTypes getGunType() const;
 

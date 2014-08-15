@@ -342,14 +342,16 @@ int ServerGameManager::calculateMaxStatesSaved() {
 }
 
 void ServerGameManager::disconnectPlayer(unsigned playerIndex) {
-    
+
     if(playerIndex > players.size()) {
-        
+
         return;
     }
-    
-    //rem
-    
+
+    //remove him from the current team so the teammanager can assign
+    //his team to another player who connects
+    teamManager.removePlayer(players[playerIndex]->player.getTeam());
+
     players.erase(players.begin() + playerIndex);
 }
 
@@ -425,7 +427,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
         } else if(players[index]->player.shouldRespawn()) {
 
-            players[index]->player.respawn(sf::Vector2f(200, 300));
+            players[index]->player.respawn(getGameWorld().getSpawnPoint(players[index]->player.getTeam()));
         }
 
 
@@ -457,8 +459,9 @@ void ServerGameManager::handleCollisions() {
     //hsndle collision between players and blocks
     for(auto& player : players) {
 
-        playerBlockCollision(player->player, getBlocks(player->player.getFloor()));
-        playerPortalCollision(player->player, getPortals(player->player.getFloor()));
+        playerStaticCollision(player->player, getBlocks(player->player.getFloor()));
+        playerStaticCollision(player->player, getPortals(player->player.getFloor()));
+        playerStaticCollision(player->player, getGunGivers(player->player.getFloor()));
     }
 
     playerFlagCollision();

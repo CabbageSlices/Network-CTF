@@ -5,25 +5,13 @@
 #include "userPlayer.h"
 #include "Portal.h"
 #include "Block.h"
+#include "GunGiver.h"
 #include <cmath>
 
 using std::vector;
 using std::tr1::shared_ptr;
 using std::min;
 using std::abs;
-
-template<class Static>
-void playerStaticCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Static> >& statics,
-                            std::function<void(UserPlayer& player, std::tr1::shared_ptr<Static>& staticObj)> collisionResponse) {
-
-    for(auto staticObj : statics) {
-
-        if(player.getDestinationBox().intersects(staticObj->getCollisionBox() )) {
-
-            collisionResponse(player, staticObj);
-        }
-    }
-}
 
 bool checkCollision(const sf::FloatRect& rect, shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint) {
 
@@ -110,24 +98,4 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
     }
 
     return movementOffset;
-}
-
-void playerBlockCollision(UserPlayer& userPlayer, vector<shared_ptr<Block> >& blocks) {
-
-    playerStaticCollision<Block>(userPlayer, blocks,
-                                 [](UserPlayer& player, shared_ptr<Block> block) {
-
-                                    sf::Vector2f movementOffset = calculateCollisionOffset(player.getDestinationBox(), block->getCollisionBox());
-                                    player.move(movementOffset);
-                                 });
-}
-
-void playerPortalCollision(UserPlayer& userPlayer, std::vector<std::tr1::shared_ptr<Portal> >& portals) {
-
-    playerStaticCollision<Portal>(userPlayer, portals,
-                                 [](UserPlayer& player, shared_ptr<Portal> portal) {
-
-                                    player.setInterpolationPosition(portal->getTeleportPosition());
-                                    player.setFloor(portal->getDestinationFloor());
-                                 });
 }

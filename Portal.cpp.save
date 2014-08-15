@@ -1,8 +1,9 @@
 #include "Portal.h"
 #include "Floors.h"
+#include "UserPlayer.h"
 
-Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation, const unsigned locatedFloor, const unsigned targetFloor):
-    StaticObject(centerPosition, locatedFloor),
+Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation, const unsigned targetFloor):
+    StaticObject(centerPosition),
     teleportPosition(sf::Vector2f(50, 50)),
     destinationFloor(targetFloor)
     {
@@ -11,7 +12,7 @@ Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportL
     }
 
 Portal::Portal(const sf::Vector2f& centerPosition):
-    StaticObject(centerPosition, OVERGROUND_FLOOR),
+    StaticObject(centerPosition),
     teleportPosition(sf::Vector2f(50, 50)),
     destinationFloor(UNDERGROUND_FLOOR)
     {
@@ -32,6 +33,12 @@ const sf::Vector2f& Portal::getTeleportPosition() const {
 const unsigned Portal::getDestinationFloor() const {
 
     return destinationFloor;
+}
+
+void Portal::handleCollision(UserPlayer& collidingPlayer) {
+    
+    collidingPlayer.setInterpolationPosition(portal->getTeleportPosition());
+    collidingPlayer.setFloor(portal->getDestinationFloor());
 }
 
 void Portal::draw(sf::RenderWindow& window) {

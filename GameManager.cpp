@@ -154,6 +154,11 @@ vector<shared_ptr<Portal> >& GameManager::getPortals(const unsigned& floor) {
     return world.getPortals(floor);
 }
 
+vector<shared_ptr<GunGiver> >& GameManager::getGunGivers(const unsigned& floor) {
+
+    return world.getGunGivers(floor);
+}
+
 shared_ptr<FlagManager> GameManager::getFlagManager() {
 
     return world.getFlagManager();

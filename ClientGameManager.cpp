@@ -351,7 +351,7 @@ void ClientGameManager::handleCollisions() {
 
     //no broadphase as of yet
     //check for collision between players and blocks
-    playerBlockCollision(userPlayer, getBlocks(userPlayer.getFloor()));
+    playerStaticCollision(userPlayer, getBlocks(userPlayer.getFloor()));
 
     playerForegroundCollision();
 }

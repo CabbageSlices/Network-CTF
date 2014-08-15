@@ -15,6 +15,7 @@ class ForegroundObject;
 class FlagManager;
 class PlayerBase;
 class Portal;
+class GunGiver;
 
 //class to manage the game world by keeping track of all of the objects and events
 class GameWorld {
@@ -27,6 +28,7 @@ class GameWorld {
             std::vector<std::tr1::shared_ptr<Block> > blocks;
             std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
             std::vector<std::tr1::shared_ptr<Portal> > portals;
+            std::vector<std::tr1::shared_ptr<GunGiver> > gunGivers;
         };
 
         std::map<const unsigned, std::tr1::shared_ptr<GameFloor> > floors;
@@ -44,11 +46,12 @@ class GameWorld {
         std::vector<std::tr1::shared_ptr<Block> >& getBlocks(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<ForegroundObject> >& getForeground(const unsigned& floor = OVERGROUND_FLOOR);
         std::vector<std::tr1::shared_ptr<Portal> >& getPortals(const unsigned& floor = OVERGROUND_FLOOR);
+        std::vector<std::tr1::shared_ptr<GunGiver> >& getGunGivers(const unsigned& floor = OVERGROUND_FLOOR);
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
-        
+
         //get a spawn position for the given team, randomly gets a point wihtin that team's spawn zone
-        const sf::Vector2f getSpawnPoint(const unsigned& team);
+        const sf::Vector2f getSpawnPoint(const unsigned& team) const;
 
         //load the given level, indicate success or failure
         bool load(std::string levelName);

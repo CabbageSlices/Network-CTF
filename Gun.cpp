@@ -179,7 +179,7 @@ void Gun::setFloor(const unsigned& newFloor) {
 
 void Gun::setCurrentAmmo(const int& amount) {
 
-    if(amount >= 0 && amount < maxCurrentMagazine) {
+    if(amount >= 0 && amount <= maxCurrentMagazine) {
 
         currentMagazine = amount;
     }
@@ -192,7 +192,7 @@ const int Gun::getCurrentAmmo() const {
 
 void Gun::setTotalAmmo(const int& amount) {
 
-    if(amount > 0 && amount < maxTotalMagazine) {
+    if(amount >= 0 && amount <= maxTotalMagazine) {
 
         totalMagazine = amount;
     }

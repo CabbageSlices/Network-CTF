@@ -7,6 +7,7 @@
 #include "PlayerBase.h"
 #include "Portal.h"
 #include "math.h"
+#include "GunGiver.h"
 
 #include <iostream>
 
@@ -42,6 +43,10 @@ vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
     return floors[floor]->portals;
 }
 
+vector<shared_ptr<GunGiver> >& GameWorld::getGunGivers(const unsigned& floor) {
+
+    return floors[floor]->gunGivers;
+}
 
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
 
@@ -74,6 +79,9 @@ bool GameWorld::load(string levelName) {
     teamASpawn = {0, 0, 500, 500};
     teamBSpawn = {0, 500, 500, 500};
 
+    shared_ptr<GunGiver> shotgunGiver(new GunGiver(sf::Vector2f(-200, 50), SHOTGUN));
+    floors[OVERGROUND_FLOOR]->gunGivers.push_back(shotgunGiver);
+
     return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }
 
@@ -85,6 +93,7 @@ void GameWorld::clearWorld() {
         floor.second->blocks.clear();
         floor.second->foregroundObjects.clear();
         floor.second->portals.clear();
+        floor.second->gunGivers.clear();
     }
 
     flagManager.reset();
@@ -108,6 +117,11 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
     for(auto& portal : floors[floor]->portals) {
 
         portal->draw(window);
+    }
+
+    for(auto& gunGiver : floors[floor]->gunGivers) {
+
+        gunGiver->draw(window);
     }
 
     flagManager->draw(window);

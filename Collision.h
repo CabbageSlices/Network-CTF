@@ -10,8 +10,6 @@
 
 class LineSegment;
 class UserPlayer;
-class Block;
-class Portal;
 
 //check for collision between the rectangle and line and return the point of collision
 bool checkCollision(const sf::FloatRect& rect, std::tr1::shared_ptr<LineSegment> line, sf::Vector2f& collisionPoint);
@@ -23,9 +21,18 @@ bool handleEdgeCollision(const sf::Vector2f& edgeBegin, const sf::Vector2f& edge
 //calculate the offset required for the first block to no longer be colliding with the second block
 sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf::FloatRect& staticRect);
 
-//handle collision between players and blocks
-void playerBlockCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Block> >& blocks);
-void playerPortalCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<Portal> >& portals);
+//handle collision between players and the given type of static object
+template<class Static, class Player>
+void playerStaticCollision(Player& player, std::vector<std::tr1::shared_ptr<Static> >& statics) {
+
+    for(auto staticObj : statics) {
+
+        if(player.getDestinationBox().intersects(staticObj->getCollisionBox() )) {
+
+            staticObj->handleCollision(player);
+        }
+    }
+}
 
 //handle collision between the given bullet and all objects in the given container, only the bullet is changed
 //take a function that is called to check if the collision response should be handled between the given bullet and the entity that the bullet is colliding with

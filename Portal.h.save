@@ -6,6 +6,8 @@
 #include "StaticObject.h"
 #include "Floors.h"
 
+class UserPlayer;
+
 //when a player collides with a portal they are taken to a different part of the map or a different floor entirely
 //used to have caves and other stuff
 class Portal : public StaticObject {
@@ -30,6 +32,8 @@ class Portal : public StaticObject {
         const sf::Vector2f& getTeleportPosition() const;
 
         const unsigned getDestinationFloor() const;
+        
+        virtual void handleCollision(UserPlayer& collidingPlayer);
 
         virtual void draw(sf::RenderWindow& window);
 };

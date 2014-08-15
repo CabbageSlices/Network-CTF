@@ -8,6 +8,8 @@
 #include "math.h"
 #include "Block.h"
 #include "Floors.h"
+#include "Portal.h"
+#include "GunGiver.h"
 
 #include <map>
 #include <iostream>
@@ -200,6 +202,8 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);
+
+        bullet->disableCollision();
     }
 }
 
@@ -459,8 +463,9 @@ void ServerGameManager::handleCollisions() {
     //hsndle collision between players and blocks
     for(auto& player : players) {
 
-        playerBlockCollision(player->player, getBlocks(player->player.getFloor()));
-        playerPortalCollision(player->player, getPortals(player->player.getFloor()));
+        playerStaticCollision(player->player, getBlocks(player->player.getFloor()));
+        playerStaticCollision(player->player, getPortals(player->player.getFloor()));
+        playerStaticCollision(player->player, getGunGivers(player->player.getFloor()));
     }
 
     playerFlagCollision();

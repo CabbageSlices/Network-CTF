@@ -8,9 +8,13 @@
 #include "Portal.h"
 #include "math.h"
 
+#include <iostream>
+
 using std::vector;
 using std::tr1::shared_ptr;
 using std::string;
+using std::cout;
+using std::endl;
 
 GameWorld::GameWorld():
     floors(),
@@ -38,6 +42,10 @@ vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
     return floors[floor]->portals;
 }
 
+vector<shared_ptr<GunGiver> >& GameWorld::getGunGivers(const unsigned& floor) {
+
+    return floors[floor]->gunGiver;
+}
 
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
 
@@ -54,8 +62,8 @@ const sf::Vector2f GameWorld::getSpawnPoint(const unsigned& team) const {
     }
 
     //randomly generate an x and y position within the spawn area
-    sf::Vector2f spawnPoint(getRand(spawnAreaToUse.left, spawnAreaToUse.left + spawnAreaToUse.width),
-                             getRand(spawnAreaToUse.top, spawnAreaToUse.top + spawnAreaToUse.height));
+    sf::Vector2f spawnPoint(getRand(spawnAreaToUse.left + spawnAreaToUse.width, spawnAreaToUse.left),
+                             getRand(spawnAreaToUse.top + spawnAreaToUse.height, spawnAreaToUse.top));
 
     return spawnPoint;
 }
@@ -69,6 +77,8 @@ bool GameWorld::load(string levelName) {
 
     teamASpawn = {0, 0, 500, 500};
     teamBSpawn = {0, 500, 500, 500};
+    
+    shared_ptr<GunGiver> shotgunGiver
 
     return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }
@@ -81,6 +91,7 @@ void GameWorld::clearWorld() {
         floor.second->blocks.clear();
         floor.second->foregroundObjects.clear();
         floor.second->portals.clear();
+        floor.second->gunGivers.clear();
     }
 
     flagManager.reset();

@@ -7,10 +7,9 @@ Be able to pick up different weapons on the ground
 		-shotgun, spread shot, each bullet does 5 - 10% damage, terrible long range accuracy. maybe 2 - 3 shots before reloading
 		-sniper, 2 bullets, each does more than 50% damage, high accuracy, long reload times
 
-Guns should have ammo capacity and reloading
 
 Add spawn zones for each team, heal in spawn zones
-	-each teams side should have a spawn area. in this area they can spawn randomly at any position in the area
+	***done***-each teams side should have a spawn area. in this area they can spawn randomly at any position in the area
 	-while in the spawn zones players regenerate health slowly
 
 All background objects, that is blocks and anything that players can collide with but not hide behind, should be predrawn, and the collision boxes will be added later
@@ -28,6 +27,6 @@ Add a Minimap
 
 
 
-
+***done***Guns should have ammo capacity and reloading
 ***done***keep track of how many kills, deaths, flag captures, and flag returns each player has
 ***done***when your teammates are hiding make the foreground they are hiding in, visible so that you too can see whats inside.

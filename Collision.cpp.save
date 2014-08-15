@@ -5,6 +5,7 @@
 #include "userPlayer.h"
 #include "Portal.h"
 #include "Block.h"
+#include "GunGiver.h"
 #include <cmath>
 
 using std::vector;
@@ -18,7 +19,7 @@ void playerStaticCollision(UserPlayer& player, std::vector<std::tr1::shared_ptr<
 
     for(auto staticObj : statics) {
 
-        if(player.getDestinationBox().intersects(staticObj->getCollisionBox() ) && player.getFloor() == staticObj->getFloor()) {
+        if(player.getDestinationBox().intersects(staticObj->getCollisionBox() )) {
 
             collisionResponse(player, staticObj);
         }
@@ -122,12 +123,21 @@ void playerBlockCollision(UserPlayer& userPlayer, vector<shared_ptr<Block> >& bl
                                  });
 }
 
-void playerPortalCollision(UserPlayer& userPlayer, std::vector<std::tr1::shared_ptr<Portal> >& portals) {
+void playerPortalCollision(UserPlayer& userPlayer, vector<shared_ptr<Portal> >& portals) {
 
     playerStaticCollision<Portal>(userPlayer, portals,
                                  [](UserPlayer& player, shared_ptr<Portal> portal) {
 
                                     player.setInterpolationPosition(portal->getTeleportPosition());
-                                    player.setFloor(portal->getDestinatio)
+                                    player.setFloor(portal->getDestinationFloor());
+                                 });
+}
+
+void playerGunGiverCollision(UserPlayer& userPlayer, vector<shared_ptr<GunGiver> >& gunGivers) {
+
+    playerStaticCollision<GunGiver>(userPlayer, gunGivers,
+                                 [](UserPlayer& player, shared_ptr<GunGiver> gunGiver) {
+
+                                    gunGiver->handlePlayerCollision(userPlayer);
                                  });
 }
