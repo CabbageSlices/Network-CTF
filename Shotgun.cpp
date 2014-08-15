@@ -6,8 +6,8 @@ using std::cout;
 using std::endl;
 
 Shotgun::Shotgun() :
-    Gun(13, 500, sf::milliseconds(100), 30),
-    bulletsPerShot(100 / bulletDamage),
+    Gun(17, 450, sf::milliseconds(100), 28),
+    bulletsPerShot(6),
     bulletsFired(0)
     {
         maxCurrentMagazine = 4;

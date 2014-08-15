@@ -1,11 +1,13 @@
 #include "Flag.h"
+#include "Floors.h"
 #include "math.h"
 
 Flag::Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor):
     flag(),
     spawnPosition(spawnLocation),
     beingHeld(false),
-    atSpawn(true)
+    atSpawn(true),
+    floor(OVERGROUND_FLOOR)
     {
         flag.setRadius(20);
         flag.setOrigin(calculateCenter(flag.getLocalBounds()));
@@ -29,6 +31,7 @@ void Flag::reset() {
     atSpawn = true;
     beingHeld = false;
     flag.setPosition(spawnPosition);
+    floor = OVERGROUND_FLOOR;
 }
 
 void Flag::dropFlag() {
@@ -61,7 +64,17 @@ const sf::Vector2f Flag::getPosition() const {
     return flag.getPosition();
 }
 
+const unsigned& Flag::getFloor() const {
+
+    return floor;
+}
+
 void Flag::setHeld(bool held) {
 
     beingHeld = held;
+}
+
+void Flag::setFloor(const unsigned& destinationFloor) {
+
+    floor = destinationFloor;
 }

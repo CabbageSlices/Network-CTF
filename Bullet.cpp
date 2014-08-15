@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "LineSegment.h"
 #include "math.h"
+#include <cmath>
 
 using std::tr1::shared_ptr;
 
@@ -17,6 +18,12 @@ Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& ori
     {
         tracerVelocity.x = (bulletLine->getEndPoint().x - bulletLine->getStartPoint().x) / LIFE_TIME.asSeconds();
         tracerVelocity.y = (bulletLine->getEndPoint().y - bulletLine->getStartPoint().y) / LIFE_TIME.asSeconds();
+
+        if(abs(tracerVelocity.x) < 800 || abs(tracerVelocity.y) < 800) {
+
+            tracerVelocity.x *= 2;
+            tracerVelocity.y *= 2;
+        }
 
         bulletTracer.setPosition(bulletLine->getStartPoint());
         bulletTracer.setOrigin(calculateCenter(bulletTracer.getLocalBounds()));

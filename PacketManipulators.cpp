@@ -121,6 +121,9 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
 
     dataDestination << flagManager->teamAFlag()->getPosition().x << flagManager->teamAFlag()->getPosition().y;
     dataDestination << flagManager->teamBFlag()->getPosition().x << flagManager->teamBFlag()->getPosition().y;
+
+    dataDestination << flagManager->teamAFlag()->getFloor();
+    dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -234,6 +237,14 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
         flagManager->teamBFlag()->setPosition(flagBPosition);
     }
+
+    unsigned flagAFloor = 0;
+    unsigned flagBFloor = 0;
+
+    updatePacket >> flagAFloor >> flagBFloor;
+
+    flagManager->teamAFlag()->setFloor(flagAFloor);
+    flagManager->teamBFlag()->setFloor(flagBFloor);
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {

@@ -16,14 +16,17 @@ using std::tr1::shared_ptr;
 
 void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager) {
 
-    bool collidesOwnFlag = flagManager.checkFlagCollision(player.getCollisionBox(), player.getTeam());
+    //collisions with flags can only occur if the player and the flag are in the same floor
+    bool collidesOwnFlag = flagManager.checkFlagCollision(player.getCollisionBox(), player.getTeam()) &&
+                            flagManager.getFlag(player.getTeam())->getFloor() == player.getFloor();
 
     if(collidesOwnFlag) {
 
         ownFlagCollision(player, flagManager, teamManager);
     }
 
-    bool collidesOpponentFlag = flagManager.checkFlagCollision(player.getCollisionBox(), getOpposingTeam(player.getTeam()));
+    bool collidesOpponentFlag = flagManager.checkFlagCollision(player.getCollisionBox(), getOpposingTeam(player.getTeam())) &&
+                                flagManager.getFlag(getOpposingTeam(player.getTeam()))->getFloor() == player.getFloor();;
 
     if(collidesOpponentFlag) {
 
@@ -140,11 +143,14 @@ shared_ptr<Flag> FlagManager::teamBFlag() {
     return getFlag(TEAM_B_ID);
 }
 
-void FlagManager::draw(sf::RenderWindow& window) {
+void FlagManager::draw(sf::RenderWindow& window, const unsigned& floor) {
 
     for(auto& flag : flags) {
 
-        flag.second->draw(window);
+        if(flag.second->getFloor() == floor && !flag.second->isHeld()) {
+
+            flag.second->draw(window);
+        }
     }
 }
 

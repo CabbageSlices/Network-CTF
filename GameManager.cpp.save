@@ -127,13 +127,14 @@ void GameManager::drawMinimap(sf::RenderWindow& window) {
 
     //set the minimaps view
     minimap.applyMinimap(window);
-
-    world.drawBackground(window, getFloor());
+    
+    ///on minimap always draw overground
+    world.drawBackground(window, OVERGROUND_FLOOR);
 
     //draw the derived class's minimap components
     this->drawMinimap(window);
 
-    world.drawForeground(window, getFloor());
+    world.drawForeground(window, OVERGROUND_FLOOR);
 
     //re-apply old view
     window.setView(previousView);

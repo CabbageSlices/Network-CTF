@@ -345,6 +345,13 @@ int ServerGameManager::calculateMaxStatesSaved() {
     return (1000 / stateUpdateDelay.asMilliseconds()) + 1;
 }
 
+void ServerGameManager::spawnPlayer(shared_ptr<ServerGameManager::ConnectedPlayer>& player) {
+
+    player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam()));
+
+    player->player.setFloor(OVERGROUND_FLOOR);
+}
+
 void ServerGameManager::disconnectPlayer(unsigned playerIndex) {
 
     if(playerIndex > players.size()) {
@@ -367,11 +374,13 @@ void ServerGameManager::drawPlayers(sf::RenderWindow& window) {
     }
 }
 
-void ServerGameManager::playerFlagCollision() {
+void ServerGameManager::playerSpawnCollision(shared_ptr<ServerGameManager::ConnectedPlayer>& player) {
 
-    for(auto& player : players) {
+    const sf::FloatRect& spawnArea = getGameWorld().getSpawnArea(player->player.getTeam());
 
-        collidePlayerFlag(player->player, *getFlagManager(), teamManager);
+    if(player->player.getCollisionBox().intersects(spawnArea)) {
+
+        player->player.regenerateHealth();
     }
 }
 
@@ -431,7 +440,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
         } else if(players[index]->player.shouldRespawn()) {
 
-            players[index]->player.respawn(getGameWorld().getSpawnPoint(players[index]->player.getTeam()));
+            spawnPlayer(players[index]);
         }
 
 
@@ -460,13 +469,16 @@ const unsigned ServerGameManager::getFloor() const {
 
 void ServerGameManager::handleCollisions() {
 
-    //hsndle collision between players and blocks
+    //handle collision between player and all other objects that he can collide with
+    //do in this one loop so you don't repeat loops
     for(auto& player : players) {
 
         playerStaticCollision(player->player, getBlocks(player->player.getFloor()));
         playerStaticCollision(player->player, getPortals(player->player.getFloor()));
         playerStaticCollision(player->player, getGunGivers(player->player.getFloor()));
-    }
 
-    playerFlagCollision();
+        collidePlayerFlag(player->player, *getFlagManager(), teamManager);
+
+        playerSpawnCollision(player);
+    }
 }

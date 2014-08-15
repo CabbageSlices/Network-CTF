@@ -96,6 +96,11 @@ class UserPlayer : public PlayerBase{
         //player's current keystate
         KeyState keystate;
 
+        //healing rate to recover hp while in spawn zone, how much hp to heal each time
+        int healthRecovered;
+        sf::Clock regenerationTimer;
+        sf::Time regenerationDelay;
+
         const float getHorizontalVelocity() const;
         const float getVerticalVelocity() const;
 
@@ -162,6 +167,9 @@ class UserPlayer : public PlayerBase{
 
         //fire the gun at the given angle
         void fireGun(const float& angle);
+
+        //attempt to heal
+        void regenerateHealth();
 
         //given the client input simple execute it
         void handleClientInput(Input& clientInput);

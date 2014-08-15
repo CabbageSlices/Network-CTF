@@ -53,6 +53,16 @@ shared_ptr<FlagManager> GameWorld::getFlagManager() {
     return flagManager;
 }
 
+const sf::FloatRect& GameWorld::getSpawnArea(const unsigned& team) const {
+
+    if(team == TEAM_A_ID) {
+
+        return teamASpawn;
+    }
+
+    return teamBSpawn;
+}
+
 const sf::Vector2f GameWorld::getSpawnPoint(const unsigned& team) const {
 
     sf::FloatRect spawnAreaToUse = teamASpawn;
@@ -124,7 +134,7 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
         gunGiver->draw(window);
     }
 
-    flagManager->draw(window);
+    flagManager->draw(window, floor);
 }
 
 void GameWorld::drawForeground(sf::RenderWindow& window, const unsigned& floor) {

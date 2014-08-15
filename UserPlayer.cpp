@@ -20,7 +20,10 @@ UserPlayer::UserPlayer():
     nextNewInputId(0),
     keystateUpdateTimer(),
     keystateUpdateDelay(sf::milliseconds(100)),
-    keystate()
+    keystate(),
+    healthRecovered(10),
+    regenerationTimer(),
+    regenerationDelay(sf::seconds(3))
     {
 
     }
@@ -192,6 +195,15 @@ void UserPlayer::fireGun(const float& angle) {
 
     gun->fire(angle);
     resetDataTimer();
+}
+
+void UserPlayer::regenerateHealth() {
+
+    if(regenerationTimer.getElapsedTime() > regenerationDelay) {
+
+        setHealth(getHealth() + healthRecovered);
+        regenerationTimer.restart();
+    }
 }
 
 void UserPlayer::handleClientInput(Input& clientInput) {

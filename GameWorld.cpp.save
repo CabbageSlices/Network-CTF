@@ -7,6 +7,7 @@
 #include "PlayerBase.h"
 #include "Portal.h"
 #include "math.h"
+#include "GunGiver.h"
 
 #include <iostream>
 
@@ -44,12 +45,22 @@ vector<shared_ptr<Portal> >& GameWorld::getPortals(const unsigned& floor) {
 
 vector<shared_ptr<GunGiver> >& GameWorld::getGunGivers(const unsigned& floor) {
 
-    return floors[floor]->gunGiver;
+    return floors[floor]->gunGivers;
 }
 
 shared_ptr<FlagManager> GameWorld::getFlagManager() {
 
     return flagManager;
+}
+
+const sf::FloatRect& GameWorld::getSpawnArea(const unsigned& team) const {
+
+    if(team == TEAM_A_ID) {
+
+        return teamASpawn;
+    }
+
+    return teamBSpawn;
 }
 
 const sf::Vector2f GameWorld::getSpawnPoint(const unsigned& team) const {
@@ -77,8 +88,9 @@ bool GameWorld::load(string levelName) {
 
     teamASpawn = {0, 0, 500, 500};
     teamBSpawn = {0, 500, 500, 500};
-    
-    shared_ptr<GunGiver> shotgunGiver
+
+    shared_ptr<GunGiver> shotgunGiver(new GunGiver(sf::Vector2f(-200, 50), SHOTGUN));
+    floors[OVERGROUND_FLOOR]->gunGivers.push_back(shotgunGiver);
 
     return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }
@@ -117,7 +129,12 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
         portal->draw(window);
     }
 
-    flagManager->draw(window);
+    for(auto& gunGiver : floors[floor]->gunGivers) {
+
+        gunGiver->draw(window);
+    }
+    
+    flagManager->draw(window, floor);
 }
 
 void GameWorld::drawForeground(sf::RenderWindow& window, const unsigned& floor) {

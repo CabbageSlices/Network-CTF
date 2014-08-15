@@ -94,14 +94,16 @@ class ServerGameManager : public GameManager {
         //calculate how many updates the server saves before deleting old position data
         int calculateMaxStatesSaved();
 
+        void spawnPlayer(std::tr1::shared_ptr<ConnectedPlayer>& player);
+
         //disconnect the given player, that is, remove him from the container of players
         //take the index of the player in the vector
         void disconnectPlayer(unsigned playerIndex);
 
         void drawPlayers(sf::RenderWindow& window);
 
-        //check and handle collision between players and flags
-        void playerFlagCollision();
+        //check and handle collision between given and their spawn zones, that is, heal them if in spawn
+        void playerSpawnCollision(std::tr1::shared_ptr<ConnectedPlayer>& player);
 
     protected:
 

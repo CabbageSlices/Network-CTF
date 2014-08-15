@@ -141,6 +141,7 @@ class PlayerBase {
         void getHit(int damage);
 
         //set helath to given value, if its less than current health then run damage animation
+        //if its more than current health, run regeneration animation
         void setHealth(int value);
 
         bool isHoldingFlag() const;

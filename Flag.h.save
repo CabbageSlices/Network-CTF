@@ -19,6 +19,9 @@ class Flag {
 
         //if the flag is at the spawn
         bool atSpawn;
+        
+        //current floor the flag exist on
+        unsigned floor;
 
     public:
 

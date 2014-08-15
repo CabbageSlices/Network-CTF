@@ -50,6 +50,8 @@ class GameWorld {
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
 
+        const sf::FloatRect& getSpawnArea(const unsigned& team) const;
+
         //get a spawn position for the given team, randomly gets a point wihtin that team's spawn zone
         const sf::Vector2f getSpawnPoint(const unsigned& team) const;
 

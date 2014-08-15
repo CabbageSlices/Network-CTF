@@ -20,6 +20,9 @@ class Flag {
         //if the flag is at the spawn
         bool atSpawn;
 
+        //current floor the flag exist on
+        unsigned floor;
+
     public:
 
         Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor = sf::Color::Red);
@@ -37,8 +40,10 @@ class Flag {
 
         const sf::FloatRect getCollisionBox() const;
         const sf::Vector2f getPosition() const;
+        const unsigned& getFloor() const;
 
         void setHeld(bool held);
+        void setFloor(const unsigned& floor);
 };
 
 #endif // FLAG_H_INCLUDED

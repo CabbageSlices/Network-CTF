@@ -9,6 +9,7 @@
 
 class PlayerBase;
 class Flag;
+class TeamManager;
 
 //keeps track of each teams flags and their flag spawn zone
 class FlagManager {
@@ -53,7 +54,7 @@ class FlagManager {
         std::tr1::shared_ptr<Flag> teamBFlag();
 
         //draw the flags
-        void draw(sf::RenderWindow& window);
+        void draw(sf::RenderWindow& window, const unsigned& floor);
 };
 
 void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager);

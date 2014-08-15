@@ -28,7 +28,7 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Shotgun()),
+    gun(new Pistol()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
@@ -219,19 +219,23 @@ void PlayerBase::getHit(int damage) {
 
 void PlayerBase::setHealth(int value) {
 
-    //save the current health to check if it actually changed
-    int currentHealth = health.getCurrentHealth();
+    //check if health changed at all
+    //that way if his health reaches 0 you know for sure it was because the value was changed
+    if(value == health.getCurrentHealth()) {
+
+        //no change
+        return;
+    }
 
     //check if given value is less than current health
-    if(value < currentHealth) {
+    if(value < health.getCurrentHealth()) {
 
         ///play damage animation
     }
 
     health.setCurrentHealth(value);
 
-    //if he has no health and it was because of getting hit, then die
-    if(health.getCurrentHealth() == 0 && health.getCurrentHealth() != currentHealth) {
+    if(health.getCurrentHealth() == 0) {
 
         die();
     }
@@ -250,7 +254,7 @@ void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
 void PlayerBase::dropFlag() {
 
     //drop the flag at his current position
-    dropFlag(getCurrentPosition());
+    dropFlag(getDestinationPosition());
 }
 
 void PlayerBase::setFloor(const unsigned& destinationFloor) {
@@ -270,6 +274,7 @@ void PlayerBase::dropFlag(const sf::Vector2f& positionToDrop) {
     if(flagBeingHeld.lock()) {
 
         flagBeingHeld.lock()->setPosition(positionToDrop);
+        flagBeingHeld.lock()->setFloor(getFloor());
         flagBeingHeld.lock()->dropFlag();
     }
 
@@ -291,8 +296,8 @@ const shared_ptr<Gun> PlayerBase::getGun() const {
     return gun;
 }
 
-void PlayerBase::setGun(shared_ptr<Gun>& newGun) {
-    
+void PlayerBase::setGun(shared_ptr<Gun> newGun) {
+
     gun = newGun;
 }
 
@@ -378,6 +383,9 @@ void PlayerBase::die() {
     stopInterpolation();
 
     respawnTimer.restart();
+
+    //when he respawns gun should be reloaded
+    gun->refillTotalAmmo();
 
     //increase the amount of deaths
     setDeaths(getDeaths() + 1);

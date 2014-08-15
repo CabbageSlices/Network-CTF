@@ -7,6 +7,10 @@
 
 #include <tr1/memory>
 #include <vector>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 class LineSegment;
 class Bullet;
@@ -24,11 +28,12 @@ class Gun {
 
         //texture for the line of sight to give it graphics
         sf::Texture lineTexture;
-        
+
         //bullets that have been fired
         std::vector<std::tr1::shared_ptr<Bullet> > bullets;
-        
-        //bullets whose data needs to be sent to the clients FOR SERVER ONLY
+
+        //bullets whose data needs to be sent to the clients that way server can keep track of which data it has sent and which ones it hasn't
+        /// FOR SERVER ONLY
         std::vector<std::tr1::shared_ptr<Bullet> > bulletsForClients;
 
         //maximum distance the gun can shoot in order to draw the line of sight and determine bullet's start and end points
@@ -117,7 +122,7 @@ class Gun {
 
     public:
 
-        Gun(const int& damage = 10, const float& maxDist = 1200.f, const sf::Time& fireDelay = sf::milliseconds(1000), const float& accuracyMod = 4);
+        Gun(const int& damage = 13, const float& maxDist = 1200.f, const sf::Time& fireDelay = sf::milliseconds(1000), const float& accuracyMod = 4);
         virtual ~Gun(){}
 
         //handle a player's mouselick when he tries to fire a gun
@@ -152,8 +157,8 @@ class Gun {
         void drawBullets(sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
-        std::vector<std::tr1::shared_ptr<Bullet> >& getBulletsToClients();
-        
+        std::vector<std::tr1::shared_ptr<Bullet> >& getBulletsForClients();
+
         const std::vector<float>& getQueuedRotations() const;
 
         void clearRotations();
@@ -166,6 +171,12 @@ class Gun {
 
         void setTotalAmmo(const int& amount);
         const int getTotalAmmo() const;
+
+        void refillTotalAmmo() {
+
+            totalMagazine = maxTotalMagazine;
+            ///cout << "refillled" << endl;
+        }
 
         virtual GunTypes getGunType() const;
 

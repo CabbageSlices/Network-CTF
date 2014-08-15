@@ -20,7 +20,10 @@ UserPlayer::UserPlayer():
     nextNewInputId(0),
     keystateUpdateTimer(),
     keystateUpdateDelay(sf::milliseconds(100)),
-    keystate()
+    keystate(),
+    healthRecovered(10),
+    regenerationTimer(),
+    regenerationDelay(sf::seconds(2.5))
     {
 
     }

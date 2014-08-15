@@ -30,7 +30,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client(sf::IpAddress::getLocalAddress(), 8080),
+    client("192.168.0.150", 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),
@@ -316,10 +316,10 @@ void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
 
 
     ///only draw players on minimap if they are in the overground section
-    //only draw another player on the minimap if they are on the players team, or they are near someone on the players team
+    //only draw another player on the minimap if they are on the players team, or they are near someone on the players team, and only if they are overground
     for(auto& player : connectedPlayers) {
 
-        if((player->getTeam() == userPlayer.getTeam() || player->getCollisionBox().intersects(camera.getCameraBounds())) && player->getFloor() == OVERGROUND_FLOOR) {
+        if((player->getTeam() == userPlayer.getTeam() || (player->getCollisionBox().intersects(camera.getCameraBounds()) && userPlayer.getFloor() == OVERGROUND_FLOOR)) && player->getFloor() == OVERGROUND_FLOOR) {
 
             player->drawMinimap(window);
 

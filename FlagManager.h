@@ -54,7 +54,7 @@ class FlagManager {
         std::tr1::shared_ptr<Flag> teamBFlag();
 
         //draw the flags
-        void draw(sf::RenderWindow& window);
+        void draw(sf::RenderWindow& window, const unsigned& floor);
 };
 
 void collidePlayerFlag(PlayerBase& player, FlagManager& flagManager, TeamManager& teamManager);
