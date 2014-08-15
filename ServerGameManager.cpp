@@ -420,7 +420,7 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 
         if(players[index]->player.timedOut()) {
 
-            players.erase(players.begin() + index);
+            disconnectPlayer(index);
             continue;
         }
 

@@ -1,5 +1,10 @@
 #include "TeamManager.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 const unsigned short TEAM_A_ID = 1;
 const unsigned short TEAM_B_ID = 2;
 
@@ -40,6 +45,8 @@ unsigned short TeamManager::addNewPlayer() {
         numberOfPlayers[TEAM_B_ID]++;
         team = TEAM_B_ID;
     }
+    
+    cout << numberOfPlayers[TEAM_A_ID] << "     " << numberOfPlayers[TEAM_B_ID];
 
     return team;
 }
@@ -63,18 +70,18 @@ short unsigned int TeamManager::switchTeams(unsigned short currentTeam) {
 }
 
 void TeamManager::increaseTeamScore(const unsigned short& team) {
-    
+
     ++teamScores[team];
 }
 
 void TeamManager::resetScores() {
-    
+
     //reseting scores is setting them to 0 which the setup function already does
     setupScores();
 }
 
 unsigned short TeamManager::getTeamScore(const unsigned short& team) {
-    
+
     return teamScores[team];
 }
 
@@ -85,7 +92,7 @@ void TeamManager::setupPlayerCounter() {
 }
 
 void TeamManager::setupScores() {
-    
+
     teamScores[TEAM_A_ID] = 0;
     teamScores[TEAM_B_ID] = 0;
 }

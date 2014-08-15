@@ -1,5 +1,10 @@
 #include "TeamManager.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 const unsigned short TEAM_A_ID = 1;
 const unsigned short TEAM_B_ID = 2;
 
