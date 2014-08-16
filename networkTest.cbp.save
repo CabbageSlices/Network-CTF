@@ -68,6 +68,8 @@
 		<Unit filename="Healthbar.h" />
 		<Unit filename="InterpolatingPlayer.cpp" />
 		<Unit filename="InterpolatingPlayer.h" />
+		<Unit filename="LargeImage.cpp" />
+		<Unit filename="LargeImage.h" />
 		<Unit filename="Lerp.cpp" />
 		<Unit filename="Lerp.h" />
 		<Unit filename="LevelManager.cpp" />

@@ -1,23 +1,17 @@
 When player has a flag a marker should draw over his indicating he has a flag
 
 
-Add spawn zones for each team, heal in spawn zones
-	***done***-each teams side should have a spawn area. in this area they can spawn randomly at any position in the area
-	-while in the spawn zones players regenerate health slowly
-
 All background objects, that is blocks and anything that players can collide with but not hide behind, should be predrawn, and the collision boxes will be added later
 
-Add an underground system, add tags for all entities that indicate whether its underground or overground and things can only collide with things in the same plane
-	-things in the underground are only drawn if the player is underground
 
-Add a Minimap
-	-in minimap you can see the whole level except for underground parts
-	-you can see the flags at all time except when its underground
+
+***done***Add an underground system, add tags for all entities that indicate whether its underground or overground and things can only collide with things in the same plane
+	***done***-things in the underground are only drawn if the player is underground
+
+***done***Add a Minimap
+	***done***-in minimap you can see the whole level except for underground parts
+	***done***-you can see the flags unless they're being held
 	***done***-In the minimap you can always see your teammates, however you can't see players of the other team unless they are close to your teammates
-
-
-
-
 
 
 ***done***Guns should have ammo capacity and reloading
@@ -31,3 +25,7 @@ Add a Minimap
 	***done***-pistol, basic automatic gun, 10 - 20% health damage (undecided), can kill one person before reloading
 	***done***-shotgun, spread shot, each bullet does 5 - 10% damage, terrible long range accuracy. maybe 2 - 3 shots before reloading
 	***done***-sniper, 2 bullets, each does more than 50% damage, high accuracy, long reload times
+
+***done***Add spawn zones for each team, heal in spawn zones
+	***done***-each teams side should have a spawn area. in this area they can spawn randomly at any position in the area
+	***done***-while in the spawn zones players regenerate health slowly
