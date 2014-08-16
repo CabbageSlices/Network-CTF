@@ -91,6 +91,7 @@ bool GameWorld::load(string levelName) {
 
     shared_ptr<GunGiver> shotgunGiver(new GunGiver(sf::Vector2f(-200, 50), SHOTGUN));
     floors[OVERGROUND_FLOOR]->gunGivers.push_back(shotgunGiver);
+    floors[OVERGROUND_FLOOR]->backgroundImage.load("maptest.png");
 
     return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
 }
@@ -104,6 +105,8 @@ void GameWorld::clearWorld() {
         floor.second->foregroundObjects.clear();
         floor.second->portals.clear();
         floor.second->gunGivers.clear();
+
+        floor.second->backgroundImage.clearImage();
     }
 
     flagManager.reset();
@@ -118,6 +121,8 @@ void GameWorld::updateFlagPosition(PlayerBase& player) {
 }
 
 void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) {
+
+    floors[floor]->backgroundImage.draw(window);
 
     for(auto& block : floors[floor]->blocks) {
 

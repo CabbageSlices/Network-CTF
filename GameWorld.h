@@ -4,6 +4,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "Floors.h"
+#include "LargeImage.h"
 
 #include <map>
 #include <vector>
@@ -29,6 +30,9 @@ class GameWorld {
             std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
             std::vector<std::tr1::shared_ptr<Portal> > portals;
             std::vector<std::tr1::shared_ptr<GunGiver> > gunGivers;
+
+            //background image of the floor
+            LargeImage backgroundImage;
         };
 
         std::map<const unsigned, std::tr1::shared_ptr<GameFloor> > floors;
