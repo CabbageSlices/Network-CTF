@@ -42,33 +42,31 @@ void ServerGameManager::handleIncomingData() {
     sf::IpAddress senderIp;
     unsigned short senderPort;
 
-    if(!server.receiveData(incomingData, senderIp, senderPort)) {
+    while(server.receiveData(incomingData, senderIp, senderPort)) {
 
-        //no data so exit
-        return;
-    }
+        //data is available, check if the sender already has a player connected
+        for(auto& player : players) {
 
-    //data is available, check if the sender already has a player connected
-    for(auto& player : players) {
+            if(player->playerIpAddress == senderIp && player->playerPort == senderPort) {
 
-        if(player->playerIpAddress == senderIp && player->playerPort == senderPort) {
-
-            handleData(player, incomingData);
-            return;
+                handleData(player, incomingData);
+                return;
+            }
         }
-    }
 
-    //data was not handled yet so check the data type and handle accordingly
-    if(checkPacketType(incomingData, CONNECTION_ATTEMPT)) {
+        //data was not handled yet so check the data type and handle accordingly
+        if(checkPacketType(incomingData, CONNECTION_ATTEMPT)) {
 
-        //if connection attempt has not been handled yet it means the player has not been added yet, so add him and respond with the player's id
-        createNewConnection(senderIp, senderPort, ++lastPlayerId);
+            //if connection attempt has not been handled yet it means the player has not been added yet, so add him and respond with the player's id
+            createNewConnection(senderIp, senderPort, ++lastPlayerId);
 
-        //tell the player who connected that he is connected by sending back the connection request packet
-        //except this time add the player's id so the client knows what his own id is
-        incomingData << lastPlayerId;
-        server.sendData(incomingData, senderIp, senderPort);
-        cout << "new connection" << endl;
+            //tell the player who connected that he is connected by sending back the connection request packet
+            //except this time add the player's id so the client knows what his own id is
+            incomingData << lastPlayerId;
+            server.sendData(incomingData, senderIp, senderPort);
+            cout << "new connection" << endl;
+        }
+
     }
 }
 
