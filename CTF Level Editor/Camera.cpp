@@ -12,7 +12,7 @@ Camera::Camera():
     currentCameraSize(defaultCameraSize),
     destinationCameraSize(currentCameraSize),
     transitionTimer(),
-    ZOOM_FACTOR(0.8)
+    ZOOM_FACTOR(0.75)
     {
 
     }
@@ -33,38 +33,25 @@ void Camera::applyDefaultCamera(sf::RenderWindow& window) const {
     window.setView(sf::View(sf::FloatRect(0, 0, defaultCameraSize.x, defaultCameraSize.y) ));
 }
 
-void Camera::setCameraCenter(const sf::Vector2f& targetCenter, const sf::FloatRect& worldBounds) {
+const sf::FloatRect Camera::getCameraBounds() const {
 
-    //calculate the new bounds of the camera given the new center
-    sf::FloatRect cameraBounds(0, 0, 0, 0);
-    cameraBounds.left = targetCenter.x - view.getSize().x / 2;
-    cameraBounds.top = targetCenter.y - view.getSize().y / 2;
-    cameraBounds.width = view.getSize().x;
-    cameraBounds.height = view.getSize().y;
+    return getCameraBounds(view.getCenter());
+}
 
-    //make sure camera is inside the world bounds
-    if(cameraBounds.left < worldBounds.left) {
+const sf::FloatRect Camera::getCameraBounds(const sf::Vector2f& cameraCenter) const {
 
-        cameraBounds.left = worldBounds.left;
-    }
+    sf::FloatRect bounds{cameraCenter.x - view.getSize().x / 2,
+                         cameraCenter.y - view.getSize().y / 2,
+                         view.getSize().x,
+                         view.getSize().y};
 
-    if(cameraBounds.top < worldBounds.top) {
+    return bounds;
+}
 
-        cameraBounds.top = worldBounds.top;
-    }
+void Camera::setCameraCenter(const sf::Vector2f& targetCenter) {
 
-    if(cameraBounds.left + cameraBounds.width > worldBounds.left + worldBounds.width) {
-
-        cameraBounds.left = worldBounds.left + worldBounds.width - cameraBounds.width;
-    }
-
-    if(cameraBounds.top + cameraBounds.height > worldBounds.top + worldBounds.height) {
-
-        cameraBounds.top = worldBounds.top + worldBounds.height - cameraBounds.height;
-    }
-
-    //camera will be within world bounds so set the camera properties
-    view.setCenter(calculateCenter(cameraBounds));
+    //set the camera properties
+    view.setCenter(targetCenter);
 }
 
 void Camera::setDefaultSize(sf::RenderWindow& window) {
@@ -130,12 +117,12 @@ void Camera::transitionZoom() {
 
     //determine if the current size exceeded the destination size
     //first you have to determine whether the camera was shrinking or enlarging
-    if((currentZoomVelocity.x < 0 && currentCameraSize.x < destinationCameraSize.x) ||
-       (currentZoomVelocity.x > 0 && currentCameraSize.x > destinationCameraSize.x)) {
+    ///if((currentZoomVelocity.x < 0 && currentCameraSize.x < destinationCameraSize.x) ||
+    ///   (currentZoomVelocity.x > 0 && currentCameraSize.x > destinationCameraSize.x)) {
 
         //camera is too big or too small
         currentCameraSize = destinationCameraSize;
-    }
+    ///}
 }
 
 void Camera::resetAll() {

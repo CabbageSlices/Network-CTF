@@ -49,6 +49,7 @@
 		<Unit filename="Flag.h" />
 		<Unit filename="FlagManager.cpp" />
 		<Unit filename="FlagManager.h" />
+		<Unit filename="Floor.h" />
 		<Unit filename="Floors.cpp" />
 		<Unit filename="Floors.h" />
 		<Unit filename="ForegroundObject.cpp" />

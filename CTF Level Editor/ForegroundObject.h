@@ -5,23 +5,39 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 
+#include <string>
+
 //foreground objects are things that are placed on the foreground dthat players can hide behind
 class ForegroundObject : public StaticObject {
 
     private:
 
+        //image to use
+        sf::Texture foregroundTexture;
+
+        std::string texturePath;
+
+        //whether there is a texture
+        bool hasTexture;
+
         //if player collides with this object then he is hiding behind this object
         bool hidingPlayer;
-
-        virtual void setupCollisionBox();
 
         void makeSeethrough();
         void makeSolid();
 
     public:
 
+        //create a foreground object using the image found in the given string
+        ForegroundObject(const std::string& imagePath);
         ForegroundObject(const sf::Vector2f& centerPosition);
 
+        //indicates whether the foreground object has a image to display
+        bool hasImage() const;
+
+        const std::string& getImageName() const;
+
+        void setPosition(const sf::Vector2f& centerPosition);
         void setHidingPlayer(const bool& playerHidden);
 };
 

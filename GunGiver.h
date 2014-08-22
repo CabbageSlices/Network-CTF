@@ -4,6 +4,8 @@
 #include "GunTypes.h"
 #include "StaticObject.h"
 
+#include <map>
+
 class PlayerBase;
 
 //object that gives a gun to the person who touches it, or reloads their ammo if they already have the gun
@@ -13,11 +15,22 @@ class GunGiver : public StaticObject {
 
         GunTypes gunToGive;
 
+        //all possible textures for gungivers
+        static std::map<GunTypes, sf::Texture> textures;
+
+        //whether the textures are created
+        static bool texturesCreated;
+
+    void initializeTextures();
+
     public:
 
-        GunGiver(const sf::Vector2f& centerPosition, const GunTypes& gun);
+        GunGiver(const GunTypes& gun);
         virtual ~GunGiver(){}
 
+        GunTypes getGunType() const;
+
+        void setPosition(const sf::Vector2f& position);
         virtual void handleCollision(PlayerBase& collidingPlayer);
 };
 

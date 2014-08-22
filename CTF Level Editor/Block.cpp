@@ -1,22 +1,25 @@
 #include "Block.h"
 #include "math.h"
 
-Block::Block(const sf::Vector2f& centerPosition):
-    StaticObject(centerPosition)
+Block::Block(const sf::Vector2f& blockSize):
+    StaticObject(sf::Vector2f(0, 0))
     {
-        setupCollisionBox();
+        setupCollisionBox(blockSize);
     }
 
 Block::~Block() {
 
 }
 
-void Block::setupCollisionBox() {
+void Block::setPosition(const sf::Vector2f& position) {
 
-    collisionBox.setSize(sf::Vector2f(60, 60));
-    collisionBox.setFillColor(sf::Color::Blue);
-    collisionBox.setOutlineThickness(-2.0);
+    collisionBox.setPosition(position);
+}
+
+void Block::setupCollisionBox(const sf::Vector2f& size) {
+
+    collisionBox.setSize(size);
+    collisionBox.setFillColor(sf::Color(50, 50, 50, 150));
+    collisionBox.setOutlineThickness(-3.0);
     collisionBox.setOutlineColor(sf::Color::Red);
-
-    collisionBox.setOrigin(calculateCenter(collisionBox.getLocalBounds()));
 }

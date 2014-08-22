@@ -2,27 +2,25 @@
 #include "Floors.h"
 #include "UserPlayer.h"
 
-Portal::Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation, const unsigned targetFloor):
-    StaticObject(centerPosition),
-    teleportPosition(sf::Vector2f(50, 50)),
-    destinationFloor(targetFloor)
-    {
-        teleportPosition.setFillColor(sf::Color::Magenta);
-        teleportPosition.setPosition(teleportLocation);
-    }
-
-Portal::Portal(const sf::Vector2f& centerPosition):
-    StaticObject(centerPosition),
-    teleportPosition(sf::Vector2f(50, 50)),
+Portal::Portal(const sf::Vector2f& position, const sf::Vector2f& size):
+    StaticObject(position),
+    teleportPosition(sf::Vector2f(1, 1)),
     destinationFloor(UNDERGROUND_FLOOR)
     {
+        collisionBox.setSize(size);
         teleportPosition.setFillColor(sf::Color::Magenta);
     }
 
-void Portal::setTeleportPosition(const sf::Vector2f& position, const unsigned targetFloor) {
+void Portal::setTeleportPosition(const sf::Vector2f& position, const sf::Vector2f& size, const unsigned targetFloor) {
 
     teleportPosition.setPosition(position);
+    teleportPosition.setSize(size);
     destinationFloor = targetFloor;
+}
+
+void Portal::setDestinationFloor(const unsigned& floor) {
+
+    destinationFloor = floor;
 }
 
 const sf::Vector2f& Portal::getTeleportPosition() const {
@@ -35,14 +33,29 @@ const unsigned Portal::getDestinationFloor() const {
     return destinationFloor;
 }
 
+bool Portal::contains(const sf::Vector2f& point) const {
+
+    return StaticObject::contains(point) || teleportPosition.getGlobalBounds().contains(point);
+}
+
+void Portal::draw(sf::RenderWindow& window, unsigned floor) {
+
+    StaticObject::draw(window);
+
+    drawDestination(window, floor);
+}
+
+void Portal::drawDestination(sf::RenderWindow& window, unsigned floor) {
+
+    //only draw the destination position if its on the floor given
+    if(floor == destinationFloor) {
+
+        window.draw(teleportPosition);
+    }
+}
+
 void Portal::handleCollision(UserPlayer& collidingPlayer) {
 
     collidingPlayer.setInterpolationPosition(teleportPosition.getPosition());
     collidingPlayer.setFloor(destinationFloor);
-}
-
-void Portal::draw(sf::RenderWindow& window) {
-
-    StaticObject::draw(window);
-    window.draw(teleportPosition);
 }

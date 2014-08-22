@@ -1,12 +1,47 @@
 #include "ForegroundObject.h"
 #include "math.h"
 
-ForegroundObject::ForegroundObject(const sf::Vector2f& centerPosition) :
-    StaticObject(centerPosition),
+using std::string;
+
+ForegroundObject::ForegroundObject(const string& imagePath) :
+    StaticObject(sf::Vector2f(0, 0)),
+    foregroundTexture(),
+    texturePath(imagePath),
+    hasTexture(false),
     hidingPlayer(false)
     {
-        setupCollisionBox();
+        hasTexture = foregroundTexture.loadFromFile(imagePath);
+
+        collisionBox.setTexture(&foregroundTexture);
+        collisionBox.setSize(sf::Vector2f(foregroundTexture.getSize().x, foregroundTexture.getSize().y));
+
+        collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds()));
     }
+
+ForegroundObject::ForegroundObject(const sf::Vector2f& centerPosition) :
+    StaticObject(centerPosition),
+    foregroundTexture(),
+    texturePath(),
+    hasTexture(false),
+    hidingPlayer(false)
+    {
+
+    }
+
+bool ForegroundObject::hasImage() const {
+
+    return hasTexture;
+}
+
+const string& ForegroundObject::getImageName() const {
+
+    return texturePath;
+}
+
+void ForegroundObject::setPosition(const sf::Vector2f& centerPosition) {
+
+    collisionBox.setPosition(centerPosition);
+}
 
 void ForegroundObject::setHidingPlayer(const bool& playerHidden) {
 
@@ -21,12 +56,6 @@ void ForegroundObject::setHidingPlayer(const bool& playerHidden) {
 
      makeSolid();
     }
-}
-
-void ForegroundObject::setupCollisionBox() {
-
-    collisionBox.setSize(sf::Vector2f(250, 250));
-    collisionBox.setOrigin(calculateCenter(collisionBox.getLocalBounds()));
 }
 
 void ForegroundObject::makeSeethrough() {

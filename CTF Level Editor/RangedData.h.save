@@ -1,0 +1,24 @@
+#ifndef RANGEDDATA_H_INCLUDED
+#define RANGEDDATA_H_INCLUDED
+
+///when you need a data structure that is always in an enclosed interval use this class
+///you can increase and decrease the values and if it passes the max value it will become the min value and vice-versa
+template<typename T>
+class RangedData {
+    
+    private:
+        
+        const T maxValue;
+        const T minValue;
+        
+        T currentValue;
+        
+    public:
+        
+        RangedData(const T& currentValue, const T& minValue, const T& maxValue);
+        
+        const T operator T();
+        
+};
+
+#endif // RANGEDDATA_H_INCLUDED

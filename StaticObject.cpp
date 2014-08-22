@@ -27,6 +27,11 @@ const sf::Vector2f StaticObject::getPosition() const {
     return collisionBox.getPosition();
 }
 
+bool StaticObject::contains(const sf::Vector2f& point) const {
+
+    return collisionBox.getGlobalBounds().contains(point);
+}
+
 void StaticObject::handleCollision(UserPlayer& collidingPlayer) {
 
     sf::Vector2f movementOffset = calculateCollisionOffset(collidingPlayer.getDestinationBox(), collisionBox.getGlobalBounds());

@@ -23,6 +23,8 @@ class StaticObject {
         const sf::FloatRect getCollisionBox() const;
         const sf::Vector2f getPosition() const;
 
+        bool contains(const sf::Vector2f& point) const;
+
         virtual void handleCollision(UserPlayer& collidingPlayer);
 
         virtual void draw(sf::RenderWindow& window);

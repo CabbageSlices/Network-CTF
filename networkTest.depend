@@ -270,7 +270,7 @@
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1408139273 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1408746167 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
 
@@ -294,7 +294,7 @@
 	<cmath>
 	<cstdlib>
 
-1408139273 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1408746307 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -610,30 +610,36 @@
 	"Gun.h"
 	<iostream>
 
-1407788185 source:c:\users\nimesh\documents\github\network-ctf\block.cpp
+1408568410 source:c:\users\nimesh\documents\github\network-ctf\block.cpp
 	"Block.h"
 	"math.h"
 
-1407788149 c:\users\nimesh\documents\github\network-ctf\block.h
+1408480364 c:\users\nimesh\documents\github\network-ctf\block.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"StaticObject.h"
 
-1407452473 source:c:\users\nimesh\documents\github\network-ctf\levelmanager.cpp
+1408739909 source:c:\users\nimesh\documents\github\network-ctf\levelmanager.cpp
 	"LevelManager.h"
 	"Block.h"
 	"ForegroundObject.h"
+	"Portal.h"
+	"GunGiver.h"
+	"GunTypes.h"
+	"LargeImage.h"
 	"StaticObject.h"
 	<iostream>
 	<cstdlib>
 
-1407452473 c:\users\nimesh\documents\github\network-ctf\levelmanager.h
+1408739909 c:\users\nimesh\documents\github\network-ctf\levelmanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<string>
 	<vector>
 	<tr1/memory>
 	<fstream>
+	"Floor.h"
+	"Flag.h"
 
 1407698371 source:c:\users\nimesh\documents\github\network-ctf\camera.cpp
 	"Camera.h"
@@ -644,17 +650,18 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1408228553 c:\users\nimesh\documents\github\network-ctf\gameworld.h
+1408744279 c:\users\nimesh\documents\github\network-ctf\gameworld.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Floors.h"
 	"LargeImage.h"
+	"Floor.h"
 	<map>
 	<vector>
 	<tr1/memory>
 	<string>
 
-1408228624 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
+1408745851 source:c:\users\nimesh\documents\github\network-ctf\gameworld.cpp
 	"GameWorld.h"
 	"Block.h"
 	"LevelManager.h"
@@ -667,24 +674,25 @@
 	"GunGiver.h"
 	<iostream>
 
-1408058838 c:\users\nimesh\documents\github\network-ctf\staticobject.h
+1408745682 c:\users\nimesh\documents\github\network-ctf\staticobject.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1408059726 source:c:\users\nimesh\documents\github\network-ctf\staticobject.cpp
+1408745712 source:c:\users\nimesh\documents\github\network-ctf\staticobject.cpp
 	"StaticObject.h"
 	"math.h"
 	"UserPlayer.h"
 	"Collision.h"
 
-1408058996 source:c:\users\nimesh\documents\github\network-ctf\foregroundobject.cpp
+1408745026 source:c:\users\nimesh\documents\github\network-ctf\foregroundobject.cpp
 	"ForegroundObject.h"
 	"math.h"
 
-1408058961 c:\users\nimesh\documents\github\network-ctf\foregroundobject.h
+1408745026 c:\users\nimesh\documents\github\network-ctf\foregroundobject.h
 	"StaticObject.h"
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	<string>
 
 1408139652 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
 	"FlagManager.h"
@@ -709,22 +717,22 @@
 	"TeamManager.h"
 	<iostream>
 
-1408138285 source:c:\users\nimesh\documents\github\network-ctf\flag.cpp
+1408745412 source:c:\users\nimesh\documents\github\network-ctf\flag.cpp
 	"Flag.h"
 	"Floors.h"
 	"math.h"
 
-1408137945 c:\users\nimesh\documents\github\network-ctf\flag.h
+1408745412 c:\users\nimesh\documents\github\network-ctf\flag.h
 	"SFML/Graphics.hpp"
 	"SFML/System.hpp"
 
-1408059115 c:\users\nimesh\documents\github\network-ctf\portal.h
+1408745305 c:\users\nimesh\documents\github\network-ctf\portal.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"StaticObject.h"
 	"Floors.h"
 
-1408059644 source:c:\users\nimesh\documents\github\network-ctf\portal.cpp
+1408745336 source:c:\users\nimesh\documents\github\network-ctf\portal.cpp
 	"Portal.h"
 	"Floors.h"
 	"UserPlayer.h"
@@ -773,25 +781,32 @@
 	"GunTypes.h"
 	<tr1/memory>
 
-1408061323 source:c:\users\nimesh\documents\github\network-ctf\gungiver.cpp
+1408745545 source:c:\users\nimesh\documents\github\network-ctf\gungiver.cpp
 	"GunGiver.h"
 	"PlayerBase.h"
 	"GunHandlers.h"
 	"Gun.h"
+	"math.h"
 	<iostream>
 
-1408059914 c:\users\nimesh\documents\github\network-ctf\gungiver.h
+1408745095 c:\users\nimesh\documents\github\network-ctf\gungiver.h
 	"GunTypes.h"
 	"StaticObject.h"
+	<map>
 
-1408216589 c:\users\nimesh\documents\github\network-ctf\largeimage.h
+1408730994 c:\users\nimesh\documents\github\network-ctf\largeimage.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	<vector>
 	<tr1/memory>
 	<string>
 
-1408216612 source:c:\users\nimesh\documents\github\network-ctf\largeimage.cpp
+1408740331 source:c:\users\nimesh\documents\github\network-ctf\largeimage.cpp
 	"LargeImage.h"
 	<cmath>
+
+1408732694 c:\users\nimesh\documents\github\network-ctf\floor.h
+	<vector>
+	<tr1/memory>
+	"LargeImage.h"
 

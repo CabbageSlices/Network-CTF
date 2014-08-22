@@ -1,11 +1,10 @@
 #include "StaticObject.h"
 #include "math.h"
 
-StaticObject::StaticObject(const sf::Vector2f& centerPosition):
+StaticObject::StaticObject(const sf::Vector2f& position):
     collisionBox(sf::Vector2f(20, 20))
     {
-        collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds() ));
-        collisionBox.setPosition(centerPosition);
+        collisionBox.setPosition(position);
 
         //setup the size and other information about the static object
         setupCollisionBox();
@@ -23,6 +22,11 @@ const sf::FloatRect StaticObject::getCollisionBox() const {
 const sf::Vector2f StaticObject::getPosition() const {
 
     return collisionBox.getPosition();
+}
+
+bool StaticObject::contains(const sf::Vector2f& point) const {
+
+    return collisionBox.getGlobalBounds().contains(point);
 }
 
 void StaticObject::draw(sf::RenderWindow& window) {

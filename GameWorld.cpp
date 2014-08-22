@@ -23,9 +23,10 @@ GameWorld::GameWorld():
     teamASpawn(0, 0, 0, 0),
     teamBSpawn(0, 0, 0, 0)
     {
+        flagManager.reset(new FlagManager(sf::Vector2f(0, 0), sf::Vector2f(0, 0)));
         //create new floors
-        floors[OVERGROUND_FLOOR] = shared_ptr<GameFloor>(new GameFloor());
-        floors[UNDERGROUND_FLOOR] = shared_ptr<GameFloor>(new GameFloor());
+        floors[OVERGROUND_FLOOR] = shared_ptr<Floor>(new Floor());
+        floors[UNDERGROUND_FLOOR] = shared_ptr<Floor>(new Floor());
     }
 
 vector<shared_ptr<Block> >& GameWorld::getBlocks(const unsigned& floor) {
@@ -83,17 +84,12 @@ bool GameWorld::load(string levelName) {
 
     clearWorld();
 
-    flagManager.reset(new FlagManager(sf::Vector2f(0, 0), sf::Vector2f(500, 800)));
-    floors[OVERGROUND_FLOOR]->portals.push_back(shared_ptr<Portal>(new Portal(sf::Vector2f(-200, 200), sf::Vector2f(600, 800), UNDERGROUND_FLOOR)));
+    bool loadedOverground = loadOvergroundLevel(levelName, floors[OVERGROUND_FLOOR], *flagManager->teamAFlag(), *flagManager->teamBFlag(),
+                                      teamASpawn, teamBSpawn);
 
-    teamASpawn = {0, 0, 500, 500};
-    teamBSpawn = {0, 500, 500, 500};
+    bool loadedUnderground = loadUndergroundLevel(levelName, floors[UNDERGROUND_FLOOR]);
 
-    shared_ptr<GunGiver> shotgunGiver(new GunGiver(sf::Vector2f(-200, 50), SHOTGUN));
-    floors[OVERGROUND_FLOOR]->gunGivers.push_back(shotgunGiver);
-    floors[OVERGROUND_FLOOR]->backgroundImage.load("maptest.png");
-
-    return loadLevel(levelName, floors[OVERGROUND_FLOOR]->blocks, floors[OVERGROUND_FLOOR]->foregroundObjects);
+    return loadedOverground && loadedUnderground;
 }
 
 void GameWorld::clearWorld() {
@@ -109,7 +105,7 @@ void GameWorld::clearWorld() {
         floor.second->backgroundImage.clearImage();
     }
 
-    flagManager.reset();
+    flagManager->resetFlags();
 }
 
 void GameWorld::updateFlagPosition(PlayerBase& player) {
@@ -131,7 +127,7 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
 
     for(auto& portal : floors[floor]->portals) {
 
-        portal->draw(window);
+        portal->draw(window, floor);
     }
 
     for(auto& gunGiver : floors[floor]->gunGivers) {

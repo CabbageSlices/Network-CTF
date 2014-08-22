@@ -1,0 +1,34 @@
+start blocks
+1525.18
+389.218
+176.988
+856.494
+2265.83
+389.218
+176.988
+856.494
+1714.81
+190.107
+553.086
+126.42
+1730.61
+1264.67
+489.876
+97.9752
+end blocks
+start foreground
+end foreground
+begin portal
+1885.47
+648.378
+227.556
+199.111
+1752.73
+686.304
+1
+end portal
+begin gun giver
+end gun giver
+begin underground image
+maptest.png
+end underground image

@@ -12,7 +12,7 @@ GameManager::GameManager() :
     minimap(sf::Vector2f(0.25, 0.25), sf::Vector2u(1024, 768)),
     currentWindow()
     {
-        world.load("level");
+        world.load("untitled");
         minimap.setLevelSize(sf::Vector2f(5000, 2000));
     }
 

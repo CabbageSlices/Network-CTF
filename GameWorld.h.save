@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "Floors.h"
 #include "LargeImage.h"
+#include "Floor.h"
 
 #include <map>
 #include <vector>
@@ -23,19 +24,7 @@ class GameWorld {
 
     private:
 
-        //objects that exist in a floor
-        struct GameFloor {
-
-            std::vector<std::tr1::shared_ptr<Block> > blocks;
-            std::vector<std::tr1::shared_ptr<ForegroundObject> > foregroundObjects;
-            std::vector<std::tr1::shared_ptr<Portal> > portals;
-            std::vector<std::tr1::shared_ptr<GunGiver> > gunGivers;
-            
-            //background image of the floor
-            LargeImage backgroundImage;
-        };
-
-        std::map<const unsigned, std::tr1::shared_ptr<GameFloor> > floors;
+        std::map<const unsigned, std::tr1::shared_ptr<Floor> > floors;
 
         std::tr1::shared_ptr<FlagManager> flagManager;
 

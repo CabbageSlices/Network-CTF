@@ -1,0 +1,1076 @@
+#include "LevelEditor.h"
+#include "Input.h"
+#include "Floors.h"
+#include "GunGiver.h"
+#include "ForegroundObject.h"
+#include "Portal.h"
+#include "Block.h"
+#include "TeamManager.h"
+#include "LevelManager.h"
+
+#include <sstream>
+#include <cmath>
+#include <iostream>
+
+using std::stringstream;
+using std::cout;
+using std::endl;
+using std::string;
+using std::tr1::shared_ptr;
+using std::abs;
+using std::vector;
+
+LevelEditor::LevelEditor(sf::RenderWindow& window) :
+    BLOCK("Blocks"),
+    SPAWN_ZONE("Spawn Zones"),
+    FLAG_SPAWN("Flag Spawn Locations"),
+    FOREGROUND_OBJECT("Foreground Object"),
+    GUN_GIVER("Gun Giver"),
+    PORTAL_ENRANCE("Portal Entrance"),
+    PORTAL_EXIT("Portal Exit"),
+    NOTHING("Nothing"),
+    menus(),
+    buttons(),
+    redFlag(sf::Vector2f(0, 0), TEAM_A_COLOR),
+    blueFlag(sf::Vector2f(0, 0), TEAM_B_COLOR),
+    currentFloor(OVERGROUND_FLOOR),
+    floors(),
+    levelName("Untitled"),
+    filePath(""),
+    redSpawnArea(sf::Vector2f(50, 50)),
+    blueSpawnArea(sf::Vector2f(50, 50)),
+    font(),
+    levelNameText(),
+    isEditorOpen(true),
+    isObjectSelectOpen(false),
+    isTeamSelectOpen(false),
+    isWeaponSelectOpen(false),
+    floorText(),
+    creationMessage(),
+    mirrorText(),
+    creatingRectangle(false),
+    rectangleStart(0, 0),
+    rectangleEnd(0, 0),
+    dragArea(sf::Vector2f(1, 1)),
+    levelSize(window.getSize().x, window.getSize().y),
+    creatingBlocks(false),
+    creatingSpawn(false),
+    creatingPortal(false),
+    creatingPortalEntrance(false),
+    creatingPortalExit(false),
+    portal(),
+    portalOriginFloor(OVERGROUND_FLOOR),
+    creatingForeground(false),
+    foregroundCreated(),
+    creatingGunGiver(false),
+    gunGiverCreated(),
+    settingFlag(false),
+    team(TEAM_A_ID),
+    isMirrored(false),
+    cameraCenter(0, 0),
+    velocities(0, 0),
+    camera()
+    {
+
+        redSpawnArea.setFillColor(TEAM_A_COLOR);
+        blueSpawnArea.setFillColor(TEAM_B_COLOR);
+
+        camera.setDefaultSize(window);
+        camera.applyCamera(window);
+
+        setupMenus(window.getSize());
+
+        font.loadFromFile("font.ttf");
+
+        levelNameText.setFont(font);
+        levelNameText.setCharacterSize(15);
+
+        setupTitle();
+
+        floorText.setFont(font);
+        floorText.setCharacterSize(15);
+        floorText.setColor(sf::Color(0, 116, 0));
+
+        resetFloorText();
+
+        creationMessage.setFont(font);
+        creationMessage.setCharacterSize(20);
+
+        stopCreation();
+
+        mirrorText.setFont(font);
+        mirrorText.setCharacterSize(15);
+        mirrorText.setColor(sf::Color(0, 116, 0));
+
+        setupMirrorText();
+
+        dragArea.setFillColor(sf::Color(0, 0, 255, 100));
+
+        //create the floors
+        floors[OVERGROUND_FLOOR] = shared_ptr<Floor>(new Floor());
+        floors[UNDERGROUND_FLOOR] = shared_ptr<Floor>(new Floor());
+    }
+
+void LevelEditor::handleEvents(sf::Event& event, sf::RenderWindow& window) {
+
+    if(event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased) {
+
+        //have the moust position that is relative to the view and also relative to the window itself
+        //the one that is relative to the window is used to interact with the menus because the menus never move, while the one relative to the view
+        //is used to interact with the world because the world can move according to the camera
+        sf::Vector2f worldPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+        //in order to get the mouse position relative to the screen you need to apply the default window view so the position of the click is accurate
+        sf::Vector2f screenPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+            //if a menu button was pressed then don't let users create things
+            if(!buttonPressEvents(screenPosition, window)) {
+
+                leftClickEvents(worldPosition, window);
+            }
+
+        } else if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
+
+            rightClickEvents(worldPosition);
+        }
+
+        if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+
+            leftReleaseEvents(worldPosition, window);
+        }
+    }
+
+    if(event.type == sf::Event::KeyPressed) {
+
+        keyPressEvent(event);
+    }
+
+    if(event.type == sf::Event::Resized) {
+
+        resizedEvent(event, window);
+    }
+}
+
+void LevelEditor::update(const float& delta, sf::RenderWindow& window) {
+
+    keyboardState();
+    mouseState(window);
+
+    float xOffset = velocities.x * delta;
+    float yOffset = velocities.y * delta;
+
+    cameraCenter.x += xOffset;
+    cameraCenter.y += yOffset;
+
+    camera.setCameraCenter(cameraCenter);
+    camera.applyCamera(window);
+}
+
+void LevelEditor::draw(sf::RenderWindow& window) {
+
+    drawBackgrounds(window);
+    drawBlocks(window);
+
+    drawPortals(window);
+
+    drawGunGivers(window);
+
+    drawFlags(window);
+
+    window.draw(redSpawnArea);
+    window.draw(blueSpawnArea);
+
+    drawForeground(window);
+
+    if(creatingRectangle) {
+
+        window.draw(dragArea);
+    }
+
+    drawMenus(window);
+}
+
+void LevelEditor::setupMenus(sf::Vector2u windowSize) {
+
+    loadTextures();
+    setupSprites(windowSize);
+    setupButtons();
+}
+
+void LevelEditor::loadTextures() {
+
+    menus.editorMenu.loadFromFile("editormenu.png");
+    menus.editorMenuHidden.loadFromFile("hiddenEditor.png");
+    menus.objectSelectionMenu.loadFromFile("selectObject.png");
+    menus.teamSelectMenu.loadFromFile("selectTeam.png");
+    menus.gunGiverMenu.loadFromFile("gunGiverMenu.png");
+    menus.levelNameBar.loadFromFile("titleBar.png");
+}
+
+void LevelEditor::setupSprites(sf::Vector2u windowSize) {
+
+    //set the textures
+    menus.editor.setTexture(menus.editorMenu);
+    menus.editorHidden.setTexture(menus.editorMenuHidden);
+    menus.objectSelection.setTexture(menus.objectSelectionMenu);
+    menus.teamSelect.setTexture(menus.teamSelectMenu);
+    menus.gunGiver.setTexture(menus.gunGiverMenu);
+    menus.levelName.setTexture(menus.levelNameBar);
+
+    //set the position the menus should appear in
+    //set editor to the top left of the screen just under the level name bar
+    menus.editor.setPosition(windowSize.x - menus.editor.getGlobalBounds().width, menus.levelName.getGlobalBounds().height);
+
+    //the show editor button sprite should be placed at approximately the same height as the hide editor button on the image of the editor
+    //the magic number is the height of the hide editor button the on editor image
+    menus.editorHidden.setPosition(windowSize.x - menus.editorHidden.getGlobalBounds().width, menus.editor.getPosition().y + 81);
+
+    //show the object selection menu at the center of the screen
+    menus.objectSelection.setPosition(windowSize.x / 2 - menus.objectSelection.getGlobalBounds().width / 2, windowSize.y / 2- menus.objectSelection.getGlobalBounds().height / 2);
+
+    //team select should also be in center
+    menus.teamSelect.setPosition(windowSize.x / 2 - menus.teamSelect.getGlobalBounds().width / 2, windowSize.y / 2- menus.teamSelect.getGlobalBounds().height / 2);
+
+    menus.gunGiver.setPosition(windowSize.x / 2 - menus.gunGiver.getGlobalBounds().width / 2, windowSize.y / 2- menus.gunGiver.getGlobalBounds().height / 2);
+
+    menus.levelName.setPosition(windowSize.x / 2 - menus.levelName.getGlobalBounds().width / 2, 0);
+}
+
+void LevelEditor::setupButtons() {
+
+    //location of the buttons, must be found on the image where the button is located
+    //all locations are relative to the image on which the button is located
+    sf::Vector2f offset = menus.editor.getPosition();
+
+    buttons.hideEditor = sf::FloatRect(offset.x + 5, offset.y + 81, 28, 122);
+    buttons.changeName = sf::FloatRect(offset.x + 43, offset.y + 10, 163, 30);
+    buttons.previousFloor = sf::FloatRect(offset.x + 43, offset.y + 54, 20, 21);
+    buttons.nextFloor = sf::FloatRect(offset.x + 190, offset.y + 53, 18, 18);
+    buttons.enableMirroring = sf::FloatRect(offset.x + 80, offset.y + 93, 123, 28);
+    buttons.setBackground = sf::FloatRect(offset.x + 50, offset.y + 127, 149, 30);
+    buttons.clearBackground = sf::FloatRect(offset.x + 52, offset.y + 166, 148, 29);
+    buttons.createCollisionBoxes = sf::FloatRect(offset.x + 53, offset.y + 203, 146, 33);
+    buttons.clearCollisionBoxes = sf::FloatRect(offset.x + 50, offset.y + 242, 150, 32);
+    buttons.createObjects = sf::FloatRect(offset.x + 49, offset.y + 281, 149, 28);
+    buttons.clearObjects = sf::FloatRect(offset.x + 51, offset.y + 317, 148, 30);
+    buttons.clearLevel = sf::FloatRect(offset.x + 49, offset.y + 356, 150, 28);
+    buttons.saveLevel = sf::FloatRect(offset.x + 47, offset.y + 393, 151, 30);
+    buttons.loadLevel = sf::FloatRect(offset.x + 47, offset.y + 433, 148, 32);
+
+    offset = menus.objectSelection.getPosition();
+
+    buttons.teamSpawnArea = sf::FloatRect(offset.x + 19, offset.y + 36, 134, 67);
+    buttons.flags = sf::FloatRect(offset.x + 184, offset.y + 37, 135, 66);
+    buttons.foregroundObjects = sf::FloatRect(offset.x + 22, offset.y + 125, 134, 66);
+    buttons.portals = sf::FloatRect(offset.x + 185, offset.y + 124, 134, 64);
+    buttons.weapons = sf::FloatRect(offset.x + 105, offset.y + 203, 134, 68);
+    buttons.cancelSelectObjects = sf::FloatRect(offset.x + 238, offset.y + 251, 119, 42);
+
+    offset = menus.teamSelect.getPosition();
+
+    buttons.redTeam = sf::FloatRect(offset.x + 42, offset.y + 39, 85, 41);
+    buttons.blueTeam = sf::FloatRect(offset.x + 151, offset.y + 40, 83, 41);
+    buttons.cancelSelectTeam = sf::FloatRect(offset.x + 190, offset.y + 83, 83, 27);
+
+    offset = menus.gunGiver.getPosition();
+
+    buttons.pistolGiver = sf::FloatRect(offset.x + 3, offset.y + 20, 64, 59);
+    buttons.shotgunGiver = sf::FloatRect(offset.x + 78, offset.y + 18, 64, 59);
+    buttons.sniperGiver = sf::FloatRect(offset.x + 144, offset.y + 18, 64, 59);
+}
+
+void LevelEditor::setupTitle() {
+
+    levelNameText.setString(levelName);
+
+    //slight offset to move the text by in order to not draw on the borders of the titlebar
+    const float verticalOffset = 5;
+    levelNameText.setPosition((menus.levelName.getPosition().x + menus.levelName.getGlobalBounds().width / 2) - levelNameText.getGlobalBounds().width / 2,
+                              menus.levelName.getPosition().y + menus.levelName.getGlobalBounds().height - levelNameText.getGlobalBounds().height - verticalOffset);
+}
+
+bool LevelEditor::setInput(std::string& inputDestination, sf::RenderWindow& window) {
+
+    string input = receiveInput(window, font);
+
+    if(input != EXITED_FUNCTION && input != CLOSED_PROGRAM) {
+
+        inputDestination = input;
+        return true;
+    }
+
+    return false;
+}
+
+void LevelEditor::setCreationMessage(const std::string& objectCreated) {
+
+    creationMessage.setString("Currently Creating " + objectCreated);
+
+    //always set the the creation message underneath the title bar
+    creationMessage.setPosition(menus.levelName.getPosition().x + menus.levelName.getGlobalBounds().width / 2 - creationMessage.getGlobalBounds().width / 2,
+                                menus.levelName.getPosition().y + menus.levelName.getGlobalBounds().height);
+}
+
+void LevelEditor::startPortalEntranceCreation() {
+
+    stopCreation();
+
+    creatingPortalEntrance = true;
+    creatingPortal = true;
+
+    setCreationMessage(PORTAL_ENRANCE);
+}
+
+void LevelEditor::startPortalExitCreation() {
+
+    //dont delete previous portals
+    creatingPortalEntrance = false;
+    creatingPortalExit = true;
+    creatingPortal = true;
+
+    setCreationMessage(PORTAL_EXIT);
+}
+
+void LevelEditor::stopCreation() {
+
+    creatingBlocks = false;
+    creatingSpawn = false;
+    creatingPortal = false;
+    creatingPortalEntrance = false;
+    creatingPortalExit = false;
+    creatingForeground = false;
+    creatingGunGiver = false;
+
+    settingFlag = false;
+
+    portal.reset();
+    foregroundCreated.reset();
+    gunGiverCreated.reset();
+
+    setCreationMessage(NOTHING);
+}
+
+void LevelEditor::clearLevel() {
+
+    floors[OVERGROUND_FLOOR].reset(new Floor());
+    floors[UNDERGROUND_FLOOR].reset(new Floor());
+}
+
+void LevelEditor::clearBlocks() {
+
+    floors[currentFloor]->blocks.clear();
+}
+
+void LevelEditor::clearObjects() {
+
+    floors[currentFloor]->portals.clear();
+    floors[currentFloor]->foregroundObjects.clear();
+    floors[currentFloor]->gunGivers.clear();
+}
+
+void LevelEditor::clearBackground() {
+
+    floors[currentFloor]->backgroundImage.clearImage();
+}
+
+void LevelEditor::saveLevel() {
+
+    saveOvergroundLevel(levelName, floors[OVERGROUND_FLOOR], redFlag, blueFlag, redSpawnArea.getGlobalBounds(), blueSpawnArea.getGlobalBounds());
+    saveUndergroundLevel(levelName, floors[UNDERGROUND_FLOOR]);
+
+    cout << "saved" << endl;
+}
+
+void LevelEditor::loadLevel(const std::string& level) {
+    
+    sf::FloatRect redSpawn;
+    sf::FloatRect blueSpawn;
+    
+    loadOvergroundLevel(level, floors[OVERGROUND_FLOOR], redFlag, blueFlag, redSpawn, blueSpawn);
+    
+    redSpawnArea.setPosition(redSpawn.left, redSpawn.top);
+    redSpawnArea.setSize(sf::Vector2f(redSpawn.width, redSpawn.height));
+    
+    blueSpawnArea.setPosition(blueSpawn.left, blueSpawn.top);
+    blueSpawnArea.setSize(sf::Vector2f(blueSpawn.width, blueSpawn.height));
+    
+    loadUndergroundLevel(level, floors[UNDERGROUND_FLOOR]);
+    
+    cout << "loaded" << endl;
+}
+
+void LevelEditor::resetFloorText() {
+
+    stringstream message;
+    message << currentFloor;
+
+    floorText.setString(message.str());
+
+    //position of floor text is based on the editor menu image, must be positioned exaclty
+    floorText.setPosition(menus.editor.getPosition().x + 79, menus.editor.getPosition().y + 55);
+}
+
+void LevelEditor::setupMirrorText() {
+
+    mirrorText.setString("X");
+
+    mirrorText.setPosition(menus.editor.getPosition().x + 49, menus.editor.getPosition().y + 96);
+}
+
+shared_ptr<Block> LevelEditor::createMirror(shared_ptr<Block>& block) {
+
+    //mirror the block along the x axis
+    //mirror the left and right edge of the block and create a new block out of the mirrored sides
+    //the right edge of the original, once mirrored, will be the left edge of the new block
+    //the left edge of the origiinal, once mirrored, will become the right edge of the new block
+    sf::FloatRect boundingBox = block->getCollisionBox();
+
+    //because the size of the block will stay the same you just need to calculate the top left position of the block
+    sf::Vector2f mirroredLeft = createMirror(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top));
+
+    //can't use the blocks getsize function because it miht give a negative size, must use the size of teh bounding box
+    shared_ptr<Block> mirroredBlock(new Block(sf::Vector2f(boundingBox.width, boundingBox.height)));
+    mirroredBlock->setPosition(mirroredLeft);
+
+    return mirroredBlock;
+}
+
+sf::Vector2f LevelEditor::createMirror(const sf::Vector2f& position) {
+
+    //object is mirrored horizontally along the center
+    float levelCenter = levelSize.x / 2;
+    float distanceToCenter = levelCenter - position.x;
+
+    //the vertical position of the mirrored position is still the same
+    sf::Vector2f mirroredPosition(position);
+
+    mirroredPosition.x = levelCenter + distanceToCenter;
+
+    return mirroredPosition;
+}
+
+template<class Object>
+void LevelEditor::destoryObject(vector<shared_ptr<Object> >& container, const sf::Vector2f& point) {
+
+    //start from the end of the vector because the last object added is the object at the top
+    for(auto iter = container.rbegin(); iter != container.rend(); ++iter) {
+
+        if((*iter)->contains(point)) {
+
+            container.erase((iter.base()) - 1);
+            break;
+        }
+    }
+}
+
+bool LevelEditor::buttonPressEvents(sf::Vector2f& mousePosition, sf::RenderWindow& window) {
+
+    bool pressedButton = true;
+
+    if(isWeaponSelectOpen) {
+
+        if(buttons.pistolGiver.contains(mousePosition)) {
+
+            gunGiverCreated.reset(new GunGiver(PISTOL));
+
+        } else if(buttons.shotgunGiver.contains(mousePosition)) {
+
+            gunGiverCreated.reset(new GunGiver(SHOTGUN));
+
+        } else if(buttons.sniperGiver.contains(mousePosition)) {
+
+            gunGiverCreated.reset(new GunGiver(SNIPER));
+
+        } else {
+
+            pressedButton = false;
+        }
+
+        if(gunGiverCreated) {
+
+            //a gun was chosen so close menus
+            isWeaponSelectOpen = false;
+            isObjectSelectOpen = false;
+            creatingGunGiver = true;
+        }
+
+    } else if(isTeamSelectOpen) {
+
+        if(buttons.redTeam.contains(mousePosition)) {
+
+            team = TEAM_A_ID;
+            isTeamSelectOpen = false;
+            isObjectSelectOpen = false;
+
+        } else if(buttons.blueTeam.contains(mousePosition)) {
+
+            team = TEAM_B_ID;
+            isTeamSelectOpen = false;
+            isObjectSelectOpen = false;
+
+        } else if(buttons.cancelSelectTeam.contains(mousePosition)) {
+
+            isTeamSelectOpen = false;
+
+        } else {
+
+            pressedButton = false;
+        }
+
+    } else if(isObjectSelectOpen) {
+
+        if(buttons.teamSpawnArea.contains(mousePosition)) {
+
+            isTeamSelectOpen = true;
+
+            stopCreation();
+
+            creatingSpawn = true;
+
+            setCreationMessage(SPAWN_ZONE);
+
+        } else if(buttons.flags.contains(mousePosition)) {
+
+            isTeamSelectOpen = true;
+
+            stopCreation();
+
+            settingFlag = true;
+
+            setCreationMessage(FLAG_SPAWN);
+
+        } else if(buttons.foregroundObjects.contains(mousePosition)) {
+
+            stopCreation();
+
+            //try to receive a name for the foreground image
+            string imageName;
+
+            if(setInput(imageName, window)) {
+
+                //try creating a foreground object with the give image
+                foregroundCreated.reset(new ForegroundObject(filePath + imageName + ".png"));
+
+                //check if the foreground created has an image, meaning if the file was loaded
+                if(foregroundCreated->hasImage()) {
+
+                    //image exists and is loaded succesfully so begin creating foreground objects
+                    creatingForeground = true;
+                    setCreationMessage(FOREGROUND_OBJECT);
+
+                    //make this image invisible so player can see where he is placing new foreground
+                    foregroundCreated->setHidingPlayer(true);
+                    isObjectSelectOpen = false;
+
+                } else {
+
+                    stopCreation();
+                }
+            }
+
+        } else if(buttons.portals.contains(mousePosition)) {
+
+            startPortalEntranceCreation();
+            isObjectSelectOpen = false;
+
+        } else if(buttons.weapons.contains(mousePosition)) {
+
+            stopCreation();
+            isWeaponSelectOpen = true;
+
+        } else if(buttons.cancelSelectObjects.contains(mousePosition)) {
+
+            isObjectSelectOpen = false;
+
+        } else {
+
+            pressedButton = false;
+        }
+
+    } else if(isEditorOpen) {
+
+        if(buttons.createObjects.contains(mousePosition)) {
+
+            isObjectSelectOpen = true;
+
+        } else if(buttons.hideEditor.contains(mousePosition)) {
+
+            isEditorOpen = false;
+
+        } else if(buttons.changeName.contains(mousePosition)) {
+
+            if(setInput(levelName, window)) {
+
+                setupTitle();
+            }
+
+        } else if(buttons.previousFloor.contains(mousePosition) || buttons.nextFloor.contains(mousePosition)) {
+
+            //set the floor to whatever floor isn't being edited
+            currentFloor = (currentFloor == UNDERGROUND_FLOOR) ? OVERGROUND_FLOOR : UNDERGROUND_FLOOR;
+
+            resetFloorText();
+
+        } else if(buttons.enableMirroring.contains(mousePosition)) {
+
+            isMirrored = !isMirrored;
+
+        } else if(buttons.setBackground.contains(mousePosition)) {
+
+            //get name of background to use, name of just the image, without file path or extention
+            string backgroundName;
+
+            //if the background image doesn't load it will remain unchanged
+            if(setInput(backgroundName, window) && floors[currentFloor]->backgroundImage.load(filePath + backgroundName + ".png")) {
+
+                //the size of the level is dependant only on the image of the overground floor
+                levelSize = floors[OVERGROUND_FLOOR]->backgroundImage.getSize();
+            }
+
+        } else if(buttons.clearBackground.contains(mousePosition)) {
+
+            clearBackground();
+
+        } else if(buttons.createCollisionBoxes.contains(mousePosition)) {
+
+            //create blocks
+            //or stop creating blocks if he was already creating blocks
+            //stop all other object creations
+            //stop creation stops all creations including block so keep track of whether block
+            //was being created before button was pressed
+            bool wasCreating = creatingBlocks;
+
+            stopCreation();
+
+            if(!wasCreating) {
+
+                //blocks wasn't being created before so create blocks
+                creatingBlocks = true;
+                setCreationMessage(BLOCK);
+            }
+
+        } else if(buttons.clearCollisionBoxes.contains(mousePosition)) {
+
+            clearBlocks();
+
+        } else if(buttons.clearObjects.contains(mousePosition)) {
+
+            clearObjects();
+
+        } else if(buttons.clearLevel.contains(mousePosition)) {
+
+            clearLevel();
+
+        } else if(buttons.saveLevel.contains(mousePosition)) {
+
+            saveLevel();
+
+        } else if(buttons.loadLevel.contains(mousePosition)) {
+
+            //get the user to input a name
+            string levelToLoad;
+            
+            if(setInput(levelToLoad, window)) 
+
+        } else {
+
+            pressedButton = false;
+        }
+
+    } else if(!isEditorOpen) {
+
+        if(menus.editorHidden.getGlobalBounds().contains(mousePosition)) {
+
+            isEditorOpen = true;
+
+        } else {
+
+            pressedButton = false;
+        }
+    }
+
+    creatingPortal = creatingPortalEntrance || creatingPortalExit;
+
+    //create rectangles if any rectangular objects are being created
+    creatingRectangle = creatingBlocks || creatingSpawn || creatingPortal;
+
+    return pressedButton;
+}
+
+void LevelEditor::leftClickEvents(sf::Vector2f& mousePosition, sf::RenderWindow& window) {
+
+    if(creatingRectangle) {
+
+        rectangleStart = mousePosition;
+        rectangleEnd = mousePosition;
+
+        dragArea.setPosition(rectangleStart);
+
+        cout << mousePosition.x << " " << mousePosition.y << endl;
+    }
+
+    if(creatingForeground) {
+
+        //create a foreground at the given position
+        shared_ptr<ForegroundObject> foreground(new ForegroundObject(foregroundCreated->getImageName()));
+        foreground->setPosition(mousePosition);
+
+        floors[currentFloor]->foregroundObjects.push_back(foreground);
+
+        if(isMirrored) {
+
+            //create a foreground at the given position
+            shared_ptr<ForegroundObject> mirroredForeground(new ForegroundObject(foregroundCreated->getImageName()));
+            mirroredForeground->setPosition(createMirror(mousePosition));
+
+            floors[currentFloor]->foregroundObjects.push_back(mirroredForeground);
+        }
+    }
+
+    if(creatingGunGiver) {
+
+        //create a giver at the given position with the given gun type
+        shared_ptr<GunGiver> giver(new GunGiver(gunGiverCreated->getGunType()));
+        giver->setPosition(mousePosition);
+
+        floors[currentFloor]->gunGivers.push_back(giver);
+
+        if(isMirrored) {
+
+            //create a foreground at the given position
+            shared_ptr<GunGiver> mirroredGiver(new GunGiver(gunGiverCreated->getGunType()));
+            mirroredGiver->setPosition(createMirror(mousePosition));
+
+            floors[currentFloor]->gunGivers.push_back(mirroredGiver);
+        }
+    }
+
+    if(settingFlag) {
+
+        if(team == TEAM_A_ID) {
+
+            redFlag.setSpawn(mousePosition);
+
+        } else {
+
+            blueFlag.setSpawn(mousePosition);
+        }
+
+        if(isMirrored) {
+
+            Flag& otherFlag = (team == TEAM_A_ID) ? blueFlag : redFlag;
+
+            otherFlag.setSpawn(createMirror(mousePosition));
+        }
+    }
+}
+
+void LevelEditor::leftReleaseEvents(sf::Vector2f& mousePosition, sf::RenderWindow& window) {
+
+    creatingRectangle = false;
+    rectangleEnd = mousePosition;
+
+    sf::Vector2f rectSize(rectangleEnd.x - rectangleStart.x, rectangleEnd.y - rectangleStart.y);
+
+    if(abs(rectSize.x) < 10 || abs(rectSize.y) < 10) {
+
+            //too small so don't create any objects no matter what
+            return;
+    }
+
+    //if the size of the block the player is trying to create is big enough then create it
+    if(creatingBlocks) {
+
+        //create a rectangle based on the start and end points of the click and drag rectangle
+        shared_ptr<Block> block(new Block(rectSize));
+        block->setPosition(rectangleStart);
+
+        floors[currentFloor]->blocks.push_back(block);
+
+        //create a mirror if needed
+        if(isMirrored) {
+
+            floors[currentFloor]->blocks.push_back(createMirror(block));
+        }
+    }
+
+    if(creatingSpawn) {
+
+        if(team == TEAM_A_ID) {
+
+            redSpawnArea.setPosition(rectangleStart);
+            redSpawnArea.setSize(rectSize);
+
+        } else {
+
+            blueSpawnArea.setPosition(rectangleStart);
+            blueSpawnArea.setSize(rectSize);
+        }
+    }
+
+    if(creatingPortal) {
+
+        if(creatingPortalEntrance) {
+
+            //create the initial portal
+            portal.reset(new Portal(rectangleStart, rectSize));
+
+            //save which floor the portal was created on
+            portalOriginFloor = currentFloor;
+
+            //begin creating the portal exit next
+            startPortalExitCreation();
+
+        } else if(creatingPortalExit) {
+
+            //set the destination of the portal to the rectangle created
+            portal->setTeleportPosition(rectangleStart, rectSize, currentFloor);
+
+            //add the portal to the floor in which the portal originated, not the floor where the destination is located
+            floors[portalOriginFloor]->portals.push_back(portal);
+
+            startPortalEntranceCreation();
+        }
+
+        creatingPortal = creatingPortalEntrance || creatingPortalExit;
+    }
+}
+
+void LevelEditor::rightClickEvents(sf::Vector2f& mousePosition) {
+
+    //right click is destroything stuff, check what kind of object he was creating and only destory the same type of objects
+    if(creatingBlocks) {
+
+        destoryObject(floors[currentFloor]->blocks, mousePosition);
+
+        //now destory the object in the mirrored position if mirroring is enabled
+        if(isMirrored) {
+
+            destoryObject(floors[currentFloor]->blocks, createMirror(mousePosition));
+        }
+    }
+
+    if(creatingForeground) {
+
+        destoryObject(floors[currentFloor]->foregroundObjects, mousePosition);
+
+        if(isMirrored) {
+
+            destoryObject(floors[currentFloor]->foregroundObjects, createMirror(mousePosition));
+        }
+    }
+
+    if(creatingPortal) {
+
+        destoryObject(floors[currentFloor]->portals, mousePosition);
+
+        //if a portal is partially created and it was destoryed restart the portal creation process
+        if(creatingPortalExit && portal->getCollisionBox().contains(mousePosition)) {
+
+            startPortalEntranceCreation();
+        }
+    }
+
+    if(creatingGunGiver) {
+
+        destoryObject(floors[currentFloor]->gunGivers, mousePosition);
+
+        if(isMirrored) {
+
+            destoryObject(floors[currentFloor]->gunGivers, createMirror(mousePosition));
+        }
+    }
+}
+
+void LevelEditor::resizedEvent(sf::Event& event, sf::RenderWindow& window) {
+
+    camera.setDefaultSize(window);
+}
+
+void LevelEditor::keyPressEvent(sf::Event& event) {
+
+    if(event.key.code == sf::Keyboard::Add) {
+
+        camera.zoomIn();
+    }
+
+    if(event.key.code == sf::Keyboard::Subtract) {
+
+        camera.zoomOut();
+    }
+}
+
+void LevelEditor::keyboardState() {
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+
+        velocities.y = -getVelocity();
+
+    } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+
+        velocities.y = getVelocity();
+
+    } else {
+
+        velocities.y = 0;
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+
+        velocities.x = -getVelocity();
+
+    } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+        velocities.x = getVelocity();
+
+    } else {
+
+        velocities.x = 0;
+    }
+}
+
+void LevelEditor::mouseState(sf::RenderWindow& window) {
+
+    sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+    rectangleEnd = mousePosition;
+    dragArea.setSize(sf::Vector2f(rectangleEnd.x - rectangleStart.x, rectangleEnd.y - rectangleStart.y));
+
+    //set the position of any foreground that is being created
+    if(foregroundCreated) {
+
+        foregroundCreated->setPosition(mousePosition);
+    }
+
+    if(gunGiverCreated) {
+
+        gunGiverCreated->setPosition(mousePosition);
+    }
+}
+
+void LevelEditor::drawMenus(sf::RenderWindow& window) {
+
+    //menus don't move with the world so put the window to default view before drawing
+    sf::View previousView = window.getView();
+    window.setView(window.getDefaultView());
+
+    if(isEditorOpen) {
+
+        window.draw(menus.editor);
+        window.draw(floorText);
+
+        if(isMirrored) {
+
+            window.draw(mirrorText);
+        }
+
+    } else {
+
+        window.draw(menus.editorHidden);
+    }
+
+    if(isObjectSelectOpen) {
+
+        window.draw(menus.objectSelection);
+    }
+
+    if(isTeamSelectOpen) {
+
+        window.draw(menus.teamSelect);
+    }
+
+    if(isWeaponSelectOpen) {
+
+        window.draw(menus.gunGiver);
+    }
+
+    window.draw(menus.levelName);
+    window.draw(levelNameText);
+
+    window.draw(creationMessage);
+
+    //restore previous view
+    window.setView(previousView);
+}
+
+void LevelEditor::drawBackgrounds(sf::RenderWindow& window) {
+
+    floors[currentFloor]->backgroundImage.draw(window);
+}
+
+void LevelEditor::drawBlocks(sf::RenderWindow& window) {
+
+    for(auto& block : floors[currentFloor]->blocks) {
+
+        block->draw(window);
+    }
+}
+
+void LevelEditor::drawPortals(sf::RenderWindow& window) {
+
+    //draw any portal that exists on the current floor, or whose destination exists on the current floor
+    for(auto& toDraw : floors[currentFloor]->portals) {
+
+        toDraw->draw(window, currentFloor);
+    }
+
+    unsigned floorNotDrawn = (currentFloor == OVERGROUND_FLOOR) ? UNDERGROUND_FLOOR : OVERGROUND_FLOOR;
+
+    for(auto& toDraw : floors[floorNotDrawn]->portals) {
+
+        toDraw->drawDestination(window, currentFloor);
+    }
+
+    //lastly draw the portal being created if its on the same floor and it exists
+    if(portalOriginFloor == currentFloor && portal) {
+
+        portal->draw(window, currentFloor);
+    }
+}
+
+void LevelEditor::drawForeground(sf::RenderWindow& window) {
+
+    for(auto& toDraw : floors[currentFloor]->foregroundObjects) {
+
+        toDraw->draw(window);
+    }
+
+    //if a foreground is being created then draw the foreground being created so user knows where he is placing the foreground
+    if(foregroundCreated) {
+
+        foregroundCreated->draw(window);
+    }
+}
+
+void LevelEditor::drawGunGivers(sf::RenderWindow& window) {
+
+    for(auto& giver : floors[currentFloor]->gunGivers) {
+
+        giver->draw(window);
+    }
+
+    if(gunGiverCreated) {
+
+        gunGiverCreated->draw(window);
+    }
+}
+
+void LevelEditor::drawFlags(sf::RenderWindow& window) {
+
+    if(currentFloor == OVERGROUND_FLOOR || settingFlag) {
+
+        redFlag.draw(window);
+    }
+
+    if(currentFloor == OVERGROUND_FLOOR || settingFlag) {
+
+        blueFlag.draw(window);
+    }
+}
+
+const float LevelEditor::getVelocity() const {
+
+    return 500;
+}

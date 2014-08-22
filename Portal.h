@@ -23,19 +23,22 @@ class Portal : public StaticObject {
 
     public:
 
-        Portal(const sf::Vector2f& centerPosition, const sf::Vector2f& teleportLocation, const unsigned destinationFloor = UNDERGROUND_FLOOR);
-        Portal(const sf::Vector2f& centerPosition);
+        Portal(const sf::Vector2f& position, const sf::Vector2f& size);
 
         virtual ~Portal(){/*empty destructor*/}
 
-        void setTeleportPosition(const sf::Vector2f& position, const unsigned destinationFloor = UNDERGROUND_FLOOR);
-        const sf::Vector2f& getTeleportPosition() const;
+        void setTeleportPosition(const sf::Vector2f& position, const sf::Vector2f& size = sf::Vector2f(20, 20), const unsigned destinationFloor = UNDERGROUND_FLOOR);
+        void setDestinationFloor(const unsigned& floor);
 
+        const sf::Vector2f& getTeleportPosition() const;
         const unsigned getDestinationFloor() const;
 
-        virtual void handleCollision(UserPlayer& collidingPlayer);
+        bool contains(const sf::Vector2f& point) const;
 
-        virtual void draw(sf::RenderWindow& window);
+        void draw(sf::RenderWindow& window, unsigned floor);
+        void drawDestination(sf::RenderWindow& window, unsigned floor);
+
+        virtual void handleCollision(UserPlayer& collidingPlayer);
 };
 
 #endif // PORTAL_H_INCLUDED

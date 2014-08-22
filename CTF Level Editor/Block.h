@@ -10,11 +10,13 @@ class Block : public StaticObject {
 
     protected:
 
-        virtual void setupCollisionBox();
+        virtual void setupCollisionBox(const sf::Vector2f& size);
 
     public:
 
-        Block(const sf::Vector2f& centerPosition);
+        Block(const sf::Vector2f& blockSize);
+        void setPosition(const sf::Vector2f& position);
+
         virtual ~Block();
 };
 

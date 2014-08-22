@@ -21,7 +21,9 @@ class StaticObject {
         const sf::FloatRect getCollisionBox() const;
         const sf::Vector2f getPosition() const;
 
-        virtual void draw(sf::RenderWindow& window);
+        bool contains(const sf::Vector2f& point) const;
+
+        void draw(sf::RenderWindow& window);
 };
 
 #endif // STATICOBJECT_H_INCLUDED
