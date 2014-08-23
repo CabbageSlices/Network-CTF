@@ -376,7 +376,7 @@ void ServerGameManager::playerSpawnCollision(shared_ptr<ServerGameManager::Conne
 
     const sf::FloatRect& spawnArea = getGameWorld().getSpawnArea(player->player.getTeam());
 
-    if(player->player.getCollisionBox().intersects(spawnArea)) {
+    if(player->player.getCollisionBox().intersects(spawnArea) && player->player.isAlive()) {
 
         player->player.regenerateHealth();
     }
