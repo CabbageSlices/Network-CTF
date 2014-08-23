@@ -123,24 +123,23 @@ void ClientGameManager::handleServerUpdates() {
     sf::Packet downloadedData;
 
     //not server data so no point handling the data
-    if(!client.receiveFromServer(downloadedData)) {
+    while(client.receiveFromServer(downloadedData)) {
 
-        return;
-    }
+        //check the type of data received
+        const int packetType = getPacketType(downloadedData);
 
-    //check the type of data received
-    const int packetType = getPacketType(downloadedData);
+        //respond to the packet depending on the type of packet
+        if(packetType == PLAYER_STATE_UPDATE) {
 
-    //respond to the packet depending on the type of packet
-    if(packetType == PLAYER_STATE_UPDATE) {
-
-        applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData);
+            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData);
 
 
-    } else if(packetType == WORLD_STATE_UPDATE) {
+        } else if(packetType == WORLD_STATE_UPDATE) {
 
-        applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
-        serverUpdateTime = stateUpdateTimer.restart();
+            applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
+            serverUpdateTime = stateUpdateTimer.restart();
+        }
+    
     }
 }
 
