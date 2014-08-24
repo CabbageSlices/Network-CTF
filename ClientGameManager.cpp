@@ -169,6 +169,8 @@ void ClientGameManager::handleBulletCollision() {
     //get the bullets from the player and check for collision with others
     vector<shared_ptr<Bullet> > bullets = userPlayer.getBullets();
 
+    sf::Clock ti;
+
     for(auto& bullet : bullets) {
 
         if(!bullet->checkCanCollide()) {
@@ -177,7 +179,7 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getBlocks(userPlayer.getFloor()));
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()));
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
@@ -189,6 +191,11 @@ void ClientGameManager::handleBulletCollision() {
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
     }
+
+    float passed = ti.getElapsedTime().asMilliseconds();
+
+    if(passed != 0)
+    cout << ti.getElapsedTime().asMilliseconds() << endl;
 }
 
 void ClientGameManager::playerForegroundCollision() {

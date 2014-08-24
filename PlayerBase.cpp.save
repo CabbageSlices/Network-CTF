@@ -33,7 +33,7 @@ PlayerBase::PlayerBase():
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
     respawnTimer(),
-    respawnDelay(sf::seconds(2)),
+    respawnDelay(sf::seconds(5)),
     kills(0),
     deaths(0),
     flagCaptures(0),

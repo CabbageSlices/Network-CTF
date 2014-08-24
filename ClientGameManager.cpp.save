@@ -139,7 +139,7 @@ void ClientGameManager::handleServerUpdates() {
             applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
             serverUpdateTime = stateUpdateTimer.restart();
         }
-    
+
     }
 }
 
@@ -177,7 +177,7 @@ void ClientGameManager::handleBulletCollision() {
         }
 
         //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getBlocks(userPlayer.getFloor()));
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()));
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,

@@ -196,7 +196,7 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-        bulletEntityCollision<Block>(bullet, getBlocks(player->player.getFloor()));
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), player->player.getFloor()));
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);

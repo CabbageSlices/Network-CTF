@@ -38,7 +38,7 @@ void playerStaticCollision(Player& player, std::vector<std::tr1::shared_ptr<Stat
 //take a function that is called to check if the collision response should be handled between the given bullet and the entity that the bullet is colliding with
 //e.g a funciton that tests if the collision should occur in the first place
 template<class Entity>
-void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std::tr1::shared_ptr<Entity> >& entities,
+void bulletEntityCollision(std::tr1::shared_ptr<Bullet> bullet, std::vector<std::tr1::shared_ptr<Entity> > entities,
                            std::function<bool(std::tr1::shared_ptr<Entity>& entity)> collisionPredicate = [](std::tr1::shared_ptr<Entity>& entity){return true;}) {
 
     //go through all entities and check for collision with them
