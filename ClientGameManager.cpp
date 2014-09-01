@@ -357,7 +357,11 @@ void ClientGameManager::handleCollisions() {
 
     //no broadphase as of yet
     //check for collision between players and blocks
-    playerStaticCollision(userPlayer, getBlocks(userPlayer.getFloor()));
+    //top left and right points of the player's collision box which will be used to determine which blocks he can collide with
+    sf::Vector2f topLeft(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top);
+    sf::Vector2f topRight(userPlayer.getCollisionBox().left + userPlayer.getCollisionBox().width, topLeft.y);
+
+    playerStaticCollision(userPlayer, getGameWorld().getBlocks(topLeft, topRight, userPlayer.getFloor()));
 
     playerForegroundCollision();
 }

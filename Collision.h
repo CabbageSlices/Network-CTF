@@ -23,7 +23,7 @@ sf::Vector2f calculateCollisionOffset(const sf::FloatRect& rectToMove, const sf:
 
 //handle collision between players and the given type of static object
 template<class Static, class Player>
-void playerStaticCollision(Player& player, std::vector<std::tr1::shared_ptr<Static> >& statics) {
+void playerStaticCollision(Player& player, std::vector<std::tr1::shared_ptr<Static> > statics) {
 
     for(auto staticObj : statics) {
 

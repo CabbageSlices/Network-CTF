@@ -471,7 +471,11 @@ void ServerGameManager::handleCollisions() {
     //do in this one loop so you don't repeat loops
     for(auto& player : players) {
 
-        playerStaticCollision(player->player, getBlocks(player->player.getFloor()));
+        //top left and right points of the player's collision box which will be used to determine which blocks he can collide with
+        sf::Vector2f topLeft(player->player.getCollisionBox().left, player->player.getCollisionBox().top);
+        sf::Vector2f topRight(player->player.getCollisionBox().left + player->player.getCollisionBox().width, topLeft.y);
+
+        playerStaticCollision(player->player, getGameWorld().getBlocks(topLeft, topRight, player->player.getFloor()));
         playerStaticCollision(player->player, getPortals(player->player.getFloor()));
         playerStaticCollision(player->player, getGunGivers(player->player.getFloor()));
 
