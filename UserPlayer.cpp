@@ -11,6 +11,11 @@ using std::endl;
 
 UserPlayer::UserPlayer():
     PlayerBase(),
+    LEFT_KEY(sf::Keyboard::A),
+    RIGHT_KEY(sf::Keyboard::D),
+    UP_KEY(sf::Keyboard::W),
+    DOWN_KEY(sf::Keyboard::S),
+    RELOAD_KEY(sf::Keyboard::R),
     INVALID_INPUT_ID(-1),
     playerId(0),
     velocities(0, 0),
@@ -33,27 +38,27 @@ void UserPlayer::handleEvents(sf::Event& event) {
     //convert all events to an input and place them in the input queue to be handled later, and create an input to send to the server
     if(event.type == sf::Event::KeyPressed) {
 
-        if(event.key.code == sf::Keyboard::Left) {
+        if(event.key.code == LEFT_KEY) {
 
             placeIntoQueue(createInput(PRESS_LEFT));
         }
 
-        if(event.key.code == sf::Keyboard::Right) {
+        if(event.key.code == RIGHT_KEY) {
 
             placeIntoQueue(createInput(PRESS_RIGHT));
         }
 
-        if(event.key.code == sf::Keyboard::Up) {
+        if(event.key.code == UP_KEY) {
 
             placeIntoQueue(createInput(PRESS_UP));
         }
 
-        if(event.key.code == sf::Keyboard::Down) {
+        if(event.key.code == DOWN_KEY) {
 
             placeIntoQueue(createInput(PRESS_DOWN));
         }
 
-        if(event.key.code == sf::Keyboard::R) {
+        if(event.key.code == RELOAD_KEY) {
 
             placeIntoQueue(createInput(RELOAD));
         }
@@ -77,22 +82,22 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
     if(event.type == sf::Event::KeyReleased) {
 
-        if(event.key.code == sf::Keyboard::Left) {
+        if(event.key.code == LEFT_KEY) {
 
             placeIntoQueue(createInput(RELEASE_LEFT));
         }
 
-        if(event.key.code == sf::Keyboard::Right) {
+        if(event.key.code == RIGHT_KEY) {
 
             placeIntoQueue(createInput(RELEASE_RIGHT));
         }
 
-        if(event.key.code == sf::Keyboard::Up) {
+        if(event.key.code == UP_KEY) {
 
             placeIntoQueue(createInput(RELEASE_UP));
         }
 
-        if(event.key.code == sf::Keyboard::Down) {
+        if(event.key.code == DOWN_KEY) {
 
             placeIntoQueue(createInput(RELEASE_DOWN));
         }
@@ -104,10 +109,10 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
 void UserPlayer::handleStateEvents() {
 
-    keystate.pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-    keystate.pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-    keystate.pressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-    keystate.pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+    keystate.pressedLeft = sf::Keyboard::isKeyPressed(LEFT_KEY);
+    keystate.pressedRight = sf::Keyboard::isKeyPressed(RIGHT_KEY);
+    keystate.pressedUp = sf::Keyboard::isKeyPressed(UP_KEY);
+    keystate.pressedDown = sf::Keyboard::isKeyPressed(DOWN_KEY);
 }
 
 void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId) {

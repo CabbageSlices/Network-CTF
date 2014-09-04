@@ -128,6 +128,7 @@ class ServerGameManager : public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
+        virtual void drawUI(sf::RenderWindow& window) {}
         virtual void drawMinimap(sf::RenderWindow& window) {}
 
         virtual const unsigned getFloor() const;

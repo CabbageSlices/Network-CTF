@@ -88,7 +88,7 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     world.drawForeground(window, getFloor());
 
-    GameManager::drawMinimap(window);
+    GameManager::drawUI(window);
 
     window.display();
 }
@@ -116,14 +116,29 @@ void GameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window)
     }
 }
 
-void GameManager::drawMinimap(sf::RenderWindow& window) {
+void GameManager::drawUI(sf::RenderWindow& window) {
 
-    //get the previous view before minimap is drawn that way it can be reapplied later
+    //get the previous view before UI is drawn that way it can be reapplied later
     sf::View previousView = window.getView();
 
-    //the minimap border is drawn on the defualt window becausei ts a UI
+    //all UI is drawn on the defualt window because they don't move along with the camera and always stay on the same spot on the screen
     window.setView(currentWindow);
+
+    GameManager::drawMinimap(window);
+
+    //derived class UI
+    this->drawUI(window);
+
+    //re-apply old view
+    window.setView(previousView);
+}
+
+void GameManager::drawMinimap(sf::RenderWindow& window) {
+
     minimap.drawBorder(window);
+
+    //save the view of the window before the minimap is drawn that way the view can be restored and any other items being drawn wont be drawn onto the minimap
+    sf::View previousView = window.getView();
 
     //set the minimaps view
     minimap.applyMinimap(window);

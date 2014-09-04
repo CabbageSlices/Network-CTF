@@ -65,6 +65,14 @@ class UserPlayer : public PlayerBase{
         };
 
     private:
+        
+        //keys for each possible player action
+        const sf::Key LEFT_KEY;
+        const sf::Key RIGHT_KEY;
+        const sf::Key UP_KEY;
+        const sf::Key DOWN_KEY;
+        
+        const sf::Key RELOAD_KEY;
 
         //use invalid inputs when you search for an input that doesn't exist
         const sf::Uint32 INVALID_INPUT_ID;
@@ -95,9 +103,9 @@ class UserPlayer : public PlayerBase{
 
         //player's current keystate
         KeyState keystate;
-        
+
         //healing rate to recover hp while in spawn zone, how much hp to heal each time
-        int healtRecovered;
+        int healthRecovered;
         sf::Clock regenerationTimer;
         sf::Time regenerationDelay;
 
@@ -167,7 +175,7 @@ class UserPlayer : public PlayerBase{
 
         //fire the gun at the given angle
         void fireGun(const float& angle);
-        
+
         //attempt to heal
         void regenerateHealth();
 

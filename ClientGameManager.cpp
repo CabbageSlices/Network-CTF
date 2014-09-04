@@ -312,6 +312,10 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
     }
 }
 
+void ClientGameManager::drawUI(sf::RenderWindow& window) {
+
+}
+
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
 
     //only draw on minimap if they are on the overground floor

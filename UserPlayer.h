@@ -66,6 +66,14 @@ class UserPlayer : public PlayerBase{
 
     private:
 
+        //keys for each possible player action
+        const sf::Keyboard::Key LEFT_KEY;
+        const sf::Keyboard::Key RIGHT_KEY;
+        const sf::Keyboard::Key UP_KEY;
+        const sf::Keyboard::Key DOWN_KEY;
+
+        const sf::Keyboard::Key RELOAD_KEY;
+
         //use invalid inputs when you search for an input that doesn't exist
         const sf::Uint32 INVALID_INPUT_ID;
 
