@@ -1,0 +1,128 @@
+#include "Scoreboard.h"
+#include "PlayerBase.h"
+
+using std::vector;
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
+
+/*
+
+set the position of all text stating the stats of the players
+currently only the string that is displayed on the text has been created, they have not been positioned properly
+
+must change all function pointers to member function pointers
+
+*/
+
+Scoreboard::Scoreboard():
+    NAME_OFFSET(18),
+    KILLS_OFFSET(139),
+    DEATHS_OFFSET(176),
+    CAPTURES_OFFSET(242),
+    RETURNS_OFFSET(313),
+    font(),
+    TOGGLE_DISPLAY_KEY(sf::Keyboard::Tab),
+    drawDisplay(false),
+    scoreTexture(),
+    scoreSprite(),
+    redTeam(),
+    blueTeam()
+    {
+        scoreTexture.loadFromFile("scoreboard.png");
+        scoreSprite.setTexture(scoreTexture);
+        font.loadFromFile("font.ttf");
+    }
+
+void Scoreboard::handleEvents(sf::Event& event) {
+
+    if(event.type == sf::Event::KeyPressed) {
+
+        if(event.key.code == TOGGLE_DISPLAY_KEY) {
+
+            drawDisplay = !drawDisplay;
+        }
+    }
+}
+
+void Scoreboard::setDisplayCenter(const sf::Vector2f& center) {
+
+    scoreSprite.setPosition(center.x - scoreSprite.getGlobalBounds().left, center.y - scoreSprite.getGlobalBounds().top);
+}
+
+bool Scoreboard::canDisplayInfo() {
+
+    return drawDisplay;
+}
+
+void Scoreboard::clearScoreboard() {
+
+    redTeam.clear();
+    blueTeam.clear();
+}
+
+void Scoreboard::setupInfoPosition() {
+
+    positionInfo(redTeam, &Scoreboard::calculateRedScorePosition);
+    positionInfo(blueTeam, &Scoreboard::calculateBlueScorePosition);
+}
+
+void Scoreboard::draw(sf::RenderWindow& window) {
+
+    window.draw(scoreSprite);
+
+    drawTeamInfo(window, redTeam);
+    drawTeamInfo(window, blueTeam);
+}
+
+void Scoreboard::drawTeamInfo(sf::RenderWindow& window, const vector<shared_ptr<InfoToDisplay> >& teamInfo) {
+
+    for(auto infoDisplayed : teamInfo) {
+
+        drawInfo(window, infoDisplayed);
+    }
+}
+
+void Scoreboard::drawInfo(sf::RenderWindow& window, shared_ptr<InfoToDisplay> toDisplay) {
+
+    window.draw(toDisplay->name);
+    window.draw(toDisplay->kills);
+    window.draw(toDisplay->deaths);
+    window.draw(toDisplay->captures);
+    window.draw(toDisplay->returns);
+}
+
+void Scoreboard::positionInfo(vector<shared_ptr<InfoToDisplay> >& teamInfo, float (Scoreboard::*calculatePosition)(const float& offset, const float& stringSize)) {
+
+    //place each players information onto the scoreboard
+    for(unsigned index = 0; index < teamInfo.size(); ++index) {
+
+        //each peice of information on the scoreboard has its own offset from the edge of the screen
+
+        //distance from the top of the scoreboard to the first character info slot
+        const float scoreboardTopThickness = 67;
+
+        //used to calculate the vertical position of all info
+        const float characterSlotHeight = 64;
+        
+        shared_ptr<InfoToDisplay>& info = teamInfo[index];
+
+        ///horizontal offset of each information is based on image
+        info->name.setPosition((this->*calculatePosition)(NAME_OFFSET, info->name.getGlobalBounds), scoreboardTopThickness + characterSlotHeight * index);
+        info->kills.setPosition((this->*calculatePosition)(KILLS_OFFSET), scoreboardTopThickness + characterSlotHeight * index);
+        info->deaths.setPosition((this->*calculatePosition)(DEATHS_OFFSET), scoreboardTopThickness + characterSlotHeight * index);
+        info->captures.setPosition((this->*calculatePosition)(CAPTURES_OFFSET), scoreboardTopThickness + characterSlotHeight * index);
+        info->returns.setPosition((this->*calculatePosition)(RETURNS_OFFSET), scoreboardTopThickness + characterSlotHeight * index);
+    }
+}
+
+float Scoreboard::calculateRedScorePosition(const float& offset) {
+
+    //red team ais on the left side so set the position from the left side of the scoreboard
+    return scoreSprite.getPosition().x + offset;
+}
+
+float Scoreboard::calculateBlueScorePosition(const float& offset) {
+
+    //blue team's information is positioned from the right side of the scoreboard
+    return scoreSprite.getPosition().x + scoreSprite.getGlobalBounds().width - offset;
+}

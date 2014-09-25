@@ -8,6 +8,7 @@
 #include "UserPlayer.h"
 #include "Camera.h"
 #include "GameManager.h"
+#include "Scoreboard.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -32,6 +33,8 @@ class ClientGameManager: public GameManager {
 
         //player being controlled by the user
         UserPlayer userPlayer;
+
+        Scoreboard score;
 
         //camera to follow player around
         //camera's zoom is reset every frame that way the zoom level can be determined every frame
@@ -58,6 +61,8 @@ class ClientGameManager: public GameManager {
         void sendInputsToServer();
         void sendGunshotsToServer();
         void handleServerUpdates();
+        
+        void updateScoreboard();
 
         void updateUserPlayer(const float& delta, sf::RenderWindow& window);
         void updateConnectedPlayers(const float& delta);
@@ -89,9 +94,9 @@ class ClientGameManager: public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
-        
+
         virtual void drawUI(sf::RenderWindow& window);
-        
+
         virtual void drawMinimap(sf::RenderWindow& window);
 
         virtual const unsigned getFloor() const;

@@ -214,7 +214,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1409844847 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1411666238 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -228,13 +228,14 @@
 	<cstdlib>
 	<iostream>
 
-1409844847 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1411665506 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
 	"UserPlayer.h"
 	"Camera.h"
 	"GameManager.h"
+	"Scoreboard.h"
 	<tr1/memory>
 	<vector>
 
@@ -811,4 +812,20 @@
 	<vector>
 	<tr1/memory>
 	"LargeImage.h"
+
+1411665357 c:\users\nimesh\documents\github\network-ctf\scoreboard.h
+	"SFML/Window.hpp"
+	"SFML/Graphics.hpp"
+	"TeamManager.h"
+	"Conversion.h"
+	<vector>
+	<tr1/memory>
+
+1411665296 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
+	"Scoreboard.h"
+	"PlayerBase.h"
+
+1409851044 c:\users\nimesh\documents\github\network-ctf\conversion.h
+	<string>
+	<sstream>
 

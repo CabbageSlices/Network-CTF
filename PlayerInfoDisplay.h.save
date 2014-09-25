@@ -11,7 +11,7 @@ class PlayerBase;
 
 //determines if player is trying to look at the information about all players connected
 //displays each player's statistics, i.e their kills, deaths, flag captures, flag returns
-class PlayerInfoDisplay {
+class Scoreboard {
 
     private:
 
@@ -33,8 +33,8 @@ class PlayerInfoDisplay {
 
         bool drawDisplay;
 
-        sf::Texture infoTexture;
-        sf::Sprite infoSprite;
+        sf::Texture scoreTexture;
+        sf::Sprite scoreSprite;
 
         //info about the players that exist on both teams
         //a vector is used to seperate players into the two teams that way when drawing their stats you can use the index in the vector to determine the position
@@ -44,11 +44,9 @@ class PlayerInfoDisplay {
 
         //the info created for the given class is not positioned so it has to be positioned
         template<class Player>
-        std::tr1::shared_ptr<InfoToDisplay> createInfo(std::tr1::shared_ptr<Player>& player);
+        std::tr1::shared_ptr<InfoToDisplay> createInfo(Player& player);
 
         void clearTeams();
-        
-        void updateInfoPosition();
 
         //draw the given container of infos
         void drawTeamInfo(sf::RenderWindow& window, const std::vector<std::tr1::shared_ptr<InfoToDisplay> >& teamInfo);
@@ -56,9 +54,22 @@ class PlayerInfoDisplay {
         //draw the given info object
         void drawInfo(sf::RenderWindow& window, shared_ptr<InfoToDisplay> toDisplay);
 
+        //set the position of the player's information that way they draw on the scoreboard properly
+        //the given positioning function is used because each team's position is calculated differently
+        //the red team's score is set from the left side of the scoreboard while the blue team's scores are set from the right side
+        //the position calculation function is used to properly set the position from the left side or the right side
+        //it should only calculate the horizontal or vertical position
+        void positionInfo(std::vector<std::tr1::shared_ptr<InfoToDisplay> >& teamInfo, float (*calculatePosition)(float offset));
+
+        //offset is the distance from the edge of the scoreboard to the position where the info should display
+        //uses the offset to calculate the position on the scoreboard
+        //each team calculates the position differently
+        float calculateRedScorePosition(const float& offset);
+        float calculateBlueScorePosition(const float& offset);
+
     public:
 
-        PlayerInfoDisplay();
+        Scoreboard();
 
         void handleEvents(sf::Event& event);
 
@@ -72,9 +83,13 @@ class PlayerInfoDisplay {
         template<class Player>
         void updatePlayerList(std::vector<std::tr1::shared_ptr<Player> >& players);
 
-        //add the given player to the bottom of the list of his respective team, this player's information is displayed at the bottom
+        //add the given player to the bottom of the list of his respective team, this player's information is displayed at the bottom of the list
+        //this function doesn't take in a shared ptr, and instead takes the object itself because client game manager uses a player object instead of a shared pointer
         template<class Player>
-        void addPlayerInfo(std::tr1::shared_ptr<Player>& player);
+        void addPlayerInfo(Player& player);
+
+        //setup the positions of each of the info for the player's information that are drawn on the scoreboard
+        void setupInfoPosition();
 
         void draw(sf::RenderWindow& window);
 };

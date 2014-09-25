@@ -143,6 +143,17 @@ void ClientGameManager::handleServerUpdates() {
     }
 }
 
+void ClientGameManager::updateScoreboard() {
+
+    if(score.canDisplayInfo()) {
+
+        score.clearScoreboard();
+        score.addPlayerInfo(userPlayer);
+        score.updatePlayerList(connectedPlayers);
+        score.setupInfoPosition();
+    }
+}
+
 void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& window) {
 
     userPlayer.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
@@ -169,8 +180,6 @@ void ClientGameManager::handleBulletCollision() {
     //get the bullets from the player and check for collision with others
     vector<shared_ptr<Bullet> > bullets = userPlayer.getBullets();
 
-    sf::Clock ti;
-
     for(auto& bullet : bullets) {
 
         if(!bullet->checkCanCollide()) {
@@ -191,11 +200,6 @@ void ClientGameManager::handleBulletCollision() {
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
     }
-
-    float passed = ti.getElapsedTime().asMilliseconds();
-
-    if(passed != 0)
-    cout << ti.getElapsedTime().asMilliseconds() << endl;
 }
 
 void ClientGameManager::playerForegroundCollision() {
@@ -256,6 +260,8 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     //handle the player's inputs
     userPlayer.handleEvents(event);
+
+    score.handleEvents(event);
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {
@@ -263,6 +269,8 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     sendInputsToServer();
     sendGunshotsToServer();
     handleServerUpdates();
+
+    updateScoreboard();
 
     ///handle the bullet collision here isntead of in the time components
     ///update part because the loop may never run because there isn't enough
@@ -314,6 +322,10 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
 void ClientGameManager::drawUI(sf::RenderWindow& window) {
 
+    if(score.canDisplayInfo()) {
+
+        score.draw(window);
+    }
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
