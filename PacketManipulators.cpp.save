@@ -121,6 +121,9 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
 
     dataDestination << flagManager->teamAFlag()->getPosition().x << flagManager->teamAFlag()->getPosition().y;
     dataDestination << flagManager->teamBFlag()->getPosition().x << flagManager->teamBFlag()->getPosition().y;
+
+    dataDestination << flagManager->teamAFlag()->getFloor();
+    dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
 void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
@@ -234,6 +237,14 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
         flagManager->teamBFlag()->setPosition(flagBPosition);
     }
+
+    unsigned flagAFloor = 0;
+    unsigned flagBFloor = 0;
+
+    updatePacket >> flagAFloor >> flagBFloor;
+
+    flagManager->teamAFlag()->setFloor(flagAFloor);
+    flagManager->teamBFlag()->setFloor(flagBFloor);
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {
@@ -254,10 +265,14 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getHealth();
         updatePacket << player->player.getTeam();
         updatePacket << player->player.isHoldingFlag();
+        updatePacket << player->player.getKills();
+        updatePacket << player->player.getDeaths();
+        updatePacket << player->player.getFlagCaptures();
+        updatePacket << player->player.getFlagReturns();
         updatePacket << player->player.getFloor();
         updatePacket << player->player.getGun()->getGunType();
 
-        vector<shared_ptr<Bullet> > bullets = player->player.getGun().getBulletsToClients();
+        vector<shared_ptr<Bullet> >& bullets = player->player.getGun()->getBulletsForClients();
 
         //indicate how many bullets were fired
         updatePacket << bullets.size();
@@ -266,19 +281,16 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         //only send data about bullets if the data hasn't already been sent so clients don't have duplicate bullets
         for(auto& bullet : bullets) {
 
-            if(bullet->checkDataSent()) {
-
-                continue;
-            }
-
             sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
             sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
 
             updatePacket << beginPoint.x << beginPoint.y;
             updatePacket << endPoint.x << endPoint.y;
             updatePacket << bullet->getFloor();
-            bullet->setDataSent(true);
         }
+
+        //empty the container so next time you don't send duplicates
+        bullets.clear();
     }
 }
 
@@ -321,6 +333,12 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         bool holdingFlag = false;
         statePacket >> holdingFlag;
+        
+        unsigned short kills = 0;
+        statePacket >> kills;
+        
+        unsigned short kills = 0;
+        statePacket >> kills;
 
         unsigned floor = 0;
         statePacket >> floor;
@@ -400,6 +418,9 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
         updatedPlayer->setFloor(floor);
+        updatedPlayer->setKills(kills);
+
+        cout << kills << endl;
 
         setGunTo(*updatedPlayer, static_cast<GunTypes>(gunType));
 

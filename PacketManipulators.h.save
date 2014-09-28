@@ -72,6 +72,10 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
     -PLAYER HEALTH
     -PLAYER TEAM
     -PLAYER HAS FLAG
+    -PLAYER'S KILLS
+    -PLAYER'S DEATHS
+    -PLAYER'S FLAG CAPTURES
+    -PLAYER'S FLAG RETURNS
     -PLAYER FLOOR
     -PLAYER GUN TYPE
 

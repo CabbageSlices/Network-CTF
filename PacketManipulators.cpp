@@ -265,6 +265,10 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
         updatePacket << player->player.getHealth();
         updatePacket << player->player.getTeam();
         updatePacket << player->player.isHoldingFlag();
+        updatePacket << player->player.getKills();
+        updatePacket << player->player.getDeaths();
+        updatePacket << player->player.getFlagCaptures();
+        updatePacket << player->player.getFlagReturns();
         updatePacket << player->player.getFloor();
         updatePacket << player->player.getGun()->getGunType();
 
@@ -329,6 +333,18 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         bool holdingFlag = false;
         statePacket >> holdingFlag;
+
+        unsigned short kills = 0;
+        statePacket >> kills;
+
+        unsigned short deaths = 0;
+        statePacket >> deaths;
+
+        unsigned short captures = 0;
+        statePacket >> captures;
+
+        unsigned short returns = 0;
+        statePacket >> returns;
 
         unsigned floor = 0;
         statePacket >> floor;
@@ -408,6 +424,10 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
         updatedPlayer->setFloor(floor);
+        updatedPlayer->setKills(kills);
+        updatedPlayer->setDeaths(deaths);
+        updatedPlayer->setCaptures(captures);
+        updatedPlayer->setReturns(returns);
 
         setGunTo(*updatedPlayer, static_cast<GunTypes>(gunType));
 

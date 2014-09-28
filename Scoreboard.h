@@ -162,10 +162,8 @@ std::tr1::shared_ptr<Scoreboard::InfoToDisplay> Scoreboard::createInfo(Player& p
     newInfo->name.setString("Player Name");
     newInfo->kills.setString(toString(player.getKills() ));
     newInfo->deaths.setString(toString(player.getDeaths() ));
-    //newInfo->captures.setString(toString(player.getCaptures() ));
-    newInfo->captures.setString(toString(0 ));
-    //newInfo->returns.setString(toString(player.getReturns() ));
-    newInfo->returns.setString(toString(0 ));
+    newInfo->captures.setString(toString(player.getFlagCaptures() ));
+    newInfo->returns.setString(toString(player.getFlagReturns() ));
 
     return newInfo;
 }
