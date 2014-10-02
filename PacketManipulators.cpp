@@ -91,7 +91,8 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.inputId;
 }
 
-void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination) {
+void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
+                        TeamManager& teamManager) {
 
     //set the packet type
     dataDestination << PLAYER_STATE_UPDATE;
@@ -111,6 +112,8 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << player.getDeaths();
     dataDestination << player.getFlagCaptures();
     dataDestination << player.getFlagReturns();
+    dataDestination << teamManager.getTeamScore(TEAM_A_ID);
+    dataDestination << teamManager.getTeamScore(TEAM_B_ID);
     dataDestination << player.getFloor();
     dataDestination << player.getGun()->getGunType();
     dataDestination << player.getGun()->getCurrentAmmo();
@@ -171,6 +174,15 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     player.setDeaths(deaths);
     player.setCaptures(flagCaptures);
     player.setReturns(flagReturns);
+
+    unsigned short team_A_Score = 0;
+    unsigned short team_B_Score = 0;
+
+    updatePacket >> team_A_Score >> team_B_Score;
+
+    /**
+        Do something with the above scores, put them in the score display of the H.U.D to draw on screen
+    **/
 
     unsigned floor = 0;
     updatePacket >> floor;

@@ -83,6 +83,11 @@ unsigned short TeamManager::getTeamScore(const unsigned short& team) {
     return teamScores[team];
 }
 
+void TeamManager::setTeamScore(const unsigned short& team, const unsigned short& score) {
+
+    teamScores[team] = score;
+}
+
 void TeamManager::setupPlayerCounter() {
 
     numberOfPlayers[TEAM_A_ID] = 0;

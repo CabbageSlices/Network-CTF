@@ -46,6 +46,7 @@ class TeamManager {
         void resetScores();
 
         unsigned short getTeamScore(const unsigned short& team);
+        void setTeamScore(const unsigned short& team, const unsigned short& score);
 };
 
 //gets the id of the team that is opposing the given team

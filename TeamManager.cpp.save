@@ -45,8 +45,6 @@ unsigned short TeamManager::addNewPlayer() {
         numberOfPlayers[TEAM_B_ID]++;
         team = TEAM_B_ID;
     }
-    
-    cout << numberOfPlayers[TEAM_A_ID] << "     " << numberOfPlayers[TEAM_B_ID];
 
     return team;
 }
@@ -83,6 +81,11 @@ void TeamManager::resetScores() {
 unsigned short TeamManager::getTeamScore(const unsigned short& team) {
 
     return teamScores[team];
+}
+
+void TeamManager::setTeamScore(const unsigned short& team, const unsigned short& score) {
+    
+    teamScores[team] = score;
 }
 
 void TeamManager::setupPlayerCounter() {

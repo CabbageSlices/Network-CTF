@@ -11,6 +11,7 @@
 class UserPlayer;
 class InterpolatingPlayer;
 class FlagManager;
+class TeamManager;
 
 //all of these functions are helper functions used to make packet creation and reading easier for the users
 
@@ -24,7 +25,8 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
-void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination);
+void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination
+                        TeamManager& teamManager);
 
 //read the given position and state update from the server and apply the updates to the player
 ///this function assumes the outstream of the ip address has already read the packet id thus it will begin reading from the id of lasat confirmed input sent by player
@@ -41,6 +43,8 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     -PLAYER'S DEATHS
     -PLAYER'S FLAG CAPTURES
     -PLAYER'S FLAG RETURNS
+    -TEAM A CAPTURES
+    -TEAM B CAPTURES
     -PLAYER'S FLOOR
     -PLAYER'S GUN TYPE
     -PLAYER'S CURRENT AMMO
@@ -66,24 +70,24 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
     -NUMBER OF PLAYERS WHOSE DATA IS BEING SENT
 
     ----REPEATE THE FOLLOWING FOR EVERY PLAYER WHOSE DATA IS BEING SENT
-    -ID OF PLAYER
-    -PLAYER POSITION (x,y)
-    -PLAYER ROTATION
-    -PLAYER HEALTH
-    -PLAYER TEAM
-    -PLAYER HAS FLAG
-    -PLAYER'S KILLS
-    -PLAYER'S DEATHS
-    -PLAYER'S FLAG CAPTURES
-    -PLAYER'S FLAG RETURNS
-    -PLAYER FLOOR
-    -PLAYER GUN TYPE
+        -ID OF PLAYER
+        -PLAYER POSITION (x,y)
+        -PLAYER ROTATION
+        -PLAYER HEALTH
+        -PLAYER TEAM
+        -PLAYER HAS FLAG
+        -PLAYER'S KILLS
+        -PLAYER'S DEATHS
+        -PLAYER'S FLAG CAPTURES
+        -PLAYER'S FLAG RETURNS
+        -PLAYER FLOOR
+        -PLAYER GUN TYPE
 
-    -NUMBER OF BULLETS FIRED
-        ---REPEAT THE FOLLOWING FOR EVERY BULLET
-        -BULLET BEGIN POINT
-        -BULLET END POINT
-        -BULLET FLOOR
+        -NUMBER OF BULLETS FIRED
+            ---REPEAT THE FOLLOWING FOR EVERY BULLET
+            -BULLET BEGIN POINT
+            -BULLET END POINT
+            -BULLET FLOOR
 
 **/
 ///its up to the receiving client to determine which player's data should not be used

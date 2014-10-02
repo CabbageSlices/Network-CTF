@@ -296,7 +296,7 @@ void ServerGameManager::sendInputConfirmation() {
     for(auto& player : players) {
 
         sf::Packet playerUpdate;
-        createUpdatePacket(getFlagManager(), player->player, player->lastConfirmedInputId, playerUpdate);
+        createUpdatePacket(getFlagManager(), player->player, player->lastConfirmedInputId, playerUpdate, teamManager);
 
         //send the info to the player
         server.sendData(playerUpdate, player->playerIpAddress, player->playerPort);
