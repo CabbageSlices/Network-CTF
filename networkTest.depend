@@ -200,11 +200,11 @@
 	<vector>
 	<tr1/memory>
 
-1409845648 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1412218231 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"GameWorld.h"
-	"Minimap.h"
+	"HeadsUpDisplay.h"
 	"Floors.h"
 	<vector>
 	<tr1/memory>
@@ -214,7 +214,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1411931681 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1412224113 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -228,7 +228,7 @@
 	<cstdlib>
 	<iostream>
 
-1411665506 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1412224113 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -236,6 +236,7 @@
 	"Camera.h"
 	"GameManager.h"
 	"Scoreboard.h"
+	"HeadsUpDisplay.h"
 	<tr1/memory>
 	<vector>
 
@@ -271,9 +272,10 @@
 1405148931 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1411875406 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1412223356 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
+	"Minimap.h"
 
 1408043761 source:c:\users\nimesh\documents\github\network-ctf\lerp.cpp
 	"Lerp.h"
@@ -295,7 +297,7 @@
 	<cmath>
 	<cstdlib>
 
-1411931044 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1411932474 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -560,11 +562,11 @@
 1404765466 source:c:\users\nimesh\network-ctf\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1407452800 c:\users\nimesh\documents\github\network-ctf\healthbar.h
+1412136048 c:\users\nimesh\documents\github\network-ctf\healthbar.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1407452800 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
+1412218329 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
 1407786424 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
@@ -578,15 +580,16 @@
 	<vector>
 	<tr1/memory>
 
-1408129871 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1412009493 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
 	"FlagManager.h"
 	<vector>
 	<tr1/memory>
+	<string>
 
-1408921929 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1412009832 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -740,11 +743,11 @@
 	"Floors.h"
 	"UserPlayer.h"
 
-1407696889 c:\users\nimesh\documents\github\network-ctf\minimap.h
+1412222591 c:\users\nimesh\documents\github\network-ctf\minimap.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1407696880 source:c:\users\nimesh\documents\github\network-ctf\minimap.cpp
+1412223356 source:c:\users\nimesh\documents\github\network-ctf\minimap.cpp
 	"Minimap.h"
 
 1407782554 c:\users\nimesh\documents\github\network-ctf\floors.h
@@ -761,7 +764,7 @@
 1408046531 c:\users\nimesh\documents\github\network-ctf\sniper.h
 	"Gun.h"
 
-1408046531 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
+1412225321 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
 	"Sniper.h"
 
 1408046531 c:\users\nimesh\documents\github\network-ctf\shotgun.h
@@ -813,7 +816,7 @@
 	<tr1/memory>
 	"LargeImage.h"
 
-1411875322 c:\users\nimesh\documents\github\network-ctf\scoreboard.h
+1412010651 c:\users\nimesh\documents\github\network-ctf\scoreboard.h
 	"SFML/Window.hpp"
 	"SFML/Graphics.hpp"
 	"TeamManager.h"
@@ -821,11 +824,28 @@
 	<vector>
 	<tr1/memory>
 
-1411665296 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
+1412010651 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
 	"Scoreboard.h"
 	"PlayerBase.h"
 
 1409851044 c:\users\nimesh\documents\github\network-ctf\conversion.h
 	<string>
 	<sstream>
+
+1412218292 c:\users\nimesh\documents\github\network-ctf\headsupdisplay.h
+	"Minimap.h"
+	"StatDisplay.h"
+	<string>
+
+1412218292 c:\users\nimesh\documents\github\network-ctf\statdisplay.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Healthbar.h"
+	<string>
+
+1412217678 source:c:\users\nimesh\documents\github\network-ctf\headsupdisplay.cpp
+	"HeadsUpDisplay.h"
+
+1412224113 source:c:\users\nimesh\documents\github\network-ctf\statdisplay.cpp
+	"StatDisplay.h"
 

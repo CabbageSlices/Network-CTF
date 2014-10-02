@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "LevelManager.h"
+#include "Minimap.h"
 
 using std::vector;
 using std::tr1::shared_ptr;
@@ -9,11 +10,11 @@ GameManager::GameManager() :
     accumulator(),
     optimalTimeStep(sf::milliseconds(15)),
     world(),
-    minimap(sf::Vector2f(0.25, 0.25), sf::Vector2u(1024, 768)),
+    headsUpDisplay(sf::Vector2f(0.25, 0.25), sf::Vector2u(1024, 768)),
     currentWindow()
     {
         world.load("untitled");
-        minimap.setLevelSize(sf::Vector2f(5000, 2000));
+        headsUpDisplay.getMinimap().setLevelSize(sf::Vector2f(3968, 1472));
     }
 
 void GameManager::runGame(sf::RenderWindow& window) {
@@ -42,6 +43,7 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
         handleCommonInputs(event, window);
 
         GameManager::handleWindowEvents(event, window);
+
         this->handleWindowEvents(event, window);
 
         this->handleComponentInputs(event, window);
@@ -101,7 +103,7 @@ void GameManager::setupCurrentWindow(sf::RenderWindow& window) {
 
 void GameManager::setup(sf::RenderWindow& window) {
 
-    minimap.updateBorder(window.getSize());
+    headsUpDisplay.handleScreenResize(window.getSize());
 
     setupCurrentWindow(window);
 }
@@ -110,7 +112,7 @@ void GameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window)
 
     if(event.type == sf::Event::Resized) {
 
-        minimap.updateBorder(sf::Vector2u(event.size.width, event.size.height));
+        headsUpDisplay.handleScreenResize(sf::Vector2u(event.size.width, event.size.height));
 
         setupCurrentWindow(window);
     }
@@ -124,6 +126,8 @@ void GameManager::drawUI(sf::RenderWindow& window) {
     //all UI is drawn on the defualt window because they don't move along with the camera and always stay on the same spot on the screen
     window.setView(currentWindow);
 
+    headsUpDisplay.draw(window);
+
     GameManager::drawMinimap(window);
 
     //derived class UI
@@ -135,13 +139,11 @@ void GameManager::drawUI(sf::RenderWindow& window) {
 
 void GameManager::drawMinimap(sf::RenderWindow& window) {
 
-    minimap.drawBorder(window);
-
     //save the view of the window before the minimap is drawn that way the view can be restored and any other items being drawn wont be drawn onto the minimap
     sf::View previousView = window.getView();
 
     //set the minimaps view
-    minimap.applyMinimap(window);
+    headsUpDisplay.getMinimap().applyMinimap(window);
 
     ///on minimap always draw overground
     world.drawBackground(window, OVERGROUND_FLOOR);

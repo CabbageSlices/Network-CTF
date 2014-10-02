@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <tr1/memory>
+#include <string>
 
 class Gun;
 class Bullet;
@@ -57,6 +58,8 @@ class PlayerBase {
         //timer to respawn player after he is dead
         sf::Clock respawnTimer;
         sf::Time respawnDelay;
+
+        std::string playerName;
 
         unsigned short kills;
         unsigned short deaths;
@@ -162,11 +165,13 @@ class PlayerBase {
         const std::tr1::shared_ptr<Gun> getGun() const;
         void setGun(std::tr1::shared_ptr<Gun> newGun);
 
+        const std::string& getName() const;
         const unsigned short& getKills() const;
         const unsigned short& getDeaths() const;
         const unsigned short& getFlagCaptures() const;
         const unsigned short& getFlagReturns() const;
 
+        void setName(const std::string& name);
         void setKills(const unsigned short& amount);
         void setDeaths(const unsigned short& amount);
         void setCaptures(const unsigned short& amount);

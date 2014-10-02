@@ -39,6 +39,9 @@ class Scoreboard {
         const float CAPTURES_OFFSET;
         const float RETURNS_OFFSET;
 
+        //all text in the scoreboard is too big so it must be scaled by this factor
+        const float TEXT_SCALE;
+
         sf::Font font;
 
         //the key player needs to press in order to bring up the display
@@ -142,21 +145,34 @@ template<class Player>
 std::tr1::shared_ptr<Scoreboard::InfoToDisplay> Scoreboard::createInfo(Player& player) {
 
     std::tr1::shared_ptr<InfoToDisplay> newInfo(new InfoToDisplay);
+    
+    sf::Color translucent(255, 255, 255, 150);
 
     newInfo->name.setFont(font);
+    newInfo->name.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->name.setColor(translucent);
+
     newInfo->kills.setFont(font);
+    newInfo->kills.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->kills.setColor(translucent);
+
     newInfo->deaths.setFont(font);
+    newInfo->deaths.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->deaths.setColor(translucent);
+
     newInfo->captures.setFont(font);
+    newInfo->captures.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->captures.setColor(translucent);
+
     newInfo->returns.setFont(font);
+    newInfo->returns.setScale(TEXT_SCALE, TEXT_SCALE);
 
     //newInfo->name.setString(player.getName());
-    newInfo->name.setString("Player Name");
+    newInfo->name.setString(player.getName());
     newInfo->kills.setString(toString(player.getKills() ));
     newInfo->deaths.setString(toString(player.getDeaths() ));
-    //newInfo->captures.setString(toString(player.getCaptures() ));
-    newInfo->captures.setString(toString(0 ));
-    //newInfo->returns.setString(toString(player.getReturns() ));
-    newInfo->returns.setString(toString(0 ));
+    newInfo->captures.setString(toString(player.getFlagCaptures() ));
+    newInfo->returns.setString(toString(player.getFlagReturns() ));
 
     return newInfo;
 }

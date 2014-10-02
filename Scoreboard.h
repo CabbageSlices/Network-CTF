@@ -39,6 +39,9 @@ class Scoreboard {
         const float CAPTURES_OFFSET;
         const float RETURNS_OFFSET;
 
+        //all text in the scoreboard is too big so it must be scaled by this factor
+        const float TEXT_SCALE;
+
         sf::Font font;
 
         //the key player needs to press in order to bring up the display
@@ -143,26 +146,31 @@ std::tr1::shared_ptr<Scoreboard::InfoToDisplay> Scoreboard::createInfo(Player& p
 
     std::tr1::shared_ptr<InfoToDisplay> newInfo(new InfoToDisplay);
 
+    sf::Color translucent(255, 255, 255, 100);
+
     newInfo->name.setFont(font);
-    newInfo->name.setScale(0.3, 0.5);
+    newInfo->name.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->name.setColor(translucent);
+    newInfo->name.setString(player.getName());
 
     newInfo->kills.setFont(font);
-    newInfo->kills.setScale(0.5, 0.5);
+    newInfo->kills.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->kills.setColor(translucent);
+    newInfo->kills.setString(toString(player.getKills() ));
 
     newInfo->deaths.setFont(font);
-    newInfo->deaths.setScale(0.5, 0.5);
+    newInfo->deaths.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->deaths.setColor(translucent);
+    newInfo->deaths.setString(toString(player.getDeaths() ));
 
     newInfo->captures.setFont(font);
-    newInfo->captures.setScale(0.5, 0.5);
+    newInfo->captures.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->captures.setColor(translucent);
+    newInfo->captures.setString(toString(player.getFlagCaptures() ));
 
     newInfo->returns.setFont(font);
-    newInfo->returns.setScale(0.5, 0.5);
-
-    //newInfo->name.setString(player.getName());
-    newInfo->name.setString("Player Name");
-    newInfo->kills.setString(toString(player.getKills() ));
-    newInfo->deaths.setString(toString(player.getDeaths() ));
-    newInfo->captures.setString(toString(player.getFlagCaptures() ));
+    newInfo->returns.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->returns.setColor(translucent);
     newInfo->returns.setString(toString(player.getFlagReturns() ));
 
     return newInfo;

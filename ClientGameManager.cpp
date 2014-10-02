@@ -143,10 +143,11 @@ void ClientGameManager::handleServerUpdates() {
     }
 }
 
-void ClientGameManager::updateScoreboard() {
+void ClientGameManager::updateScoreboard(sf::RenderWindow& window) {
 
     if(score.canDisplayInfo()) {
 
+        score.setDisplayCenter(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
         score.clearScoreboard();
         score.addPlayerInfo(userPlayer);
         score.updatePlayerList(connectedPlayers);
@@ -173,6 +174,11 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
         connectedPlayers[index]->updateGun(delta);
         ++index;
     }
+}
+
+void ClientGameManager::updateStatDisplay() {
+
+    getStatDisplay().setPlayerHealth(userPlayer.getHealth());
 }
 
 void ClientGameManager::handleBulletCollision() {
@@ -245,6 +251,10 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
 
     //setup camera
     camera.setDefaultSize(window);
+
+    //setup the player name on the H.U.D
+    getStatDisplay().setPlayerName(userPlayer.getName());
+    getStatDisplay().setPlayerHealth(userPlayer.getHealth());
 }
 
 void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
@@ -270,7 +280,9 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     sendGunshotsToServer();
     handleServerUpdates();
 
-    updateScoreboard();
+    updateScoreboard(window);
+
+    updateStatDisplay();
 
     ///handle the bullet collision here isntead of in the time components
     ///update part because the loop may never run because there isn't enough

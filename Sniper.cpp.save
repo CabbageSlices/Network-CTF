@@ -1,12 +1,17 @@
 #include "Sniper.h"
 
 Sniper::Sniper() :
-    Gun(75, 2500, sf::milliseconds(150), 12),
+    Gun(75, 2500, sf::milliseconds(10), 15),
     holdingFireButton(false),
-    currentAccuracyModifier(0),
-    accuracyChangeRate(5),
+    currentAccuracyModifier(accuracyModifier),
+    accuracyChangeRate(2),
     accuracyRange(sf::Triangles, 3)
     {
+        maxCurrentMagazine = 2;
+        maxTotalMagazine = 10;
+        currentMagazine = maxCurrentMagazine;
+        totalMagazine = maxTotalMagazine;
+
         setupAccuracyRange();
     }
 
@@ -44,20 +49,33 @@ void Sniper::updateGunfire(const sf::Time& delta) {
 
         //reset accuracy modifier so gun has to aim again
         currentAccuracyModifier = accuracyModifier;
+
+    } else {
+
+        //if he can't fire gun but he has fired the gun then the fired won't change to false
+        //and the gun will automatically fire later on by itself so change fired to false
+        //so gun wont fire by itself
+        fired = false;
     }
+}
+
+void Sniper::drawSight(sf::RenderWindow& window) {
+
+    window.draw(accuracyRange);
+    Gun::drawSight(window);
+}
+
+GunTypes Sniper::getGunType() const {
+
+    return SNIPER;
 }
 
 bool Sniper::canIncreaseAccuracy() {
 
-    return timeSinceFired > fireDelay && holdingFireButton;
+    return timeSinceFired > fireDelay && holdingFireButton && !mustReload();
 }
 
-bool Sniper::canFireGun() {
-
-    return timeSinceFired > fireDelay && fired;
-}
-
-void Sniper::updateLineOfSight(const sf::Vector2f& originerRotation) {
+void Sniper::updateLineOfSight(const sf::Vector2f& origin) {
 
     //first update the normal line of sight
     Gun::updateLineOfSight(origin);
@@ -90,12 +108,12 @@ void Sniper::setupAccuracyPoints() {
 
 void Sniper::setupAccuracyColour() {
 
-    accuracyRange[0].color = sf::Color::White;
+    accuracyRange[0].color = sf::Color(50, 50, 50);
     accuracyRange[1].color = sf::Color::Transparent;
     accuracyRange[2].color = sf::Color::Transparent;
 }
 
-const float Sniper::getAccuracyModifier() {
+const float Sniper::getAccuracyModifier() const {
 
     return currentAccuracyModifier;
 }

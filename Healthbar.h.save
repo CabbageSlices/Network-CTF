@@ -15,13 +15,14 @@ class HealthBar {
         sf::RectangleShape currentHealthBar;
 
         const float MAX_WIDTH;
+        const float MAX_HEIGHT;
 
         //resize the health bars so that the current healtbar is inside the max healthbar
         void resizeHealthBar();
 
     public:
 
-        HealthBar(int maxValue = 100);
+        HealthBar(const float barWidth = 100, const float barHeight = 10);
 
         void setCurrentHealth(const int& value);
         const int getCurrentHealth() const;

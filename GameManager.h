@@ -4,7 +4,7 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 #include "GameWorld.h"
-#include "Minimap.h"
+#include "HeadsUpDisplay.h"
 #include "Floors.h"
 
 #include <vector>
@@ -13,6 +13,7 @@
 class Block;
 class ForegroundObject;
 class FlagManager;
+class StatDisplay;
 
 //base game manager class for client and server to derive from
 //the internal functions are virtual because the functions have the same outer appearence but the inner workings are different
@@ -31,7 +32,7 @@ class GameManager {
 
         GameWorld world;
 
-        Minimap minimap;
+        HeadsUpDisplay headsUpDisplay;
 
         //view that uses the current window size, in order to draw UI and stuff onto the screen
         sf::View currentWindow;
@@ -92,6 +93,11 @@ class GameManager {
         std::tr1::shared_ptr<FlagManager> getFlagManager();
 
         GameWorld& getGameWorld();
+
+        StatDisplay& getStatDisplay() {
+
+            return headsUpDisplay.getStatDisplay();
+        }
 
         //calculate what fraction of time has passed since the last physics update to the next physics update
         const float calculateDeltaFraction();

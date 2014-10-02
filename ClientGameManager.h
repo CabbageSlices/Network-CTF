@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "GameManager.h"
 #include "Scoreboard.h"
+#include "HeadsUpDisplay.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -62,10 +63,11 @@ class ClientGameManager: public GameManager {
         void sendGunshotsToServer();
         void handleServerUpdates();
 
-        void updateScoreboard();
+        void updateScoreboard(sf::RenderWindow& window);
 
         void updateUserPlayer(const float& delta, sf::RenderWindow& window);
         void updateConnectedPlayers(const float& delta);
+        void updateStatDisplay();
 
         void handleBulletCollision();
 

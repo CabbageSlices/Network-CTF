@@ -2,19 +2,24 @@
 
 Minimap::Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize):
     view(),
-    border(),
-    levelSize(1024, 768)
+    borderTexture(),
+    borderSprite(),
+    viewingAreaOffset(22, 35),
+    viewingAreaSize(194, 126),
+    levelSize(1024, 768),
+    movementOffset(0.01)
     {
-        //position the minmap at the bottom right of the screen
-        view.setViewport(sf::FloatRect(1 - minimapSize.x, 1 - minimapSize.y, minimapSize.x, minimapSize.y));
+        borderTexture.loadFromFile("minimap.png");
+        borderSprite.setTexture(borderTexture);
         
-        border.setOutlineThickness(3.0);
-        border.setOutlineColor(sf::Color::Green);
+        setupBorderPosition(windowSize);
+
+        setupViewingRegion(windowSize);
 
         //set level size to the default level size
         setLevelSize(levelSize);
-
-        updateBorder(windowSize);
+        
+        handleScreenResize(windowSize);
     }
 
 void Minimap::setLevelSize(const sf::Vector2f& size) {
@@ -31,16 +36,31 @@ void Minimap::applyMinimap(sf::RenderWindow& window) const {
     window.setView(view);
 }
 
-void Minimap::updateBorder(const sf::Vector2u& windowSize) {
+void Minimap::handleScreenResize(const sf::Vector2u& windowSize) {
 
-    sf::Vector2f borderSize(windowSize.x * view.getViewport().width, windowSize.y * view.getViewport().height);
-    border.setSize(borderSize);
-
-    sf::Vector2f borderPosition(windowSize.x * view.getViewport().left, windowSize.y * view.getViewport().top);
-    border.setPosition(borderPosition);
+    setupBorderPosition(windowSize);
+    setupViewingRegion(windowSize);
 }
 
 void Minimap::drawBorder(sf::RenderWindow& window) {
-    
-    window.draw(border);
+
+    window.draw(borderSprite);
+}
+
+void Minimap::setupViewingRegion(const sf::Vector2u& windowSize) {
+
+    float viewXPosition = (borderSprite.getPosition().x + viewingAreaOffset.x) / static_cast<float>(windowSize.x);
+    float viewYPosition = (borderSprite.getPosition().y + viewingAreaOffset.y) / static_cast<float>(windowSize.y);
+    float viewWidth = viewingAreaSize.x / static_cast<float>(windowSize.x);
+    float viewHeight = viewingAreaSize.y / static_cast<float>(windowSize.y);
+
+    view.setViewport(sf::FloatRect(viewXPosition, viewYPosition, viewWidth, viewHeight));
+}
+
+void Minimap::setupBorderPosition(const sf::Vector2u& windowSize) {
+
+    sf::Vector2f borderPosition(windowSize.x - borderSprite.getGlobalBounds().width,
+                                windowSize.y - borderSprite.getGlobalBounds().height);
+
+    borderSprite.setPosition(borderPosition);
 }

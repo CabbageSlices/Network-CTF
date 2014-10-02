@@ -66,6 +66,8 @@
 		<Unit filename="GunHandlers.cpp" />
 		<Unit filename="GunHandlers.h" />
 		<Unit filename="GunTypes.h" />
+		<Unit filename="HeadsUpDisplay.cpp" />
+		<Unit filename="HeadsUpDisplay.h" />
 		<Unit filename="Healthbar.cpp" />
 		<Unit filename="Healthbar.h" />
 		<Unit filename="InterpolatingPlayer.cpp" />
@@ -98,6 +100,8 @@
 		<Unit filename="Shotgun.h" />
 		<Unit filename="Sniper.cpp" />
 		<Unit filename="Sniper.h" />
+		<Unit filename="StatDisplay.cpp" />
+		<Unit filename="StatDisplay.h" />
 		<Unit filename="StateTracker.cpp" />
 		<Unit filename="StateTracker.h" />
 		<Unit filename="StaticObject.cpp" />

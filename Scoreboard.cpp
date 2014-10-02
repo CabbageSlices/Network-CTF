@@ -20,6 +20,7 @@ Scoreboard::Scoreboard():
     DEATHS_OFFSET(176),
     CAPTURES_OFFSET(242),
     RETURNS_OFFSET(313),
+    TEXT_SCALE(0.4),
     font(),
     TOGGLE_DISPLAY_KEY(sf::Keyboard::Tab),
     drawDisplay(false),
@@ -30,6 +31,8 @@ Scoreboard::Scoreboard():
     {
         scoreTexture.loadFromFile("scoreboard.png");
         scoreSprite.setTexture(scoreTexture);
+        scoreSprite.setColor(sf::Color(255, 255, 255, 100));
+
         font.loadFromFile("font.ttf");
     }
 
@@ -46,7 +49,7 @@ void Scoreboard::handleEvents(sf::Event& event) {
 
 void Scoreboard::setDisplayCenter(const sf::Vector2f& center) {
 
-    scoreSprite.setPosition(center.x - scoreSprite.getGlobalBounds().left, center.y - scoreSprite.getGlobalBounds().top);
+    scoreSprite.setPosition(center.x - scoreSprite.getGlobalBounds().width / 2, center.y - scoreSprite.getGlobalBounds().height / 2);
 }
 
 bool Scoreboard::canDisplayInfo() {
@@ -107,11 +110,20 @@ void Scoreboard::positionInfo(vector<shared_ptr<InfoToDisplay> >& teamInfo, floa
         shared_ptr<InfoToDisplay>& info = teamInfo[index];
 
         ///horizontal offset of each information is based on image
-        info->name.setPosition((this->*calculatePosition)(NAME_OFFSET, info->name.getGlobalBounds().width), scoreboardTopThickness + characterSlotHeight * index);
-        info->kills.setPosition((this->*calculatePosition)(KILLS_OFFSET, info->kills.getGlobalBounds().width), scoreboardTopThickness + characterSlotHeight * index);
-        info->deaths.setPosition((this->*calculatePosition)(DEATHS_OFFSET, info->deaths.getGlobalBounds().width), scoreboardTopThickness + characterSlotHeight * index);
-        info->captures.setPosition((this->*calculatePosition)(CAPTURES_OFFSET, info->captures.getGlobalBounds().width), scoreboardTopThickness + characterSlotHeight * index);
-        info->returns.setPosition((this->*calculatePosition)(RETURNS_OFFSET, info->returns.getGlobalBounds().width), scoreboardTopThickness + characterSlotHeight * index);
+        info->name.setPosition((this->*calculatePosition)(NAME_OFFSET, info->name.getGlobalBounds().width),
+                               scoreSprite.getPosition().y + scoreboardTopThickness + characterSlotHeight * index);
+
+        info->kills.setPosition((this->*calculatePosition)(KILLS_OFFSET, info->kills.getGlobalBounds().width),
+                                scoreSprite.getPosition().y + scoreboardTopThickness + characterSlotHeight * index);
+
+        info->deaths.setPosition((this->*calculatePosition)(DEATHS_OFFSET, info->deaths.getGlobalBounds().width),
+                                 scoreSprite.getPosition().y + scoreboardTopThickness + characterSlotHeight * index);
+
+        info->captures.setPosition((this->*calculatePosition)(CAPTURES_OFFSET, info->captures.getGlobalBounds().width),
+                                   scoreSprite.getPosition().y + scoreboardTopThickness + characterSlotHeight * index);
+
+        info->returns.setPosition((this->*calculatePosition)(RETURNS_OFFSET, info->returns.getGlobalBounds().width),
+                                  scoreSprite.getPosition().y + scoreboardTopThickness + characterSlotHeight * index);
     }
 }
 

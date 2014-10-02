@@ -18,7 +18,7 @@ using std::endl;
 
 PlayerBase::PlayerBase():
     playerId(0),
-    teamId(0),
+    teamId(1),
     pastHitBox(sf::Vector2f(29, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
@@ -34,6 +34,7 @@ PlayerBase::PlayerBase():
     maxNoData(sf::seconds(3)),
     respawnTimer(),
     respawnDelay(sf::seconds(5)),
+    playerName("Name"),
     kills(0),
     deaths(0),
     flagCaptures(0),
@@ -301,6 +302,11 @@ void PlayerBase::setGun(shared_ptr<Gun> newGun) {
     gun = newGun;
 }
 
+const std::string& PlayerBase::getName() const {
+
+    return playerName;
+}
+
 const unsigned short& PlayerBase::getKills() const {
 
     return kills;
@@ -319,6 +325,11 @@ const unsigned short& PlayerBase::getFlagCaptures() const {
 const unsigned short& PlayerBase::getFlagReturns() const {
 
     return flagReturns;
+}
+
+void PlayerBase::setName(const std::string& name) {
+
+    playerName = name;
 }
 
 void PlayerBase::setKills(const unsigned short& amount) {
