@@ -177,8 +177,9 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
 }
 
 void ClientGameManager::updateStatDisplay() {
-    
+
     getStatDisplay().setPlayerHealth(userPlayer.getHealth());
+    getStatDisplay().setPlayerAmmo(userPlayer.getGun()->getCurrentAmmo)
 }
 
 void ClientGameManager::handleBulletCollision() {
@@ -251,7 +252,7 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
 
     //setup camera
     camera.setDefaultSize(window);
-    
+
     //setup the player name on the H.U.D
     getStatDisplay().setPlayerName(userPlayer.getName());
     getStatDisplay().setPlayerHealth(userPlayer.getHealth());
@@ -281,7 +282,7 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
     handleServerUpdates();
 
     updateScoreboard(window);
-    
+
     updateStatDisplay();
 
     ///handle the bullet collision here isntead of in the time components

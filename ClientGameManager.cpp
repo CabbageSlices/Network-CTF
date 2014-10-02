@@ -8,6 +8,7 @@
 #include "ForegroundObject.h"
 #include "TeamManager.h"
 #include "Block.h"
+#include "Gun.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -30,7 +31,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client("192.168.0.150", 8080),
+    client(sf::IpAddress::getLocalAddress(), 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),
@@ -179,6 +180,10 @@ void ClientGameManager::updateConnectedPlayers(const float& delta) {
 void ClientGameManager::updateStatDisplay() {
 
     getStatDisplay().setPlayerHealth(userPlayer.getHealth());
+
+    getStatDisplay().setPlayerAmmo(userPlayer.getGun()->getCurrentAmmo(),
+                                   userPlayer.getGun()->getMaxCurrentAmmo(),
+                                   userPlayer.getGun()->getTotalAmmo());
 }
 
 void ClientGameManager::handleBulletCollision() {

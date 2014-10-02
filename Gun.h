@@ -169,6 +169,11 @@ class Gun {
 
         const int getCurrentAmmo() const;
 
+        const int getMaxCurrentAmmo() const {
+
+            return maxCurrentMagazine;
+        }
+
         void setTotalAmmo(const int& amount);
         const int getTotalAmmo() const;
 

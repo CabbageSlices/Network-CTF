@@ -28,7 +28,7 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Shotgun()),
+    gun(new Sniper()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
@@ -250,6 +250,7 @@ bool PlayerBase::isHoldingFlag() const {
 void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
 
     flagBeingHeld = flagToHold;
+    flagToHold->pickUpFlag();
 }
 
 void PlayerBase::dropFlag() {

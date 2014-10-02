@@ -215,6 +215,7 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     if(!flagAHeld) {
 
         flagManager->teamAFlag()->dropFlag();
+        cout << "Flag not held" << endl;
     }
 
     if(!flagBHeld) {

@@ -27,8 +27,8 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     fireDelay(firingDelay),
     floor(OVERGROUND_FLOOR),
     bulletDamage(damage),
-    maxCurrentMagazine(20),
-    maxTotalMagazine(100),
+    maxCurrentMagazine(15),
+    maxTotalMagazine(90),
     currentMagazine(maxCurrentMagazine),
     totalMagazine(maxTotalMagazine),
     reloading(false),
@@ -152,9 +152,14 @@ void Gun::drawBullets(sf::RenderWindow& window) {
     }
 }
 
-vector<shared_ptr<Bullet> > Gun::getBullets() {
+vector<shared_ptr<Bullet> >& Gun::getBullets() {
 
     return bullets;
+}
+
+vector<shared_ptr<Bullet> >& Gun::getBulletsForClients() {
+
+    return bulletsForClients;
 }
 
 const vector<float>& Gun::getQueuedRotations() const {
@@ -174,7 +179,7 @@ void Gun::setFloor(const unsigned& newFloor) {
 
 void Gun::setCurrentAmmo(const int& amount) {
 
-    if(amount >= 0 && amount < maxCurrentMagazine) {
+    if(amount >= 0 && amount <= maxCurrentMagazine) {
 
         currentMagazine = amount;
     }
@@ -187,7 +192,7 @@ const int Gun::getCurrentAmmo() const {
 
 void Gun::setTotalAmmo(const int& amount) {
 
-    if(amount > 0 && amount < maxTotalMagazine) {
+    if(amount >= 0 && amount <= maxTotalMagazine) {
 
         totalMagazine = amount;
     }
@@ -239,7 +244,7 @@ void Gun::fire(const float& angle) {
 
     //fire with new angle
     createBullet(lineOfSight[0].position, endPoint, floor);
-    
+
     //the new bullet fired needs to be queued to send to the clients
     //since its the last bullet added to the container, copy the last object to the bulletsForClients
     bulletsForClients.push_back(bullets[bullets.size() - 1]);

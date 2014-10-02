@@ -2,6 +2,11 @@
 #include "Floors.h"
 #include "math.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 Flag::Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor):
     flag(),
     spawnPosition(spawnLocation),
