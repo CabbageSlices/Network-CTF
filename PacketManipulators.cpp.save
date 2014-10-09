@@ -129,7 +129,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
-void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay) {
 
     sf::Uint32 inputId = 0;
 
@@ -174,15 +174,14 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     player.setDeaths(deaths);
     player.setCaptures(flagCaptures);
     player.setReturns(flagReturns);
-    
+
     unsigned short team_A_Score = 0;
     unsigned short team_B_Score = 0;
-    
+
     updatePacket >> team_A_Score >> team_B_Score;
-    
-    /**
-        Do someth
-    **/
+
+    scoreDisplay.setRedScore(team_A_Score);
+    scoreDisplay.setBlueScore(team_B_Score);
 
     unsigned floor = 0;
     updatePacket >> floor;

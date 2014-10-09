@@ -16,7 +16,7 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
     AMMO_OFFSET_TOTAL(184, 61),
     healthBar(91, 12),
     font(),
-    textScale(0.35),
+    TEXT_SCALE(0.35),
     playerName(),
     totalAmmo()
     {
@@ -34,11 +34,11 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
         font.loadFromFile("font.ttf");
 
         playerName.setFont(font);
-        playerName.setScale(textScale, textScale);
+        playerName.setScale(TEXT_SCALE, TEXT_SCALE);
         playerName.setString("Player Name");
 
         totalAmmo.setFont(font);
-        totalAmmo.setScale(textScale, textScale);
+        totalAmmo.setScale(TEXT_SCALE, TEXT_SCALE);
         totalAmmo.setString("0");
         totalAmmo.setColor(sf::Color(66, 40, 57));
 

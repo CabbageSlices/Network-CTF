@@ -3,6 +3,7 @@
 
 #include "Minimap.h"
 #include "StatDisplay.h"
+#include "ScoreDisplay.h"
 
 #include <string>
 
@@ -13,6 +14,7 @@ class HeadsUpDisplay {
 
         Minimap minimap;
         StatDisplay statDisplay;
+        ScoreDisplay scoreDisplay;
 
     public:
 
@@ -34,10 +36,16 @@ class HeadsUpDisplay {
             return minimap;
         }
 
+        ScoreDisplay& getScoreDisplay() {
+
+            return scoreDisplay;
+        }
+
         void draw(sf::RenderWindow& window) {
 
             statDisplay.draw(window);
             minimap.drawBorder(window);
+            scoreDisplay.draw(window);
         }
 };
 

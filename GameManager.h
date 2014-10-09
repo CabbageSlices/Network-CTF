@@ -14,6 +14,7 @@ class Block;
 class ForegroundObject;
 class FlagManager;
 class StatDisplay;
+class ScoreDisplay;
 
 //base game manager class for client and server to derive from
 //the internal functions are virtual because the functions have the same outer appearence but the inner workings are different
@@ -97,6 +98,11 @@ class GameManager {
         StatDisplay& getStatDisplay() {
 
             return headsUpDisplay.getStatDisplay();
+        }
+
+        ScoreDisplay& getScoreDisplay() {
+
+            return headsUpDisplay.getScoreDisplay();
         }
 
         //calculate what fraction of time has passed since the last physics update to the next physics update

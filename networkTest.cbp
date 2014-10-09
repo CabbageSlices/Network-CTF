@@ -92,6 +92,8 @@
 		<Unit filename="PlayerBase.h" />
 		<Unit filename="Portal.cpp" />
 		<Unit filename="Portal.h" />
+		<Unit filename="ScoreDisplay.cpp" />
+		<Unit filename="ScoreDisplay.h" />
 		<Unit filename="Scoreboard.cpp" />
 		<Unit filename="Scoreboard.h" />
 		<Unit filename="ServerGameManager.cpp" />

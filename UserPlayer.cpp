@@ -241,7 +241,6 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
     if(gun->mustReload() && canReload()) {
 
         reload();
-        ///cout << "reloaded" << endl;
     }
 }
 

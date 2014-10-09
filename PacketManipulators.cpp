@@ -129,7 +129,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& p
     dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
-void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay) {
 
     sf::Uint32 inputId = 0;
 
@@ -180,9 +180,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> team_A_Score >> team_B_Score;
 
-    /**
-        Do something with the above scores, put them in the score display of the H.U.D to draw on screen
-    **/
+    scoreDisplay.setRedScore(team_A_Score);
+    scoreDisplay.setBlueScore(team_B_Score);
 
     unsigned floor = 0;
     updatePacket >> floor;
@@ -227,7 +226,6 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     if(!flagAHeld) {
 
         flagManager->teamAFlag()->dropFlag();
-        cout << "Flag not held" << endl;
     }
 
     if(!flagBHeld) {

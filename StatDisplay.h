@@ -41,7 +41,7 @@ class StatDisplay {
 
         //display for all texts displayed on the stat
         sf::Font font;
-        const float textScale;
+        const float TEXT_SCALE;
 
         sf::Text playerName;
         sf::Text totalAmmo;

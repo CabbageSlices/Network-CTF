@@ -180,7 +180,6 @@ class Gun {
         void refillTotalAmmo() {
 
             totalMagazine = maxTotalMagazine;
-            ///cout << "refillled" << endl;
         }
 
         virtual GunTypes getGunType() const;

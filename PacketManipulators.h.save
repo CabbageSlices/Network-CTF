@@ -12,6 +12,7 @@ class UserPlayer;
 class InterpolatingPlayer;
 class FlagManager;
 class TeamManager;
+class ScoreDisplay;
 
 //all of these functions are helper functions used to make packet creation and reading easier for the users
 
@@ -25,7 +26,7 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
-void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination
+void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
                         TeamManager& teamManager);
 
 //read the given position and state update from the server and apply the updates to the player
@@ -60,7 +61,7 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, const Use
     =FLAG TEAM A FLOOR NUMBER
     -FLAG TEAM B FLOOR NUMBER
 **/
-void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket);
+void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay);
 
 //state update packet contains data about all players connected to server
 /**
