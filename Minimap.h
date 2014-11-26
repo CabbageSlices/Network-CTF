@@ -4,6 +4,11 @@
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
 
+/*
+size of the minimap is dependent on the size of the minimap texture
+however its not based on the size of the image, just the size of the viewing region alloted in the image file
+the size is represented by viewAreaSize
+*/
 class Minimap {
 
     private:
@@ -15,6 +20,7 @@ class Minimap {
 
         //distance from the origin of the border to the actual place where the map can be drawn
         //expressed in pixels, not in percent of the screen
+        //this is the offset to the viewing area depicted on the imagefile of the border
         sf::Vector2f viewingAreaOffset;
 
         //size of the viewing area, which is different from the border size, expressed in pixels
@@ -35,7 +41,7 @@ class Minimap {
 
     public:
 
-        Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize);
+        Minimap(const sf::Vector2u& windowSize);
 
         //set the minimap to the size of the level and center the map on the level
         void setLevelSize(const sf::Vector2f& level);

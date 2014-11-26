@@ -137,6 +137,12 @@ start blocks
 55
 end blocks
 start foreground
+bush.png
+894.006
+722.866
+bush.png
+981.492
+441.287
 end foreground
 begin portal
 1860.19

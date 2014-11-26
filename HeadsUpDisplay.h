@@ -18,7 +18,7 @@ class HeadsUpDisplay {
 
     public:
 
-        HeadsUpDisplay(const sf::Vector2f& minimapSize, const sf::Vector2u& screenSize);
+        HeadsUpDisplay(const sf::Vector2u& screenSize);
 
         void handleScreenResize(const sf::Vector2u& screenSize) {
 

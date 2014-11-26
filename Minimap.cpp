@@ -1,11 +1,11 @@
 #include "Minimap.h"
 
-Minimap::Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize):
+Minimap::Minimap(const sf::Vector2u& windowSize):
     view(),
     borderTexture(),
     borderSprite(),
-    viewingAreaOffset(22, 35),
-    viewingAreaSize(194, 126),
+    viewingAreaOffset(27, 43),
+    viewingAreaSize(242, 158),
     levelSize(1024, 768),
     movementOffset(0.01)
     {

@@ -10,7 +10,7 @@ GameManager::GameManager() :
     accumulator(),
     optimalTimeStep(sf::milliseconds(15)),
     world(),
-    headsUpDisplay(sf::Vector2f(0.25, 0.25), sf::Vector2u(1024, 768)),
+    headsUpDisplay(sf::Vector2u(1024, 768)),
     currentWindow()
     {
         world.load("untitled");
