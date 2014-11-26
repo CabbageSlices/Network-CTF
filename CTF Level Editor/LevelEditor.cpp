@@ -447,6 +447,10 @@ shared_ptr<Block> LevelEditor::createMirror(shared_ptr<Block>& block) {
 
 sf::Vector2f LevelEditor::createMirror(const sf::Vector2f& position) {
 
+    //mirrored along the center of the level, and the size of the level is dependent on the size of the background image of the overground
+    //set the levelsize to the background size incase it hasn't been set yet
+    levelSize = floors[OVERGROUND_FLOOR]->backgroundImage.getSize();
+
     //object is mirrored horizontally along the center
     float levelCenter = levelSize.x / 2;
     float distanceToCenter = levelCenter - position.x;

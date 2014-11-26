@@ -131,6 +131,8 @@ void LevelEditor::handleEvents(sf::Event& event, sf::RenderWindow& window) {
                 leftClickEvents(worldPosition, window);
             }
 
+            rectangleStart = worldPosition;
+
         } else if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
 
             rightClickEvents(worldPosition);
@@ -179,8 +181,11 @@ void LevelEditor::draw(sf::RenderWindow& window) {
 
     drawFlags(window);
 
-    window.draw(redSpawnArea);
-    window.draw(blueSpawnArea);
+    if(currentFloor == OVERGROUND_FLOOR) {
+
+        window.draw(redSpawnArea);
+        window.draw(blueSpawnArea);
+    }
 
     drawForeground(window);
 
@@ -384,20 +389,23 @@ void LevelEditor::saveLevel() {
 }
 
 void LevelEditor::loadLevel(const std::string& level) {
-    
+
+    //clear previous level
+    clearLevel();
+
     sf::FloatRect redSpawn;
     sf::FloatRect blueSpawn;
-    
+
     loadOvergroundLevel(level, floors[OVERGROUND_FLOOR], redFlag, blueFlag, redSpawn, blueSpawn);
-    
+
     redSpawnArea.setPosition(redSpawn.left, redSpawn.top);
     redSpawnArea.setSize(sf::Vector2f(redSpawn.width, redSpawn.height));
-    
+
     blueSpawnArea.setPosition(blueSpawn.left, blueSpawn.top);
     blueSpawnArea.setSize(sf::Vector2f(blueSpawn.width, blueSpawn.height));
-    
+
     loadUndergroundLevel(level, floors[UNDERGROUND_FLOOR]);
-    
+
     cout << "loaded" << endl;
 }
 
@@ -438,7 +446,11 @@ shared_ptr<Block> LevelEditor::createMirror(shared_ptr<Block>& block) {
 }
 
 sf::Vector2f LevelEditor::createMirror(const sf::Vector2f& position) {
-
+    
+    //mirrored along the center of the level, and the size of the level is dependent on the size of the background image of the overground
+    //set the levelsize to the background size incase it hasn't been set yet
+    levelSize = floors[OVERGROUND_FLOOR]->backgroundImage
+    
     //object is mirrored horizontally along the center
     float levelCenter = levelSize.x / 2;
     float distanceToCenter = levelCenter - position.x;
@@ -671,8 +683,12 @@ bool LevelEditor::buttonPressEvents(sf::Vector2f& mousePosition, sf::RenderWindo
 
             //get the user to input a name
             string levelToLoad;
-            
-            if(setInput(levelToLoad, window)) 
+
+            if(setInput(levelToLoad, window)) {
+
+                loadLevel(levelToLoad);
+            }
+
 
         } else {
 
