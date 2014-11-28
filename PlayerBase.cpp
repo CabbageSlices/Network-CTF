@@ -105,7 +105,7 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    pastHitBox.setPosition(destinationHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
     destinationHitBox.setPosition(position);
 
     //if the distance to interpolate is too large just set the position to the given position

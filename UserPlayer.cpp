@@ -231,16 +231,10 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
-    ///pastHitBox.setPosition(currentHitBox.getPosition());
+    pastHitBox.setPosition(currentHitBox.getPosition());
 
     //set the destination hitbox to the new position so the current hitbox and interpolate towards it over time
-    ///destinationHitBox.move(velocities.x * delta, velocities.y * delta);
-
-    sf::Vector2f position = destinationHitBox.getPosition();
-    position.x += velocities.x * delta;
-    position.y += velocities.y * delta;
-
-    setInterpolationPosition(position);
+    destinationHitBox.move(velocities.x * delta, velocities.y * delta);
 
     updateGun(delta);
 

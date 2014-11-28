@@ -103,3 +103,18 @@ int getRand(int max, int min) {
 
     return (rand() % max + min) + subtracted;
 }
+
+bool compareFloats(const float& float1, const float& float2) {
+
+    const float MAX_DIFFERENCE = 0.25;
+
+    return abs(float1 - float2) < MAX_DIFFERENCE;
+}
+
+bool compareRects(const sf::FloatRect& rect1, const sf::FloatRect& rect2) {
+
+    bool matchingPositions = compareFloats(rect1.left, rect2.left) && compareFloats(rect1.top, rect2.top);
+    bool matchingSizes = compareFloats(rect1.width, rect2.width) && compareFloats(rect1.height, rect2.height);
+
+    return matchingPositions && matchingSizes;
+}

@@ -71,9 +71,6 @@ vector<shared_ptr<Block> > GameWorld::getBlocks(const sf::Vector2f& beginRange, 
         blocks.insert(blocks.end(), blocksInRegion.begin(), blocksInRegion.end());
     }
 
-    //make sure there are no duplicates in the blocks to return
-    blocks.erase(unique(blocks.begin(), blocks.end()), blocks.end());
-
     return blocks;
 }
 

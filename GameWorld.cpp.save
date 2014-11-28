@@ -71,8 +71,16 @@ vector<shared_ptr<Block> > GameWorld::getBlocks(const sf::Vector2f& beginRange, 
         blocks.insert(blocks.end(), blocksInRegion.begin(), blocksInRegion.end());
     }
 
+    cout << blocks.size() << "     ";
+
     //make sure there are no duplicates in the blocks to return
-    blocks.erase(unique(blocks.begin(), blocks.end()), blocks.end());
+    blocks.erase(unique(blocks.begin(), blocks.end(), [](shared_ptr<Block> block1, shared_ptr<Block> block2){
+                        
+                                return compareRects(block1->getCollisionBox(), block2->getCollisionBox());
+                            }
+                        ), blocks.end());
+
+    cout << blocks.size() << endl;
 
     return blocks;
 }
@@ -242,25 +250,25 @@ vector<shared_ptr<Block> >& GameWorld::getContainingSection(const sf::Vector2f& 
 
     } else if(point.x >= floorSize.x / SECTIONS_IN_FLOOR * 3 && point.x < floorSize.x / SECTIONS_IN_FLOOR * 4) {
 
-        return regions[floor].blocksSection3;
+        return regions[floor].blocksSection4;
 
     } else if(point.x >= floorSize.x / SECTIONS_IN_FLOOR * 4 && point.x < floorSize.x / SECTIONS_IN_FLOOR * 5) {
 
-        return regions[floor].blocksSection3;
+        return regions[floor].blocksSection5;
 
     }  else if(point.x >= floorSize.x / SECTIONS_IN_FLOOR * 5 && point.x < floorSize.x / SECTIONS_IN_FLOOR * 6) {
 
-        return regions[floor].blocksSection3;
+        return regions[floor].blocksSection6;
 
     } else if(point.x >= floorSize.x / SECTIONS_IN_FLOOR * 6 && point.x < floorSize.x / SECTIONS_IN_FLOOR * 7) {
 
-        return regions[floor].blocksSection3;
+        return regions[floor].blocksSection7;
 
     }else {
 
-        return regions[floor].blocksSection4;
+        return regions[floor].blocksSection8;
     }
 
     //by default return the last block section
-    return regions[floor].blocksSection4;
+    return regions[floor].blocksSection8;
 }
