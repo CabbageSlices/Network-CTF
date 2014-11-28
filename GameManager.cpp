@@ -2,13 +2,17 @@
 #include "LevelManager.h"
 #include "Minimap.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
 using std::vector;
 using std::tr1::shared_ptr;
 
 GameManager::GameManager() :
     timer(),
     accumulator(),
-    optimalTimeStep(sf::milliseconds(15)),
+    optimalTimeStep(sf::milliseconds(30)),
     world(),
     headsUpDisplay(sf::Vector2u(1024, 768)),
     currentWindow()

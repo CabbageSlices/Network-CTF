@@ -19,12 +19,19 @@ end blocks
 start foreground
 end foreground
 begin portal
-1885.47
-648.378
-227.556
-199.111
-1752.73
-686.304
+961.023
+651.204
+104.296
+125.63
+925.467
+667.796
+1
+2470.95
+653.574
+94.8147
+125.63
+2494.65
+672.537
 1
 end portal
 begin gun giver

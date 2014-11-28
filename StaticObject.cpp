@@ -3,11 +3,10 @@
 #include "UserPlayer.h"
 #include "Collision.h"
 
-StaticObject::StaticObject(const sf::Vector2f& centerPosition):
+StaticObject::StaticObject(const sf::Vector2f& position):
     collisionBox(sf::Vector2f(20, 20))
     {
-        collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds() ));
-        collisionBox.setPosition(centerPosition);
+        collisionBox.setPosition(position);
 
         //setup the size and other information about the static object
         setupCollisionBox();

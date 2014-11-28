@@ -1,6 +1,10 @@
 #include "ForegroundObject.h"
 #include "math.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
 using std::string;
 
 ForegroundObject::ForegroundObject(const string& imagePath) :

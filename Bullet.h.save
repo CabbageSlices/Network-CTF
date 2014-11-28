@@ -9,7 +9,8 @@
 class LineSegment;
 
 //bullets are rays but they need to keep track of how long they're live
-//bullets can only damage things the moment they're fired, afterwards they remain in order for the players to see a line indicating where they fired
+//bullets can only damage things the moment they're fired, the actual bullet body is seen as a pellet
+//after a bullet is fired and the collision detection occurs the pellet is interpolated from the starting point to the end to give the illusion of a bullet moving
 class Bullet {
 
     private:

@@ -28,7 +28,7 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Sniper()),
+    gun(new Pistol()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
@@ -42,6 +42,9 @@ PlayerBase::PlayerBase():
     maxInterpolationDist(65000),
     currentFloor(OVERGROUND_FLOOR)
     {
+        pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
+        pastHitBox.setFillColor(sf::Color(255, 0, 0, 100));
+
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
         currentHitBox = pastHitBox;
@@ -102,7 +105,7 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    pastHitBox.setPosition(currentHitBox.getPosition());
+    pastHitBox.setPosition(destinationHitBox.getPosition());
     destinationHitBox.setPosition(position);
 
     //if the distance to interpolate is too large just set the position to the given position

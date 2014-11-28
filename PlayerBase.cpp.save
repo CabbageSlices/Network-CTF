@@ -18,7 +18,7 @@ using std::endl;
 
 PlayerBase::PlayerBase():
     playerId(0),
-    teamId(0),
+    teamId(1),
     pastHitBox(sf::Vector2f(29, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
@@ -28,12 +28,13 @@ PlayerBase::PlayerBase():
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
-    gun(new Pistol()),
+    gun(new Sniper()),
     flagBeingHeld(),
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
     respawnTimer(),
     respawnDelay(sf::seconds(5)),
+    playerName("Name"),
     kills(0),
     deaths(0),
     flagCaptures(0),
@@ -41,6 +42,9 @@ PlayerBase::PlayerBase():
     maxInterpolationDist(65000),
     currentFloor(OVERGROUND_FLOOR)
     {
+        pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
+        pastHitBox.setFillColor(sf::Color(255, 0, 0, 100));
+
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
         currentHitBox = pastHitBox;
@@ -101,7 +105,7 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    pastHitBox.setPosition(currentHitBox.getPosition());
+    pastHitBox.setPosition(destinationHitBox.getPosition());
     destinationHitBox.setPosition(position);
 
     //if the distance to interpolate is too large just set the position to the given position
@@ -249,6 +253,7 @@ bool PlayerBase::isHoldingFlag() const {
 void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
 
     flagBeingHeld = flagToHold;
+    flagToHold->pickUpFlag();
 }
 
 void PlayerBase::dropFlag() {
@@ -301,6 +306,11 @@ void PlayerBase::setGun(shared_ptr<Gun> newGun) {
     gun = newGun;
 }
 
+const std::string& PlayerBase::getName() const {
+
+    return playerName;
+}
+
 const unsigned short& PlayerBase::getKills() const {
 
     return kills;
@@ -319,6 +329,11 @@ const unsigned short& PlayerBase::getFlagCaptures() const {
 const unsigned short& PlayerBase::getFlagReturns() const {
 
     return flagReturns;
+}
+
+void PlayerBase::setName(const std::string& name) {
+
+    playerName = name;
 }
 
 void PlayerBase::setKills(const unsigned short& amount) {

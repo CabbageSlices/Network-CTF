@@ -17,7 +17,7 @@ class StaticObject {
 
     public:
 
-        StaticObject(const sf::Vector2f& centerPosition);
+        StaticObject(const sf::Vector2f& position);
         virtual ~StaticObject();
 
         const sf::FloatRect getCollisionBox() const;
