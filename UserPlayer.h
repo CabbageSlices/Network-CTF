@@ -152,7 +152,7 @@ class UserPlayer : public PlayerBase{
         void handleStateEvents();
 
         //update the player's state according to the server's data and replay all events from the last input confirmed by the server
-        void handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId);
+        void handleServerUpdate(const State& stateUpdate, const unsigned& destinationFloor, const sf::Uint32& lastConfirmedInputId);
 
         const std::vector<Input>& getInputsToSend() const;
 
@@ -172,6 +172,8 @@ class UserPlayer : public PlayerBase{
         void clearInputsToSend();
 
         void setRotation(const float& newRotation);
+
+        virtual void updateGun(const float& delta);
 
         //fire the gun at the given angle
         void fireGun(const float& angle);

@@ -22,7 +22,7 @@ class ScoreDisplay;
 //also adds the player's current rotation so server can send player's rotation to other clients
 bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 
-//create a packet that contains the players current keystate
+//create a packet that contains the players current keystate and position
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player
@@ -104,6 +104,7 @@ void applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector
     -NUMBER OF GUNSHOTS
     -FRACTION OF TIME PASSED SINCE LAST SERVER UPDATE (so server knows how far back in time to move all objects when cheking for collision with gunshot)
     -ID OF LAST UPDATE SENT BY SERVER (so server knows which update to start interpolating the world from before checkign for collision)
+    -PLAYER POSITION
 
     **repeat the following for every gunshot player has sent
     -PLAYER ROTATION

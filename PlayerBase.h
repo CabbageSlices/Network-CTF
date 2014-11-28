@@ -104,7 +104,7 @@ class PlayerBase {
 
         const float getRotation() const;
 
-        void updateGun(const float& delta);
+        virtual void updateGun(const float& delta);
 
         //make player interpolate from current position to the given position
         //called by several functions related to the player class and interpolationg player class

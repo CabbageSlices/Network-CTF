@@ -71,6 +71,8 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
 
     dataDestination << player.getRotation();
 
+    dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
+
     //if the number of inputs sent is 0 then there was no data added, so there is only data added if the number of player inputs is more than 0
     return playerInputs.size() > 0;
 }
@@ -87,6 +89,8 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.pressedDown;
 
     dataDestination << player.getRotation();
+
+    dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
 
     dataDestination << keystate.inputId;
 }
@@ -155,9 +159,6 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatedState.team = team;
 
-    //apply to player
-    player.handleServerUpdate(updatedState, inputId);
-
     bool holdingFlag = false;
     updatePacket >> holdingFlag;
 
@@ -186,7 +187,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     unsigned floor = 0;
     updatePacket >> floor;
 
-    player.setFloor(floor);
+    ///apply to player
+    player.handleServerUpdate(updatedState, floor, inputId);
 
     int gunType = 0;
     updatePacket >> gunType;
@@ -465,6 +467,8 @@ void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const s
 
     packet << lastServerUpdate;
 
+    packet << player.getDestinationPosition().x << player.getDestinationPosition().y;
+
     for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
 
         packet << playerGunshotRotations[gunshotsCreated];
@@ -486,6 +490,12 @@ void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& las
     packet >> deltaFraction;
 
     packet >> lastServerUpdate;
+
+    sf::Vector2f position(0, 0);
+
+    packet >> position.x >> position.y;
+
+    player.setInterpolationPosition(position);
 
     //create gunshots for this player until there are no more gunshots left to created
     for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {

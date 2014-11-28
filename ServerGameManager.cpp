@@ -150,6 +150,11 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     float rotation = 0;
     statePacket >> rotation;
 
+    sf::Vector2f position(0, 0);
+    statePacket >> position.x >> position.y;
+
+    player->player.setInterpolationPosition(position);
+
     //read the id of this state update
     sf::Uint32 inputId = 0;
     statePacket >> inputId;
@@ -434,7 +439,8 @@ void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
         //if the player if alive update him, otherwise try to respawn him
         if(players[index]->player.isAlive()) {
 
-            players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+            //players[index]->player.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
+            players[index]->player.updateGun(delta);
 
         } else if(players[index]->player.shouldRespawn()) {
 

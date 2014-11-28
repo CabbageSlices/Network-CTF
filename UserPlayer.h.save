@@ -65,14 +65,14 @@ class UserPlayer : public PlayerBase{
         };
 
     private:
-        
+
         //keys for each possible player action
-        const sf::Key LEFT_KEY;
-        const sf::Key RIGHT_KEY;
-        const sf::Key UP_KEY;
-        const sf::Key DOWN_KEY;
-        
-        const sf::Key RELOAD_KEY;
+        const sf::Keyboard::Key LEFT_KEY;
+        const sf::Keyboard::Key RIGHT_KEY;
+        const sf::Keyboard::Key UP_KEY;
+        const sf::Keyboard::Key DOWN_KEY;
+
+        const sf::Keyboard::Key RELOAD_KEY;
 
         //use invalid inputs when you search for an input that doesn't exist
         const sf::Uint32 INVALID_INPUT_ID;
@@ -152,7 +152,7 @@ class UserPlayer : public PlayerBase{
         void handleStateEvents();
 
         //update the player's state according to the server's data and replay all events from the last input confirmed by the server
-        void handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId);
+        void handleServerUpdate(const State& stateUpdate, const unsigned& destinationFloor, const sf::Uint32& lastConfirmedInputId);
 
         const std::vector<Input>& getInputsToSend() const;
 
@@ -172,6 +172,8 @@ class UserPlayer : public PlayerBase{
         void clearInputsToSend();
 
         void setRotation(const float& newRotation);
+
+        virtual void updateGun(const float& delta);
 
         //fire the gun at the given angle
         void fireGun(const float& angle);

@@ -115,7 +115,7 @@ void UserPlayer::handleStateEvents() {
     keystate.pressedDown = sf::Keyboard::isKeyPressed(DOWN_KEY);
 }
 
-void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId) {
+void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& destinationFloor, const sf::Uint32& lastConfirmedInputId) {
 
     //if the first input in queue has an id that is greater than the last confirmed input id it means
     //that the current server update is from the past and should be ignored because the first input in queue is the first
@@ -134,7 +134,20 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
 
     currentInputId = lastConfirmedInputId + 1;
 
-    setInterpolationPosition(stateUpdate.position);
+    //only let the server set the position if the player respawned because server determines respawn position,
+    //or if the player uses a portal because both respawning and portals are handled server side
+    bool respawned = health.getCurrentHealth() == 0 && stateUpdate.health > 0;
+    bool usedPortal = distanceToPoint(stateUpdate.position, pastHitBox.getPosition()) > maxInterpolationDist || currentFloor != destinationFloor;
+
+    if(health.getCurrentHealth() == 0 && stateUpdate.health > 0)
+    cout << stateUpdate.health << "     " << health.getCurrentHealth() << endl;
+
+    if(respawned || usedPortal) {
+
+        setInterpolationPosition(stateUpdate.position);
+    }
+
+    setFloor(destinationFloor);
 
     //now load the health from the server update
     setHealth(stateUpdate.health);
@@ -196,6 +209,16 @@ void UserPlayer::setRotation(const float& newRotation) {
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
 }
 
+void UserPlayer::updateGun(const float& delta) {
+
+    PlayerBase::updateGun(delta);
+
+    if(gun->mustReload() && canReload()) {
+
+        reload();
+    }
+}
+
 void UserPlayer::fireGun(const float& angle) {
 
     gun->fire(angle);
@@ -231,17 +254,12 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
-    pastHitBox.setPosition(currentHitBox.getPosition());
+    pastHitBox.setPosition(destinationHitBox.getPosition());
 
     //set the destination hitbox to the new position so the current hitbox and interpolate towards it over time
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);
 
     updateGun(delta);
-
-    if(gun->mustReload() && canReload()) {
-
-        reload();
-    }
 }
 
 void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {

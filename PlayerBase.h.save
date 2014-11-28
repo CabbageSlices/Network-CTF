@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <tr1/memory>
+#include <string>
 
 class Gun;
 class Bullet;
@@ -58,6 +59,8 @@ class PlayerBase {
         sf::Clock respawnTimer;
         sf::Time respawnDelay;
 
+        std::string playerName;
+
         unsigned short kills;
         unsigned short deaths;
         unsigned short flagCaptures;
@@ -101,7 +104,7 @@ class PlayerBase {
 
         const float getRotation() const;
 
-        void updateGun(const float& delta);
+        virtual void updateGun(const float& delta);
 
         //make player interpolate from current position to the given position
         //called by several functions related to the player class and interpolationg player class
@@ -141,6 +144,7 @@ class PlayerBase {
         void getHit(int damage);
 
         //set helath to given value, if its less than current health then run damage animation
+        //if its more than current health, run regeneration animation
         void setHealth(int value);
 
         bool isHoldingFlag() const;
@@ -159,13 +163,15 @@ class PlayerBase {
         void resetDataTimer();
 
         const std::tr1::shared_ptr<Gun> getGun() const;
-        void setGun(std::tr1::shared_ptr<Gun>& newGun);
+        void setGun(std::tr1::shared_ptr<Gun> newGun);
 
+        const std::string& getName() const;
         const unsigned short& getKills() const;
         const unsigned short& getDeaths() const;
         const unsigned short& getFlagCaptures() const;
         const unsigned short& getFlagReturns() const;
 
+        void setName(const std::string& name);
         void setKills(const unsigned short& amount);
         void setDeaths(const unsigned short& amount);
         void setCaptures(const unsigned short& amount);

@@ -11,6 +11,11 @@ using std::endl;
 
 UserPlayer::UserPlayer():
     PlayerBase(),
+    LEFT_KEY(sf::Keyboard::A),
+    RIGHT_KEY(sf::Keyboard::D),
+    UP_KEY(sf::Keyboard::W),
+    DOWN_KEY(sf::Keyboard::S),
+    RELOAD_KEY(sf::Keyboard::R),
     INVALID_INPUT_ID(-1),
     playerId(0),
     velocities(0, 0),
@@ -107,10 +112,10 @@ void UserPlayer::handleStateEvents() {
     keystate.pressedLeft = sf::Keyboard::isKeyPressed(LEFT_KEY);
     keystate.pressedRight = sf::Keyboard::isKeyPressed(RIGHT_KEY);
     keystate.pressedUp = sf::Keyboard::isKeyPressed(UP_KEY);
-    keystate.pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+    keystate.pressedDown = sf::Keyboard::isKeyPressed(DOWN_KEY);
 }
 
-void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& lastConfirmedInputId) {
+void UserPlayer::handleServerUpdate(const State& stateUpdate, unsigned short& destinationFloor, const sf::Uint32& lastConfirmedInputId) {
 
     //if the first input in queue has an id that is greater than the last confirmed input id it means
     //that the current server update is from the past and should be ignored because the first input in queue is the first
@@ -128,8 +133,17 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const sf::Uint32& 
     //so the player has to reprocess the inputs to calculate its new state
 
     currentInputId = lastConfirmedInputId + 1;
-
-    setInterpolationPosition(stateUpdate.position);
+    
+    //only let the server set the position if the player respawned because server determines respawn position,
+    //or if the player uses a portal because both respawning and portals are handled server side
+    bool respawned = health.getCurrentHealth() == 0 && stateUpdate.health > 0;
+    bool usedPortal = distanceToPoint(position, pastHitBox.getPosition()) > maxInterpolationDist || currentFloor != destinationFloor;
+    
+    if(respawned || usedPortal) {
+        
+        setInterpolationPosition(stateUpdate.position);
+    }
+    
 
     //now load the health from the server update
     setHealth(stateUpdate.health);
@@ -191,6 +205,16 @@ void UserPlayer::setRotation(const float& newRotation) {
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
 }
 
+void UserPlayer::updateGun(const float& delta) {
+
+    PlayerBase::updateGun(delta);
+
+    if(gun->mustReload() && canReload()) {
+
+        reload();
+    }
+}
+
 void UserPlayer::fireGun(const float& angle) {
 
     gun->fire(angle);
@@ -232,12 +256,6 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
     destinationHitBox.move(velocities.x * delta, velocities.y * delta);
 
     updateGun(delta);
-
-    if(gun->mustReload() && canReload()) {
-
-        reload();
-        ///cout << "reloaded" << endl;
-    }
 }
 
 void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
