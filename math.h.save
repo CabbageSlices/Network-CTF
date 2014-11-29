@@ -31,4 +31,6 @@ sf::Vector2f calculateCenter(const sf::FloatRect& rect);
 ///this way the given random number is not greather than the max range and is still within the range [max, min]
 int getRand(int max, int min);
 
+bool compareFloats(const float& float1, const float& float2, const float differenceThreshold = 0.25);
+
 #endif // MATH_H_INCLUDED

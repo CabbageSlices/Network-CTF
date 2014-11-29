@@ -42,8 +42,6 @@ PlayerBase::PlayerBase():
     maxInterpolationDist(65000),
     currentFloor(OVERGROUND_FLOOR)
     {
-        pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
-        pastHitBox.setFillColor(sf::Color(255, 0, 0, 100));
 
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -52,6 +50,9 @@ PlayerBase::PlayerBase():
 
         currentHitBox.setOutlineThickness(4.0);
         currentHitBox.setFillColor(sf::Color::Transparent);
+
+        pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
+        destinationHitBox.setFillColor(sf::Color(255, 0, 0, 100));
 
         playerTexture.loadFromFile("player.png");
         playerSprite.setTexture(playerTexture);
@@ -134,6 +135,15 @@ void PlayerBase::interpolate(const float& deltaFraction) {
     //interpolate the player's rotation
     float rotationDelta = ::interpolate(pastRotation, destinationRotation, deltaFraction);
     currentRotation = pastRotation + rotationDelta;
+
+    //if the delta fraction is close enough to one, then interpolation is finished so set all attributes to their target attributes
+    if(compareFloats(deltaFraction, 1.0, 0.05)) {
+
+        currentRotation = destinationRotation;
+        pastRotation = destinationRotation;
+        setPosition(destinationHitBox.getPosition());
+        currentHitBox.setPosition(destinationHitBox.getPosition());
+    }
 
     updateHitboxRotation();
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
@@ -361,7 +371,6 @@ void PlayerBase::setPosition(const sf::Vector2f& position) {
     pastHitBox.setPosition(position);
     destinationHitBox.setPosition(position);
     currentHitBox.setPosition(position);
-
 }
 
 void PlayerBase::updateHitboxRotation() {

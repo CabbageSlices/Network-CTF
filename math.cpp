@@ -103,3 +103,8 @@ int getRand(int max, int min) {
 
     return (rand() % max + min) + subtracted;
 }
+
+bool compareFloats(const float& float1, const float& float2, const float differenceThreshold) {
+
+    return abs(float1 - float2) < differenceThreshold;
+}

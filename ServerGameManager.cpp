@@ -153,8 +153,6 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     sf::Vector2f position(0, 0);
     statePacket >> position.x >> position.y;
 
-    player->player.setInterpolationPosition(position);
-
     //read the id of this state update
     sf::Uint32 inputId = 0;
     statePacket >> inputId;
@@ -169,6 +167,7 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
 
     player->player.handleClientKeystate(keystate);
     player->player.setRotation(rotation);
+    player->player.setInterpolationPosition(position);
 }
 
 void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {

@@ -19,7 +19,7 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    gameManager.runGame(window); return 0;
+    //gameManager.runGame(window); return 0;
 
     ServerGameManager serverGameManager;
 
