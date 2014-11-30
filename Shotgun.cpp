@@ -7,7 +7,7 @@ using std::endl;
 
 Shotgun::Shotgun() :
     Gun(17, 450, sf::milliseconds(100), 28),
-    bulletsPerShot(30),
+    bulletsPerShot(5),
     bulletsFired(0)
     {
         maxCurrentMagazine = 400;

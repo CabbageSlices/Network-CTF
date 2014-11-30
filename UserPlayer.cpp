@@ -136,11 +136,8 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
 
     //only let the server set the position if the player respawned because server determines respawn position,
     //or if the player uses a portal because both respawning and portals are handled server side
-    bool respawned = health.getCurrentHealth() == 0 && stateUpdate.health > 0;
+    bool respawned = (health.getCurrentHealth() == 0 && stateUpdate.health > 0);
     bool usedPortal = distanceToPoint(stateUpdate.position, pastHitBox.getPosition()) > maxInterpolationDist || currentFloor != destinationFloor;
-
-    if(health.getCurrentHealth() == 0 && stateUpdate.health > 0)
-    cout << stateUpdate.health << "     " << health.getCurrentHealth() << endl;
 
     if(respawned || usedPortal) {
 

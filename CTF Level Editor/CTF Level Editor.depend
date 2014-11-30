@@ -8,7 +8,7 @@
 	"SFML/Graphics.hpp"
 	"StaticObject.h"
 
-1407448872 c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.h
+1417150612 c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
@@ -34,7 +34,7 @@
 	"Floor.h"
 	"Flag.h"
 
-1407448872 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.cpp
+1417151012 source:c:\users\nimesh\documents\github\network-ctf\ctf level editor\math.cpp
 	"math.h"
 	<cmath>
 	<cstdlib>

@@ -44,7 +44,6 @@ vector<shared_ptr<Block> >& GameWorld::getBlocks(const unsigned& floor) {
 vector<shared_ptr<Block> > GameWorld::getBlocks(const sf::Vector2f& beginRange, const sf::Vector2f& endRange, const unsigned& floor) {
 
     //floor is only split into regions horizontally so you only need to check where the two points range horizontally
-    ///magic number 8 is the number of regions to divide floor into
     const float regionSize = floors[OVERGROUND_FLOOR]->backgroundImage.getSize().x / SECTIONS_IN_FLOOR;
 
     //figure out which of the two points is the left most region
@@ -162,10 +161,10 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
 
     floors[floor]->backgroundImage.draw(window);
 
-    for(auto& block : floors[floor]->blocks) {
+    /*for(auto& block : floors[floor]->blocks) {
 
         block->draw(window);
-    }
+    }*/
 
     for(auto& portal : floors[floor]->portals) {
 

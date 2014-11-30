@@ -1,6 +1,7 @@
 #include "Portal.h"
 #include "Floors.h"
 #include "UserPlayer.h"
+#include "math.h"
 
 Portal::Portal(const sf::Vector2f& position, const sf::Vector2f& size):
     StaticObject(position),
@@ -15,6 +16,7 @@ void Portal::setTeleportPosition(const sf::Vector2f& position, const sf::Vector2
 
     teleportPosition.setPosition(position);
     teleportPosition.setSize(size);
+    teleportPosition.setOrigin(calculateCenter(teleportPosition.getGlobalBounds()));
     destinationFloor = targetFloor;
 }
 
