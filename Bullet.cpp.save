@@ -3,6 +3,11 @@
 #include "math.h"
 #include <cmath>
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :
@@ -18,12 +23,12 @@ Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& ori
     {
         tracerVelocity.x = (bulletLine->getEndPoint().x - bulletLine->getStartPoint().x) / LIFE_TIME.asSeconds();
         tracerVelocity.y = (bulletLine->getEndPoint().y - bulletLine->getStartPoint().y) / LIFE_TIME.asSeconds();
-        
-        //if bullet moves too slow players will see themselves get hit before 
+
+        //if bullet moves too slow players will see themselves get hit before the bullet reaches them so make sure bullet travels fast enough
         if(abs(tracerVelocity.x) < 800 || abs(tracerVelocity.y) < 800) {
 
-            tracerVelocity.x *= 2;
-            tracerVelocity.y *= 2;
+            tracerVelocity.x *= 1.6;
+            tracerVelocity.y *= 1.6;
         }
 
         bulletTracer.setPosition(bulletLine->getStartPoint());
