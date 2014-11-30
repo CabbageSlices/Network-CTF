@@ -71,8 +71,6 @@ bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination) {
 
     dataDestination << player.getRotation();
 
-    dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
-
     //if the number of inputs sent is 0 then there was no data added, so there is only data added if the number of player inputs is more than 0
     return playerInputs.size() > 0;
 }
@@ -91,6 +89,7 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << player.getRotation();
 
     dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
+    dataDestination << player.getFloor();
 
     dataDestination << keystate.inputId;
 }
@@ -383,7 +382,7 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             BulletData data;
             statePacket >> data.beginPosition.x >> data.beginPosition.y;
             statePacket >> data.endPosition.x >> data.endPosition.y;
-            statePacket >> floor;
+            statePacket >> data. floor;
 
             bullets.push_back(data);
         }
@@ -467,8 +466,6 @@ void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const s
 
     packet << lastServerUpdate;
 
-    packet << player.getDestinationPosition().x << player.getDestinationPosition().y;
-
     for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
 
         packet << playerGunshotRotations[gunshotsCreated];
@@ -490,12 +487,6 @@ void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& las
     packet >> deltaFraction;
 
     packet >> lastServerUpdate;
-
-    sf::Vector2f position(0, 0);
-
-    packet >> position.x >> position.y;
-
-    player.setInterpolationPosition(position);
 
     //create gunshots for this player until there are no more gunshots left to created
     for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {

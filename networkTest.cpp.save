@@ -19,7 +19,7 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    //gameManager.runGame(window); return 0;
+    gameManager.runGame(window); return 0;
 
     ServerGameManager serverGameManager;
 
@@ -28,7 +28,7 @@ int main() {
     largeView.setSize(3200, 1800);
     window.setView(largeView);
 
-    serverGameManager.runGame(window);
+    //serverGameManager.runGame(window);
 
     return 0;
 }

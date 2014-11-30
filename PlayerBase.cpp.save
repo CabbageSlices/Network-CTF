@@ -45,6 +45,7 @@ PlayerBase::PlayerBase():
 
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
+        pastHitBox.setPosition(60, 60);
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
 
@@ -106,7 +107,7 @@ void PlayerBase::updateGun(const float& delta) {
 
 void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
 
-    //pastHitBox.setPosition(destinationHitBox.getPosition());
+    pastHitBox.setPosition(destinationHitBox.getPosition());
     destinationHitBox.setPosition(position);
 
     //if the distance to interpolate is too large just set the position to the given position
@@ -156,17 +157,15 @@ void PlayerBase::stopInterpolation() {
     destinationRotation = pastRotation;
 }
 
-void PlayerBase::draw(sf::RenderWindow& window) {
+void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    this->drawGun(window);
+    this->drawGun(window, drawingFloor);
 
-    window.draw(pastHitBox);
-    window.draw(destinationHitBox);
-    ///window.draw(currentHitBox);
-    ///window.draw(playerSprite);
+    window.draw(currentHitBox);
+    window.draw(playerSprite);
 
     health.draw(window);
 }

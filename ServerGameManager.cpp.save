@@ -153,6 +153,9 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     sf::Vector2f position(0, 0);
     statePacket >> position.x >> position.y;
 
+    unsigned floor = 0;
+    statePacket >> floor;
+
     //read the id of this state update
     sf::Uint32 inputId = 0;
     statePacket >> inputId;
@@ -167,7 +170,15 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
 
     player->player.handleClientKeystate(keystate);
     player->player.setRotation(rotation);
-    player->player.setInterpolationPosition(position);
+
+    ///if client is on a different floor it means the player used a portal on teh server side so client's position must be determiend by the server in the case of portal use
+    if(floor == player->player.getFloor()) {
+
+        player->player.setInterpolationPosition(position);
+    } else {
+        
+        cout << position.x << "    " << position.y << endl;
+    }
 }
 
 void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {
@@ -455,7 +466,7 @@ void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
     for(auto& player : players) {
 
-        //player->player.interpolate(calculateDeltaFraction());
+        player->player.interpolate(calculateDeltaFraction());
         getGameWorld().updateFlagPosition(player->player);
     }
 }

@@ -86,7 +86,7 @@ class PlayerBase {
         void die();
 
         //overload in inherited class to draw differnt part of guns
-        virtual void drawGun(sf::RenderWindow& window) = 0;
+        virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) = 0;
 
     public:
 
@@ -115,7 +115,7 @@ class PlayerBase {
         void interpolate(const float& deltaFraction);
         void stopInterpolation();
 
-        void draw(sf::RenderWindow& window);
+        void draw(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
 
         //drawing components to show on minimap
         void drawMinimap(sf::RenderWindow& window);

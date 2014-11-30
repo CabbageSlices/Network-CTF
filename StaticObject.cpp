@@ -3,6 +3,11 @@
 #include "UserPlayer.h"
 #include "Collision.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 StaticObject::StaticObject(const sf::Vector2f& position):
     collisionBox(sf::Vector2f(20, 20))
     {

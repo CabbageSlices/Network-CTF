@@ -137,11 +137,12 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
     //only let the server set the position if the player respawned because server determines respawn position,
     //or if the player uses a portal because both respawning and portals are handled server side
     bool respawned = (health.getCurrentHealth() == 0 && stateUpdate.health > 0);
-    bool usedPortal = distanceToPoint(stateUpdate.position, pastHitBox.getPosition()) > maxInterpolationDist || currentFloor != destinationFloor;
+    bool usedPortal = currentFloor != destinationFloor;
 
     if(respawned || usedPortal) {
 
-        setInterpolationPosition(stateUpdate.position);
+        cout << stateUpdate.position.x << "     " << stateUpdate.position.y << endl;
+        setPosition(stateUpdate.position);
     }
 
     setFloor(destinationFloor);
@@ -270,7 +271,7 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
     setRotation(calculateAngle(currentHitBox.getPosition(), mousePosition));
 }
 
-void UserPlayer::drawGun(sf::RenderWindow& window) {
+void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     gun->drawAll(window);
 }

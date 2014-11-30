@@ -20,9 +20,10 @@ class ScoreDisplay;
 //return true if there was any data added to indicate whether or not the packet should be sent
 //assumes packet is empty
 //also adds the player's current rotation so server can send player's rotation to other clients
+//also adds the players position
 bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 
-//create a packet that contains the players current keystate and position
+//create a packet that contains the players current keystate and position, as well as his floor
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player

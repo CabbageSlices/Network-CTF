@@ -154,7 +154,8 @@ class Gun {
         virtual void drawSight(sf::RenderWindow& window);
 
         //draw the bullets that have already checked for collision with other entities
-        void drawBullets(sf::RenderWindow& window);
+        //only draw bullets that are on the drawingfloor because the player might not be on the same floor as the bullet
+        void drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor);
 
         std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
         std::vector<std::tr1::shared_ptr<Bullet> >& getBulletsForClients();

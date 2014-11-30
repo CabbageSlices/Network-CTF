@@ -3,6 +3,11 @@
 #include "math.h"
 #include <cmath>
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :

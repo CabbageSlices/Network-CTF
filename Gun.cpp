@@ -130,7 +130,7 @@ void Gun::animate() {
 void Gun::drawAll(sf::RenderWindow& window) {
 
     drawSight(window);
-    drawBullets(window);
+    drawBullets(window, floor);
 }
 
 void Gun::drawSight(sf::RenderWindow& window) {
@@ -138,14 +138,15 @@ void Gun::drawSight(sf::RenderWindow& window) {
     window.draw(lineOfSight, &lineTexture);
 }
 
-void Gun::drawBullets(sf::RenderWindow& window) {
+void Gun::drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     for(auto& bullet : bullets) {
+
 
         //only draw the bullet if it has checked for collision
         //if it hasn't hcecked for collision then it is a brand new bullet, and new bullets may look as if they are going through all other entities
         //when infact they check for collision the next update and onlly are cut off
-        if(!bullet->checkCanCollide()) {
+        if(!bullet->checkCanCollide() && bullet->getFloor() == drawingFloor) {
 
             bullet->draw(window);
         }

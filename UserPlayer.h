@@ -138,7 +138,7 @@ class UserPlayer : public PlayerBase{
 
     protected:
 
-        virtual void drawGun(sf::RenderWindow& window);
+        virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
 
     public:
 

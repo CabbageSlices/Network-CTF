@@ -45,6 +45,7 @@ PlayerBase::PlayerBase():
 
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
+        pastHitBox.setPosition(60, 60);
         currentHitBox = pastHitBox;
         destinationHitBox = pastHitBox;
 
@@ -156,12 +157,12 @@ void PlayerBase::stopInterpolation() {
     destinationRotation = pastRotation;
 }
 
-void PlayerBase::draw(sf::RenderWindow& window) {
+void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    this->drawGun(window);
+    this->drawGun(window, drawingFloor);
 
     window.draw(currentHitBox);
     window.draw(playerSprite);

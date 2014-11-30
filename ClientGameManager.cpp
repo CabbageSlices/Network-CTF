@@ -332,7 +332,7 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
         if(player->getFloor() == userPlayer.getFloor()) {
 
-            player->draw(window);
+            player->draw(window, userPlayer.getFloor());
         }
     }
 }
