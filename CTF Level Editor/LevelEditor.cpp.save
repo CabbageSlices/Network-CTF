@@ -22,6 +22,7 @@ using std::vector;
 
 LevelEditor::LevelEditor(sf::RenderWindow& window) :
     BLOCK("Blocks"),
+    PASSTHROUGH_BLOCK("Pass-through Blocks"),
     SPAWN_ZONE("Spawn Zones"),
     FLAG_SPAWN("Flag Spawn Locations"),
     FOREGROUND_OBJECT("Foreground Object"),
@@ -54,6 +55,7 @@ LevelEditor::LevelEditor(sf::RenderWindow& window) :
     dragArea(sf::Vector2f(1, 1)),
     levelSize(window.getSize().x, window.getSize().y),
     creatingBlocks(false),
+    creatingPassThrough(false),
     creatingSpawn(false),
     creatingPortal(false),
     creatingPortalEntrance(false),
@@ -446,11 +448,11 @@ shared_ptr<Block> LevelEditor::createMirror(shared_ptr<Block>& block) {
 }
 
 sf::Vector2f LevelEditor::createMirror(const sf::Vector2f& position) {
-    
+
     //mirrored along the center of the level, and the size of the level is dependent on the size of the background image of the overground
     //set the levelsize to the background size incase it hasn't been set yet
-    levelSize = floors[OVERGROUND_FLOOR]->backgroundImage
-    
+    levelSize = floors[OVERGROUND_FLOOR]->backgroundImage.getSize();
+
     //object is mirrored horizontally along the center
     float levelCenter = levelSize.x / 2;
     float distanceToCenter = levelCenter - position.x;
@@ -656,11 +658,23 @@ bool LevelEditor::buttonPressEvents(sf::Vector2f& mousePosition, sf::RenderWindo
 
             stopCreation();
 
+            //pass through blocks are created if he clicks the block create button twice
+            //if clicked three times then it will stop block creation
             if(!wasCreating) {
 
                 //blocks wasn't being created before so create blocks
                 creatingBlocks = true;
                 setCreationMessage(BLOCK);
+
+            } else if(wasCreating && !creatingPassThrough) {
+
+                creatingBlocks = true;
+                creatingPassThrough = true;
+                setCreationMessage(PASSTHROUGH_BLOCK);
+
+            } else if(creatingPassThrough) {
+
+                creatingPassThrough = false;
             }
 
         } else if(buttons.clearCollisionBoxes.contains(mousePosition)) {
@@ -800,7 +814,7 @@ void LevelEditor::leftReleaseEvents(sf::Vector2f& mousePosition, sf::RenderWindo
     if(creatingBlocks) {
 
         //create a rectangle based on the start and end points of the click and drag rectangle
-        shared_ptr<Block> block(new Block(rectSize));
+        shared_ptr<Block> block(new Block(rectSize, creatingPassThrough));
         block->setPosition(rectangleStart);
 
         floors[currentFloor]->blocks.push_back(block);
@@ -809,6 +823,9 @@ void LevelEditor::leftReleaseEvents(sf::Vector2f& mousePosition, sf::RenderWindo
         if(isMirrored) {
 
             floors[currentFloor]->blocks.push_back(createMirror(block));
+            
+            //when mirrored the blocks letBulletPass property isn't set so set it now
+            floors[currentFloor]->blocks.back()
         }
     }
 

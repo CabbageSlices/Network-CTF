@@ -248,13 +248,11 @@ bool saveFloor(fstream& file, std::tr1::shared_ptr<Floor>& floor, const string& 
         return false;
     }
 
-    if(!saveObjects(floor->gunGivers, BEGIN_PORTAL, END_PORTAL, file, &saveGunGiver)) {
+    if(!saveObjects(floor->gunGivers, BEGIN_GUN_GIVER, END_GUN_GIVER, file, &saveGunGiver)) {
 
         cout << "failed to save Gun Givers" << endl;
         return false;
     }
-    
-    if(!saveObjects(floor->gunGivers, BEGIN_GUN_GIVER, END_GUN_GIVER, file))
 
     if(!saveBackground(file, floor->backgroundImage, backgroundBegin, backgroundEnd)) {
 
@@ -322,7 +320,7 @@ bool loadFloor(fstream& file, std::tr1::shared_ptr<Floor>& floor, const string& 
         return false;
     }
 
-    if(!loadObjects(floor->gunGivers, BEGIN_PORTAL, END_PORTAL, file, &loadGunGiver)) {
+    if(!loadObjects(floor->gunGivers, BEGIN_GUN_GIVER, END_GUN_GIVER, file, &loadGunGiver)) {
 
         cout << "failed to load Gun Givers" << endl;
         return false;
@@ -411,6 +409,8 @@ void saveBlock(fstream& file, const shared_ptr<Block>& block) {
     file << blockDimensions.top << endl;
     file << blockDimensions.width << endl;
     file << blockDimensions.height << endl;
+
+    file << block->getPass() << endl;
 }
 
 void saveForeground(std::fstream& file, const shared_ptr<ForegroundObject>& foregroundObj) {
@@ -475,7 +475,12 @@ shared_ptr<Block> loadBlock(fstream& file, const string& endTag) {
     getline(file, loadedData);
     bounds.height = atof(loadedData.c_str());
 
-    shared_ptr<Block> block(new Block(sf::Vector2f(bounds.width, bounds.height)) );
+    bool passThrough = false;
+
+    getline(file, loadedData);
+    passThrough = atoi(loadedData.c_str());
+
+    shared_ptr<Block> block(new Block(sf::Vector2f(bounds.width, bounds.height)), passThrough);
     block->setPosition(sf::Vector2f(bounds.left, bounds.top));
 
     return block;

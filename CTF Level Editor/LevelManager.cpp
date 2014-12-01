@@ -409,6 +409,8 @@ void saveBlock(fstream& file, const shared_ptr<Block>& block) {
     file << blockDimensions.top << endl;
     file << blockDimensions.width << endl;
     file << blockDimensions.height << endl;
+
+    file << block->getPassBullets() << endl;
 }
 
 void saveForeground(std::fstream& file, const shared_ptr<ForegroundObject>& foregroundObj) {
@@ -473,7 +475,12 @@ shared_ptr<Block> loadBlock(fstream& file, const string& endTag) {
     getline(file, loadedData);
     bounds.height = atof(loadedData.c_str());
 
-    shared_ptr<Block> block(new Block(sf::Vector2f(bounds.width, bounds.height)) );
+    bool passThrough = false;
+
+    getline(file, loadedData);
+    passThrough = atoi(loadedData.c_str());
+
+    shared_ptr<Block> block(new Block(sf::Vector2f(bounds.width, bounds.height), passThrough));
     block->setPosition(sf::Vector2f(bounds.left, bounds.top));
 
     return block;

@@ -198,8 +198,12 @@ void ClientGameManager::handleBulletCollision() {
             continue;
         }
 
-        //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()));
+        //first check for colision with blocks, bullets only collide with blocks that don't let bullets pass
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()),
+                                     [&](shared_ptr<Block> block) {
+
+                                     return !block->getPassBullets();
+                                     });
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,

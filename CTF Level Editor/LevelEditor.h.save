@@ -26,6 +26,7 @@ class LevelEditor {
 
         //types of object being created
         const std::string BLOCK;
+        const std::string PASSTHROUGH_BLOCK;
         const std::string SPAWN_ZONE;
         const std::string FLAG_SPAWN;
         const std::string FOREGROUND_OBJECT;
@@ -148,6 +149,9 @@ class LevelEditor {
 
         //whether player is creating blocks
         bool creatingBlocks;
+        
+        //whether player is creating special blocks that let bullets pass through
+        bool creatingPassThrough;
 
         //whether player is creating team spawn area
         bool creatingSpawn;

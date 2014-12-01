@@ -12,10 +12,16 @@ class Block : public StaticObject {
 
         virtual void setupCollisionBox(const sf::Vector2f& size);
 
+        //for special blocks that allow bullets to be shot through ,like the ones placed over water
+        bool letBulletsPass;
+
     public:
 
-        Block(const sf::Vector2f& blockSize);
+        Block(const sf::Vector2f& blockSize, const bool& passBullets = false);
         void setPosition(const sf::Vector2f& position);
+        void setPassBullets(const bool& passBullets);
+
+        bool getPassBullets();
 
         virtual ~Block();
 };
