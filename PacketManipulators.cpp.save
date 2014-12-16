@@ -90,6 +90,8 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
 
     dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
     dataDestination << player.getFloor();
+    
+    dataDestination << player.getHealth();
 
     dataDestination << keystate.inputId;
 }
@@ -299,8 +301,6 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
             updatePacket << beginPoint.x << beginPoint.y;
             updatePacket << endPoint.x << endPoint.y;
             updatePacket << bullet->getFloor();
-            
-            cout << 
         }
 
         //empty the container so next time you don't send duplicates
@@ -384,7 +384,7 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             BulletData data;
             statePacket >> data.beginPosition.x >> data.beginPosition.y;
             statePacket >> data.endPosition.x >> data.endPosition.y;
-            statePacket >> floor;
+            statePacket >> data. floor;
 
             bullets.push_back(data);
         }

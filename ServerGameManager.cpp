@@ -156,6 +156,9 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     unsigned floor = 0;
     statePacket >> floor;
 
+    unsigned health = 0;
+    statePacket >> health;
+
     //read the id of this state update
     sf::Uint32 inputId = 0;
     statePacket >> inputId;
@@ -171,8 +174,9 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     player->player.handleClientKeystate(keystate);
     player->player.setRotation(rotation);
 
+    ///if client has no health it means he died on the server side but hasn't respawned yet so don't let client set position
     ///if client is on a different floor it means the player used a portal on teh server side so client's position must be determiend by the server in the case of portal use
-    if(floor == player->player.getFloor()) {
+    if(floor == player->player.getFloor() && health != 0) {
 
         player->player.setInterpolationPosition(position);
     }

@@ -156,6 +156,9 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     unsigned floor = 0;
     statePacket >> floor;
 
+    unsigned health = 0;
+    statePacket >> health;
+
     //read the id of this state update
     sf::Uint32 inputId = 0;
     statePacket >> inputId;
@@ -171,13 +174,11 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     player->player.handleClientKeystate(keystate);
     player->player.setRotation(rotation);
 
+    ///if client has no health it means he died on the server side but hasn't respawned yet so don't let client set position
     ///if client is on a different floor it means the player used a portal on teh server side so client's position must be determiend by the server in the case of portal use
-    if(floor == player->player.getFloor()) {
+    if(floor == player->player.getFloor() && health != 0) {
 
         player->player.setInterpolationPosition(position);
-    } else {
-        
-        cout << position.x << "    " << position.y << endl;
     }
 }
 
@@ -211,7 +212,11 @@ void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> playe
 
         ///first check if the bullet collides with any obstacles because when it does it's range is shortened
         ///and bullets can't pass through blocks and such so once the range is shortened it will automatically prevent it from shooting players behind walls
-        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), player->player.getFloor()));
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), player->player.getFloor()),
+                                     [&](shared_ptr<Block> block) {
+
+                                     return !block->getPassBullets();
+                                     });
 
         //now handle collision with players
         handleBulletCollision(player, bullet, deltaFraction, clientUpdateId);

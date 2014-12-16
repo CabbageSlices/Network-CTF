@@ -91,6 +91,8 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << player.getDestinationPosition().x << player.getDestinationPosition().y;
     dataDestination << player.getFloor();
 
+    dataDestination << player.getHealth();
+
     dataDestination << keystate.inputId;
 }
 

@@ -24,6 +24,7 @@ class ScoreDisplay;
 bool createInputPacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create a packet that contains the players current keystate and position, as well as his floor
+//also sends his current health that way server doesn't set user to client position if the user has no health on client side because it means he respawned on server side
 void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination);
 
 //create update packet to give to player

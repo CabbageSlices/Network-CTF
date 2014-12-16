@@ -139,8 +139,6 @@ void ClientGameManager::handleServerUpdates() {
 
             applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
             serverUpdateTime = stateUpdateTimer.restart();
-
-            cout << serverUpdateTime.asMilliseconds() - 60 << endl;
         }
 
     }
