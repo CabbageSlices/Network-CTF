@@ -308,7 +308,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     }
 }
 
-void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
+bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
 
     sf::Uint32 packetStateId = 0;
 
@@ -317,7 +317,7 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
     if(packetStateId < stateId) {
 
         ///old data, ignore
-        return;
+        return false;
     }
 
     stateId = packetStateId;
@@ -453,6 +453,8 @@ void applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             updatedPlayer->fireGun(bullet.beginPosition, bullet.endPosition, bullet.floor);
         }
     }
+
+    return true;
 }
 
 void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const sf::Uint32& lastServerUpdate, sf::Packet& packet) {

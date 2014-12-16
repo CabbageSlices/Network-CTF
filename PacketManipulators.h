@@ -97,7 +97,8 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
 void createStateUpdate(const std::vector<std::tr1::shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& statePacket);
 
 //assumes packet id has already beenread from the state packet, ignores any packet that is older thant he stateid given
-void applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
+//returns true if data was used, false otherwise
+bool applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
 
 //player firing data
 /**

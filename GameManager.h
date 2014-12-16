@@ -64,6 +64,11 @@ class GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window) = 0;
 
+        virtual void handleStateEvents() {
+
+            //empty for now
+        }
+
         virtual void updateComponents(sf::RenderWindow& window) = 0;
 
         //updates objects that behave according to delta time

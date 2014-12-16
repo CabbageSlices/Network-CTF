@@ -137,8 +137,10 @@ void ClientGameManager::handleServerUpdates() {
 
         } else if(packetType == WORLD_STATE_UPDATE) {
 
-            applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
-            serverUpdateTime = stateUpdateTimer.restart();
+            if(applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData)) {
+
+                stateUpdateTimer.restart();
+            }
         }
 
     }

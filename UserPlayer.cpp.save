@@ -36,7 +36,7 @@ UserPlayer::UserPlayer():
 void UserPlayer::handleEvents(sf::Event& event) {
 
     //convert all events to an input and place them in the input queue to be handled later, and create an input to send to the server
-    if(event.type == sf::Event::KeyPressed) {
+    /*if(event.type == sf::Event::KeyPressed) {
 
         if(event.key.code == LEFT_KEY) {
 
@@ -104,7 +104,9 @@ void UserPlayer::handleEvents(sf::Event& event) {
     }
 
     //now get the next input in the queue and handle it
-    processInput(getInputToProcess());
+    processInput(getInputToProcess());*/
+    
+    
 }
 
 void UserPlayer::handleStateEvents() {
@@ -131,8 +133,7 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
 
     //now that the old inputs have been removed, you have to handle all of the inputs starting from the last input that was processed because the player might be at a different position
     //so the player has to reprocess the inputs to calculate its new state
-
-    currentInputId = lastConfirmedInputId + 1;
+    ///currentInputId = lastConfirmedInputId + 1;
 
     //only let the server set the position if the player respawned because server determines respawn position,
     //or if the player uses a portal because both respawning and portals are handled server side
@@ -272,7 +273,7 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
 }
 
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
-    
+
     gun->drawAll(window);
 }
 

@@ -121,6 +121,23 @@ void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
     resetDataTimer();
 }
 
+void PlayerBase::setInterpolationPositionV2(const sf::Vector2f& position) {
+
+    pastHitBox.setPosition(currentHitBox.getPosition());
+
+    destinationHitBox.setPosition(position);
+
+    //if the distance to interpolate is too large just set the position to the given position
+    //only past hitbox's position needs to be forcibly set because it interpolates from the past hitbox
+    if(distanceToPoint(position, pastHitBox.getPosition()) > maxInterpolationDist) {
+
+        pastHitBox.setPosition(position);
+    }
+
+    //if interpolation position is set it means its data sent from the server so restart the data recieve timer so player doens't time out
+    resetDataTimer();
+}
+
 void PlayerBase::interpolate(const float& deltaFraction) {
 
     //interpolate the position first

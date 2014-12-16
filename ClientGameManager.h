@@ -86,6 +86,11 @@ class ClientGameManager: public GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
 
+        virtual void handleStateEvents() {
+
+            userPlayer.handleStateEvents();
+        }
+
         virtual void updateComponents(sf::RenderWindow& window);
 
         //updates objects that behave according to delta time

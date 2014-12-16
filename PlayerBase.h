@@ -110,6 +110,10 @@ class PlayerBase {
         //called by several functions related to the player class and interpolationg player class
         void setInterpolationPosition(const sf::Vector2f& position);
 
+        //interpolates from current position to given position
+        //instead of jumping to the last destination postiion and interpolating from there
+        void setInterpolationPositionV2(const sf::Vector2f& position);
+
         //interpolate from previous position to the destination position
         ///time passed is what fraction of time has passed from the physics update to the next physics update, not the actual time passed
         void interpolate(const float& deltaFraction);

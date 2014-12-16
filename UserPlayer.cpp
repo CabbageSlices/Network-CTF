@@ -36,7 +36,7 @@ UserPlayer::UserPlayer():
 void UserPlayer::handleEvents(sf::Event& event) {
 
     //convert all events to an input and place them in the input queue to be handled later, and create an input to send to the server
-    if(event.type == sf::Event::KeyPressed) {
+    /*if(event.type == sf::Event::KeyPressed) {
 
         if(event.key.code == LEFT_KEY) {
 
@@ -104,6 +104,33 @@ void UserPlayer::handleEvents(sf::Event& event) {
     }
 
     //now get the next input in the queue and handle it
+    processInput(getInputToProcess());*/
+
+    if(event.type == sf::Event::MouseButtonPressed) {
+
+        if(event.mouseButton.button == sf::Mouse::Left) {
+
+            gun->handleButtonPress();
+        }
+    }
+
+    if(event.type == sf::Event::MouseButtonReleased) {
+
+        if(event.mouseButton.button == sf::Mouse::Left) {
+
+            gun->handleButtonRelease();
+        }
+    }
+
+    if(event.type == sf::Event::KeyPressed) {
+
+        if(event.key.code == RELOAD_KEY) {
+
+            placeIntoQueue(createInput(RELOAD));
+        }
+    }
+
+    //only for reloading since gun ammo and stuff is kept track server side and its too much work to change all packet data just so player can reload client side
     processInput(getInputToProcess());
 }
 
