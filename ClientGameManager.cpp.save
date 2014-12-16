@@ -31,7 +31,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client(sf::IpAddress::getLocalAddress(), 8080),
+    client("70.71.114.74", 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),
@@ -132,13 +132,15 @@ void ClientGameManager::handleServerUpdates() {
         //respond to the packet depending on the type of packet
         if(packetType == PLAYER_STATE_UPDATE) {
 
-            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, teamManager);
+            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, getScoreDisplay());
 
 
         } else if(packetType == WORLD_STATE_UPDATE) {
 
             applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
             serverUpdateTime = stateUpdateTimer.restart();
+            
+            cout << "latency:" serverUpdateTime.asMilliseconds() - 60 << " millise"
         }
 
     }
@@ -198,8 +200,12 @@ void ClientGameManager::handleBulletCollision() {
             continue;
         }
 
-        //fist check for colision with blocks
-        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()));
+        //first check for colision with blocks, bullets only collide with blocks that don't let bullets pass
+        bulletEntityCollision<Block>(bullet, getGameWorld().getBlocks(bullet->getLine()->getStartPoint(), bullet->getLine()->getEndPoint(), userPlayer.getFloor()),
+                                     [&](shared_ptr<Block> block) {
+
+                                     return !block->getPassBullets();
+                                     });
 
         //handle collision with other players
         bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
@@ -332,7 +338,7 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
         if(player->getFloor() == userPlayer.getFloor()) {
 
-            player->draw(window);
+            player->draw(window, userPlayer.getFloor());
         }
     }
 }

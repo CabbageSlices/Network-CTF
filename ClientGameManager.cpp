@@ -31,7 +31,7 @@ using std::vector;
 ClientGameManager::ClientGameManager() :
     GameManager(),
     currentState(STATE_PLAYING),
-    client(sf::IpAddress::getLocalAddress(), 8080),
+    client("70.71.114.74", 8080),
     userPlayer(),
     camera(),
     connectedPlayers(),
@@ -139,6 +139,8 @@ void ClientGameManager::handleServerUpdates() {
 
             applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData);
             serverUpdateTime = stateUpdateTimer.restart();
+
+            cout << serverUpdateTime.asMilliseconds() - 60 << endl;
         }
 
     }
