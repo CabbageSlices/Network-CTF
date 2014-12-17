@@ -70,6 +70,8 @@
 		<Unit filename="HeadsUpDisplay.h" />
 		<Unit filename="Healthbar.cpp" />
 		<Unit filename="Healthbar.h" />
+		<Unit filename="Input.cpp" />
+		<Unit filename="Input.h" />
 		<Unit filename="InterpolatingPlayer.cpp" />
 		<Unit filename="InterpolatingPlayer.h" />
 		<Unit filename="LargeImage.cpp" />

@@ -6,6 +6,7 @@
 
 using std::cout;
 using std::endl;
+using std::string;
 
 Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToConnectTo) :
     ConnectionManager(),
@@ -15,19 +16,30 @@ Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToC
 
     }
 
-bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
+void Client::setServerIp(const string& ip) {
+
+    serverIpAddress = ip;
+}
+
+void Client::setServerPort(const unsigned short& port) {
+
+    serverPort = port;
+}
+
+bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime, string& playerName) {
 
     //send a connection request to the server until the server either responds or the time runs out
     sf::Packet connectionRequest;
 
     //indicate the packet is a connection attempt packet so server knows its a new connection
-    connectionRequest << CONNECTION_ATTEMPT;
+    //and add the name so the server knows the name of the player connecting
+    connectionRequest << CONNECTION_ATTEMPT << playerName;
 
     //keep track of how long you have attempted to connect
     sf::Clock connectionAttemptTimer;
 
     //to prevent client from spamming the server with requests put a limit to how often it can send the packets
-    sf::Time requestSendDelay = sf::milliseconds(500);
+    sf::Time requestSendDelay = sf::milliseconds(300);
 
     //timer to keep track of how much time ahs passed since the last packet was sent
     sf::Clock packetSendTimer;
@@ -58,6 +70,8 @@ bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
 
         //it is time to send another connection request because it's waited through the delay, so send another packet
         sendToServer(connectionRequest);
+
+        packetSendTimer.restart();
     }
 
     //timed out before a proper response

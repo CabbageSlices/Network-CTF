@@ -2,34 +2,184 @@
 #include "SFML/Graphics.hpp"
 #include "ClientGameManager.h"
 #include "ServerGameManager.h"
+#include "Input.h"
+
 #include <iostream>
+#include <string>
+#include <cstdlib>
 
 using std::cout;
 using std::endl;
+using std::string;
+using std::atoi;
+
+void clientTitleScreen(sf::RenderWindow& window);
+
+void findMatchScreen(sf::RenderWindow& window);
 
 int main() {
-    
-    cout << sf:
+
     srand(static_cast<long>(time(0) ));
 
     sf::Vector2f screenSize(1024, 768);
 
-    sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test");
-
-    ClientGameManager gameManager;
-
+    //disable the resizing in the window at the beginning because the title screen and such have a fixed size
+    sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    gameManager.runGame(window); return 0;
-
     ServerGameManager serverGameManager;
+
+    clientTitleScreen(window);
 
     sf::View largeView;
     largeView.setViewport(sf::FloatRect(0, 0, 1, 1));
     largeView.setSize(3200, 1800);
     window.setView(largeView);
 
-    //serverGameManager.runGame(window);
+    serverGameManager.runGame(window);
 
     return 0;
+}
+
+void clientTitleScreen(sf::RenderWindow& window) {
+
+    //load up the image of the title screen
+    sf::Texture titleScreenTexture;
+    titleScreenTexture.loadFromFile("clientTitleScreen.png");
+
+    sf::Sprite titleScreenSprite;
+    titleScreenSprite.setTexture(titleScreenTexture);
+
+    //buttons that can be pressed
+    sf::FloatRect findMatchButton(206, 132, 287, 62);
+
+    sf::Event event;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                if(findMatchButton.contains(mousePosition)) {
+
+                    findMatchScreen(window);
+                }
+            }
+        }
+
+        window.clear();
+
+        window.draw(titleScreenSprite);
+
+        window.display();
+    }
+}
+
+void findMatchScreen(sf::RenderWindow& window) {
+
+    //load the images and buttons required for the find match screen
+    sf::Texture findMatchTexture;
+    findMatchTexture.loadFromFile("findmatchscreen.png");
+
+    sf::Sprite findMatchSprite;
+    findMatchSprite.setTexture(findMatchTexture);
+
+    sf::FloatRect serverIpBox(247, 142, 207, 32);
+    sf::FloatRect serverPortBox(246, 207, 211, 35);
+    sf::FloatRect nameBox(243, 105, 216, 23);
+    sf::FloatRect backButton(490, 29, 112, 83);
+    sf::FloatRect connectBox(163, 299, 296, 67);
+
+    sf::Font font;
+    font.loadFromFile("font.ttf");
+
+    const float textScale = 0.6;
+
+    //create a text representation of the current server ip and port the user is trying to connect to
+    sf::Text serverIp;
+    serverIp.setFont(font);
+    serverIp.setPosition(serverIpBox.left, serverIpBox.top);
+    serverIp.setColor(sf::Color::Blue);
+    serverIp.setScale(textScale, textScale);
+
+    sf::Text serverPort;
+    serverPort.setFont(font);
+    serverPort.setPosition(serverPortBox.left, serverPortBox.top);
+    serverPort.setColor(sf::Color::Blue);
+    serverPort.setScale(textScale, textScale);
+
+    sf::Text playerName;
+    playerName.setFont(font);
+    playerName.setPosition(nameBox.left, nameBox.top);
+    playerName.setColor(sf::Color::Blue);
+    playerName.setScale(textScale, textScale);
+
+    sf::Event event;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                if(serverIpBox.contains(mousePosition)) {
+
+                    string ipToConnectTo = receiveInput(window, "Enter the server's Ip Address", font);
+                    serverIp.setString(ipToConnectTo);
+
+                } else if(serverPortBox.contains(mousePosition)) {
+
+                    string portToConnectTo = receiveInput(window, "Enter the server's port", font);
+                    serverPort.setString(portToConnectTo);
+
+                } else if(nameBox.contains(mousePosition)) {
+
+                    string name = receiveInput(window, "Enter your player name", font);
+                    playerName.setString(name);
+
+                } else if(connectBox.contains(mousePosition)) {
+
+                    ClientGameManager client;
+                    client.setPlayerName(playerName.getString());
+
+                    string ipAddress = serverIp.getString();
+                    unsigned short port = static_cast<unsigned short>(atoi(serverPort.getString().toAnsiString().c_str()) );
+
+                    if(client.connectToServer(ipAddress, port)) {
+
+                        client.gameLobby(window);
+                    }
+                }
+
+                else if(backButton.contains(mousePosition)) {
+
+                    return;
+                }
+            }
+        }
+
+        window.clear();
+
+        window.draw(findMatchSprite);
+        window.draw(serverIp);
+        window.draw(serverPort);
+        window.draw(playerName);
+
+        window.display();
+    }
 }

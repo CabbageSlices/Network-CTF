@@ -6,6 +6,7 @@
 
 using std::cout;
 using std::endl;
+using std::string;
 
 Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToConnectTo) :
     ConnectionManager(),
@@ -15,13 +16,24 @@ Client::Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToC
 
     }
 
-bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
+void Client::setServerIp(const string& ip) {
+
+    serverIpAddress = ip;
+}
+
+void Client::setServerPort(const unsigned short& port) {
+
+    serverPort = port;
+}
+
+bool Client::connectToServer(int& clientId, string playerName, const sf::Time& responseWaitTime) {
 
     //send a connection request to the server until the server either responds or the time runs out
     sf::Packet connectionRequest;
 
     //indicate the packet is a connection attempt packet so server knows its a new connection
-    connectionRequest << CONNECTION_ATTEMPT;
+    //and add the name so the server knows the name of the player connecting
+    connectionRequest << CONNECTION_ATTEMPT << playerName;
 
     //keep track of how long you have attempted to connect
     sf::Clock connectionAttemptTimer;
@@ -41,9 +53,9 @@ bool Client::connectToServer(int& clientId, const sf::Time& responseWaitTime) {
         if(receiveFromServer(exchangePacket) && checkPacketType(exchangePacket, CONNECTION_ATTEMPT)) {
 
             //read the id given to the client from the server
-            //packet has the packet id and the client id still saved on it so you'll have to download data twice
+            //packet has the packet id and the client id as well as the player name still saved on it so you'll have to download data twice
             exchangePacket >> clientId;
-            exchangePacket >> clientId;
+            exchangePacket >> clientId >> clientId;
 
             //successfully connected
             return true;

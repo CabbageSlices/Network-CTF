@@ -13,6 +13,7 @@
 
 #include <tr1/memory>
 #include <vector>
+#include <string>
 
 class Bullet;
 class InterpolatingPlayer;
@@ -113,6 +114,11 @@ class ClientGameManager: public GameManager {
     public:
 
         ClientGameManager();
+
+        bool connectToServer(std::string serverIp, unsigned short serverPort);
+        void setPlayerName(std::string name);
+
+        void gameLobby(sf::RenderWindow& window);
 };
 
 #endif // GAMEMANAGER_H_INCLUDED

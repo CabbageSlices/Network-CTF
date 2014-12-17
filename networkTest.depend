@@ -162,15 +162,16 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1407448873 source:c:\users\nimesh\documents\github\network-ctf\client.cpp
+1418859014 source:c:\users\nimesh\documents\github\network-ctf\client.cpp
 	"Client.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
 	<iostream>
 
-1405145331 c:\users\nimesh\documents\github\network-ctf\client.h
+1418859014 c:\users\nimesh\documents\github\network-ctf\client.h
 	"SFML/Network.hpp"
 	"ConnectionManager.h"
+	<string>
 
 1405145331 c:\users\nimesh\documents\github\network-ctf\connectionmanager.h
 	"SFML/Network.hpp"
@@ -214,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1418769598 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1418859014 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -229,7 +230,7 @@
 	<cstdlib>
 	<iostream>
 
-1418767522 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1418858759 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -240,6 +241,7 @@
 	"HeadsUpDisplay.h"
 	<tr1/memory>
 	<vector>
+	<string>
 
 1408055962 source:c:\users\nimesh\documents\github\network-ctf\collision.cpp
 	"Collision.h"
@@ -299,12 +301,14 @@
 	<cmath>
 	<cstdlib>
 
-1418703157 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1418854677 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
 	"ServerGameManager.h"
+	"Input.h"
 	<iostream>
+	<string>
 
 1407448873 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
@@ -866,4 +870,12 @@
 1412356339 source:c:\users\nimesh\documents\github\network-ctf\scoredisplay.cpp
 	"ScoreDisplay.h"
 	"Conversion.h"
+
+1418855453 source:c:\users\nimesh\documents\github\network-ctf\input.cpp
+	"SFML/Graphics.hpp"
+	"Input.h"
+
+1418853561 c:\users\nimesh\documents\github\network-ctf\input.h
+	"SFML/Graphics.hpp"
+	<string>
 

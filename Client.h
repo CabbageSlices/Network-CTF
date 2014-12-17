@@ -4,6 +4,8 @@
 #include "SFML/Network.hpp"
 #include "ConnectionManager.h"
 
+#include <string>
+
 //a client must connect to the server, send the player's inputs to the server, and receive input confirmation and state updates from the server
 
 class Client : public ConnectionManager {
@@ -19,10 +21,13 @@ class Client : public ConnectionManager {
         //for now give a default server ip and port and leave it hard coded, later have the user type it in
         Client(const sf::IpAddress& ipToConnectTo, const unsigned short& portToConnectTo);
 
+        void setServerIp(const std::string& ip);
+        void setServerPort(const unsigned short& port);
+
         //attempt to connect to server, timeout if no response is received within the given time limit.
         //return true if connected, false otherwise
         //if connected the id of the client will be given from the server
-        bool connectToServer(int& clientId, const sf::Time& responseWaitTime = sf::seconds(2.0));
+        bool connectToServer(int& clientId, std::string playerName, const sf::Time& responseWaitTime = sf::seconds(2.0));
 
         //true if succesfully sent, false otherwise
         bool sendToServer(sf::Packet& dataToSend);

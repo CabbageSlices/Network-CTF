@@ -13,6 +13,7 @@
 
 #include <tr1/memory>
 #include <vector>
+#include <string>
 
 class Bullet;
 class InterpolatingPlayer;
@@ -86,6 +87,11 @@ class ClientGameManager: public GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
 
+        virtual void handleStateEvents() {
+
+            userPlayer.handleStateEvents();
+        }
+
         virtual void updateComponents(sf::RenderWindow& window);
 
         //updates objects that behave according to delta time
@@ -108,6 +114,11 @@ class ClientGameManager: public GameManager {
     public:
 
         ClientGameManager();
+
+        bool connectToServer(std::string serverIp, unsigned short serverPort);
+        void setPlayerName(std::string name);
+        
+        void gameLobby(sf::RenderWindow& window);
 };
 
 #endif // GAMEMANAGER_H_INCLUDED

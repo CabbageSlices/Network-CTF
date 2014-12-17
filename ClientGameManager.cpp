@@ -27,6 +27,7 @@ using std::tr1::shared_ptr;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::string;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
@@ -41,6 +42,39 @@ ClientGameManager::ClientGameManager() :
     {
 
     }
+
+void ClientGameManager::setPlayerName(string name) {
+
+    userPlayer.setName(name);
+}
+
+bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPort) {
+
+    int playerId = 0;
+
+    client.setServerIp(serverIp);
+    client.setServerPort(serverPort);
+
+    if(client.connectToServer(playerId, userPlayer.getName(), sf::seconds(5))) {
+
+        userPlayer.setId(playerId);
+
+        return true;
+    }
+
+    return false;
+}
+
+void ClientGameManager::gameLobby(sf::RenderWindow& window) {
+
+    //load the image of the game lobby
+    sf::Texture lobbyTexture;
+    lobbyTextre.loadFromFile("lobbyMenu.png");
+
+    sf::Sprite lobbySprite;
+    lobbySprite.setTexture(lobbyTexture);
+
+}
 
 void ClientGameManager::interpolateEntities() {
 
@@ -247,18 +281,6 @@ void ClientGameManager::playerForegroundCollision() {
 }
 
 void ClientGameManager::setup(sf::RenderWindow& window) {
-
-    int playerId = 0;
-
-    if(client.connectToServer(playerId)) {
-
-        userPlayer.setId(playerId);
-
-    } else {
-
-        cout << "Failed to receive data from server.";
-        ///window.close();
-    }
 
     //setup camera
     camera.setDefaultSize(window);
