@@ -22,4 +22,12 @@ extern const int CONNECTION_ATTEMPT;
 
 extern const int WORLD_STATE_UPDATE;
 
+extern const int LOBBY_CONNECTION_INFO;
+
+extern const int START_GAME;
+
+extern const int CHANGE_TEAM;
+
+extern const int HEART_BEAT;
+
 #endif // PACKETIDENTIFICATION_H_INCLUDED

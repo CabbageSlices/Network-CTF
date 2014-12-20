@@ -29,6 +29,9 @@ class ServerGameManager : public GameManager {
             std::tr1::shared_ptr<StateTracker> state;
 
             UserPlayer player;
+
+            //when the game first starts the player has to respond the to starting packet in order for the game to actually start
+            bool readyToPlay = false;
         };
 
     private:
@@ -80,7 +83,7 @@ class ServerGameManager : public GameManager {
         void handleBulletCollision(std::tr1::shared_ptr<ConnectedPlayer> shootingPlayer, std::tr1::shared_ptr<Bullet> bullet, const float& deltaFraction, const sf::Uint32& clientUpdateId);
 
         //new player connected so create info for him
-        void createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId);
+        bool createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId);
 
         //send input confirmations to connected clients if it is time to do so
         void sendInputConfirmation();
@@ -128,6 +131,7 @@ class ServerGameManager : public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
+        virtual void drawUI(sf::RenderWindow& window) {}
         virtual void drawMinimap(sf::RenderWindow& window) {}
 
         virtual const unsigned getFloor() const;
@@ -136,7 +140,14 @@ class ServerGameManager : public GameManager {
 
     public:
 
-        ServerGameManager(unsigned short portToBindTo = 8080);
+        ServerGameManager();
+        
+        bool bindToPort(const unsigned& port) {
+            
+            return server.bind(port);
+        }
+        
+        void gameLobby(sf::RenderWindow& window);
 };
 
 #endif // SERVERGAMEMANAGER_H_INCLUDED

@@ -1,0 +1,28 @@
+#include "ButtonPlacer.h"
+#include "SFML/Graphics.hpp"
+
+const sf::Color BUTTON_PIXEL = sf::Color(174, 29, 113, 255);
+
+using std::string;
+using std::vector;
+
+void placeButtons(const string& imagePath, vector<Button>& buttons) {
+
+    sf::Image image;
+    image.loadFromFile(imagePath);
+    
+    unsigned buttonsIndex = 0;
+    
+    for(unsigned pixelYPos = 0; pixelYPos < image.getSize().y && buttonsIndex < buttons.size(); ++pixelYPos) {
+
+        for(unsigned pixelXPos = 0; pixelXPos < image.getSize().x && buttonsIndex < buttons.size(); ++pixelXPos) {
+
+            if(image.getPixel(pixelXPos, pixelYPos) == BUTTON_PIXEL) {
+                    
+                //a button pixel was found so take the current button being placed, and center it at this position, then move on to the next button
+                buttons[buttonsIndex].setCenter(pixelXPos, pixelYPos);
+                buttonsIndex += 1;
+            }
+        }
+    }
+}

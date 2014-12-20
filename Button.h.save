@@ -1,0 +1,51 @@
+#ifndef BUTTON_H_INCLUDED
+#define BUTTON_H_INCLUDED
+
+#include "SFML/Graphics.hpp"
+#include "SFML/Window.hpp"
+
+#include <string>
+
+///button objects show text onto a given texture
+///when user hovers over them it becomes darker
+///the texture used by the button must be supplied as a file
+///and the words displayed on the button determines the size of the button
+///the button texture should be a 100 by 50 pixel image file which will be resized according to the size of the text
+class Button {
+
+    private:
+        //image that the button will use
+        sf::Texture texture;
+        sf::Sprite sprite;
+        sf::Font font;
+
+        //message displayed to user
+        sf::Text text;
+        
+        //cover to draw over the button when user hovers mouse over it
+        sf::RectangleShape cover;
+
+        //if mouse is hovering the button then it should get darker so keep
+        bool isMouseTouching;
+
+        //resizes the sprite so that the text can fit inside it
+        //also resizes cover
+        void resizeSprite();
+
+        //resets the position of the sprite so that the text is in the center of the sprite
+        //also respositions the cover
+        void repositionSprite();
+
+    public:
+
+        Button(const std::string& imagePath, const std::string& fontPath, const std::string& message, sf::Vector2f textScale = sf::Vector2f(1, 1));
+
+        void setPosition(float xPos, float yPos);
+
+        //if mouse is touching button it also sets isMouseTouching to true
+        bool checkMouseTouching(sf::Vector2f& mousePosition);
+        void setTextScale(sf::Vector2f textScale);
+        void draw(sf::RenderWindow& window);
+};
+
+#endif // BUTTON_H_INCLUDED

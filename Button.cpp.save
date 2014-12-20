@@ -1,0 +1,84 @@
+#include "Button.h"
+
+Button::Button(const string& imagePath, const string& fontPath, const string& message, const sf::Vector2f& textScale):
+    texture(),
+    sprite(),
+    font(),
+    text(),
+    cover(sf::Vector2f(1, 1)),
+    isMouseTouching(false)
+    {
+        texture.loadFromFile(imagePath);
+        font.loadFromFile(fontPath);
+
+        sprite.setTexture(texture);
+        text.setString(message);
+        text.setScale(textScale);
+        
+        cover.setFillColor(sf::Color(0, 0, 0, 100));
+
+        resizeSprite();
+    }
+
+void Button::setPosition(float xPos, float yPos) {
+
+    text.setPosition(xPos - text.getGlobalBounds().width / 2, yPos - text.getGlobalBounds().height / 2);
+    repositionSprite();
+}
+
+bool Button::checkMouseTouching(sf::Vector2f& mousePosition) {
+
+    isMouseTouching = sprite.getGlobalBounds().contains(mousePosition);
+}
+
+void Button::setTextScale(sf::Vector2f textScale) {
+
+    //get the current center position since the text scales from the top left and not from the center
+    //so it will no longer be centered
+    sf::Vector2f currentCenter(text.getGlobalBounds().left + text.getGlobalBounds().width / 2,
+                               text.getGlobalBounds().top + text.getGlobalBounds().height / 2);
+    text.setScale(textScale);
+    resizeSprite();
+
+    //now set the position of the text to the previous center
+    setPosition(currentCenter.x, currentCenter.y);
+}
+
+void Button::draw(sf::RenderWindow& window) {
+
+    window.draw(sprite);
+    window.draw(text);
+    
+    if(isMouseTouching) {
+        
+        window.draw(cover);
+    }
+}
+
+void Button::resizeSprite() {
+    
+    //resize the sprite so that the text can fit completely inside
+    //add a few pixels extra to account for the border
+    //scales differently on each axis
+    float borderSize = 5;
+    
+    //size of the text with the border
+    float textBorderWidth = text.getGlobalBounds().width + borderSize * 2;
+    float textBorderHeight = text.getGlobalBounds().height + borderSize * 2;
+    
+    float xScaling = textBorderWidth / sprite.getGlobalBounds().width;
+    float yScaling = textBorderHeight / sprite.getGlobalBounds().height;
+    
+    sprite.scale(xScaling, yScaling);
+    cover.scale(xScaling, yScaling);
+}
+
+void Button::repositionSprite() {
+    
+    //set the center of the sprite to the center of the text
+    sprite.setPosition(text.getGlobalBounds().left + text.getGlobalBounds().width / 2 - sprite.getGlobalBounds().width / 2,
+                       text.getGlobalBounds().top + text.getGlobalBounds().height / 2 - sprite.getGlobalBounds().height / 2);
+                       
+    cover.setPosition(sprite.getGlobalBounds().left, sprite.getlgo
+    )
+}

@@ -1,0 +1,22 @@
+#ifndef BUTTONPLACER_H_INCLUDED
+#define BUTTONPLACER_H_INCLUDED
+
+#include <vector>
+#include <string>
+
+#include "Button.h"
+
+//color of the pixel which indicates a button should be placed there
+//all button colors must have a transparancy of 255, or be completely opaque
+extern const sf::Color BUTTON_PIXEL;
+
+///function that takes in a container of buttons
+///and centers them onto small dots in a given image file
+///the squares must be exactly 1 pixel and must be of the specified color in order for it to be considered a button destination
+///the image is scanned starting from the top left and going one row at a time
+///every time a button pixel is found a button is placed onto the pixel
+///if there are no button pixels on the image file then no button will get placed
+///imagePath is the file path of the image where the buttons will be placed
+void placeButtons(const std::string& imagePath, std::vector<Button>& buttons);
+
+#endif // BUTTONPLACER_H_INCLUDED

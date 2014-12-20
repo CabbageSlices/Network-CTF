@@ -162,7 +162,7 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1418859014 source:c:\users\nimesh\documents\github\network-ctf\client.cpp
+1418953423 source:c:\users\nimesh\documents\github\network-ctf\client.cpp
 	"Client.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -173,18 +173,18 @@
 	"ConnectionManager.h"
 	<string>
 
-1405145331 c:\users\nimesh\documents\github\network-ctf\connectionmanager.h
+1419112918 c:\users\nimesh\documents\github\network-ctf\connectionmanager.h
 	"SFML/Network.hpp"
 
-1407448873 c:\users\nimesh\documents\github\network-ctf\packetidentification.h
+1418950564 c:\users\nimesh\documents\github\network-ctf\packetidentification.h
 
-1418769122 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
+1418945500 c:\users\nimesh\documents\github\network-ctf\packetmanipulators.h
 	"SFML/Network.hpp"
 	"ServerGameManager.h"
 	<vector>
 	<tr1/memory>
 
-1409840356 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
+1419112918 c:\users\nimesh\documents\github\network-ctf\servergamemanager.h
 	"SFML/Network.hpp"
 	"UserPlayer.h"
 	"ConnectionManager.h"
@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1418859014 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1419032281 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -229,8 +229,10 @@
 	"Gun.h"
 	<cstdlib>
 	<iostream>
+	<map>
+	<iterator>
 
-1418858759 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1418945385 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -272,7 +274,7 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1405145331 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
+1419113923 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
 1418767522 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
@@ -301,19 +303,25 @@
 	<cmath>
 	<cstdlib>
 
-1418854677 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1419113754 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
 	"ServerGameManager.h"
 	"Input.h"
+	"PredrawnButton.h"
+	"ButtonPlacer.h"
+	"TypeChecker.h"
+	<tr1/memory>
+	<vector>
 	<iostream>
 	<string>
+	<cstdlib>
 
-1407448873 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
+1418950564 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1418703926 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1419113867 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -326,7 +334,7 @@
 	"Floors.h"
 	"Portal.h"
 	"GunGiver.h"
-	<map>
+	<string>
 	<iostream>
 
 1405145331 source:c:\users\nimesh\documents\github\network-ctf\statetracker.cpp
@@ -366,7 +374,7 @@
 	<vector>
 	<iostream>
 
-1418769764 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
+1418956853 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -377,6 +385,7 @@
 	"Gun.h"
 	"GunHandlers.h"
 	"GunTypes.h"
+	<string>
 	<iostream>
 	"Bullet.h"
 	"LineSegment.h"
@@ -580,14 +589,14 @@
 	"InterpolatingPlayer.h"
 	"Gun.h"
 
-1417310223 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
+1418954295 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1418768618 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1418954295 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -596,7 +605,7 @@
 	<tr1/memory>
 	<string>
 
-1418768618 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1418954748 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -608,7 +617,7 @@
 	"TeamManager.h"
 	<iostream>
 
-1417310223 c:\users\nimesh\documents\github\network-ctf\userplayer.h
+1418954295 c:\users\nimesh\documents\github\network-ctf\userplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
@@ -724,11 +733,11 @@
 	<tr1/memory>
 	<map>
 
-1412277286 c:\users\nimesh\documents\github\network-ctf\teammanager.h
+1418948116 c:\users\nimesh\documents\github\network-ctf\teammanager.h
 	<map>
 	"SFML/Graphics.hpp"
 
-1412277286 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
+1418949816 source:c:\users\nimesh\documents\github\network-ctf\teammanager.cpp
 	"TeamManager.h"
 	<iostream>
 
@@ -877,5 +886,39 @@
 
 1418853561 c:\users\nimesh\documents\github\network-ctf\input.h
 	"SFML/Graphics.hpp"
+	<string>
+
+1419032195 source:c:\users\nimesh\documents\github\network-ctf\button.cpp
+	"Button.h"
+	<iostream>
+
+1419032195 c:\users\nimesh\documents\github\network-ctf\button.h
+	"SFML/Graphics.hpp"
+	"SFML/Window.hpp"
+	<string>
+	<functional>
+
+1419112285 source:c:\users\nimesh\documents\github\network-ctf\buttonplacer.cpp
+	"ButtonPlacer.h"
+	"SFML/Graphics.hpp"
+
+1419109297 source:c:\users\nimesh\documents\github\network-ctf\predrawnbutton.cpp
+	"PredrawnButton.h"
+
+1419109297 c:\users\nimesh\documents\github\network-ctf\predrawnbutton.h
+	"SFML/Graphics.hpp"
+	"SFML/System.hpp"
+	<string>
+
+1419112285 c:\users\nimesh\documents\github\network-ctf\buttonplacer.h
+	<vector>
+	<string>
+	"SFML/Graphics.hpp"
+
+1419113725 source:c:\users\nimesh\documents\github\network-ctf\typechecker.cpp
+	"TypeChecker.h"
+	<ctype.h>
+
+1419113659 c:\users\nimesh\documents\github\network-ctf\typechecker.h
 	<string>
 

@@ -11,7 +11,7 @@
 #include "Portal.h"
 #include "GunGiver.h"
 
-#include <map>
+#include <string>
 #include <iostream>
 
 using std::map;
@@ -19,8 +19,9 @@ using std::cout;
 using std::endl;
 using std::tr1::shared_ptr;
 using std::vector;
+using std::string;
 
-ServerGameManager::ServerGameManager(unsigned short portToBindTo) :
+ServerGameManager::ServerGameManager() :
     GameManager(),
     server(false),
     players(),
@@ -32,8 +33,131 @@ ServerGameManager::ServerGameManager(unsigned short portToBindTo) :
     lastPlayerId(0),
     teamManager()
     {
-        server.bind(portToBindTo);
+
     }
+
+void ServerGameManager::gameLobby(sf::RenderWindow& window) {
+
+    window.setView(window.getDefaultView());
+
+    //load the image for the server lobby
+    sf::Texture lobbyTexture;
+    lobbyTexture.loadFromFile("serverLobby.png");
+
+    sf::Sprite lobbySprite;
+    lobbySprite.setTexture(lobbyTexture);
+
+    sf::FloatRect startGameButton(199, 341, 237, 57);
+    sf::FloatRect quitButton(513, 4, 126, 63);
+
+    sf::Event event;
+
+    //keep track of when to send information about players connected
+    sf::Clock dataSendTimer;
+
+    sf::Time dataSendTime = sf::milliseconds(200);
+
+    //whether the server should start sending game start packets
+    //sends at the same rate as the data send timer
+    bool sendGameStarts = false;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            //only let the user start the game if there is a player on each team
+             if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                bool enoughPlayers = (teamManager.getPlayerCount(TEAM_A_ID) > 0) && (teamManager.getPlayerCount(TEAM_B_ID) > 0);
+
+                if(startGameButton.contains(mousePosition)) {
+
+                    sendGameStarts = true;
+
+                } else if(quitButton.contains(mousePosition)) {
+
+                    return;
+                }
+             }
+        }
+
+        handleIncomingData();
+
+        //disconnect inactive players
+        for(unsigned i = 0; i < players.size();) {
+
+            if(players[i]->player.timedOut()) {
+
+                disconnectPlayer(i);
+                continue;
+            }
+
+            ++i;
+        }
+
+        if(dataSendTimer.getElapsedTime() > dataSendTime) {
+
+            sf::Packet packet;
+
+            packet << LOBBY_CONNECTION_INFO;
+
+            //send data about all players
+            for(auto& player: players) {
+
+                packet << player->player.getName();
+                packet << player->player.getTeam();
+            }
+
+            for(auto& player : players) {
+
+                server.sendData(packet, player->playerIpAddress, player->playerPort);
+
+                if(sendGameStarts) {
+
+                    sf::Packet gameStartPacket;
+                    gameStartPacket << START_GAME;
+                    server.sendData(gameStartPacket, player->playerIpAddress, player->playerPort);
+                }
+            }
+
+            dataSendTimer.restart();
+        }
+
+        //if all players are ready to play then start the game
+        bool everyoneReady = true;
+
+        if(players.size() == 0) {
+
+            everyoneReady = false;
+        }
+
+        for(auto& player : players) {
+
+            if(!player->readyToPlay) {
+
+                everyoneReady = false;
+            }
+        }
+
+        if(everyoneReady) {
+
+            runGame(window);
+        }
+
+        window.clear();
+
+        window.draw(lobbySprite);
+
+        window.display();
+    }
+}
 
 void ServerGameManager::handleIncomingData() {
 
@@ -55,16 +179,29 @@ void ServerGameManager::handleIncomingData() {
         }
 
         //data was not handled yet so check the data type and handle accordingly
-        if(checkPacketType(incomingData, CONNECTION_ATTEMPT)) {
+        //if connection attempt has not been handled yet it means the player has not been added yet, so add him and respond with the player's id
+        //if teams are full then ignore request
+        if(checkPacketType(incomingData, CONNECTION_ATTEMPT) && createNewConnection(senderIp, senderPort, lastPlayerId + 1)) {
 
-            //if connection attempt has not been handled yet it means the player has not been added yet, so add him and respond with the player's id
-            createNewConnection(senderIp, senderPort, ++lastPlayerId);
+            //strip off the packet id
+            getPacketType(incomingData);
+
+            //the name of the player isn't set yet so download the name data
+            string name;
+            incomingData >> name;
+
+            (*players.rbegin())->player.setName(name);
+
+            incomingData.clear();
 
             //tell the player who connected that he is connected by sending back the connection request packet
             //except this time add the player's id so the client knows what his own id is
-            incomingData << lastPlayerId;
+            incomingData << CONNECTION_ATTEMPT << lastPlayerId + 1;
             server.sendData(incomingData, senderIp, senderPort);
-            cout << "new connection" << endl;
+            cout << "new connection: " << name << endl;
+
+            //player added so increase the player's ids
+            lastPlayerId += 1;
         }
 
     }
@@ -79,17 +216,35 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
         data << player->player.getId();
         server.sendData(data, player->playerIpAddress, player->playerPort);
 
-        cout << "Connection Attempt" << endl;
-
     } else if(checkPacketType(data, PLAYER_INPUT)) {
 
         handlePlayerInput(player, data);
+
     } else if(checkPacketType(data, PLAYER_GUNFIRE)) {
 
         handlePlayerGunfire(player, data);
+
     } else if(checkPacketType(data, PLAYER_KEYSTATE_UPDATE)) {
 
         handlePlayerKeystate(player, data);
+
+        //keystate update means the player is ready to start playing the game
+        player->readyToPlay = true;
+
+    } else if(checkPacketType(data, CHANGE_TEAM)) {
+
+        unsigned short destinationTeam = getOpposingTeam(player->player.getTeam());
+
+        if(!teamManager.isTeamFull(destinationTeam)) {
+
+            player->player.setTeam(getOpposingTeam(player->player.getTeam() ));
+            teamManager.switchTeams(getOpposingTeam(destinationTeam));
+        }
+
+    } else if(checkPacketType(data, HEART_BEAT)) {
+
+        player->player.resetDataTimer();
+
     }
 }
 
@@ -297,17 +452,24 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     }
 }
 
-void ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId) {
+bool ServerGameManager::createNewConnection(sf::IpAddress& connectedIp, unsigned short& connectedPort, const int& playerId) {
 
     shared_ptr<ConnectedPlayer> player(new ConnectedPlayer());
     player->player.setId(playerId);
     player->player.setTeam(teamManager.addNewPlayer());
+
+    if(player->player.getTeam() == TEAMS_FULL) {
+
+        return false;
+    }
 
     player->playerIpAddress = connectedIp;
     player->playerPort = connectedPort;
     player->lastConfirmedInputId = 0;
 
     players.push_back(player);
+
+    return true;
 }
 
 void ServerGameManager::sendInputConfirmation() {
@@ -381,6 +543,8 @@ void ServerGameManager::disconnectPlayer(unsigned playerIndex) {
     //his team to another player who connects
     teamManager.removePlayer(players[playerIndex]->player.getTeam());
 
+    cout << "A player has disconnected, Name: " << players[playerIndex]->player.getName() << endl;
+
     players.erase(players.begin() + playerIndex);
 }
 
@@ -404,8 +568,11 @@ void ServerGameManager::playerSpawnCollision(shared_ptr<ServerGameManager::Conne
 
 void ServerGameManager::setup(sf::RenderWindow& window) {
 
-    ///no setup needed
-    ///intentionally blank (for now)
+    //respawn all the players taht way they are in their proper spawn zones
+    for(auto& player : players) {
+
+        player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
+    }
 }
 
 void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {

@@ -26,7 +26,7 @@ class ConnectionManager {
         //true if successfully received
         bool receiveData(sf::Packet& dataDestination, sf::IpAddress& senderAddress, unsigned short& senderPort);
 
-        void bind(unsigned short portToBindTo);
+        bool bind(unsigned short portToBindTo);
 };
 
 #endif // CONNECTIONMANAGER_H_INCLUDED

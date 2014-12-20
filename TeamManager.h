@@ -6,10 +6,12 @@
 
 extern const unsigned short TEAM_A_ID;
 extern const unsigned short TEAM_B_ID;
+extern const unsigned short TEAMS_FULL;
 
 extern const sf::Color TEAM_A_COLOR;
 extern const sf::Color TEAM_B_COLOR;
 
+extern const int MAX_PER_TEAM;
 
 //class to keep track of how many players are in each team and assign a team to a new player
 class TeamManager {
@@ -21,6 +23,7 @@ class TeamManager {
         std::map<unsigned short, int> numberOfPlayers;
 
         //keep track of each teams scores
+        //pair is team number and team score
         std::map<unsigned short, unsigned short> teamScores;
 
         void setupPlayerCounter();
@@ -32,6 +35,7 @@ class TeamManager {
 
         //add a new player and choose what team to add him to
         //returns the team that the player was added to
+        //or FULL is there are no teams available
         unsigned short addNewPlayer();
 
         //remove a player from the given team if possible
@@ -44,6 +48,16 @@ class TeamManager {
         void increaseTeamScore(const unsigned short& team);
 
         void resetScores();
+
+        bool isTeamFull(const unsigned short& team) {
+
+            return getPlayerCount(team) == MAX_PER_TEAM;
+        }
+
+        unsigned short getPlayerCount(const unsigned short& team) {
+
+            return numberOfPlayers[team];
+        }
 
         unsigned short getTeamScore(const unsigned short& team);
         void setTeamScore(const unsigned short& team, const unsigned short& score);

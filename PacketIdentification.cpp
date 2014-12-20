@@ -17,3 +17,11 @@ const int LATENCY_TEST = 7;
 const int CONNECTION_ATTEMPT = 8;
 
 const int WORLD_STATE_UPDATE = 9;
+
+const int LOBBY_CONNECTION_INFO = 12;
+
+const int START_GAME = 13;
+
+const int CHANGE_TEAM = 14;
+
+const int HEART_BEAT = 15;

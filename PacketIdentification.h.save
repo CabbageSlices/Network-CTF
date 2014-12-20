@@ -5,6 +5,7 @@
 ///how a packet is processed is dependant on the id of the packet
 
 extern const int PLAYER_INPUT;
+extern const int PLAYER_KEYSTATE_UPDATE;
 extern const int PLAYER_STATE_UPDATE;
 
 //packet id for packets containing information about the other players connected to the server, does not contain info about the user's player
@@ -20,5 +21,11 @@ extern const int LATENCY_TEST;
 extern const int CONNECTION_ATTEMPT;
 
 extern const int WORLD_STATE_UPDATE;
+
+extern const int LOBBY_CONNECTION_INFO;
+
+extern const int START_GAME;
+
+extern const int CHANGE_TEAM;
 
 #endif // PACKETIDENTIFICATION_H_INCLUDED

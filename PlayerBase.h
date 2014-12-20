@@ -92,7 +92,7 @@ class PlayerBase {
 
         PlayerBase();
 
-        ~PlayerBase();
+        virtual ~PlayerBase();
 
         std::vector<std::tr1::shared_ptr<Bullet> > getBullets();
 

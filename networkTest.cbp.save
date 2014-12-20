@@ -35,6 +35,10 @@
 		<Unit filename="Block.h" />
 		<Unit filename="Bullet.cpp" />
 		<Unit filename="Bullet.h" />
+		<Unit filename="Button.cpp" />
+		<Unit filename="Button.h" />
+		<Unit filename="ButtonPlacer.cpp" />
+		<Unit filename="ButtonPlacer.h" />
 		<Unit filename="Camera.cpp" />
 		<Unit filename="Camera.h" />
 		<Unit filename="Client.cpp" />
@@ -94,6 +98,8 @@
 		<Unit filename="PlayerBase.h" />
 		<Unit filename="Portal.cpp" />
 		<Unit filename="Portal.h" />
+		<Unit filename="PredrawnButton.cpp" />
+		<Unit filename="PredrawnButton.h" />
 		<Unit filename="ScoreDisplay.cpp" />
 		<Unit filename="ScoreDisplay.h" />
 		<Unit filename="Scoreboard.cpp" />
@@ -112,6 +118,8 @@
 		<Unit filename="StaticObject.h" />
 		<Unit filename="TeamManager.cpp" />
 		<Unit filename="TeamManager.h" />
+		<Unit filename="TypeChecker.cpp" />
+		<Unit filename="TypeChecker.h" />
 		<Unit filename="UndefinedLineSegment.cpp" />
 		<Unit filename="UndefinedLineSegment.h" />
 		<Unit filename="UserPlayer.cpp" />

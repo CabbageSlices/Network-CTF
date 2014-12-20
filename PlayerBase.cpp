@@ -39,7 +39,7 @@ PlayerBase::PlayerBase():
     deaths(0),
     flagCaptures(0),
     flagReturns(0),
-    maxInterpolationDist(65000),
+    maxInterpolationDist(260100),
     currentFloor(OVERGROUND_FLOOR)
     {
 

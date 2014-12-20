@@ -12,6 +12,8 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <map>
+#include <iterator>
 
 /**
 
@@ -28,6 +30,8 @@ using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
+using std::map;
+using std::next;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
@@ -38,7 +42,8 @@ ClientGameManager::ClientGameManager() :
     connectedPlayers(),
     stateUpdateTimer(),
     serverUpdateTime(sf::milliseconds(60)),
-    lastStateUpdateId(0)
+    lastStateUpdateId(0),
+    waitingForOthers(true)
     {
 
     }
@@ -55,7 +60,7 @@ bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPo
     client.setServerIp(serverIp);
     client.setServerPort(serverPort);
 
-    if(client.connectToServer(playerId, userPlayer.getName(), sf::seconds(5))) {
+    if(client.connectToServer(playerId, userPlayer.getName(), sf::seconds(3))) {
 
         userPlayer.setId(playerId);
 
@@ -65,15 +70,164 @@ bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPo
     return false;
 }
 
-void ClientGameManager::gameLobby(sf::RenderWindow& window) {
-    
+void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
+
     //load the image of the game lobby
     sf::Texture lobbyTexture;
-    lobbyTextre.loadFromFile("lobbyMenu.png");
-    
+    lobbyTexture.loadFromFile("lobbyMenu.png");
+
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
-    
+
+    //names of each player in their respective teams to draw onto the screen
+    //has no use what so ever outside the lobby
+    vector<sf::Text> redTeam;
+    vector<sf::Text> blueTeam;
+
+    //size of box for each player name in the lobby image
+    sf::Vector2f nameBoxSize(279, 52);
+
+    //position on the lobby image where first name is displayed
+    sf::Vector2f firstNamePosition(49, 84);
+
+    //the different buttons users can press
+    sf::FloatRect backButton(512, 4, 125, 61);
+    sf::FloatRect switchTeamsButton(249, 334, 147, 65);
+
+    sf::Event event;
+
+    //set window to default properties that way all objects are drawn on screen
+    window.setView(window.getDefaultView());
+
+    sf::Clock dataReceiveTimer;
+    sf::Time timeOutTime = sf::seconds(3);
+
+    //timer to send heartbeat packets to server
+    sf::Clock heartbeatTimer;
+    sf::Time heartBeatTime = sf::seconds(1);
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                if(backButton.contains(mousePosition)) {
+
+                    return;
+                }
+
+                if(switchTeamsButton.contains(mousePosition)) {
+
+                    sf::Packet packet;
+
+                    //tell server user wants to switch teams
+                    packet << CHANGE_TEAM;
+
+                    client.sendToServer(packet);
+                }
+            }
+        }
+
+        if(heartbeatTimer.getElapsedTime() > heartBeatTime) {
+
+            sf::Packet packet;
+            packet << HEART_BEAT;
+
+            client.sendToServer(packet);
+
+            heartbeatTimer.restart();
+        }
+
+        //recreate the list of players in each time whenever the server sends an update
+        sf::Packet packet;
+
+        if(dataReceiveTimer.getElapsedTime() > timeOutTime) {
+
+            ///do something to draw that you've disconnected
+            return;
+        }
+
+        //get new data from the server
+        while(client.receiveFromServer(packet)) {
+
+            dataReceiveTimer.restart();
+
+            int packetType = getPacketType(packet);
+
+            if(packetType == LOBBY_CONNECTION_INFO) {
+
+                redTeam.clear();
+                blueTeam.clear();
+
+                while(!packet.endOfPacket()) {
+
+                    //read data about all players, first thing read is the player name
+                    string playerName;
+
+                    unsigned short team = 0;
+
+                    packet >> playerName;
+                    packet >> team;
+
+                    sf::Text nameText;
+                    nameText.setFont(font);
+                    nameText.setString(playerName);
+                    nameText.setScale(0.70, 0.70);
+
+                    if(team == TEAM_A_ID) {
+
+                        redTeam.push_back(nameText);
+
+                    } else {
+
+                        blueTeam.push_back(nameText);
+                    }
+                }
+
+            } else if(packetType == START_GAME) {
+
+                //run the game, will go to the game stage but won't start until server sends state update packet
+                runGame(window);
+            }
+        }
+
+        //set the position of all names so that they line up with the boxes in the image file
+        for(unsigned i = 0; i < redTeam.size(); i++) {
+
+            sf::Text& name = redTeam[i];
+            name.setPosition(firstNamePosition.x, firstNamePosition.y + i * nameBoxSize.y);
+        }
+
+        for(unsigned int i = 0; i < blueTeam.size(); i++) {
+
+            sf::Text& name = blueTeam[i];
+            name.setPosition(firstNamePosition.x + nameBoxSize.x, firstNamePosition.y + i * nameBoxSize.y);
+        }
+
+        window.clear();
+
+        window.draw(lobbySprite);
+
+        for(auto& name : redTeam) {
+
+            window.draw(name);
+        }
+
+        for(auto& name : blueTeam) {
+
+            window.draw(name);
+        }
+
+        window.display();
+    }
 }
 
 void ClientGameManager::interpolateEntities() {
@@ -103,7 +257,13 @@ const float ClientGameManager::calculateServerDelta() {
     //make sure the denominator isn't 0
     //calculate the delta fraction to interpolate other connected players
     //this uses the time between server updates for interpolation rather than time between physics update cycle
-    float deltaFraction = stateUpdateTimer.getElapsedTime().asSeconds() / (serverUpdateTime.asSeconds() > 0.f ? serverUpdateTime.asSeconds() : 1.f);
+    float deltaFraction = stateUpdateTimer.getElapsedTime().asSeconds() / serverUpdateTime.asSeconds();
+
+    if(deltaFraction > 1) {
+
+        deltaFraction = 1;
+        stateUpdateTimer.restart();
+    }
 
     return deltaFraction;
 }
@@ -173,7 +333,8 @@ void ClientGameManager::handleServerUpdates() {
 
             if(applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData)) {
 
-                stateUpdateTimer.restart();
+                //if player is receiving state updates that meanst he game already started
+                waitingForOthers = false;
             }
         }
 
@@ -288,6 +449,12 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     //setup the player name on the H.U.D
     getStatDisplay().setPlayerName(userPlayer.getName());
     getStatDisplay().setPlayerHealth(userPlayer.getHealth());
+
+    //set player's health to 0 that way player can't move until all other players are loaded
+    //and also so player will set his position to server's position when the game starts
+    userPlayer.setHealth(0);
+
+    waitingForOthers = true;
 }
 
 void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
@@ -354,6 +521,7 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
+    //if player is waiting for others don't draw the screen
     userPlayer.draw(window);
 
     for(auto& player : connectedPlayers) {
@@ -362,6 +530,11 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
             player->draw(window, userPlayer.getFloor());
         }
+    }
+
+    if(waitingForOthers) {
+
+        drawWaitingSymbol(window);
     }
 }
 

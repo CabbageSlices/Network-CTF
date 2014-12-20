@@ -23,7 +23,7 @@ bool ConnectionManager::sendData(sf::Packet& packetToSend, const sf::IpAddress& 
 
 bool ConnectionManager::receiveData(sf::Packet& dataDestination, sf::IpAddress& senderAddress, unsigned short& senderPort) {
 
-    if(communicationSocket.receive(dataDestination, senderAddress, senderPort) == sf::Socket::Done) {
+    if(communicationSocket.receive(dataDestination, senderAddress, senderPort) == sf::Socket::Done && senderAddress.toString() != "") {
 
         return true;
     }
@@ -31,7 +31,12 @@ bool ConnectionManager::receiveData(sf::Packet& dataDestination, sf::IpAddress& 
     return false;
 }
 
-void ConnectionManager::bind(unsigned short portToBindTo) {
+bool ConnectionManager::bind(unsigned short portToBindTo) {
 
-    communicationSocket.bind(portToBindTo);
+    //first unbind to whatever port it was bound to before
+    communicationSocket.unbind();
+
+    sf::UdpSocket::Status result = communicationSocket.bind(portToBindTo);
+
+    return result == sf::UdpSocket::Done;
 }

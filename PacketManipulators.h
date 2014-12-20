@@ -74,6 +74,7 @@ void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer
 
     ----REPEATE THE FOLLOWING FOR EVERY PLAYER WHOSE DATA IS BEING SENT
         -ID OF PLAYER
+        -PLAYER NAME
         -PLAYER POSITION (x,y)
         -PLAYER ROTATION
         -PLAYER HEALTH

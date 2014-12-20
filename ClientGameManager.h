@@ -54,6 +54,9 @@ class ClientGameManager: public GameManager {
         //id of the last update sent by the server to check if its an old update
         sf::Uint32 lastStateUpdateId;
 
+        //whether player is waiting for other players to get to the game screen
+        bool waitingForOthers;
+
         //interpolate all entities to their new position so drawing looks smooth, the delta fraction is different for each type of entity
         void interpolateEntities();
 
@@ -73,6 +76,10 @@ class ClientGameManager: public GameManager {
         void handleBulletCollision();
 
         void playerForegroundCollision();
+
+        void drawWaitingSymbol(sf::RenderWindow& window) {
+
+        }
 
     protected:
 
@@ -118,7 +125,7 @@ class ClientGameManager: public GameManager {
         bool connectToServer(std::string serverIp, unsigned short serverPort);
         void setPlayerName(std::string name);
 
-        void gameLobby(sf::RenderWindow& window);
+        void gameLobby(sf::RenderWindow& window, sf::Font& font);
 };
 
 #endif // GAMEMANAGER_H_INCLUDED

@@ -53,9 +53,11 @@ bool Client::connectToServer(int& clientId, string playerName, const sf::Time& r
         if(receiveFromServer(exchangePacket) && checkPacketType(exchangePacket, CONNECTION_ATTEMPT)) {
 
             //read the id given to the client from the server
-            //packet has the packet id and the client id as well as the player name still saved on it so you'll have to download data twice
+            //packet has the packet id still saved on it so you'll have to download data
             exchangePacket >> clientId;
-            exchangePacket >> clientId >> clientId;
+            exchangePacket >> clientId;
+
+            cout << clientId << endl;
 
             //successfully connected
             return true;

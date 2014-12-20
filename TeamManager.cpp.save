@@ -7,9 +7,12 @@ using std::endl;
 
 const unsigned short TEAM_A_ID = 1;
 const unsigned short TEAM_B_ID = 2;
+const unsigned short TEAMS_FULL = 3;
 
 const sf::Color TEAM_A_COLOR = sf::Color::Red;
 const sf::Color TEAM_B_COLOR = sf::Color::Blue;
+
+const int MAX_PER_TEAM = 5;
 
 unsigned short getOpposingTeam(const unsigned short& currentTeam) {
 
@@ -44,6 +47,12 @@ unsigned short TeamManager::addNewPlayer() {
 
         numberOfPlayers[TEAM_B_ID]++;
         team = TEAM_B_ID;
+    }
+    
+    if(numberOfPlayers[team] >= MAX_PER_TEAM) {
+        
+        numberOfPlayers[team] = MAX_PER_TEAM
+        team = TEAMS_FULL;
     }
 
     return team;
@@ -84,7 +93,7 @@ unsigned short TeamManager::getTeamScore(const unsigned short& team) {
 }
 
 void TeamManager::setTeamScore(const unsigned short& team, const unsigned short& score) {
-    
+
     teamScores[team] = score;
 }
 

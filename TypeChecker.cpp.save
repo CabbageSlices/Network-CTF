@@ -1,0 +1,9 @@
+#include "TypeChecker.h"
+#include <ctype>
+
+using std::string;
+using std::isdigit;
+
+bool isDigit(string toCheck) {
+
+}

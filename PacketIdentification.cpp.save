@@ -1,6 +1,7 @@
 #include "PacketIdentification.h"
 
 const int PLAYER_INPUT = 4;
+const int PLAYER_KEYSTATE_UPDATE = 11;
 const int PLAYER_STATE_UPDATE = 5;
 
 //packet id for packets containing information about the other players connected to the server, does not contain info about the user's player
@@ -16,3 +17,9 @@ const int LATENCY_TEST = 7;
 const int CONNECTION_ATTEMPT = 8;
 
 const int WORLD_STATE_UPDATE = 9;
+
+const int LOBBY_CONNECTION_INFO = 12;
+
+const int START_GAME = 13;
+
+const int CHANGE_TEAM = 14;

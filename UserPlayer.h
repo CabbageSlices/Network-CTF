@@ -143,7 +143,7 @@ class UserPlayer : public PlayerBase{
     public:
 
         UserPlayer();
-        ~UserPlayer(){};
+        virtual ~UserPlayer(){};
 
         //handle any input the player triggered and save them to send to the server
         void handleEvents(sf::Event& event);

@@ -9,6 +9,7 @@
 #include "GunHandlers.h"
 #include "GunTypes.h"
 
+#include <string>
 #include <iostream>
 #include "Bullet.h"
 #include "LineSegment.h"
@@ -16,6 +17,7 @@
 using std::cout;
 using std::endl;
 using std::vector;
+using std::string;
 using std::tr1::shared_ptr;
 
 //gives or takes a flag from a player depending on update from the server
@@ -274,6 +276,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     for(auto& player : players) {
 
         updatePacket << player->player.getId();
+        updatePacket << player->player.getName();
         updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
         updatePacket << player->player.getRotation();
         updatePacket << player->player.getHealth();
@@ -332,6 +335,9 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         int playerId = 0;
         statePacket >> playerId;
+
+        string playerName;
+        statePacket >> playerName;
 
         sf::Vector2f playerPosition(0, 0);
         statePacket >> playerPosition.x >> playerPosition.y;
@@ -398,6 +404,8 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             continue;
         }
 
+        cout << userPlayer.getId() << "    " << playerId << "  " << endl;;
+
         //if the given player already exists then update him, however
         bool playerAlreadyExists = false;
 
@@ -433,7 +441,8 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         }
 
         updatedPlayer->setId(playerId);
-        updatedPlayer->setInterpolationPosition(playerPosition);
+        updatedPlayer->setName(playerName);
+        updatedPlayer->setInterpolationPositionV2(playerPosition);
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
         updatedPlayer->setTeam(teamId);
