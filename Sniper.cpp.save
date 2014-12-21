@@ -4,7 +4,7 @@ Sniper::Sniper() :
     Gun(75, 2500, sf::milliseconds(10), 15),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
-    accuracyChangeRate(2),
+    accuracyChangeRate(4),
     accuracyRange(sf::Triangles, 3)
     {
         maxCurrentMagazine = 2;
@@ -13,6 +13,11 @@ Sniper::Sniper() :
         totalMagazine = maxTotalMagazine;
 
         setupAccuracyRange();
+        
+        //load the texture for the ui
+        uiTexture.loadFromFile("shotgunUI.png");
+        uiSprite.setTexture(uiTexture);
+        uiSprite.setOrigin(uiSprite.getLocalBounds().width / 2, uiSprite.getLocalBounds().height / 2);
     }
 
 void Sniper::handleButtonPress() {

@@ -166,7 +166,7 @@ class PlayerBase {
         bool timedOut();
         void resetDataTimer();
 
-        const std::tr1::shared_ptr<Gun> getGun() const;
+        std::tr1::shared_ptr<Gun> getGun();
         void setGun(std::tr1::shared_ptr<Gun> newGun);
 
         const std::string& getName() const;

@@ -1,7 +1,9 @@
 #include "StatDisplay.h"
 #include "Conversion.h"
+#include "Gun.h"
 
 using std::string;
+using std::tr1::shared_ptr;
 
 StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
     statDisplayTexture(),
@@ -83,6 +85,14 @@ void StatDisplay::draw(sf::RenderWindow& window) {
     window.draw(usedAmmo);
     window.draw(availableAmmo);
     window.draw(totalAmmo);
+}
+
+void StatDisplay::drawGunUI(sf::RenderWindow& window, shared_ptr<Gun> playerGun) {
+
+    //the offsets from the top left of the statDisplay is based on the image file, so use that
+    sf::Vector2f gunOffset(8, 0);
+
+    playerGun->drawUI(gunOffset + statDisplaySprite.getPosition(), window);
 }
 
 void StatDisplay::setupComponentPositions() {

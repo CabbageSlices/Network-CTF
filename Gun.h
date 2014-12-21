@@ -29,6 +29,11 @@ class Gun {
         //texture for the line of sight to give it graphics
         sf::Texture lineTexture;
 
+        //texture for the image of the gun to draw onto the ui
+        sf::Texture uiTexture;
+
+        sf::Sprite uiSprite;
+
         //bullets that have been fired
         std::vector<std::tr1::shared_ptr<Bullet> > bullets;
 
@@ -157,6 +162,8 @@ class Gun {
         //only draw bullets that are on the drawingfloor because the player might not be on the same floor as the bullet
         void drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor);
 
+        void drawUI(const sf::Vector2f& position, sf::RenderWindow& window);
+
         std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
         std::vector<std::tr1::shared_ptr<Bullet> >& getBulletsForClients();
 
@@ -168,9 +175,9 @@ class Gun {
 
         void setCurrentAmmo(const int& amount);
 
-        const int getCurrentAmmo() const;
+        const int getCurrentAmmo();
 
-        const int getMaxCurrentAmmo() const {
+        const int getMaxCurrentAmmo() {
 
             return maxCurrentMagazine;
         }
@@ -183,7 +190,7 @@ class Gun {
             totalMagazine = maxTotalMagazine;
         }
 
-        virtual GunTypes getGunType() const;
+        virtual GunTypes getGunType();
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot
         float fire();

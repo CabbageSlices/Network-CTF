@@ -6,14 +6,18 @@ using std::cout;
 using std::endl;
 
 Shotgun::Shotgun() :
-    Gun(17, 450, sf::milliseconds(100), 28),
+    Gun(17, 400, sf::milliseconds(1000), 35),
     bulletsPerShot(5),
     bulletsFired(0)
     {
-        maxCurrentMagazine = 400;
-        maxTotalMagazine = 1200;
+        maxCurrentMagazine = 4;
+        maxTotalMagazine = 12;
         currentMagazine = maxCurrentMagazine;
         totalMagazine = maxTotalMagazine;
+
+        //load the texture for the ui
+        uiTexture.loadFromFile("shotgunUI.png");
+        uiSprite.setTexture(uiTexture);
     }
 
 void Shotgun::updateGunfire(const sf::Time& delta) {
@@ -33,7 +37,7 @@ void Shotgun::updateGunfire(const sf::Time& delta) {
     }
 }
 
-GunTypes Shotgun::getGunType() const {
+GunTypes Shotgun::getGunType() {
 
     return SHOTGUN;
 }

@@ -16,6 +16,8 @@ using std::endl;
 Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, const float& accuracyMod) :
     lineOfSight(sf::Lines, 2),
     lineTexture(),
+    uiTexture(),
+    uiSprite(),
     bullets(),
     bulletsForClients(),
     MAX_DISTANCE_FIRED(maxDist),
@@ -151,6 +153,12 @@ void Gun::drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor) {
             bullet->draw(window);
         }
     }
+}
+
+void Gun::drawIcon(const sf::Vector2f& position, sf::RenderWindow& window) {
+    
+    uiSprite.setPosition(position);
+    window.draw(uiSprite);
 }
 
 vector<shared_ptr<Bullet> >& Gun::getBullets() {

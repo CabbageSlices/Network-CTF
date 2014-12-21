@@ -31,7 +31,7 @@ class Shotgun : public Gun {
 
         virtual void updateGunfire(const sf::Time& delta);
 
-        virtual GunTypes getGunType() const;
+        virtual GunTypes getGunType();
 };
 
 #endif // SHOTGUN_H_INCLUDED

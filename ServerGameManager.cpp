@@ -77,7 +77,7 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
                 bool enoughPlayers = (teamManager.getPlayerCount(TEAM_A_ID) > 0) && (teamManager.getPlayerCount(TEAM_B_ID) > 0);
 
-                if(startGameButton.contains(mousePosition)) {
+                if(startGameButton.contains(mousePosition) && enoughPlayers) {
 
                     sendGameStarts = true;
 

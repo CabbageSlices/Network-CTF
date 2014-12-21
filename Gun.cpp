@@ -16,6 +16,8 @@ using std::endl;
 Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, const float& accuracyMod) :
     lineOfSight(sf::Lines, 2),
     lineTexture(),
+    uiTexture(),
+    uiSprite(),
     bullets(),
     bulletsForClients(),
     MAX_DISTANCE_FIRED(maxDist),
@@ -33,7 +35,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     totalMagazine(maxTotalMagazine),
     reloading(false),
     animationTimer(),
-    frameTime(sf::milliseconds(60)),
+    frameTime(sf::milliseconds(100)),
     frame(0),
     reloadingFrameCount(7)
     {
@@ -153,6 +155,12 @@ void Gun::drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor) {
     }
 }
 
+void Gun::drawUI(const sf::Vector2f& position, sf::RenderWindow& window) {
+
+    uiSprite.setPosition(position);
+    window.draw(uiSprite);
+}
+
 vector<shared_ptr<Bullet> >& Gun::getBullets() {
 
     return bullets;
@@ -186,7 +194,7 @@ void Gun::setCurrentAmmo(const int& amount) {
     }
 }
 
-const int Gun::getCurrentAmmo() const {
+const int Gun::getCurrentAmmo() {
 
     return currentMagazine;
 }
@@ -204,7 +212,7 @@ const int Gun::getTotalAmmo() const {
     return totalMagazine;
 }
 
-GunTypes Gun::getGunType() const {
+GunTypes Gun::getGunType() {
 
     return PISTOL;
 }

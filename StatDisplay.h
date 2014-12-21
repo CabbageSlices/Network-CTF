@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <tr1/memory>
+
+class Gun;
 
 //the player's name, ammo, health, and equipped weapon
 class StatDisplay {
@@ -61,6 +64,7 @@ class StatDisplay {
         void setPlayerAmmo(const int currentAmmo, const int maxUsableAmmo, const int playerTotalAmmo);
 
         void draw(sf::RenderWindow& window);
+        void drawGunUI(sf::RenderWindow& window, std::tr1::shared_ptr<Gun> playerGun);
 };
 
 #endif // STATDISPLAY_H_INCLUDED

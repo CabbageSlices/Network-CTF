@@ -60,7 +60,7 @@ bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPo
     client.setServerIp(serverIp);
     client.setServerPort(serverPort);
 
-    if(client.connectToServer(playerId, userPlayer.getName(), sf::seconds(3))) {
+    if(client.connectToServer(playerId, userPlayer.getName(), sf::seconds(2))) {
 
         userPlayer.setId(playerId);
 
@@ -259,12 +259,6 @@ const float ClientGameManager::calculateServerDelta() {
     //this uses the time between server updates for interpolation rather than time between physics update cycle
     float deltaFraction = stateUpdateTimer.getElapsedTime().asSeconds() / serverUpdateTime.asSeconds();
 
-    if(deltaFraction > 1) {
-
-        deltaFraction = 1;
-        stateUpdateTimer.restart();
-    }
-
     return deltaFraction;
 }
 
@@ -332,6 +326,8 @@ void ClientGameManager::handleServerUpdates() {
         } else if(packetType == WORLD_STATE_UPDATE) {
 
             if(applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData)) {
+
+                serverUpdateTime = stateUpdateTimer.restart();
 
                 //if player is receiving state updates that meanst he game already started
                 waitingForOthers = false;
@@ -544,6 +540,8 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
 
         score.draw(window);
     }
+    
+    headsUpDisplay.drawGunUI(window, userPlayer.getGun());
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {

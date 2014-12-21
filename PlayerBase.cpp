@@ -324,7 +324,7 @@ void PlayerBase::resetDataTimer() {
     dataReceiveTimer.restart();
 }
 
-const shared_ptr<Gun> PlayerBase::getGun() const {
+shared_ptr<Gun> PlayerBase::getGun() {
 
     return gun;
 }

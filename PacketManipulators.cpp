@@ -98,7 +98,7 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.inputId;
 }
 
-void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
+void createUpdatePacket(shared_ptr<FlagManager> flagManager, UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
                         TeamManager& teamManager) {
 
     //set the packet type

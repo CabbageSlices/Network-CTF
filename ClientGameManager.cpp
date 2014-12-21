@@ -540,6 +540,8 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
 
         score.draw(window);
     }
+
+    getHeadsUpDisplay().drawGunUI(window, userPlayer.getGun());
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {

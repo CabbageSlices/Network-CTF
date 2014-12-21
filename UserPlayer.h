@@ -192,6 +192,9 @@ class UserPlayer : public PlayerBase{
         //update the player's rotation using the mouse position, not the same as set rotation which jsut sets the rotation of the player
         //uses set rotation
         void updateRotation(const sf::Vector2f& mousePosition);
+
+        //draw the gun's icon on the UI
+        void drawGunUI(const sf::Vector2f& position, sf::RenderWindow& window);
 };
 
 #endif // USERPLAYER_H_INCLUDED

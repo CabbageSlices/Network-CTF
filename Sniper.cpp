@@ -1,10 +1,10 @@
 #include "Sniper.h"
 
 Sniper::Sniper() :
-    Gun(75, 2500, sf::milliseconds(10), 15),
+    Gun(75, 2500, sf::milliseconds(1000), 15),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
-    accuracyChangeRate(4),
+    accuracyChangeRate(6),
     accuracyRange(sf::Triangles, 3)
     {
         maxCurrentMagazine = 2;
@@ -13,6 +13,10 @@ Sniper::Sniper() :
         totalMagazine = maxTotalMagazine;
 
         setupAccuracyRange();
+
+        //load the texture for the ui
+        uiTexture.loadFromFile("sniperUI.png");
+        uiSprite.setTexture(uiTexture);
     }
 
 void Sniper::handleButtonPress() {
@@ -65,7 +69,7 @@ void Sniper::drawSight(sf::RenderWindow& window) {
     Gun::drawSight(window);
 }
 
-GunTypes Sniper::getGunType() const {
+GunTypes Sniper::getGunType() {
 
     return SNIPER;
 }

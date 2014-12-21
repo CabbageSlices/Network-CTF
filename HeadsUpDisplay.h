@@ -6,6 +6,9 @@
 #include "ScoreDisplay.h"
 
 #include <string>
+#include <tr1/memory>
+
+class Gun;
 
 //the player's weapon display, health, minimap, and the team scores
 class HeadsUpDisplay {
@@ -46,6 +49,11 @@ class HeadsUpDisplay {
             statDisplay.draw(window);
             minimap.drawBorder(window);
             scoreDisplay.draw(window);
+        }
+
+        void drawGunUI(sf::RenderWindow& window, std::tr1::shared_ptr<Gun> playerGun) {
+
+            statDisplay.drawGunUI(window, playerGun);
         }
 };
 

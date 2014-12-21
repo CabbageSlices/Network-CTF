@@ -297,6 +297,11 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
     setRotation(calculateAngle(currentHitBox.getPosition(), mousePosition));
 }
 
+void UserPlayer::drawGunUI(const sf::Vector2f& position, sf::RenderWindow& window) {
+
+    gun->drawUI(position, window);
+}
+
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     gun->drawAll(window);

@@ -98,6 +98,11 @@ class GameManager {
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
 
+        HeadsUpDisplay& getHeadsUpDisplay() {
+
+            return headsUpDisplay;
+        }
+
         GameWorld& getGameWorld();
 
         StatDisplay& getStatDisplay() {

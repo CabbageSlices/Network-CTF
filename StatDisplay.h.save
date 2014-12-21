@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <tr1/memory>
+
+class Gun;
 
 //the player's name, ammo, health, and equipped weapon
 class StatDisplay {
@@ -16,19 +19,19 @@ class StatDisplay {
         //texture for the stat display outline
         sf::Texture statDisplayTexture;
         sf::Sprite statDisplaySprite;
-        
+
         //current ammo is represented by pictures of bullets so have textures for the bullets
         //one picture to represent a used bullet slot, and one to represent an availabel bullet slot
         sf::Texture availableAmmoTexture;
         sf::Texture usedAmmoTexture;
-        
+
         sf::Sprite availableAmmo;
         sf::Sprite usedAmmo;
 
         //distanec to the given object relative to the position of the stat display
         const sf::Vector2f NAME_OFFSET;
         const sf::Vector2f HEALTH_OFFSET;
-        
+
         //current ammo is displayed as bullets, number of bullets = ammo
         //total ammo is represented as a number
         const sf::Vector2f AMMO_OFFSET_CURRENT;
@@ -41,8 +44,8 @@ class StatDisplay {
 
         //display for all texts displayed on the stat
         sf::Font font;
-        const float textScale;
-        
+        const float TEXT_SCALE;
+
         sf::Text playerName;
         sf::Text totalAmmo;
 
@@ -58,9 +61,10 @@ class StatDisplay {
 
         void setPlayerHealth(const float& currentValue);
         void setPlayerName(const std::string& name);
-        void setPlayerAmmo(const unsigned& currentAmmo, const unsigned& maxUsableAmmo, const unsigned& playerTotalAmmo);
-
-        void draw(sf::RenderWindow& window);
+        void setPlayerAmmo(const int currentAmmo, const int maxUsableAmmo, const int playerTotalAmmo);
+    
+        //also draws the player's gun icon onto the gun display
+        void draw(sf::RenderWindow& window, std::tr1::shared_ptr<Gun> playerGun);
 };
 
 #endif // STATDISPLAY_H_INCLUDED
