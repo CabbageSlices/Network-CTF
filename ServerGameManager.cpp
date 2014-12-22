@@ -10,6 +10,9 @@
 #include "Floors.h"
 #include "Portal.h"
 #include "GunGiver.h"
+#include "ButtonPlacer.h"
+#include "PredrawnButton.h"
+#include "Conversion.h"
 
 #include <string>
 #include <iostream>
@@ -50,12 +53,38 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
     sf::FloatRect startGameButton(199, 341, 237, 57);
     sf::FloatRect quitButton(513, 4, 126, 63);
 
+    //buttons to increase and decrease the amount of points required to win the game
+    shared_ptr<PredrawnButton> decreasePointsButton(new PredrawnButton("decreaseArrow.png"));
+    shared_ptr<PredrawnButton> increasePointsButton(new PredrawnButton("increaseArrow.png"));
+
+    vector<shared_ptr<PredrawnButton> > buttons;
+    buttons.push_back(decreasePointsButton);
+    buttons.push_back(increasePointsButton);
+
+    //indices to access buttons
+    unsigned decreasePoints = 0;
+    unsigned increasePoints = 1;
+
+    placeButtons("serverLobby.png", buttons);
+
     sf::Event event;
 
     //keep track of when to send information about players connected
     sf::Clock dataSendTimer;
 
     sf::Time dataSendTime = sf::milliseconds(200);
+
+    sf::Font font;
+    font.loadFromFile("font.ttf");
+
+    //text that represents how many points you need to win
+    //position is based on the image file
+    sf::Text pointsText;
+    pointsText.setFont(font);
+    pointsText.setString(toString(pointsToWinGame));
+    pointsText.setPosition(47, 368);
+    pointsText.setScale(0.7, 0.7);
+    pointsText.setColor(sf::Color::Blue);
 
     //whether the server should start sending game start packets
     //sends at the same rate as the data send timer
@@ -77,7 +106,7 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
                 bool enoughPlayers = (teamManager.getPlayerCount(TEAM_A_ID) > 0) && (teamManager.getPlayerCount(TEAM_B_ID) > 0);
 
-                if(startGameButton.contains(mousePosition) && enoughPlayers) {
+                if(startGameButton.contains(mousePosition) && enoughPlayers && everyoneInLobby()) {
 
                     sendGameStarts = true;
 
@@ -85,7 +114,29 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
                     return;
                 }
+
+                //don't let user change amount of points requried to win game
+                //if he already started the game
+
+                if(buttons[decreasePoints]->checkMouseTouching(mousePosition) && !sendGameStarts) {
+
+                    pointsToWinGame = pointsToWinGame > 1 ? pointsToWinGame - 1 : 1;
+                    pointsText.setString(toString(pointsToWinGame));
+                }
+
+                if(buttons[increasePoints]->checkMouseTouching(mousePosition) && !sendGameStarts) {
+
+                    pointsToWinGame = pointsToWinGame < 99 ? pointsToWinGame + 1 : 99;
+                    pointsText.setString(toString(pointsToWinGame));
+                }
              }
+        }
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+        for(auto& button : buttons) {
+
+            button->checkMouseTouching(mousePosition);
         }
 
         handleIncomingData();
@@ -107,6 +158,9 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
             sf::Packet packet;
 
             packet << LOBBY_CONNECTION_INFO;
+
+            //give the number of poitns required to win
+            packet << pointsToWinGame;
 
             //send data about all players
             for(auto& player: players) {
@@ -131,29 +185,33 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
         }
 
         //if all players are ready to play then start the game
-        bool everyoneReady = true;
+        bool everyoneReady = allPlayersReady();
 
-        if(players.size() == 0) {
-
-            everyoneReady = false;
-        }
-
-        for(auto& player : players) {
-
-            if(!player->readyToPlay) {
-
-                everyoneReady = false;
-            }
-        }
-
-        if(everyoneReady) {
+        if(everyoneReady && sendGameStarts) {
 
             runGame(window);
+
+            sendGameStarts = false;
+
+            //game finished so make all players not ready again
+            for(auto& player : players) {
+
+                player->readyToPlay = false;
+            }
+
+            cout << "match ended" << endl;
         }
 
         window.clear();
 
         window.draw(lobbySprite);
+
+        window.draw(pointsText);
+
+        for(auto& button : buttons) {
+
+            button->draw(window);
+        }
 
         window.display();
     }
@@ -168,14 +226,33 @@ void ServerGameManager::handleIncomingData() {
 
     while(server.receiveData(incomingData, senderIp, senderPort)) {
 
+        bool handledData = false;
+
         //data is available, check if the sender already has a player connected
         for(auto& player : players) {
 
             if(player->playerIpAddress == senderIp && player->playerPort == senderPort) {
 
                 handleData(player, incomingData);
-                return;
+                handledData = true;
+                break;
             }
+        }
+
+        //if the packet was handles already then don't check if its a connection attempt
+        //because sometimes a connection attempt might be received from the client after its already connected
+        //so this extra connection attempt is caught in the above loop and theres no need to handle it again
+        if(handledData) {
+
+            continue;
+        }
+
+        //don't accept new connections if game is already in sessions
+        //if all players are ready to play it means the game started
+        //because the clients are sending state updates which means the match is in session
+        if(allPlayersReady()) {
+
+            continue;
         }
 
         //data was not handled yet so check the data type and handle accordingly
@@ -229,8 +306,11 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
         handlePlayerKeystate(player, data);
 
         //keystate update means the player is ready to start playing the game
-        player->readyToPlay = true;
+        //however this is only if he isn't at the end screen
+        if(!player->atEndScreen) {
 
+           player->readyToPlay = true;
+        }
     } else if(checkPacketType(data, CHANGE_TEAM)) {
 
         unsigned short destinationTeam = getOpposingTeam(player->player.getTeam());
@@ -245,6 +325,13 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
 
         player->player.resetDataTimer();
 
+        //heartbeats are only sent out in the lobby so player is no longer in end game screen
+        player->atEndScreen = false;
+
+    } else if(checkPacketType(data, AT_END_SCREEN)) {
+
+        player->player.resetDataTimer();
+        player->atEndScreen = true;
     }
 }
 
@@ -502,6 +589,27 @@ void ServerGameManager::sendStateUpdates() {
     }
 }
 
+void ServerGameManager::sendResultPackets() {
+
+    sf::Packet victory;
+    victory << VICTORY;
+
+    sf::Packet defeat;
+    defeat << DEFEAT;
+
+    for(auto& player : players) {
+
+        if(onWinningTeam(player)) {
+
+            server.sendData(victory, player->playerIpAddress, player->playerPort);
+
+        } else {
+
+            server.sendData(defeat, player->playerIpAddress, player->playerPort);
+        }
+    }
+}
+
 void ServerGameManager::savePlayerStates(const int stateId) {
 
     //loop through all the players and update their state, if they don't exist then add a state for them
@@ -573,6 +681,9 @@ void ServerGameManager::setup(sf::RenderWindow& window) {
 
         player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
     }
+
+    //reset all scores
+    teamManager.resetScores();
 }
 
 void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
@@ -590,11 +701,33 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
     //receive new data
     handleIncomingData();
 
+    //if all players are at the end game screen then server needs to return to the lobby
+    if(allEndGameScreen()) {
+
+        exitGameLoop = true;
+        return;
+    }
+
     //tell clients what the last input the server confirmed was
     if(inputConfirmationTime.getElapsedTime() > inputConfirmationDelay) {
 
         sendInputConfirmation();
         inputConfirmationTime.restart();
+    }
+
+    //if match is over then only send a victor or defeat packet
+    //use the state update timer to send result packet
+    if(isGameFinished()) {
+
+        if(stateUpdateTimer.getElapsedTime() > stateUpdateDelay) {
+
+            //also send an input confirmation update that way
+            //clients can see everyones final scores
+            sendInputConfirmation();
+            sendResultPackets();
+        }
+
+        return;
     }
 
     //send information about other players to connected clients
@@ -608,6 +741,12 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
 }
 
 void ServerGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
+
+    //if the game ended then don't update any components
+    if(isGameFinished()) {
+
+        return;
+    }
 
     //update the players of all the connected clients, if any have timed out, delete them
     for(unsigned index = 0; index < players.size();) {

@@ -25,3 +25,9 @@ const int START_GAME = 13;
 const int CHANGE_TEAM = 14;
 
 const int HEART_BEAT = 15;
+
+const int VICTORY = 16;
+
+const int DEFEAT = 17;
+
+const int AT_END_SCREEN = 18;

@@ -404,8 +404,6 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             continue;
         }
 
-        cout << userPlayer.getId() << "    " << playerId << "  " << endl;;
-
         //if the given player already exists then update him, however
         bool playerAlreadyExists = false;
 

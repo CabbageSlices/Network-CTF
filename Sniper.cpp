@@ -4,7 +4,7 @@ Sniper::Sniper() :
     Gun(75, 2500, sf::milliseconds(1000), 15),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
-    accuracyChangeRate(6),
+    accuracyChangeRate(8),
     accuracyRange(sf::Triangles, 3)
     {
         maxCurrentMagazine = 2;

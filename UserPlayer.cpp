@@ -309,17 +309,17 @@ void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor)
 
 const float UserPlayer::getHorizontalVelocity() const {
 
-    return 200;
+    return 225;
 }
 
 const float UserPlayer::getVerticalVelocity() const {
 
-    return 200;
+    return 225;
 }
 
 const float UserPlayer::getVelocityReduction() const {
 
-    return 0.70;
+    return 1;
 }
 
 UserPlayer::Input UserPlayer::getInputToProcess() {

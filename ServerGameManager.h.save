@@ -32,6 +32,11 @@ class ServerGameManager : public GameManager {
 
             //when the game first starts the player has to respond the to starting packet in order for the game to actually start
             bool readyToPlay = false;
+
+            //when the game ends all players need to be in the end game screen
+            //server needs to receive a packet from every player saying they're in the end game screen
+            //before the server can return to the lobby
+            bool atEndScreen = false;
         };
 
     private:
@@ -91,6 +96,9 @@ class ServerGameManager : public GameManager {
         //send information about connected clients to other players
         void sendStateUpdates();
 
+        //send information about a player's victor or defeat ot each player
+        void sendResultPackets();
+
         //should be called right after update is given to clients so the state data is saved immediately and will be the same as the data the clients have
         void savePlayerStates(const int stateId);
 
@@ -107,6 +115,57 @@ class ServerGameManager : public GameManager {
 
         //check and handle collision between given and their spawn zones, that is, heal them if in spawn
         void playerSpawnCollision(std::tr1::shared_ptr<ConnectedPlayer>& player);
+
+        bool isGameFinished() {
+
+            return teamManager.getTeamScore(TEAM_A_ID) == pointsToWinGame || teamManager.getTeamScore(TEAM_B_ID) == pointsToWinGame;
+        }
+
+        //check if all players are at the end game screen, only usefull if  the game is over
+        bool allEndGameScreen() {
+
+            for(auto& player : players) {
+
+                if(!player->atEndScreen) {
+
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        //returns true if player is on the winning team
+        bool onWinningTeam(std::tr1::shared_ptr<ConnectedPlayer>& player) {
+
+            return teamManager.getTeamScore(player->player.getTeam()) == pointsToWinGame;
+        }
+        
+        bool everyoneInLobby() {
+            
+            for(auto& player : players) {
+
+                if(player->atEndScreen) {
+
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        bool allPlayersReady() {
+            
+            for(auto& player : players) {
+
+                if(!player->readyToPlay) {
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
     protected:
 
@@ -141,12 +200,12 @@ class ServerGameManager : public GameManager {
     public:
 
         ServerGameManager();
-        
+
         bool bindToPort(const unsigned& port) {
-            
+
             return server.bind(port);
         }
-        
+
         void gameLobby(sf::RenderWindow& window);
 };
 

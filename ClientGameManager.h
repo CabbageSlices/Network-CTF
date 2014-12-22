@@ -29,6 +29,13 @@ class ClientGameManager: public GameManager {
             STATE_PLAYING
         };
 
+        //textures to draw when the user either wins or loses
+        //the texture is loaded when the player actually receives information about winning or losing
+        sf::Texture matchResultTexture;
+        sf::Sprite matchResultSprite;
+
+        bool matchEnded;
+
         GameState currentState;
 
         Client client;
@@ -79,6 +86,16 @@ class ClientGameManager: public GameManager {
 
         void drawWaitingSymbol(sf::RenderWindow& window) {
 
+        }
+
+        void loadVictoryTexture(sf::Texture& textureToFill) {
+
+            textureToFill.loadFromFile("victory.png");
+        }
+
+        void loadDefeatTexture(sf::Texture& textureToFill){
+
+            textureToFill.loadFromFile("defeat.png");
         }
 
     protected:

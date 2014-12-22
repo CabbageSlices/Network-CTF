@@ -15,7 +15,9 @@ GameManager::GameManager() :
     optimalTimeStep(sf::milliseconds(30)),
     world(),
     headsUpDisplay(sf::Vector2u(1024, 768)),
-    currentWindow()
+    currentWindow(),
+    pointsToWinGame(1),
+    exitGameLoop(false)
     {
         world.load("untitled");
         headsUpDisplay.getMinimap().setLevelSize(sf::Vector2f(3968, 1472));
@@ -30,7 +32,7 @@ void GameManager::runGame(sf::RenderWindow& window) {
 
     sf::Event event;
 
-    while(window.isOpen()) {
+    while(window.isOpen() && !exitGameLoop) {
 
         handleInputs(event, window);
 
@@ -38,6 +40,9 @@ void GameManager::runGame(sf::RenderWindow& window) {
 
         drawWorld(window);
     }
+
+    //reset exit game loop that way if the game starts again it wont exit immediately
+    exitGameLoop = false;
 }
 
 void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {

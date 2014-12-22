@@ -53,6 +53,12 @@ class GameManager {
 
     protected:
 
+        //amount of points required for a team to win the game
+        short unsigned pointsToWinGame;
+
+        //when the player exits the game loop to return to lobby or something
+        bool exitGameLoop;
+
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things

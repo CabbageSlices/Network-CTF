@@ -33,7 +33,7 @@ PlayerBase::PlayerBase():
     dataReceiveTimer(),
     maxNoData(sf::seconds(3)),
     respawnTimer(),
-    respawnDelay(sf::seconds(5)),
+    respawnDelay(sf::seconds(7)),
     playerName("Name"),
     kills(0),
     deaths(0),

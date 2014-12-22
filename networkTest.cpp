@@ -35,18 +35,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    clientTitleScreen(window);
-    ///serverTitleScreen(window);
-
-    ServerGameManager serverGameManager;
-
-    sf::View largeView;
-    largeView.setViewport(sf::FloatRect(0, 0, 1, 1));
-    largeView.setSize(3200, 1800);
-    window.setView(largeView);
-
-    ///serverGameManager.gameLobby(window);
-    ///serverGameManager.runGame(window);
+    ///clientTitleScreen(window);
+    serverTitleScreen(window);
 
     return 0;
 }

@@ -120,7 +120,6 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
                 if(backButton.contains(mousePosition)) {
-
                     return;
                 }
 
@@ -167,6 +166,9 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 redTeam.clear();
                 blueTeam.clear();
 
+                //first read the number of points required to win
+                packet >> pointsToWinGame;
+
                 while(!packet.endOfPacket()) {
 
                     //read data about all players, first thing read is the player name
@@ -196,6 +198,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
                 //run the game, will go to the game stage but won't start until server sends state update packet
                 runGame(window);
+
+                //reset the view that way you cna see the menu
+                window.setView(window.getDefaultView());
+
+                //reset the data receive timer because the time will be very high right now
+                //and clients will get disconnected
+                dataReceiveTimer.restart();
             }
         }
 
@@ -267,6 +276,14 @@ void ClientGameManager::sendInputsToServer() {
 
     sf::Packet packagedInputs;
 
+    //if game is over jst tell the server teh player is currently in the end game screen
+    if(matchEnded) {
+
+        packagedInputs << AT_END_SCREEN;
+        client.sendToServer(packagedInputs);
+        return;
+    }
+
     //if there was any new inputs added, then send to server
     if(createInputPacket(userPlayer, packagedInputs)) {
 
@@ -287,6 +304,12 @@ void ClientGameManager::sendInputsToServer() {
 }
 
 void ClientGameManager::sendGunshotsToServer() {
+
+    //don't send updates if game is over
+    if(matchEnded) {
+
+        return;
+    }
 
     //check if the user shot any bullets and send any gunshot data to the server
     if(userPlayer.getGunshotsToSend().size() == 0) {
@@ -332,8 +355,61 @@ void ClientGameManager::handleServerUpdates() {
                 //if player is receiving state updates that meanst he game already started
                 waitingForOthers = false;
             }
-        }
 
+            //when looking at victory or defeat only load textures
+            //if they haven't been loaded already
+            //textures haven't been loaded if matchEnded is still false
+        } else if(packetType == VICTORY) {
+
+            if(matchEnded == false) {
+
+                loadVictoryTexture(matchResultTexture);
+                matchResultSprite.setTexture(matchResultTexture);
+            }
+
+            matchEnded = true;
+
+            //after match ends the client begins to ignore server packets that give score updates
+            //so the team scores aren't updated
+            //add the last score to whatever team won
+            ///increases player's team score
+            if(userPlayer.getTeam() == TEAM_A_ID) {
+
+                getHeadsUpDisplay().getScoreDisplay().setRedScore(pointsToWinGame);
+
+            } else {
+
+                getHeadsUpDisplay().getScoreDisplay().setBlueScore(pointsToWinGame);
+            }
+
+        } else if(packetType == DEFEAT) {
+
+            if(matchEnded == false) {
+
+                loadDefeatTexture(matchResultTexture);
+                matchResultSprite.setTexture(matchResultTexture);
+            }
+
+            matchEnded = true;
+
+            //after match ends the client begins to ignore server packets that give score updates
+            //so the team scores aren't updated
+            //add the last score to whatever team won
+            ///increases other teams score
+            if(userPlayer.getTeam() == TEAM_A_ID) {
+
+                getHeadsUpDisplay().getScoreDisplay().setBlueScore(pointsToWinGame);
+
+            } else {
+
+                getHeadsUpDisplay().getScoreDisplay().setRedScore(pointsToWinGame);
+            }
+
+        } else if(packetType == LOBBY_CONNECTION_INFO) {
+
+            //servers at the lobby so client should return as well
+            ///exitGameLoop = true;
+        }
     }
 }
 
@@ -451,6 +527,13 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     userPlayer.setHealth(0);
 
     waitingForOthers = true;
+    matchEnded = false;
+
+    //delete all previous players so new ones can be created
+    connectedPlayers.clear();
+
+    //clear scoreboards so they draw the correct scores the next time players are created
+    score.clearScoreboard();
 }
 
 void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
@@ -464,10 +547,17 @@ void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& w
 
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
+    score.handleEvents(event);
+
+    //don't handle player input once game is over
+    if(matchEnded) {
+
+        return;
+    }
+
     //handle the player's inputs
     userPlayer.handleEvents(event);
 
-    score.handleEvents(event);
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {
@@ -480,6 +570,12 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
     updateStatDisplay();
 
+    //don't handle bullet collision once match is over
+    if(matchEnded) {
+
+        return;
+    }
+
     ///handle the bullet collision here isntead of in the time components
     ///update part because the loop may never run because there isn't enough
     ///time accumulate for an update loop to occur, if that happens you get
@@ -488,6 +584,12 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 }
 
 void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindow& window) {
+
+    //don't update anything if match is over
+    if(matchEnded) {
+
+        return;
+    }
 
     //only update the player if he is alive
     if(userPlayer.isAlive()) {
@@ -499,6 +601,12 @@ void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
 }
 
 void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
+
+    //don't update anything if match is over
+    if(matchEnded) {
+
+        return;
+    }
 
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
@@ -531,6 +639,12 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
     if(waitingForOthers) {
 
         drawWaitingSymbol(window);
+    }
+
+    //if the match is already over then draw the appropriate texture
+    if(matchEnded) {
+
+        window.draw(matchResultSprite);
     }
 }
 

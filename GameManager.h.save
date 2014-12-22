@@ -53,6 +53,12 @@ class GameManager {
 
     protected:
 
+        //amount of points required for a team to win the game
+        unsigned pointsToWinGame;
+        
+        //when the player exits the game loop to return to lobby or something
+        bool exitGameLoop;
+
         //do anything that needs to be done before the game starts running
         //so do all the set up
         //make it virtual so derived classes can modify it to do different things
@@ -63,9 +69,9 @@ class GameManager {
 
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window) = 0;
-        
+
         virtual void handleStateEvents() {
-            
+
             //empty for now
         }
 
@@ -97,6 +103,11 @@ class GameManager {
         std::vector<std::tr1::shared_ptr<GunGiver> >& getGunGivers(const unsigned& floor = OVERGROUND_FLOOR);
 
         std::tr1::shared_ptr<FlagManager> getFlagManager();
+
+        HeadsUpDisplay& getHeadsUpDisplay() {
+
+            return headsUpDisplay;
+        }
 
         GameWorld& getGameWorld();
 
