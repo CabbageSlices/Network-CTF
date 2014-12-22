@@ -6,6 +6,7 @@
 #include "PredrawnButton.h"
 #include "ButtonPlacer.h"
 #include "TypeChecker.h"
+#include "ErrorMessage.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -35,8 +36,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    clientTitleScreen(window);
-    ///serverTitleScreen(window);
+    ///clientTitleScreen(window);
+    serverTitleScreen(window);
 
     return 0;
 }
@@ -164,7 +165,7 @@ void findMatchScreen(sf::RenderWindow& window) {
                     //if the port is invalid then don't let player try to connect and make him enter a valid port
                     if(!isDigit(serverPort.getString().toAnsiString())) {
 
-                        ///for now just ignore packet
+                        displayError(window, "The server port is invalid.");
                         continue;
                     }
 
@@ -177,6 +178,10 @@ void findMatchScreen(sf::RenderWindow& window) {
                     if(client.connectToServer(ipAddress, port)) {
 
                         client.gameLobby(window, font);
+
+                    } else {
+
+                        displayError(window, "Failed to connect to server.");
                     }
                 }
 
@@ -260,7 +265,7 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                     } else {
 
-                        ///do something to indicate a failure
+                        displayError(window, "This port is unavailable.\nPlease choose a different\nport.");
                     }
                 }
 

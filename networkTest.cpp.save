@@ -6,6 +6,7 @@
 #include "PredrawnButton.h"
 #include "ButtonPlacer.h"
 #include "TypeChecker.h"
+#include "ErrorMessage.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -35,18 +36,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
-
-    ServerGameManager serverGameManager;
-
-    sf::View largeView;
-    largeView.setViewport(sf::FloatRect(0, 0, 1, 1));
-    largeView.setSize(3200, 1800);
-    window.setView(largeView);
-
-    ///serverGameManager.gameLobby(window);
-    ///serverGameManager.runGame(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }
@@ -171,6 +162,13 @@ void findMatchScreen(sf::RenderWindow& window) {
 
                 } else if(connectBox.contains(mousePosition)) {
 
+                    //if the port is invalid then don't let player try to connect and make him enter a valid port
+                    if(!isDigit(serverPort.getString().toAnsiString())) {
+
+                        displayError(window, "The server port\nis invalid.");
+                        continue;
+                    }
+
                     ClientGameManager client;
                     client.setPlayerName(playerName.getString());
 
@@ -219,9 +217,9 @@ void serverTitleScreen(sf::RenderWindow& window) {
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("hostGameButton.png")) );
 
     placeButtons<shared_ptr<PredrawnButton> >("serverTitlescreen.png" , buttons);
-    
+
     //create a button for user to press in order to change port numbers
-    
+    sf::FloatRect changePortButton(262, 119, 215, 42);
 
     sf::Font font;
     font.loadFromFile("font.ttf");
@@ -263,11 +261,19 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                     } else {
 
-                        ///do something to indicate a failure
+                        displayError(window, "This port is unavailable")
                     }
                 }
-                
-                if()
+
+                if(changePortButton.contains(mousePosition)) {
+
+                    string port = receiveInput(window, "Enter the host port.", font);
+
+                    if(port.size() > 0) {
+
+                        serverPortText.setString(port);
+                    }
+                }
             }
         }
 

@@ -58,6 +58,9 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     inputMessage.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputMessage.getGlobalBounds().width / 2,
                              messageBox.getGlobalBounds().top + 10);
 
+    //offset from the bottom of the message box to display the player's input that way its not on the borders of the inputbox
+    float distanceFromBottom = 80;
+
     sf::Event event;
 
     bool isActive = true;
@@ -101,7 +104,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
         //set the message and place the text at the center of the message box
         inputText.setString(input);
         inputText.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputText.getGlobalBounds().width / 2,
-                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - inputText.getGlobalBounds().height * 4);
+                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - distanceFromBottom);
 
         //if the size of the text exceeds the size of the message box then erase the last letter of the message so it fits
         while(inputText.getGlobalBounds().width > maxInputLength)
