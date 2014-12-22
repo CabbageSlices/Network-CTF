@@ -10,6 +10,14 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     //ensure the previous window has no view attached so the inputs don't get screwed up
     window.setView(window.getDefaultView());
 
+    //copy the current contents of the window that way the draw message can be drawn overtop of the window
+    sf::Texture currentWindow;
+    currentWindow.create(window.getSize().x, window.getSize().y);
+    currentWindow.update(window);
+
+    sf::Sprite currentWindowSprite;
+    currentWindowSprite.setTexture(currentWindow);
+
     //constant for specific unicodes
     const unsigned unicodeBackspace = 8;
     const unsigned unicodeEnter = 13;
@@ -104,6 +112,10 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
                 inputText.setString(input);
             }
         }
+
+        window.clear();
+
+        window.draw(currentWindowSprite);
 
         window.draw(messageBox);
         window.draw(inputMessage);
