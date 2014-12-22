@@ -9,6 +9,7 @@
 #include "TeamManager.h"
 #include "Block.h"
 #include "Gun.h"
+#include "ErrorMessage.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -37,8 +38,15 @@ using std::next;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
-    buttons(),
+    endMatchButtons(),
+    pausedMenuButtons(),
     resultToLobbyId(0),
+    resumeId(0),
+    quitMatch(1),
+    quitGame(2),
+    pausedTexture(),
+    pausedSprite(),
+    paused(false),
     currentState(STATE_PLAYING),
     client("70.71.114.74", 8080),
     userPlayer(),
@@ -49,10 +57,21 @@ ClientGameManager::ClientGameManager() :
     lastStateUpdateId(0),
     waitingForOthers(true)
     {
-        buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("returnToLobby.png")) );
+        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("returnToLobby.png")) );
 
         //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
-        placeButtons("victory.png", buttons);
+        placeButtons("victory.png", endMatchButtons);
+
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("resume.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitMatch.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitGame.png")) );
+
+        placeButtons("clientPaused.png", pausedMenuButtons);
+
+        pausedTexture.loadFromFile("clientPaused.png");
+        pausedSprite.setTexture(pausedTexture);
+
+
     }
 
 void ClientGameManager::setPlayerName(string name) {
@@ -127,6 +146,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
                 if(backButton.contains(mousePosition)) {
+
                     return;
                 }
 
@@ -158,6 +178,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
         if(dataReceiveTimer.getElapsedTime() > timeOutTime) {
 
             ///do something to draw that you've disconnected
+            displayError(window, "You have been disconnected\nfrom the server.");
             return;
         }
 
@@ -212,6 +233,18 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 //reset the data receive timer because the time will be very high right now
                 //and clients will get disconnected
                 dataReceiveTimer.restart();
+
+                //if the user player timed out it means the game finished because hwas disconnected so exit lobby
+                if(userPlayer.timedOut()) {
+
+                    return;
+                }
+
+            } else if(packetType == PLAYER_STATE_UPDATE || packetType == WORLD_STATE_UPDATE) {
+
+                //if the server sends a packet that should be sent in the middle of a game
+                //it means the client quit the game but is still connected to the server, so exit the lobby as well
+                return;
             }
         }
 
@@ -436,6 +469,13 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
 
     userPlayer.update(delta, sf::Vector2f(window.getSize().x, window.getSize().y));
     userPlayer.updateRotation(window.mapPixelToCoords(sf::Mouse::getPosition(window) ));
+
+    //if the player timed out return him to the lobby which will then end the match
+    if(userPlayer.timedOut()) {
+
+        displayError(window, "You have disconnected from\nthe server.");
+        exitGameLoop = true;
+    }
 }
 
 void ClientGameManager::updateConnectedPlayers(const float& delta) {
@@ -522,7 +562,12 @@ void ClientGameManager::playerForegroundCollision() {
 
 void ClientGameManager::checkButtons(const sf::Vector2f& mousePosition) {
 
-    for(auto& button : buttons) {
+    for(auto& button : endMatchButtons) {
+
+        button->checkMouseTouching(mousePosition);
+    }
+
+    for(auto& button : pausedMenuButtons) {
 
         button->checkMouseTouching(mousePosition);
     }
@@ -564,21 +609,46 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     score.handleEvents(event);
 
-    if(matchEnded) {
+    if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 
-        //check if user returned to lobby
-        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
 
-            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+        if(matchEnded) {
 
-            if(buttons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
+            if(endMatchButtons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
 
                 exitGameLoop = true;
             }
+
+            //don't handle other inputs if match has ended
+            return;
         }
 
-        //don't handle player input once game is over
-        return;
+        if(paused) {
+
+            if(pausedMenuButtons[resumeId]->checkMouseTouching(mousePosition)) {
+
+                paused = false;
+            }
+
+            if(pausedMenuButtons[quitMatch]->checkMouseTouching(mousePosition)) {
+
+                exitGameLoop = true;
+            }
+
+            if(pausedMenuButtons[quitGame]->checkMouseTouching(mousePosition)) {
+
+                window.close();
+            }
+
+            //don't handle player inputs if game is paused
+            return;
+        }
+    }
+
+    if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+
+        paused = !paused;
     }
 
     //handle the player's inputs
@@ -619,7 +689,10 @@ void ClientGameManager::updateTimeComponents(const float& delta, sf::RenderWindo
     //only update the player if he is alive
     if(userPlayer.isAlive()) {
 
-        updateUserPlayer(delta, window);
+        //if the game is paused then don't let the player move, do so by setting time as 0 so he can't move
+        float playerDelta = paused ? 0 : delta;
+
+        updateUserPlayer(playerDelta, window);
     }
 
     updateConnectedPlayers(delta);
@@ -681,7 +754,20 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
 
         window.draw(matchResultSprite);
 
-        buttons[resultToLobbyId]->draw(window);
+        endMatchButtons[resultToLobbyId]->draw(window);
+
+        //if match ended pausing doesn't matter
+        return;
+    }
+
+    if(paused) {
+
+        window.draw(pausedSprite);
+
+        for(auto& button : pausedMenuButtons) {
+
+            button->draw(window);
+        }
     }
 }
 

@@ -108,7 +108,8 @@ class PlayerBase {
 
         //make player interpolate from current position to the given position
         //called by several functions related to the player class and interpolationg player class
-        void setInterpolationPosition(const sf::Vector2f& position);
+        //you can also choose to not reset the data timer if you are interpolating wihtout using server data
+        void setInterpolationPosition(const sf::Vector2f& position, bool resetData = true);
 
         //interpolates from current position to given position
         //instead of jumping to the last destination postiion and interpolating from there

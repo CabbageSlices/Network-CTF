@@ -13,6 +13,7 @@
 #include "ButtonPlacer.h"
 #include "PredrawnButton.h"
 #include "Conversion.h"
+#include "ErrorMessage.h"
 
 #include <string>
 #include <iostream>
@@ -199,7 +200,8 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
                 player->readyToPlay = false;
             }
 
-            cout << "match ended" << endl;
+            //if here are no players connected it means the game ended because all players quit so let the server know that everyone quit
+            displayError(window, "All players have disconnected.");
         }
 
         window.clear();
@@ -700,6 +702,8 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
 
     //receive new data
     handleIncomingData();
+
+    //if there are no players or there is only one player then return to lobby
 
     //if all players are at the end game screen then server needs to return to the lobby
     if(allEndGameScreen()) {

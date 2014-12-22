@@ -13,6 +13,7 @@
 #include "ButtonPlacer.h"
 #include "PredrawnButton.h"
 #include "Conversion.h"
+#include "ErrorMessage.h"
 
 #include <string>
 #include <iostream>
@@ -199,7 +200,8 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
                 player->readyToPlay = false;
             }
 
-            cout << "match ended" << endl;
+            //if here are no players connected it means the game ended because all players quit so let the server know that everyone quit
+            displayError(window, "All players have disconnected.");
         }
 
         window.clear();
@@ -701,13 +703,15 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
     //receive new data
     handleIncomingData();
 
+    //if there are no players or there is only one player then return to lobby
+
     //if all players are at the end game screen then server needs to return to the lobby
     if(allEndGameScreen()) {
 
         exitGameLoop = true;
         return;
     }
-    
+
     //tell clients what the last input the server confirmed was
     if(inputConfirmationTime.getElapsedTime() > inputConfirmationDelay) {
 
@@ -719,19 +723,17 @@ void ServerGameManager::updateComponents(sf::RenderWindow& window) {
     //use the state update timer to send result packet
     if(isGameFinished()) {
 
-        if(inputConfirmationTime.getElapsedTime() > inputConfirmationDelay) {
-            
-            //also send a state update that way
+        if(stateUpdateTimer.getElapsedTime() > stateUpdateDelay) {
+
+            //also send an input confirmation update that way
             //clients can see everyones final scores
-            sendStateUpdates();
+            sendInputConfirmation();
             sendResultPackets();
         }
 
-        cout << "game finished" << endl;
-
         return;
     }
-    
+
     //send information about other players to connected clients
     //however if there are less than 2 players then theres no need to update them
     //because there are no other player's whose data must be sent

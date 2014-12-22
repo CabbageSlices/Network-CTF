@@ -105,8 +105,33 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
     //now get the next input in the queue and handle it
     processInput(getInputToProcess());*/
-    
-    
+
+    if(event.type == sf::Event::MouseButtonPressed) {
+
+        if(event.mouseButton.button == sf::Mouse::Left) {
+
+            gun->handleButtonPress();
+        }
+    }
+
+    if(event.type == sf::Event::MouseButtonReleased) {
+
+        if(event.mouseButton.button == sf::Mouse::Left) {
+
+            gun->handleButtonRelease();
+        }
+    }
+
+    if(event.type == sf::Event::KeyPressed) {
+
+        if(event.key.code == RELOAD_KEY) {
+
+            placeIntoQueue(createInput(RELOAD));
+        }
+    }
+
+    //only for reloading since gun ammo and stuff is kept track server side and its too much work to change all packet data just so player can reload client side
+    processInput(getInputToProcess());
 }
 
 void UserPlayer::handleStateEvents() {
@@ -130,10 +155,6 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
     //first remove all the old inputs, including the confirmed one because the new position of hte player given by the server
     //is the position of the player after the given input was processed so no need to process it again
     removeConfirmedInputs(lastConfirmedInputId);
-
-    //now that the old inputs have been removed, you have to handle all of the inputs starting from the last input that was processed because the player might be at a different position
-    //so the player has to reprocess the inputs to calculate its new state
-    ///currentInputId = lastConfirmedInputId + 1;
 
     //only let the server set the position if the player respawned because server determines respawn position,
     //or if the player uses a portal because both respawning and portals are handled server side
@@ -253,16 +274,11 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
-    ///pastHitBox.setPosition(destinationHitBox.getPosition());
-
-    //set the destination hitbox to the new position so the current hitbox and interpolate towards it over time
-    ///destinationHitBox.move(velocities.x * delta, velocities.y * delta);
-
     sf::Vector2f position = destinationHitBox.getPosition();
     position.x += velocities.x * delta;
     position.y += velocities.y * delta;
 
-    setInterpolationPosition(position);
+    setInterpolationPosition(position, false);
 
     updateGun(delta);
 }
@@ -272,6 +288,11 @@ void UserPlayer::updateRotation(const sf::Vector2f& mousePosition) {
     setRotation(calculateAngle(currentHitBox.getPosition(), mousePosition));
 }
 
+void UserPlayer::drawGunUI(const sf::Vector2f& position, sf::RenderWindow& window) {
+
+    gun->drawUI(position, window);
+}
+
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     gun->drawAll(window);
@@ -279,17 +300,17 @@ void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor)
 
 const float UserPlayer::getHorizontalVelocity() const {
 
-    return 200;
+    return 225;
 }
 
 const float UserPlayer::getVerticalVelocity() const {
 
-    return 200;
+    return 225;
 }
 
 const float UserPlayer::getVelocityReduction() const {
 
-    return 0.70;
+    return 1;
 }
 
 UserPlayer::Input UserPlayer::getInputToProcess() {

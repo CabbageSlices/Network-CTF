@@ -30,11 +30,26 @@ class ClientGameManager: public GameManager {
             STATE_PLAYING
         };
 
-        //buttons on any UI the client might have
-        std::vector<std::tr1::shared_ptr<PredrawnButton> > buttons;
+        //buttons on the end match screen
+        std::vector<std::tr1::shared_ptr<PredrawnButton> > endMatchButtons;
+
+        //buttons on the paused screen
+        std::vector<std::tr1::shared_ptr<PredrawnButton> > pausedMenuButtons;
 
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
+
+        //id for buttons that need to be pressed in the pause menu
+        unsigned resumeId;
+        unsigned quitMatch;
+        unsigned quitGame;
+
+        //image to display when user pauses the game
+        sf::Texture pausedTexture;
+
+        sf::Sprite pausedSprite;
+
+        bool paused;
 
         //textures to draw when the user either wins or loses
         //the texture is loaded when the player actually receives information about winning or losing

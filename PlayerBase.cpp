@@ -105,7 +105,7 @@ void PlayerBase::updateGun(const float& delta) {
     gun->animate();
 }
 
-void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
+void PlayerBase::setInterpolationPosition(const sf::Vector2f& position, bool resetData) {
 
     pastHitBox.setPosition(destinationHitBox.getPosition());
     destinationHitBox.setPosition(position);
@@ -117,8 +117,11 @@ void PlayerBase::setInterpolationPosition(const sf::Vector2f& position) {
         pastHitBox.setPosition(position);
     }
 
-    //if interpolation position is set it means its data sent from the server so restart the data recieve timer so player doens't time out
-    resetDataTimer();
+    if(resetData) {
+
+        //if interpolation position is set it means its data sent from the server so restart the data recieve timer so player doens't time out
+        resetDataTimer();
+    }
 }
 
 void PlayerBase::setInterpolationPositionV2(const sf::Vector2f& position) {
