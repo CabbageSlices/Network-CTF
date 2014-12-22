@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 
+class PredrawnButton;
 class Bullet;
 class InterpolatingPlayer;
 
@@ -28,6 +29,12 @@ class ClientGameManager: public GameManager {
             STATE_CONNECTING = 0,
             STATE_PLAYING
         };
+
+        //buttons on any UI the client might have
+        std::vector<std::tr1::shared_ptr<PredrawnButton> > buttons;
+
+        //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
+        unsigned resultToLobbyId;
 
         //textures to draw when the user either wins or loses
         //the texture is loaded when the player actually receives information about winning or losing
@@ -98,6 +105,9 @@ class ClientGameManager: public GameManager {
             textureToFill.loadFromFile("defeat.png");
         }
 
+        //go through all buttons and check if they're touching the mouse that way they darken out when mouse is hovering over them
+        void checkButtons(const sf::Vector2f& mousePosition);
+
     protected:
 
         //do anything that needs to be done before the game starts running
@@ -111,7 +121,11 @@ class ClientGameManager: public GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
 
-        virtual void handleStateEvents() {
+        virtual void handleStateEvents(sf::RenderWindow& window) {
+
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+            checkButtons(mousePosition);
 
             userPlayer.handleStateEvents();
         }

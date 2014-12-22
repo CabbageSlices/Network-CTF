@@ -156,10 +156,6 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
     //is the position of the player after the given input was processed so no need to process it again
     removeConfirmedInputs(lastConfirmedInputId);
 
-    //now that the old inputs have been removed, you have to handle all of the inputs starting from the last input that was processed because the player might be at a different position
-    //so the player has to reprocess the inputs to calculate its new state
-    ///currentInputId = lastConfirmedInputId + 1;
-
     //only let the server set the position if the player respawned because server determines respawn position,
     //or if the player uses a portal because both respawning and portals are handled server side
     bool respawned = (health.getCurrentHealth() == 0 && stateUpdate.health > 0);

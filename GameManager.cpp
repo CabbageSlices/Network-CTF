@@ -58,7 +58,7 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
         this->handleComponentInputs(event, window);
     }
 
-    this->handleStateEvents();
+    this->handleStateEvents(window);
 }
 
 void GameManager::handleCommonInputs(sf::Event& event, sf::RenderWindow& window) {

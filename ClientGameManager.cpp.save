@@ -14,6 +14,8 @@
 #include <iostream>
 #include <map>
 #include <iterator>
+#include "PredrawnButton.h"
+#include "ButtonPlacer.h"
 
 /**
 
@@ -35,6 +37,8 @@ using std::next;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
+    buttons(),
+    resultToLobbyId(0),
     currentState(STATE_PLAYING),
     client("70.71.114.74", 8080),
     userPlayer(),
@@ -45,7 +49,10 @@ ClientGameManager::ClientGameManager() :
     lastStateUpdateId(0),
     waitingForOthers(true)
     {
-
+        buttons.push_back(shared_ptr(new PredrawnButton("returnToLobby.png")) );
+        
+        //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
+        placeButtons("victory.png", buttons);
     }
 
 void ClientGameManager::setPlayerName(string name) {
@@ -120,8 +127,6 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
                 if(backButton.contains(mousePosition)) {
-
-                    cout << "Back pressed" << endl;
                     return;
                 }
 
@@ -204,9 +209,9 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 //reset the view that way you cna see the menu
                 window.setView(window.getDefaultView());
 
-                cout << "outside rungame" << endl;
-                
-                //reset the data receive timer because server
+                //reset the data receive timer because the time will be very high right now
+                //and clients will get disconnected
+                dataReceiveTimer.restart();
             }
         }
 
@@ -239,8 +244,6 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
         window.display();
     }
-
-    cout << "outside client lobby" << endl;
 }
 
 void ClientGameManager::interpolateEntities() {
@@ -412,7 +415,7 @@ void ClientGameManager::handleServerUpdates() {
         } else if(packetType == LOBBY_CONNECTION_INFO) {
 
             //servers at the lobby so client should return as well
-            exitGameLoop = true;
+            ///exitGameLoop = true;
         }
     }
 }
@@ -561,7 +564,20 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     //handle the player's inputs
     userPlayer.handleEvents(event);
-
+    
+    if(matchEnded) {
+        
+        //check if user returned to lobby
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+            
+            if(buttons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
+                
+                exitGameLoop = true;
+            }
+        }
+    }
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {
@@ -644,12 +660,6 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
         drawWaitingSymbol(window);
     }
-
-    //if the match is already over then draw the appropriate texture
-    if(matchEnded) {
-
-        window.draw(matchResultSprite);
-    }
 }
 
 void ClientGameManager::drawUI(sf::RenderWindow& window) {
@@ -660,6 +670,14 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
     }
 
     getHeadsUpDisplay().drawGunUI(window, userPlayer.getGun());
+    
+    //if the match is already over then draw the appropriate texture
+    if(matchEnded) {
+
+        window.draw(matchResultSprite);
+        
+        buttons[resultToLobbyId]->draw(window);
+    }
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {

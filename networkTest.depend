@@ -201,7 +201,7 @@
 	<vector>
 	<tr1/memory>
 
-1419216221 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1419274883 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"GameWorld.h"
@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1419216976 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1419275119 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -231,8 +231,10 @@
 	<iostream>
 	<map>
 	<iterator>
+	"PredrawnButton.h"
+	"ButtonPlacer.h"
 
-1419210408 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1419274883 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -277,7 +279,7 @@
 1419113923 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1419214909 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1419274883 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
 	"Minimap.h"
@@ -303,7 +305,7 @@
 	<cmath>
 	<cstdlib>
 
-1419217753 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1419274941 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -627,7 +629,7 @@
 	<vector>
 	<tr1/memory>
 
-1419215385 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1419273018 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
@@ -886,7 +888,7 @@
 	"ScoreDisplay.h"
 	"Conversion.h"
 
-1418855453 source:c:\users\nimesh\documents\github\network-ctf\input.cpp
+1419218921 source:c:\users\nimesh\documents\github\network-ctf\input.cpp
 	"SFML/Graphics.hpp"
 	"Input.h"
 

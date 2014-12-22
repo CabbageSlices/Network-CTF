@@ -14,6 +14,8 @@
 #include <iostream>
 #include <map>
 #include <iterator>
+#include "PredrawnButton.h"
+#include "ButtonPlacer.h"
 
 /**
 
@@ -35,6 +37,8 @@ using std::next;
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
+    buttons(),
+    resultToLobbyId(0),
     currentState(STATE_PLAYING),
     client("70.71.114.74", 8080),
     userPlayer(),
@@ -45,7 +49,10 @@ ClientGameManager::ClientGameManager() :
     lastStateUpdateId(0),
     waitingForOthers(true)
     {
+        buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("returnToLobby.png")) );
 
+        //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
+        placeButtons("victory.png", buttons);
     }
 
 void ClientGameManager::setPlayerName(string name) {
@@ -513,6 +520,14 @@ void ClientGameManager::playerForegroundCollision() {
     }
 }
 
+void ClientGameManager::checkButtons(const sf::Vector2f& mousePosition) {
+
+    for(auto& button : buttons) {
+
+        button->checkMouseTouching(mousePosition);
+    }
+}
+
 void ClientGameManager::setup(sf::RenderWindow& window) {
 
     //setup camera
@@ -549,15 +564,25 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     score.handleEvents(event);
 
-    //don't handle player input once game is over
     if(matchEnded) {
 
+        //check if user returned to lobby
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+            if(buttons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
+
+                exitGameLoop = true;
+            }
+        }
+
+        //don't handle player input once game is over
         return;
     }
 
     //handle the player's inputs
     userPlayer.handleEvents(event);
-
 }
 
 void ClientGameManager::updateComponents(sf::RenderWindow& window) {
@@ -640,12 +665,6 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
         drawWaitingSymbol(window);
     }
-
-    //if the match is already over then draw the appropriate texture
-    if(matchEnded) {
-
-        window.draw(matchResultSprite);
-    }
 }
 
 void ClientGameManager::drawUI(sf::RenderWindow& window) {
@@ -656,6 +675,14 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
     }
 
     getHeadsUpDisplay().drawGunUI(window, userPlayer.getGun());
+
+    //if the match is already over then draw the appropriate texture
+    if(matchEnded) {
+
+        window.draw(matchResultSprite);
+
+        buttons[resultToLobbyId]->draw(window);
+    }
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {

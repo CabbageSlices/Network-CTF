@@ -35,8 +35,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }
@@ -160,6 +160,13 @@ void findMatchScreen(sf::RenderWindow& window) {
                     }
 
                 } else if(connectBox.contains(mousePosition)) {
+
+                    //if the port is invalid then don't let player try to connect and make him enter a valid port
+                    if(!isDigit(serverPort.getString().toAnsiString())) {
+
+                        ///for now just ignore packet
+                        continue;
+                    }
 
                     ClientGameManager client;
                     client.setPlayerName(playerName.getString());
