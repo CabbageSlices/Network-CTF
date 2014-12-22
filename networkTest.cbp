@@ -50,6 +50,8 @@
 		<Unit filename="ConnectionManager.cpp" />
 		<Unit filename="ConnectionManager.h" />
 		<Unit filename="Conversion.h" />
+		<Unit filename="ErrorMessage.cpp" />
+		<Unit filename="ErrorMessage.h" />
 		<Unit filename="Flag.cpp" />
 		<Unit filename="Flag.h" />
 		<Unit filename="FlagManager.cpp" />
