@@ -7,6 +7,7 @@
 #include "FlagManager.h"
 
 #include <vector>
+#include <map>
 #include <tr1/memory>
 #include <string>
 
@@ -17,6 +18,12 @@ class Flag;
 class PlayerBase {
 
     protected:
+
+        enum DrawingState {
+
+            STANDING,
+            WALKING
+        };
 
         //id of this player, supplied by the server
         int playerId;
@@ -38,6 +45,16 @@ class PlayerBase {
         sf::Texture playerTexture;
 
         sf::Sprite playerSprite;
+
+        unsigned frame;
+
+        sf::Clock animationTimer;
+
+        sf::Time animationTime;
+
+        //connect the player's team to an animation clip
+        //key is player team, animation clips for that teams color
+        std::map<unsigned short, std::vector<sf::IntRect> > clips;
 
         //rotation of the player in degrees, interolates like the hitbox
         float pastRotation;
@@ -72,6 +89,8 @@ class PlayerBase {
         //current floor of the player, can only interact with others in the same floor
         unsigned short currentFloor;
 
+        void setupClips();
+
         //sets position without interpolation
         void setPosition(const sf::Vector2f& position);
 
@@ -87,6 +106,8 @@ class PlayerBase {
 
         //overload in inherited class to draw differnt part of guns
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) = 0;
+
+        virtual DrawingState getDrawingState() = 0;
 
     public:
 
@@ -119,6 +140,8 @@ class PlayerBase {
         ///time passed is what fraction of time has passed from the physics update to the next physics update, not the actual time passed
         void interpolate(const float& deltaFraction);
         void stopInterpolation();
+
+        void animate();
 
         void draw(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
 

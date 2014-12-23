@@ -53,6 +53,34 @@ class Minimap {
         //the view doesn't need to change because the size is dependent on the level size and the viewport is onlly used by the window
         void handleScreenResize(const sf::Vector2u& windowSize);
 
+        //sets the point that the minimap should zoom in on
+        void setTarget(const sf::Vector2f& target) {
+
+            view.setCenter(target);
+
+            //make sure the view doesn't go out of level bounds
+            //if its out of bounds move it onto the level
+            if(target.x - view.getSize().x / 2  < 0) {
+
+                view.move(view.getSize().x / 2 - target.x, 0);
+            }
+
+            if(target.y - view.getSize().y / 2 < 0) {
+
+                view.move(0, view.getSize().y / 2 - target.y);
+            }
+
+            if(target.x + view.getSize().x / 2 > levelSize.x) {
+
+                view.move(-((target.x + view.getSize().x / 2) - levelSize.x), 0);
+            }
+
+            if(target.y + view.getSize().y / 2 > levelSize.y) {
+
+                view.move(0, -((target.y + view.getSize().y / 2) - levelSize.y));
+            }
+        }
+
         void drawBorder(sf::RenderWindow& window);
 };
 

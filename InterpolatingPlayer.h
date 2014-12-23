@@ -16,6 +16,8 @@ class InterpolatingPlayer : public PlayerBase {
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor);
 
+        virtual DrawingState getDrawingState();
+
     public:
 
         InterpolatingPlayer();

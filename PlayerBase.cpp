@@ -19,12 +19,16 @@ using std::endl;
 PlayerBase::PlayerBase():
     playerId(0),
     teamId(1),
-    pastHitBox(sf::Vector2f(29, 35)),
+    pastHitBox(sf::Vector2f(31, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
     health(),
     playerTexture(),
     playerSprite(),
+    frame(0),
+    animationTimer(),
+    animationTime(sf::milliseconds(100)),
+    clips(),
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
@@ -42,6 +46,7 @@ PlayerBase::PlayerBase():
     maxInterpolationDist(260100),
     currentFloor(OVERGROUND_FLOOR)
     {
+        setupClips();
 
         //set the origin of the hit boxes to the center because player needs to rotate around the center
         pastHitBox.setOrigin(calculateCenter(pastHitBox.getGlobalBounds() ));
@@ -55,9 +60,11 @@ PlayerBase::PlayerBase():
         pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
         destinationHitBox.setFillColor(sf::Color(255, 0, 0, 100));
 
-        playerTexture.loadFromFile("player.png");
+        playerTexture.loadFromFile("character.png");
         playerSprite.setTexture(playerTexture);
-        playerSprite.setOrigin(calculateCenter(playerSprite.getGlobalBounds() ));
+
+        //default center based on image file of the character
+        playerSprite.setOrigin(sf::Vector2f(22, 26));
     }
 
 PlayerBase::~PlayerBase() {
@@ -175,6 +182,30 @@ void PlayerBase::stopInterpolation() {
     destinationHitBox.setPosition(currentHitBox.getPosition());
     pastHitBox.setPosition(currentHitBox.getPosition());
     destinationRotation = pastRotation;
+}
+
+void PlayerBase::animate() {
+
+    if(animationTimer.getElapsedTime() > animationTime) {
+
+        frame += 1;
+
+        if(frame > clips[TEAM_A_ID].size() - 1) {
+
+            frame = 0;
+        }
+
+        animationTimer.restart();
+    }
+
+    //if player is standing still always set the frame to 0
+    if(getDrawingState() == STANDING) {
+
+        frame = 0;
+    }
+
+    //set the current clip onto the sprite in order to draw it
+    playerSprite.setTextureRect(clips[teamId][frame]);
 }
 
 void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
@@ -385,6 +416,32 @@ void PlayerBase::setCaptures(const unsigned short& amount) {
 void PlayerBase::setReturns(const unsigned short& amount) {
 
     flagReturns = amount;
+}
+
+void PlayerBase::setupClips() {
+
+    //all positions are based on the image of the player sprite itself
+    clips[TEAM_B_ID] = vector<sf::IntRect>();
+
+    clips[TEAM_B_ID].push_back(sf::IntRect(3, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(66, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(129, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(192, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(255, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(318, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(381, 3, 59, 43));
+    clips[TEAM_B_ID].push_back(sf::IntRect(444, 3, 59, 43));
+
+    clips[TEAM_A_ID] = vector<sf::IntRect>();
+
+    clips[TEAM_A_ID].push_back(sf::IntRect(3, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(66, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(129, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(192, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(255, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(318, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(381, 50, 59, 43));
+    clips[TEAM_A_ID].push_back(sf::IntRect(444, 50, 59, 43));
 }
 
 void PlayerBase::setPosition(const sf::Vector2f& position) {

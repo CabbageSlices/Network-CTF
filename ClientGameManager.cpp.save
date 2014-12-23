@@ -146,7 +146,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
                 if(backButton.contains(mousePosition)) {
-                        
+
                     return;
                 }
 
@@ -178,7 +178,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
         if(dataReceiveTimer.getElapsedTime() > timeOutTime) {
 
             ///do something to draw that you've disconnected
-            displayError(window, "You have been disconnected from\nthe server.")
+            displayError(window, "You have been disconnected\nfrom the server.");
             return;
         }
 
@@ -233,6 +233,12 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                 //reset the data receive timer because the time will be very high right now
                 //and clients will get disconnected
                 dataReceiveTimer.restart();
+
+                //if the user player timed out it means the game finished because hwas disconnected so exit lobby
+                if(userPlayer.timedOut()) {
+
+                    return;
+                }
 
             } else if(packetType == PLAYER_STATE_UPDATE || packetType == WORLD_STATE_UPDATE) {
 
@@ -467,7 +473,7 @@ void ClientGameManager::updateUserPlayer(const float& delta, sf::RenderWindow& w
     //if the player timed out return him to the lobby which will then end the match
     if(userPlayer.timedOut()) {
 
-        displayError(window, "You have disconnected from the\nserver.");
+        displayError(window, "You have disconnected from\nthe server.");
         exitGameLoop = true;
     }
 }
@@ -699,6 +705,8 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
         return;
     }
+    
+    animateEntities();
 
     //linearly interpolate all entities to their destination positions
     interpolateEntities();

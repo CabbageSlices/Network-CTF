@@ -279,6 +279,16 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
     }
 }
 
+void ClientGameManager::animateEntities() {
+
+    userPlayer.animate();
+
+    for(auto& player : connectedPlayers) {
+
+        player->animate();
+    }
+}
+
 void ClientGameManager::interpolateEntities() {
 
     ///delta fraction for user player and other players are different
@@ -706,8 +716,13 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
         return;
     }
 
+    animateEntities();
+
     //linearly interpolate all entities to their destination positions
     interpolateEntities();
+
+    //make the minimap centerd on the player
+    getHeadsUpDisplay().getMinimap().setTarget(userPlayer.getCurrentPosition());
 
     //apply camera before setting the center that way camera is already resized before it is set in the center
     //because applycamera causes camera to zoom in or out if the camera started zooming
@@ -717,7 +732,8 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
     ///currently there is no level bounds or properties so just give some default level properties for now
     if(userPlayer.isAlive()) {
 
-        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top));
+        ///level size if hard coded
+        camera.setCameraCenter(sf::Vector2f(userPlayer.getCollisionBox().left, userPlayer.getCollisionBox().top), sf::Vector2f(3968, 1472));
     }
 }
 

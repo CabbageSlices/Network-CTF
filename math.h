@@ -20,6 +20,7 @@ float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoi
 
 //calculate the center point of a given rectangle
 sf::Vector2f calculateCenter(const sf::FloatRect& rect);
+sf::Vector2f calculateCenter(const sf::IntRect& rect);
 
 //normally generate a random number within the range
 //[max - 1 + min, min] where the left side is the maximum number generated, and the right side is the minimum
@@ -32,5 +33,7 @@ sf::Vector2f calculateCenter(const sf::FloatRect& rect);
 int getRand(int max, int min);
 
 bool compareFloats(const float& float1, const float& float2, const float differenceThreshold = 0.25);
+
+bool compareFloatRects(const sf::FloatRect& rect1, const sf::FloatRect& rect2);
 
 #endif // MATH_H_INCLUDED

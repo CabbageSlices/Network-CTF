@@ -140,6 +140,8 @@ class UserPlayer : public PlayerBase{
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
 
+        virtual DrawingState getDrawingState();
+
     public:
 
         UserPlayer();

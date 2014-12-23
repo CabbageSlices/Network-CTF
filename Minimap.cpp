@@ -24,11 +24,9 @@ Minimap::Minimap(const sf::Vector2u& windowSize):
 
 void Minimap::setLevelSize(const sf::Vector2f& size) {
 
+    //keep the aspect ratio of the level on the minimap but make it more zoomed in
     levelSize = size;
-    view.setSize(levelSize);
-
-    //center the view at the center of the level
-    view.setCenter(levelSize.x / 2, levelSize.y / 2);
+    view.setSize(levelSize.x / 2.5, levelSize.y / 2.5);
 }
 
 void Minimap::applyMinimap(sf::RenderWindow& window) const {

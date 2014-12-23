@@ -86,6 +86,8 @@ class ClientGameManager: public GameManager {
         //whether player is waiting for other players to get to the game screen
         bool waitingForOthers;
 
+        void animateEntities();
+
         //interpolate all entities to their new position so drawing looks smooth, the delta fraction is different for each type of entity
         void interpolateEntities();
 

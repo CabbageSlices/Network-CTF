@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 Shotgun::Shotgun() :
-    Gun(15, 400, sf::milliseconds(1000), 35),
+    Gun(15, 400, sf::milliseconds(1000), 30),
     bulletsPerShot(5),
     bulletsFired(0)
     {

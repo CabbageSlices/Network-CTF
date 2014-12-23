@@ -1,5 +1,6 @@
 #include "InterpolatingPlayer.h"
 #include "Gun.h"
+#include "math.h"
 
 InterpolatingPlayer::InterpolatingPlayer():
     PlayerBase()
@@ -21,4 +22,14 @@ void InterpolatingPlayer::fireGun(const sf::Vector2f& bulletBegin, const sf::Vec
 void InterpolatingPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
     gun->drawBullets(window, drawingFloor);
+}
+
+PlayerBase::DrawingState InterpolatingPlayer::getDrawingState() {
+
+    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds())) {
+
+        return STANDING;
+    }
+
+    return WALKING;
 }

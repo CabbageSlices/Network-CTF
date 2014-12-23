@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1419289498 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1419363819 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -235,7 +235,7 @@
 	"PredrawnButton.h"
 	"ButtonPlacer.h"
 
-1419285474 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1419362801 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -273,7 +273,7 @@
 	<tr1/memory>
 	<string>
 
-1417294404 c:\users\nimesh\documents\github\network-ctf\math.h
+1419363029 c:\users\nimesh\documents\github\network-ctf\math.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
@@ -301,7 +301,7 @@
 1405145331 c:\users\nimesh\documents\github\network-ctf\undefinedlinesegment.h
 	"LineSegment.h"
 
-1417294403 source:c:\users\nimesh\documents\github\network-ctf\math.cpp
+1419363029 source:c:\users\nimesh\documents\github\network-ctf\math.cpp
 	"math.h"
 	<cmath>
 	<cstdlib>
@@ -593,27 +593,29 @@
 1412214729 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1417310223 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
+1419362538 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
 	"InterpolatingPlayer.h"
 	"Gun.h"
+	"math.h"
 
-1418954295 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
+1419362384 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1419289734 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1419362384 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
 	"FlagManager.h"
 	<vector>
+	<map>
 	<tr1/memory>
 	<string>
 
-1419289734 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1419363442 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -625,14 +627,14 @@
 	"TeamManager.h"
 	<iostream>
 
-1419120595 c:\users\nimesh\documents\github\network-ctf\userplayer.h
+1419362384 c:\users\nimesh\documents\github\network-ctf\userplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1419289749 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1419362574 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
@@ -674,7 +676,7 @@
 	"math.h"
 	<iostream>
 
-1407694758 c:\users\nimesh\documents\github\network-ctf\camera.h
+1419364808 c:\users\nimesh\documents\github\network-ctf\camera.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
@@ -771,11 +773,11 @@
 	"UserPlayer.h"
 	"math.h"
 
-1416975713 c:\users\nimesh\documents\github\network-ctf\minimap.h
+1419364639 c:\users\nimesh\documents\github\network-ctf\minimap.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1416975821 source:c:\users\nimesh\documents\github\network-ctf\minimap.cpp
+1419363959 source:c:\users\nimesh\documents\github\network-ctf\minimap.cpp
 	"Minimap.h"
 
 1407778954 c:\users\nimesh\documents\github\network-ctf\floors.h
@@ -798,7 +800,7 @@
 1419121129 c:\users\nimesh\documents\github\network-ctf\shotgun.h
 	"Gun.h"
 
-1419121500 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
+1419360219 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
 	"Shotgun.h"
 	<iostream>
 

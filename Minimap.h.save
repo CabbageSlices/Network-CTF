@@ -7,6 +7,7 @@
 /*
 size of the minimap is dependent on the size of the minimap texture
 however its not based on the size of the image, just the size of the viewing region alloted in the image file
+the size is represented by viewAreaSize
 */
 class Minimap {
 
@@ -51,6 +52,29 @@ class Minimap {
         //if window is resized the minimap border needs to be resized and repositioned
         //the view doesn't need to change because the size is dependent on the level size and the viewport is onlly used by the window
         void handleScreenResize(const sf::Vector2u& windowSize);
+
+        //sets the point that the minimap should zoom in on
+        void setTarget(const sf::Vector2f& target) {
+
+            view.setCenter(target);
+            
+            //make sure the view doesn't go out of level bounds
+            //if its out of bounds move it onto the level
+            if(target.x - view.getSize().x / 2  < 0) {
+                
+                view.move(view.getSize().x / 2 - target.x, 0);
+            }
+            
+            if(target.y - view.getSize().y / 2 < 0) {
+                
+                view.move(0, view.getSize().y - target.y);
+            }
+            
+            if(target.x + view.getSize().x / 2 > levelSize.x) {
+                
+                view.move()
+            }
+        }
 
         void drawBorder(sf::RenderWindow& window);
 };

@@ -48,10 +48,30 @@ const sf::FloatRect Camera::getCameraBounds(const sf::Vector2f& cameraCenter) co
     return bounds;
 }
 
-void Camera::setCameraCenter(const sf::Vector2f& targetCenter) {
+void Camera::setCameraCenter(const sf::Vector2f& targetCenter, const sf::Vector2f& worldBounds) {
 
     //set the camera properties
     view.setCenter(targetCenter);
+
+    if(targetCenter.x - view.getSize().x / 2  < 0) {
+
+        view.move(view.getSize().x / 2 - targetCenter.x, 0);
+    }
+
+    if(targetCenter.y - view.getSize().y / 2 < 0) {
+
+        view.move(0, view.getSize().y / 2 - targetCenter.y);
+    }
+
+    if(targetCenter.x + view.getSize().x / 2 > worldBounds.x) {
+
+        view.move(-((targetCenter.x + view.getSize().x / 2) - worldBounds.x), 0);
+    }
+
+    if(targetCenter.y + view.getSize().y / 2 > worldBounds.y) {
+
+        view.move(0, -((targetCenter.y + view.getSize().y / 2) - worldBounds.y));
+    }
 }
 
 void Camera::setDefaultSize(sf::RenderWindow& window) {

@@ -86,6 +86,13 @@ sf::Vector2f calculateCenter(const sf::FloatRect& rect) {
     return center;
 }
 
+sf::Vector2f calculateCenter(const sf::IntRect& rect) {
+
+    sf::FloatRect rect1(rect.left, rect.top, rect.width, rect.height);
+
+    return calculateCenter(rect1);
+}
+
 int getRand(int max, int min) {
 
     //if max == 0 you will divide by 0 and it will crash the program so if max is 0 then return 0
@@ -107,4 +114,12 @@ int getRand(int max, int min) {
 bool compareFloats(const float& float1, const float& float2, const float differenceThreshold) {
 
     return abs(float1 - float2) < differenceThreshold;
+}
+
+bool compareFloatRects(const sf::FloatRect& rect1, const sf::FloatRect& rect2) {
+
+    bool samePositions = compareFloats(rect1.left, rect2.left) && compareFloats(rect1.top, rect2.top);
+    bool sameSizes = compareFloats(rect1.width, rect2.width) && compareFloats(rect1.height, rect2.height);
+
+    return samePositions && sameSizes;
 }

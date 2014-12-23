@@ -298,6 +298,16 @@ void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor)
     gun->drawAll(window);
 }
 
+PlayerBase::DrawingState UserPlayer::getDrawingState() {
+
+    if(velocities.x == 0 && velocities.y == 0) {
+
+        return STANDING;
+    }
+
+    return WALKING;
+}
+
 const float UserPlayer::getHorizontalVelocity() const {
 
     return 225;
