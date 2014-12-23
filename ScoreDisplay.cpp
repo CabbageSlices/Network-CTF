@@ -22,6 +22,11 @@ ScoreDisplay::ScoreDisplay(const sf::Vector2u& screenSize):
         blueScore.setFont(font);
         blueScore.setScale(TEXT_SCALE, TEXT_SCALE);
 
+        //make everything transparent so players can see
+        scoreSprite.setColor(sf::Color(255, 255, 255, 150));
+        redScore.setColor(sf::Color(255, 255, 255, 150));
+        blueScore.setColor(sf::Color(255, 255, 255, 150));
+
         positionDisplay(screenSize);
     }
 

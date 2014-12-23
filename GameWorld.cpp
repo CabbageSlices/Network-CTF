@@ -166,7 +166,7 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
         block->draw(window);
     }*/
 
-    for(auto& portal : floors[floor]->portals) {
+    /*for(auto& portal : floors[floor]->portals) {
 
         portal->draw(window, floor);
     }
@@ -174,7 +174,7 @@ void GameWorld::drawBackground(sf::RenderWindow& window, const unsigned& floor) 
     for(auto& gunGiver : floors[floor]->gunGivers) {
 
         gunGiver->draw(window);
-    }
+    }*/
 
     flagManager->draw(window, floor);
 }

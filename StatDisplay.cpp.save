@@ -1,5 +1,6 @@
 #include "StatDisplay.h"
 #include "Conversion.h"
+#include "Gun.h"
 
 using std::string;
 using std::tr1::shared_ptr;
@@ -42,6 +43,12 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
         totalAmmo.setScale(TEXT_SCALE, TEXT_SCALE);
         totalAmmo.setString("0");
         totalAmmo.setColor(sf::Color(66, 40, 57));
+        
+        //add transparency to everything that way player can see through it all
+        playerName.setColor(sf::Color(255, 255, 255, 150));
+        usedAmmo.setColor(sf::Color(255, 255, 255, 150));
+        availableAmmo.setColor(sf::Color(255, 255, 255, 150));
+        statDisplaySprite.setColor(sf::Color(255, 255, 255, 150));
 
         handleScreenResize(screenSize);
     }
@@ -75,7 +82,7 @@ void StatDisplay::setPlayerAmmo(const int currentAmmo, const int maxUsableAmmo, 
     totalAmmo.setString(toString(playerTotalAmmo));
 }
 
-void StatDisplay::draw(sf::RenderWindow& window, shared_ptr<Gun> playerGun) {
+void StatDisplay::draw(sf::RenderWindow& window) {
 
     healthBar.draw(window);
     window.draw(statDisplaySprite);

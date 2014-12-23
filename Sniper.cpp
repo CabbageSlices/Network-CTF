@@ -19,6 +19,8 @@ Sniper::Sniper() :
         uiTexture.loadFromFile("sniperUI.png");
         uiSprite.setTexture(uiTexture);
 
+        uiSprite.setColor(sf::Color(255, 255, 255, 150));
+
         setupClips();
     }
 

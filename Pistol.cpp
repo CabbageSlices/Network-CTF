@@ -6,6 +6,7 @@ Pistol::Pistol() :
         //load the texture for the ui
         uiTexture.loadFromFile("pistolUI.png");
         uiSprite.setTexture(uiTexture);
+        uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
         setupClips();
     }

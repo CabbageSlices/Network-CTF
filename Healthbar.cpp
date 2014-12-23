@@ -9,9 +9,10 @@ HealthBar::HealthBar(const float barWidth, const float barHeight) :
     MAX_HEIGHT(barHeight)
     {
         maxHealthBar.setSize(sf::Vector2f(MAX_WIDTH, MAX_HEIGHT));
-        maxHealthBar.setFillColor(sf::Color::Red);
+        maxHealthBar.setFillColor(sf::Color(255, 0, 0, 175));
 
-        currentHealthBar.setFillColor(sf::Color::Green);
+        currentHealthBar.setSize(sf::Vector2f(MAX_WIDTH, MAX_HEIGHT));
+        currentHealthBar.setFillColor(sf::Color(0, 255, 0, 175));
     }
 
 void HealthBar::setCurrentHealth(const int& value) {

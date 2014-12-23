@@ -44,6 +44,12 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
         totalAmmo.setString("0");
         totalAmmo.setColor(sf::Color(66, 40, 57));
 
+        //add transparency to everything that way player can see through it all
+        playerName.setColor(sf::Color(255, 255, 255, 150));
+        usedAmmo.setColor(sf::Color(255, 255, 255, 150));
+        availableAmmo.setColor(sf::Color(255, 255, 255, 150));
+        statDisplaySprite.setColor(sf::Color(255, 255, 255, 225));
+
         handleScreenResize(screenSize);
     }
 

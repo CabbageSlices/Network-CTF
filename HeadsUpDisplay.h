@@ -47,7 +47,7 @@ class HeadsUpDisplay {
         void draw(sf::RenderWindow& window) {
 
             statDisplay.draw(window);
-            minimap.drawBorder(window);
+            ///minimap.drawBorder(window);
             scoreDisplay.draw(window);
         }
 

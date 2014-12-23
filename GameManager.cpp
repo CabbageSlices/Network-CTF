@@ -139,7 +139,7 @@ void GameManager::drawUI(sf::RenderWindow& window) {
 
     headsUpDisplay.draw(window);
 
-    GameManager::drawMinimap(window);
+    ///GameManager::drawMinimap(window);
 
     //derived class UI
     this->drawUI(window);
