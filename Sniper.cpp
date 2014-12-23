@@ -7,6 +7,7 @@ Sniper::Sniper() :
     accuracyChangeRate(8),
     accuracyRange(sf::Triangles, 3)
     {
+        originToLine = sf::Vector2f(38, 3);
         maxCurrentMagazine = 2;
         maxTotalMagazine = 10;
         currentMagazine = maxCurrentMagazine;
@@ -17,6 +18,8 @@ Sniper::Sniper() :
         //load the texture for the ui
         uiTexture.loadFromFile("sniperUI.png");
         uiSprite.setTexture(uiTexture);
+
+        setupClips();
     }
 
 void Sniper::handleButtonPress() {
@@ -77,6 +80,23 @@ GunTypes Sniper::getGunType() {
 bool Sniper::canIncreaseAccuracy() {
 
     return timeSinceFired > fireDelay && holdingFireButton && !mustReload();
+}
+
+void Sniper::setupClips() {
+
+    //height on the image where the animations for this gun begins
+    float animationHeight = 97;
+
+    standingClips.push_back(sf::IntRect(3, animationHeight, 59, 43));
+
+    reloadingClips.push_back(sf::IntRect(318, animationHeight, 59, 43));
+    reloadingClips.push_back(sf::IntRect(381, animationHeight, 59, 43));
+    reloadingClips.push_back(sf::IntRect(444, animationHeight, 59, 43));
+
+    shootingClips.push_back(sf::IntRect(66, animationHeight, 59, 43));
+    shootingClips.push_back(sf::IntRect(129, animationHeight, 59, 43));
+    shootingClips.push_back(sf::IntRect(192, animationHeight, 59, 43));
+    shootingClips.push_back(sf::IntRect(255, animationHeight, 59, 43));
 }
 
 void Sniper::updateLineOfSight(const sf::Vector2f& origin) {

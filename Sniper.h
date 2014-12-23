@@ -31,6 +31,8 @@ class Sniper : public Gun {
 
         bool canIncreaseAccuracy();
 
+        void setupClips();
+
     protected:
 
         virtual void updateLineOfSight(const sf::Vector2f& origin);

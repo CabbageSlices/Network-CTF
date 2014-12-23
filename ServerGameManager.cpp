@@ -201,7 +201,10 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
             }
 
             //if here are no players connected it means the game ended because all players quit so let the server know that everyone quit
-            displayError(window, "All players have disconnected.");
+            if(players.size() == 0) {
+
+                displayError(window, "All players have disconnected.");
+            }
         }
 
         window.clear();

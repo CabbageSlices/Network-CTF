@@ -213,10 +213,10 @@ void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    this->drawGun(window, drawingFloor);
-
     window.draw(currentHitBox);
     window.draw(playerSprite);
+
+    this->drawGun(window, drawingFloor);
 
     health.draw(window);
 }

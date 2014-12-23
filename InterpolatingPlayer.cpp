@@ -21,6 +21,7 @@ void InterpolatingPlayer::fireGun(const sf::Vector2f& bulletBegin, const sf::Vec
 
 void InterpolatingPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
+    gun->drawGun(window);
     gun->drawBullets(window, drawingFloor);
 }
 

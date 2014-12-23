@@ -5,6 +5,10 @@
 
 class Pistol : public Gun {
 
+    private:
+
+        void setupClips();
+
     public:
 
         Pistol();

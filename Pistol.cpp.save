@@ -6,6 +6,23 @@ Pistol::Pistol() :
         //load the texture for the ui
         uiTexture.loadFromFile("pistolUI.png");
         uiSprite.setTexture(uiTexture);
-        uiSprite.setOrigin(uiSprite.getLocalBounds().width / 2, uiSprite.getLocalBounds().height / 2);
+
+        setupClips();
     }
 
+void Pistol::setupClips() {
+
+    //height on the image where the animations for this gun begins
+    float animationHeight = 191;
+
+    standingClips.push_back(sf::IntRect(3, animationHeight, 59, 43));
+
+    shootingClips.push_back(sf::FloatRect(318, animationHeight, 59, 43));
+    shootingClips.push_back(sf::FloatRect(381, animationHeight, 59, 43));
+    shootingClips.push_back(sf::FloatRect(444, animationHeight, 59, 43));
+
+    reloadingClips.push_back(sf::FloatRect(66, animationHeight, 59, 43));
+    reloadingClips.push_back(sf::FloatRect(129, animationHeight, 59, 43));
+    reloadingClips.push_back(sf::FloatRect(192, animationHeight, 59, 43));
+    reloadingClips.push_back(sf::FloatRect(255, animationHeight, 59, 43));
+}

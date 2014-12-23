@@ -18,6 +18,9 @@ float radiansToDegrees(const float& angleInRadians);
 //returns the squared distance between two points
 float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoint);
 
+//rotate the given vector by the given angle in radians
+const sf::Vector2f& rotate(const sf::Vector2f& vec, const float& rotation);
+
 //calculate the center point of a given rectangle
 sf::Vector2f calculateCenter(const sf::FloatRect& rect);
 sf::Vector2f calculateCenter(const sf::IntRect& rect);

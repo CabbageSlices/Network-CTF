@@ -21,6 +21,13 @@ class Gun {
 
     protected:
 
+        enum DrawingState {
+
+            STANDING,
+            SHOOTING,
+            RELOADING
+        };
+
         //line used to show direction of player's aim
         ///the position of the first point of the line of sight is also the position of the gun
         ///and the origin of all bullets
@@ -33,6 +40,11 @@ class Gun {
         sf::Texture uiTexture;
 
         sf::Sprite uiSprite;
+
+        //the distance from the position of the gun to the begining point of the line of sight
+        //when the gun has a rotation of 0.
+        //this is use dto calculate the new location of the line of sight once gun is rotated
+        sf::Vector2f originToLine;
 
         //bullets that have been fired
         std::vector<std::tr1::shared_ptr<Bullet> > bullets;
@@ -64,6 +76,9 @@ class Gun {
         //flag to determine if the gun is being fired
         bool fired;
 
+        //the shooting animation should only play if the gun creates a bullet so create a flag for creating bullets
+        bool createdBullet;
+
         //timer to keep track of how long it has been since the gun was last fired
         //time is accumulated through the delta time sent by update loop
         sf::Time timeSinceFired;
@@ -90,16 +105,24 @@ class Gun {
 
         bool reloading;
 
+        sf::Texture texture;
+        sf::Sprite sprite;
+
+        //clips for every type of animation
+        std::vector<sf::IntRect> standingClips;
+        std::vector<sf::IntRect> shootingClips;
+        std::vector<sf::IntRect> reloadingClips;
+
         sf::Clock animationTimer;
 
         //time to move from one frame of animation to then ext
-        sf::Time frameTime;
+        sf::Time animationTime;
 
         //current frame of animtion
         int frame;
 
-        ///temporary counters, number of frames for reloading animation in order to reload and have psuedo animations
-        const int reloadingFrameCount;
+        //get the container of clips for the animation that is currently playing
+        std::vector<sf::IntRect>& getCurrentClips();
 
         //calculate the end point of the bullet once fired
         sf::Vector2f calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const;
@@ -154,6 +177,9 @@ class Gun {
         void animate();
 
         void drawAll(sf::RenderWindow& window);
+
+        //draws the image of the gun, without sights or bullets
+        void drawGun(sf::RenderWindow& window);
 
         //draw gun's line of sight
         virtual void drawSight(sf::RenderWindow& window);

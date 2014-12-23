@@ -18,6 +18,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     lineTexture(),
     uiTexture(),
     uiSprite(),
+    originToLine(21, 3),
     bullets(),
     bulletsForClients(),
     MAX_DISTANCE_FIRED(maxDist),
@@ -25,6 +26,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     accuracyModifier(accuracyMod),
     queuedRotations(),
     fired(false),
+    createdBullet(false),
     timeSinceFired(sf::seconds(0)),
     fireDelay(firingDelay),
     floor(OVERGROUND_FLOOR),
@@ -35,9 +37,8 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     totalMagazine(maxTotalMagazine),
     reloading(false),
     animationTimer(),
-    frameTime(sf::milliseconds(100)),
-    frame(0),
-    reloadingFrameCount(7)
+    animationTime(sf::milliseconds(150)),
+    frame(0)
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0));
@@ -45,6 +46,12 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
         lineOfSight[1].texCoords = sf::Vector2f(100, 0);
 
         lineTexture.loadFromFile("texture.png");
+
+        texture.loadFromFile("character.png");
+        sprite.setTexture(texture);
+
+        //default center for sprite based on character image
+        sprite.setOrigin(sf::Vector2f(22, 26));
     }
 
 void Gun::handleButtonPress() {
@@ -93,15 +100,22 @@ void Gun::updateBullets(const sf::Time& delta) {
 void Gun::updateRotation(const sf::Vector2f& playerPosition, const float& playerRotation) {
 
     rotation = playerRotation;
-    updateLineOfSight(playerPosition);
+
+    //the line of sight should be slightly in front of the gun because bullets shouldn't be coming from the player's center
+    sf::Vector2f lineOfSightPosition = playerPosition + rotate(originToLine, -playerRotation);
+
+    updateLineOfSight(lineOfSightPosition);
+
+    sprite.setRotation(-playerRotation);
+    sprite.setPosition(playerPosition);
 }
 
 bool Gun::reload() {
 
     if(canReload()) {
 
-        reloading = true;
         resetAnimation();
+        reloading = true;
 
         return true;
     }
@@ -111,21 +125,34 @@ bool Gun::reload() {
 
 void Gun::animate() {
 
-    //check if the number of frames exceeds the frame count for whatever animation is playing
-    if(reloading) {
+    //get the clips of the current animation
+    vector<sf::IntRect>& currentAnimation = getCurrentClips();
 
-        //increase the frame count if needed
-        if(animationTimer.getElapsedTime() > frameTime) {
+    //increase the frame count if needed
+    if(animationTimer.getElapsedTime() > animationTime) {
 
-            frame++;
-            animationTimer.restart();
-        }
+        frame++;
+        animationTimer.restart();
+    }
 
-        if(frame > reloadingFrameCount) {
+    //if the player reloads on the client side and the server takes longer to reload then his ammo might be refilled in the middle of the reloading animation
+    //if it happens then he will be reloading with full ammo, so stop him from running the reload animation if he has full ammo
+    if(currentMagazine == maxCurrentMagazine && reloading) {
+
+        resetAnimation();
+    }
+
+    if(frame > currentAnimation.size() - 1) {
+
+        frame = 0;
+
+        if(reloading) {
 
             finishReloading();
-            resetAnimation();
         }
+
+        //reset to standing animation, other animations are triggered by events so it will always return to the normal animation after an animation is finished
+        resetAnimation();
     }
 }
 
@@ -133,6 +160,15 @@ void Gun::drawAll(sf::RenderWindow& window) {
 
     drawSight(window);
     drawBullets(window, floor);
+    drawGun(window);
+}
+
+void Gun::drawGun(sf::RenderWindow& window) {
+
+    //get the latest texture rect
+    sprite.setTextureRect(getCurrentClips()[frame]);
+
+    window.draw(sprite);
 }
 
 void Gun::drawSight(sf::RenderWindow& window) {
@@ -281,6 +317,21 @@ void Gun::updateLineOfSight(const sf::Vector2f& origin) {
     lineOfSight[1].position = endPoint;
 }
 
+vector<sf::IntRect>& Gun::getCurrentClips() {
+
+    if(reloading) {
+
+        return reloadingClips;
+    }
+
+    if(createdBullet) {
+
+        return shootingClips;
+    }
+
+    return standingClips;
+}
+
 sf::Vector2f Gun::calculateEndPoint(const sf::Vector2f& beginPoint, const float& angle) const {
 
     //using the angle you can figure out the x and y components of the
@@ -309,6 +360,9 @@ void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bull
     shared_ptr<Bullet> bullet(new Bullet(bulletLine, bulletFloor, bulletDamage));
 
     bullets.push_back(bullet);
+
+    //a bullet was just created
+    createdBullet = true;
 }
 
 const float Gun::getAccuracyModifier() const {
@@ -342,6 +396,9 @@ void Gun::resetAnimation() {
 
     animationTimer.restart();
     frame = 0;
+
+    reloading = false;
+    createdBullet = false;
 }
 
 bool Gun::canReload() const {

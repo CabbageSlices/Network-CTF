@@ -30,10 +30,11 @@ class Sniper : public Gun {
         void drawAccuracyRange(sf::RenderWindow& window);
 
         bool canIncreaseAccuracy();
-        bool canFireGun();
+        
+        void setupClips();
 
     protected:
-        
+
         virtual void updateLineOfSight(const sf::Vector2f& origin);
         virtual const float getAccuracyModifier() const;
 
@@ -46,6 +47,10 @@ class Sniper : public Gun {
         virtual void handleButtonRelease();
 
         virtual void updateGunfire(const sf::Time& delta);
+
+        virtual void drawSight(sf::RenderWindow& window);
+
+        virtual GunTypes getGunType();
 };
 
 #endif // SNIPER_H_INCLUDED

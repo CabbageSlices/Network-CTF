@@ -11,7 +11,7 @@ class Shotgun : public Gun {
         //no matter the damage done by the shotgun bullets if you're hit by all of them
         //you should get killed
         const int bulletsPerShot;
-        
+
         //each magazine of a shotgun fires multiple bullets
         //however when a single bullet is fired the ammo count goes down
         //because the server handles each shot individully
@@ -20,8 +20,10 @@ class Shotgun : public Gun {
         //amount of bullets a shotgun needs to fire in order to reduce current magazine count is equal to bulletspershot
         int bulletsFired;
         
+        void setup();
+
     protected:
-        
+
         virtual void useAmmo();
 
     public:
@@ -30,6 +32,8 @@ class Shotgun : public Gun {
         virtual ~Shotgun(){}
 
         virtual void updateGunfire(const sf::Time& delta);
+
+        virtual GunTypes getGunType();
 };
 
 #endif // SHOTGUN_H_INCLUDED

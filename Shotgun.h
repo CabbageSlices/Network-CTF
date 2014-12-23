@@ -20,6 +20,8 @@ class Shotgun : public Gun {
         //amount of bullets a shotgun needs to fire in order to reduce current magazine count is equal to bulletspershot
         int bulletsFired;
 
+        void setupClips();
+
     protected:
 
         virtual void useAmmo();

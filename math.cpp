@@ -3,6 +3,8 @@
 #include <cstdlib>
 
 using std::abs;
+using std::sin;
+using std::cos;
 
 const float PI = 3.14159265;
 
@@ -75,6 +77,18 @@ float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoi
     float vertical = endPoint.y - beginPoint.y;
 
     return horizontal * horizontal + vertical * vertical;
+}
+
+const sf::Vector2f& rotate(const sf::Vector2f& vec, const float& rotation) {
+
+    float rot = degreesToRadians(rotation);
+
+    sf::Vector2f newVec(0, 0);
+
+    newVec.x = vec.x * (cos(rot)) + vec.y * (-sin(rot));
+    newVec.y = vec.x * (sin(rot)) + vec.y * (cos(rot));
+
+    return newVec;
 }
 
 sf::Vector2f calculateCenter(const sf::FloatRect& rect) {
