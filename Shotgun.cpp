@@ -61,7 +61,6 @@ void Shotgun::setupClips() {
     shootingClips.push_back(sf::IntRect(66, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(129, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(192, animationHeight, 59, 43));
-    shootingClips.push_back(sf::IntRect(255, animationHeight, 59, 43));
 
 }
 

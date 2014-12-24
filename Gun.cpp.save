@@ -37,7 +37,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     totalMagazine(maxTotalMagazine),
     reloading(false),
     animationTimer(),
-    animationTime(sf::milliseconds(100)),
+    animationTime(sf::milliseconds(150)),
     frame(0)
     {
         //set a default location for the line of sight
@@ -154,13 +154,6 @@ void Gun::animate() {
         //reset to standing animation, other animations are triggered by events so it will always return to the normal animation after an animation is finished
         resetAnimation();
     }
-
-    //once an animation ends it resets to the standing still animation
-    //however the clips being used will be from the animation that just finished
-    //so you need to get the current clip again because it might change if an animation finished
-    currentAnimation = getCurrentClips();
-
-    sprite.setTextureRect(currentAnimation[frame]);
 }
 
 void Gun::drawAll(sf::RenderWindow& window) {
@@ -171,6 +164,9 @@ void Gun::drawAll(sf::RenderWindow& window) {
 }
 
 void Gun::drawGun(sf::RenderWindow& window) {
+
+    //get the latest texture rect
+    sprite.setTextureRect(getCurrentClips()[frame]);
 
     window.draw(sprite);
 }
