@@ -12,13 +12,13 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
     usedAmmoTexture(),
     availableAmmo(),
     usedAmmo(),
-    NAME_OFFSET(94, 24),
+    NAME_OFFSET(94, 22),
     HEALTH_OFFSET(104, 48),
     AMMO_OFFSET_CURRENT(103, 61),
     AMMO_OFFSET_TOTAL(184, 61),
     healthBar(91, 12),
     font(),
-    TEXT_SCALE(0.35),
+    TEXT_SCALE(0.4),
     playerName(),
     totalAmmo()
     {
@@ -95,10 +95,7 @@ void StatDisplay::draw(sf::RenderWindow& window) {
 
 void StatDisplay::drawGunUI(sf::RenderWindow& window, shared_ptr<Gun> playerGun) {
 
-    //the offsets from the top left of the statDisplay is based on the image file, so use that
-    sf::Vector2f gunOffset(8, 0);
-
-    playerGun->drawUI(gunOffset + statDisplaySprite.getPosition(), window);
+    playerGun->drawUI(statDisplaySprite.getPosition(), window);
 }
 
 void StatDisplay::setupComponentPositions() {

@@ -15,12 +15,13 @@ must change all function pointers to member function pointers
 */
 
 Scoreboard::Scoreboard():
-    NAME_OFFSET(18),
-    KILLS_OFFSET(139),
-    DEATHS_OFFSET(176),
-    CAPTURES_OFFSET(242),
-    RETURNS_OFFSET(313),
+    NAME_OFFSET(55),
+    KILLS_OFFSET(228),
+    DEATHS_OFFSET(260),
+    CAPTURES_OFFSET(164),
+    RETURNS_OFFSET(196),
     TEXT_SCALE(0.4),
+    NAME_SCALE(0.2),
     font(),
     TOGGLE_DISPLAY_KEY(sf::Keyboard::Tab),
     drawDisplay(false),
@@ -31,7 +32,7 @@ Scoreboard::Scoreboard():
     {
         scoreTexture.loadFromFile("scoreboard.png");
         scoreSprite.setTexture(scoreTexture);
-        scoreSprite.setColor(sf::Color(255, 255, 255, 100));
+        scoreSprite.setColor(sf::Color(255, 255, 255, 175));
 
         font.loadFromFile("font.ttf");
     }
@@ -102,10 +103,10 @@ void Scoreboard::positionInfo(vector<shared_ptr<InfoToDisplay> >& teamInfo, floa
         //each peice of information on the scoreboard has its own offset from the edge of the screen
 
         //distance from the top of the scoreboard to the first character info slot
-        const float scoreboardTopThickness = 67;
+        const float scoreboardTopThickness = 127;
 
         //used to calculate the vertical position of all info
-        const float characterSlotHeight = 64;
+        const float characterSlotHeight = 48;
 
         shared_ptr<InfoToDisplay>& info = teamInfo[index];
 

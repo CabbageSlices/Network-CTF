@@ -42,6 +42,9 @@ class Scoreboard {
         //all text in the scoreboard is too big so it must be scaled by this factor
         const float TEXT_SCALE;
 
+        //the name should be scaled by a different factor since its longer than the other texts
+        const float NAME_SCALE;
+
         sf::Font font;
 
         //the key player needs to press in order to bring up the display
@@ -146,10 +149,10 @@ std::tr1::shared_ptr<Scoreboard::InfoToDisplay> Scoreboard::createInfo(Player& p
 
     std::tr1::shared_ptr<InfoToDisplay> newInfo(new InfoToDisplay);
 
-    sf::Color translucent(255, 255, 255, 100);
+    sf::Color translucent(255, 255, 255, 175);
 
     newInfo->name.setFont(font);
-    newInfo->name.setScale(TEXT_SCALE, TEXT_SCALE);
+    newInfo->name.setScale(NAME_SCALE, TEXT_SCALE);
     newInfo->name.setColor(translucent);
     newInfo->name.setString(player.getName());
 

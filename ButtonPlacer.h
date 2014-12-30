@@ -7,7 +7,9 @@
 #include "SFML/Graphics.hpp"
 
 //color of the pixel which indicates a button should be placed there
-//all button colors must have a transparancy of 255, or be completely opaque
+//THE ONLY PART OF THE COLOUR THAT IS COMPARED IS THE TRANSPARECNY
+//THAT WAY THE ACTUAL IMAGE FILE DOESN'T HAVE A RANDOM SECTION THATS A COMPLETELY DIFFERENT COLOR FROM REST OF THE IMAGE
+//GIMPS TRANSPARECNY FOR BUTTONS SHOULD BE 99%, WHICH IS 253 IN CODE
 extern const sf::Color BUTTON_DOT;
 
 //color to replace the button dot color with once a button is placed
@@ -39,7 +41,7 @@ void placeButtons(const std::string& imagePath, std::vector<ButtonPointer>& butt
 
             //the beginning of a button dot was found so now you have to calculate the center of the dot
             //in addition you also have to remove the entire dot that way you won't find it again on the next loop
-            if(image.getPixel(pixelXPos, pixelYPos) == BUTTON_DOT) {
+            if(image.getPixel(pixelXPos, pixelYPos).a == BUTTON_DOT.a) {
 
                 sf::Vector2f buttonCenter = removeDot(image, pixelXPos, pixelYPos);
 

@@ -35,7 +35,7 @@ PlayerBase::PlayerBase():
     gun(new Pistol()),
     flagBeingHeld(),
     dataReceiveTimer(),
-    maxNoData(sf::seconds(3)),
+    maxNoData(sf::seconds(6)),
     respawnTimer(),
     respawnDelay(sf::seconds(7)),
     playerName("Name"),

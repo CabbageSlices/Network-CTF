@@ -41,6 +41,7 @@ class ClientGameManager: public GameManager {
 
         //id for buttons that need to be pressed in the pause menu
         unsigned resumeId;
+        unsigned controlsId;
         unsigned quitMatch;
         unsigned quitGame;
 

@@ -79,7 +79,7 @@ float distanceToPoint(const sf::Vector2f& beginPoint, const sf::Vector2f& endPoi
     return horizontal * horizontal + vertical * vertical;
 }
 
-const sf::Vector2f& rotate(const sf::Vector2f& vec, const float& rotation) {
+const sf::Vector2f rotate(const sf::Vector2f& vec, const float& rotation) {
 
     float rot = degreesToRadians(rotation);
 

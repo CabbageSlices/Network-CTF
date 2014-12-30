@@ -11,6 +11,7 @@
 #include <tr1/memory>
 
 class Bullet;
+class PredrawnButton;
 
 class ServerGameManager : public GameManager {
 
@@ -40,6 +41,16 @@ class ServerGameManager : public GameManager {
         };
 
     private:
+
+        //image to display while game is running
+        sf::Texture inGameTexture;
+        sf::Sprite inGameSprite;
+
+        //buttons that can be pressed while game is running
+        std::vector<std::tr1::shared_ptr<PredrawnButton> > inGameButtons;
+
+        unsigned endMatch;
+        unsigned quitGame;
 
         //server connection manager to send and receive data
         ConnectionManager server;
@@ -179,6 +190,8 @@ class ServerGameManager : public GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window);
 
+        virtual void handleStateEvents(sf::RenderWindow& window);
+
         virtual void updateComponents(sf::RenderWindow& window);
 
         //updates objects that behave according to delta time
@@ -190,7 +203,7 @@ class ServerGameManager : public GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
 
-        virtual void drawUI(sf::RenderWindow& window) {}
+        virtual void drawUI(sf::RenderWindow& window);
         virtual void drawMinimap(sf::RenderWindow& window) {}
 
         virtual const unsigned getFloor() const;
@@ -208,5 +221,7 @@ class ServerGameManager : public GameManager {
 
         void gameLobby(sf::RenderWindow& window);
 };
+
+void serverHelpMenu(sf::RenderWindow& window);
 
 #endif // SERVERGAMEMANAGER_H_INCLUDED

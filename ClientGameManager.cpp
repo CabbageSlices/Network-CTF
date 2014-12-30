@@ -42,8 +42,9 @@ ClientGameManager::ClientGameManager() :
     pausedMenuButtons(),
     resultToLobbyId(0),
     resumeId(0),
-    quitMatch(1),
-    quitGame(2),
+    controlsId(1),
+    quitMatch(2),
+    quitGame(3),
     pausedTexture(),
     pausedSprite(),
     paused(false),
@@ -57,20 +58,20 @@ ClientGameManager::ClientGameManager() :
     lastStateUpdateId(0),
     waitingForOthers(true)
     {
-        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("returnToLobby.png")) );
+        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("continueButton.png")) );
 
         //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
         placeButtons("victory.png", endMatchButtons);
 
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("resume.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitMatch.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitGame.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("resumeButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("controlsButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitMatchButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")) );
 
         placeButtons("clientPaused.png", pausedMenuButtons);
 
         pausedTexture.loadFromFile("clientPaused.png");
         pausedSprite.setTexture(pausedTexture);
-
 
     }
 
@@ -98,9 +99,17 @@ bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPo
 
 void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
+    //save the previous screen, that way this screen can just draw overtop of it
+    sf::Texture previousScreen;
+    previousScreen.create(window.getSize().x, window.getSize().y);
+    previousScreen.update(window);
+
+    sf::Sprite previousScreenSprite;
+    previousScreenSprite.setTexture(previousScreen);
+
     //load the image of the game lobby
     sf::Texture lobbyTexture;
-    lobbyTexture.loadFromFile("lobbyMenu.png");
+    lobbyTexture.loadFromFile("lobby.png");
 
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
@@ -110,15 +119,38 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
     vector<sf::Text> redTeam;
     vector<sf::Text> blueTeam;
 
+    //containers for red and blue boxes which are drawn underneath each team members name in the lobby
+    vector<sf::Sprite> redBoxes;
+    vector<sf::Sprite> blueBoxes;
+
+    //texture for the red and blue boxes
+    sf::Texture teamBoxTexture;
+    teamBoxTexture.loadFromFile("teamSelect.png");
+
+    //clips for the red and blue team's colored boxes in the teamboxtexture
+    sf::IntRect redClip(0, 0, 255, 41);
+    sf::IntRect blueClip(0, 47, 255, 41);
+
     //size of box for each player name in the lobby image
-    sf::Vector2f nameBoxSize(279, 52);
+    sf::Vector2f nameBoxSize(255, 48);
 
-    //position on the lobby image where first name is displayed
-    sf::Vector2f firstNamePosition(49, 84);
+    //position on the lobby image where first name red team's name is displayed
+    sf::Vector2f firstRedName(241, 297);
+    sf::Vector2f firstBlueName(536, 297);
 
-    //the different buttons users can press
-    sf::FloatRect backButton(512, 4, 125, 61);
-    sf::FloatRect switchTeamsButton(249, 334, 147, 65);
+    ///the actual player's names should be a bit farther in on to name box
+    ///this is the offset from the name slot to the name position
+    sf::Vector2f nameOffset(10, 10);
+
+    vector<shared_ptr<PredrawnButton> > buttons;
+
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("switchTeams.png")));
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("backButton.png")));
+
+    unsigned switchTeams = 0;
+    unsigned backButton = 1;
+
+    placeButtons("lobby.png", buttons);
 
     sf::Event event;
 
@@ -126,7 +158,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
     window.setView(window.getDefaultView());
 
     sf::Clock dataReceiveTimer;
-    sf::Time timeOutTime = sf::seconds(3);
+    sf::Time timeOutTime = sf::seconds(6);
 
     //timer to send heartbeat packets to server
     sf::Clock heartbeatTimer;
@@ -145,12 +177,12 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-                if(backButton.contains(mousePosition)) {
+                if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
                     return;
                 }
 
-                if(switchTeamsButton.contains(mousePosition)) {
+                if(buttons[switchTeams]->checkMouseTouching(mousePosition)) {
 
                     sf::Packet packet;
 
@@ -160,6 +192,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                     client.sendToServer(packet);
                 }
             }
+        }
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+        for(auto& button : buttons) {
+
+            button->checkMouseTouching(mousePosition);
         }
 
         if(heartbeatTimer.getElapsedTime() > heartBeatTime) {
@@ -193,6 +232,8 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
                 redTeam.clear();
                 blueTeam.clear();
+                redBoxes.clear();
+                blueBoxes.clear();
 
                 //first read the number of points required to win
                 packet >> pointsToWinGame;
@@ -210,15 +251,28 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
                     sf::Text nameText;
                     nameText.setFont(font);
                     nameText.setString(playerName);
-                    nameText.setScale(0.70, 0.70);
+                    nameText.setScale(0.50, 0.50);
+                    nameText.setColor(sf::Color::Black);
 
                     if(team == TEAM_A_ID) {
 
                         redTeam.push_back(nameText);
 
+                        sf::Sprite redBox;
+                        redBox.setTexture(teamBoxTexture);
+                        redBox.setTextureRect(redClip);
+
+                        redBoxes.push_back(redBox);
+
                     } else {
 
                         blueTeam.push_back(nameText);
+
+                        sf::Sprite blueBox;
+                        blueBox.setTexture(teamBoxTexture);
+                        blueBox.setTextureRect(blueClip);
+
+                        blueBoxes.push_back(blueBox);
                     }
                 }
 
@@ -248,22 +302,42 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
             }
         }
 
+
+
         //set the position of all names so that they line up with the boxes in the image file
         for(unsigned i = 0; i < redTeam.size(); i++) {
 
+            sf::Vector2f position(firstRedName.x, firstRedName.y + i * nameBoxSize.y);
+
             sf::Text& name = redTeam[i];
-            name.setPosition(firstNamePosition.x, firstNamePosition.y + i * nameBoxSize.y);
+            name.setPosition(position + nameOffset);
+            redBoxes[i].setPosition(position);
         }
 
         for(unsigned int i = 0; i < blueTeam.size(); i++) {
 
+            sf::Vector2f position(firstBlueName.x, firstBlueName.y + i * nameBoxSize.y);
+
             sf::Text& name = blueTeam[i];
-            name.setPosition(firstNamePosition.x + nameBoxSize.x, firstNamePosition.y + i * nameBoxSize.y);
+            name.setPosition(position + nameOffset);
+            blueBoxes[i].setPosition(position);
         }
 
         window.clear();
 
+        window.draw(previousScreenSprite);
+
         window.draw(lobbySprite);
+
+        for(auto& clip : redBoxes) {
+
+            window.draw(clip);
+        }
+
+        for(auto& clip : blueBoxes) {
+
+            window.draw(clip);
+        }
 
         for(auto& name : redTeam) {
 
@@ -273,6 +347,11 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
         for(auto& name : blueTeam) {
 
             window.draw(name);
+        }
+
+        for(auto& button : buttons) {
+
+            button->draw(window);
         }
 
         window.display();
@@ -432,6 +511,8 @@ void ClientGameManager::handleServerUpdates() {
                 getHeadsUpDisplay().getScoreDisplay().setBlueScore(pointsToWinGame);
             }
 
+            userPlayer.resetDataTimer();
+
         } else if(packetType == DEFEAT) {
 
             if(matchEnded == false) {
@@ -455,10 +536,22 @@ void ClientGameManager::handleServerUpdates() {
                 getHeadsUpDisplay().getScoreDisplay().setRedScore(pointsToWinGame);
             }
 
+            userPlayer.resetDataTimer();
+
         } else if(packetType == LOBBY_CONNECTION_INFO) {
 
-            //servers at the lobby so client should return as well
-            ///exitGameLoop = true;
+            ///servers at the lobby so client should return as well
+            ///but only if the client is not at the game over screen, because once the game is over the server
+            ///automatically returns to lobby but the client should stay at the game over screen
+            if(!matchEnded) {
+
+                exitGameLoop = true;
+
+            } else {
+
+                //if the match has ended then jsut use this packet as a "heartbeat" from the server so client knows he is still connected
+                userPlayer.resetDataTimer();
+            }
         }
     }
 }
@@ -740,6 +833,12 @@ void ClientGameManager::handlePostUpdate(sf::RenderWindow& window) {
 void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     //if player is waiting for others don't draw the screen
+    if(waitingForOthers) {
+
+        return;
+
+    }
+
     userPlayer.draw(window);
 
     for(auto& player : connectedPlayers) {
@@ -749,14 +848,16 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
             player->draw(window, userPlayer.getFloor());
         }
     }
-
-    if(waitingForOthers) {
-
-        drawWaitingSymbol(window);
-    }
 }
 
 void ClientGameManager::drawUI(sf::RenderWindow& window) {
+
+    //if player is waiting for others don't draw the screen
+    if(waitingForOthers) {
+
+        return;
+
+    }
 
     if(score.canDisplayInfo()) {
 

@@ -1,28 +1,42 @@
 #include "ButtonPlacer.h"
 #include "SFML/Graphics.hpp"
 
-const sf::Color BUTTON_PIXEL = sf::Color(174, 29, 113, 255);
+const sf::Color BUTTON_DOT = sf::Color(174, 29, 113, 253);
+const sf::Color REPLACEMENT_COLOR = sf::Color(173, 28, 112, 255);
 
-using std::string;
-using std::vector;
+sf::Vector2f removeDot(sf::Image& image, const unsigned& startingXPosition, const unsigned& startingYPosition) {
 
-void placeButtons(const string& imagePath, vector<Button>& buttons) {
+    sf::FloatRect dotBoundingBox(startingXPosition, startingYPosition, 0, 0);
 
-    sf::Image image;
-    image.loadFromFile(imagePath);
-    
-    unsigned buttonsIndex = 0;
-    
-    for(unsigned pixelYPos = 0; pixelYPos < image.getSize().y && buttonsIndex < buttons.size(); ++pixelYPos) {
+    //dot is always a square so starting from the given position
+    //first figure out size of the dot that way later you can replace the dot with a different color
+    //scan left and scan down to determine how long the dot is on each axis
 
-        for(unsigned pixelXPos = 0; pixelXPos < image.getSize().x && buttonsIndex < buttons.size(); ++pixelXPos) {
+    //determine width
+    for(unsigned xPos = startingXPosition; (xPos < image.getSize().x) && image.getPixel(xPos, startingYPosition).a == BUTTON_DOT.a; ++xPos) {
 
-            if(image.getPixel(pixelXPos, pixelYPos) == BUTTON_PIXEL) {
-                    
-                //a button pixel was found so take the current button being placed, and center it at this position, then move on to the next button
-                buttons[buttonsIndex].setCenter(pixelXPos, pixelYPos);
-                buttonsIndex += 1;
-            }
+        //every pixel that is the same color as the dot lets you increase the width by 1
+        dotBoundingBox.width += 1;
+    }
+
+    //determine height
+    for(unsigned yPos = startingYPosition; yPos < image.getSize().y && image.getPixel(startingXPosition, yPos).a == BUTTON_DOT; ++yPos) {
+
+        //every pixel that is the same color as the dot lets you increase the heighth by 1
+        dotBoundingBox.height += 1;
+    }
+
+    //now replace the dot with the other color
+    for(unsigned yPos = startingYPosition; (yPos - startingYPosition) <= dotBoundingBox.height; ++yPos) {
+
+        for(unsigned xPos = startingXPosition; (xPos - startingXPosition) <= dotBoundingBox.width; ++xPos) {
+
+            image.setPixel(xPos, yPos, REPLACEMENT_COLOR);
         }
     }
+
+    //now calculate the center and return it
+    sf::Vector2f center(dotBoundingBox.left + dotBoundingBox.width / 2, dotBoundingBox.top + dotBoundingBox.height / 2);
+
+    return center;
 }

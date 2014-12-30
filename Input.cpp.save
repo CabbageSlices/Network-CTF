@@ -5,7 +5,7 @@ using std::string;
 
 string exitedFunction = "~/*//@#$?<>";
 
-string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font)
+string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font, const float& maxTextLengt, const sf::Vector2f& scaleFactor)
 {
     //ensure the previous window has no view attached so the inputs don't get screwed up
     window.setView(window.getDefaultView());
@@ -14,7 +14,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     sf::Texture currentWindow;
     currentWindow.create(window.getSize().x, window.getSize().y);
     currentWindow.update(window);
-    
+
     sf::Sprite currentWindowSprite;
     currentWindowSprite.setTexture(currentWindow);
 
@@ -48,7 +48,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     messageBox.setPosition(window.getSize().x / 2 - messageBox.getSize().x / 2, window.getSize().y / 2 - messageBox.getSize().y / 2);
 
     ///set the max size of the input to ensure the input isn't too long, length in pixels so it's not a character limit
-    const float maxInputLength = messageBox.getGlobalBounds().width * 0.8;
+    const float maxInputLength = maxTextLength;
 
     //message asking user to input
     sf::Text inputMessage;
@@ -57,6 +57,9 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     inputMessage.setScale(textScale, textScale);
     inputMessage.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputMessage.getGlobalBounds().width / 2,
                              messageBox.getGlobalBounds().top + 10);
+
+    //offset from the bottom of the message box to display the player's input that way its not on the borders of the inputbox
+    float distanceFromBottom = 80;
 
     sf::Event event;
 
@@ -101,7 +104,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
         //set the message and place the text at the center of the message box
         inputText.setString(input);
         inputText.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputText.getGlobalBounds().width / 2,
-                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - inputText.getGlobalBounds().height * 4);
+                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - distanceFromBottom);
 
         //if the size of the text exceeds the size of the message box then erase the last letter of the message so it fits
         while(inputText.getGlobalBounds().width > maxInputLength)
@@ -115,7 +118,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
 
         window.clear();
 
-        window.draw(currentWindow);
+        window.draw(currentWindowSprite);
 
         window.draw(messageBox);
         window.draw(inputMessage);

@@ -5,7 +5,7 @@ using std::string;
 
 string exitedFunction = "~/*//@#$?<>";
 
-string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font)
+string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font, const float& maxTextLength, const float& scale)
 {
     //ensure the previous window has no view attached so the inputs don't get screwed up
     window.setView(window.getDefaultView());
@@ -29,7 +29,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     sf::Text inputText;
     inputText.setFont(font);
 
-    const float textScale = 0.6;
+    const float textScale = scale;
 
     inputText.setScale(textScale, textScale);
     inputText.setColor(sf::Color::Blue);
@@ -48,7 +48,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     messageBox.setPosition(window.getSize().x / 2 - messageBox.getSize().x / 2, window.getSize().y / 2 - messageBox.getSize().y / 2);
 
     ///set the max size of the input to ensure the input isn't too long, length in pixels so it's not a character limit
-    const float maxInputLength = messageBox.getGlobalBounds().width * 0.8;
+    const float maxInputLength = maxTextLength;
 
     //message asking user to input
     sf::Text inputMessage;

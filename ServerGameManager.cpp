@@ -25,7 +25,85 @@ using std::tr1::shared_ptr;
 using std::vector;
 using std::string;
 
+void serverHelpMenu(sf::RenderWindow& window) {
+
+    //save the previous screen to draw it as a background
+    sf::Texture previousScreen;
+    previousScreen.create(window.getSize().x, window.getSize().y);
+    previousScreen.update(window);
+
+    sf::Sprite previousScreenSprite;
+    previousScreenSprite.setTexture(previousScreen);
+
+    window.setView(window.getDefaultView());
+
+    //load the image for the help menu
+    sf::Texture helpTexture;
+    helpTexture.loadFromFile("serverHelpScreen.png");
+
+    sf::Sprite helpSprite;
+    helpSprite.setTexture(helpTexture);
+
+    vector<shared_ptr<PredrawnButton> > buttons;
+
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+
+    placeButtons("serverHelpScreen.png", buttons);
+
+    unsigned backButton = 0;
+
+    sf::Event event;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+                if(buttons[backButton]->checkMouseTouching(mousePosition)) {
+
+                    return;
+                }
+            }
+
+        }
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+        for(auto& button : buttons) {
+
+            button->checkMouseTouching(mousePosition);
+        }
+
+
+        window.clear();
+
+        window.draw(previousScreenSprite);
+
+        window.draw(helpSprite);
+
+        for(auto& button : buttons) {
+
+            button->draw(window);
+        }
+
+        window.display();
+    }
+}
+
 ServerGameManager::ServerGameManager() :
+    inGameTexture(),
+    inGameSprite(),
+    inGameButtons(),
+    endMatch(0),
+    quitGame(1),
     GameManager(),
     server(false),
     players(),
@@ -37,10 +115,24 @@ ServerGameManager::ServerGameManager() :
     lastPlayerId(0),
     teamManager()
     {
+        inGameTexture.loadFromFile("serverInGame.png");
+        inGameSprite.setTexture(inGameTexture);
 
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("endMatch.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitGame.png")));
+
+        placeButtons("serverInGame.png", inGameButtons);
     }
 
 void ServerGameManager::gameLobby(sf::RenderWindow& window) {
+
+    //save the previous screen to draw it as a background
+    sf::Texture previousScreen;
+    previousScreen.create(window.getSize().x, window.getSize().y);
+    previousScreen.update(window);
+
+    sf::Sprite previousScreenSprite;
+    previousScreenSprite.setTexture(previousScreen);
 
     window.setView(window.getDefaultView());
 
@@ -51,20 +143,19 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
 
-    sf::FloatRect startGameButton(199, 341, 237, 57);
-    sf::FloatRect quitButton(513, 4, 126, 63);
-
-    //buttons to increase and decrease the amount of points required to win the game
-    shared_ptr<PredrawnButton> decreasePointsButton(new PredrawnButton("decreaseArrow.png"));
-    shared_ptr<PredrawnButton> increasePointsButton(new PredrawnButton("increaseArrow.png"));
-
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(decreasePointsButton);
-    buttons.push_back(increasePointsButton);
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("helpButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("startButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("decreaseArrow.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("increaseArrow.png")));
 
     //indices to access buttons
-    unsigned decreasePoints = 0;
-    unsigned increasePoints = 1;
+    unsigned helpButton = 0;
+    unsigned startButton = 1;
+    unsigned backButton = 2;
+    unsigned decreasePoints = 3;
+    unsigned increasePoints = 4;
 
     placeButtons("serverLobby.png", buttons);
 
@@ -80,16 +171,61 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
     //text that represents how many points you need to win
     //position is based on the image file
+    sf::Vector2f defaultPointsPosition(317, 666);
+
     sf::Text pointsText;
     pointsText.setFont(font);
     pointsText.setString(toString(pointsToWinGame));
-    pointsText.setPosition(47, 368);
-    pointsText.setScale(0.7, 0.7);
-    pointsText.setColor(sf::Color::Blue);
+    pointsText.setPosition(defaultPointsPosition);
+    pointsText.setScale(0.6, 0.6);
+    pointsText.setColor(sf::Color::Black);
 
     //whether the server should start sending game start packets
     //sends at the same rate as the data send timer
     bool sendGameStarts = false;
+
+    //names of each player in their respective teams to draw onto the screen
+    //has no use what so ever outside the lobby
+    vector<sf::Text> redTeam;
+    vector<sf::Text> blueTeam;
+
+    //containers for red and blue boxes which are drawn underneath each team members name in the lobby
+    vector<sf::Sprite> redBoxes;
+    vector<sf::Sprite> blueBoxes;
+
+    //texture for the red and blue boxes
+    sf::Texture teamBoxTexture;
+    teamBoxTexture.loadFromFile("teamSelect.png");
+
+    //clips for the red and blue team's colored boxes in the teamboxtexture
+    sf::IntRect redClip(0, 0, 255, 41);
+    sf::IntRect blueClip(0, 47, 255, 41);
+
+    //size of box for each player name in the lobby image
+    sf::Vector2f nameBoxSize(255, 48);
+
+    ///the actual player's names should be a bit farther in on to name box
+    ///this is the offset from the name slot to the name position
+    sf::Vector2f nameOffset(10, 10);
+
+    //position on the lobby image where first name red team's name is displayed
+    sf::Vector2f firstRedName(241, 417);
+    sf::Vector2f firstBlueName(536, 417);
+
+    //text representation of the server's public and local ip
+    sf::Text localIp;
+    localIp.setFont(font);
+    localIp.setScale(0.55, 0.6);
+    localIp.setColor(sf::Color::Black);
+    localIp.setString(sf::IpAddress::getLocalAddress().toString());
+    localIp.setPosition(472, 279);
+
+    sf::Text publicIp;
+    publicIp.setFont(font);
+    publicIp.setScale(0.55, 0.6);
+    publicIp.setColor(sf::Color::Black);
+    publicIp.setString(sf::IpAddress::getPublicAddress().toString());
+    publicIp.setPosition(472, 335);
 
     while(window.isOpen()) {
 
@@ -103,22 +239,25 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
             //only let the user start the game if there is a player on each team
              if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 
-                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
 
                 bool enoughPlayers = (teamManager.getPlayerCount(TEAM_A_ID) > 0) && (teamManager.getPlayerCount(TEAM_B_ID) > 0);
 
-                if(startGameButton.contains(mousePosition) && enoughPlayers && everyoneInLobby()) {
+                if(buttons[startButton]->checkMouseTouching(mousePosition) && enoughPlayers && everyoneInLobby()) {
 
                     sendGameStarts = true;
 
-                } else if(quitButton.contains(mousePosition)) {
+                } else if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
                     return;
+
+                } else if(buttons[helpButton]->checkMouseTouching(mousePosition)) {
+
+                    serverHelpMenu(window);
                 }
 
                 //don't let user change amount of points requried to win game
                 //if he already started the game
-
                 if(buttons[decreasePoints]->checkMouseTouching(mousePosition) && !sendGameStarts) {
 
                     pointsToWinGame = pointsToWinGame > 1 ? pointsToWinGame - 1 : 1;
@@ -133,6 +272,18 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
              }
         }
 
+        //if there is more than one digit in the points text then make it smaller horizontally, and move it to the left that way it can fit into the text box
+        if(pointsText.getString().getSize() > 1) {
+
+            pointsText.setScale(0.38, 0.6);
+            pointsText.setPosition(defaultPointsPosition.x - 1, defaultPointsPosition.y);
+
+        } else {
+
+            pointsText.setScale(0.6, 0.6);
+            pointsText.setPosition(defaultPointsPosition);
+        }
+
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
         for(auto& button : buttons) {
@@ -142,7 +293,14 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
         handleIncomingData();
 
+        //clear tame names so the list can be refreshed
+        redTeam.clear();
+        blueTeam.clear();
+        redBoxes.clear();
+        blueBoxes.clear();
+
         //disconnect inactive players
+        //add any connected player to their respective team's containers
         for(unsigned i = 0; i < players.size();) {
 
             if(players[i]->player.timedOut()) {
@@ -151,7 +309,51 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
                 continue;
             }
 
+            //add this player's name to his respective teams container to display
+            sf::Text name;
+            name.setFont(font);
+            name.setScale(0.5, 0.5);
+            name.setString(players[i]->player.getName());
+            name.setColor(sf::Color::Black);
+
+            sf::Sprite box;
+            box.setTexture(teamBoxTexture);
+
+            if(players[i]->player.getTeam() == TEAM_A_ID) {
+
+                redTeam.push_back(name);
+
+                box.setTextureRect(redClip);
+                redBoxes.push_back(box);
+
+            } else {
+
+                blueTeam.push_back(name);
+
+                box.setTextureRect(blueClip);
+                blueBoxes.push_back(box);
+            }
+
             ++i;
+        }
+
+        //set the position of all player names and boxes
+        for(unsigned i = 0; i < redTeam.size(); i++) {
+
+            sf::Vector2f position(firstRedName.x, firstRedName.y + i * nameBoxSize.y);
+
+            sf::Text& name = redTeam[i];
+            name.setPosition(position + nameOffset);
+            redBoxes[i].setPosition(position);
+        }
+
+        for(unsigned int i = 0; i < blueTeam.size(); i++) {
+
+            sf::Vector2f position(firstBlueName.x, firstBlueName.y + i * nameBoxSize.y);
+
+            sf::Text& name = blueTeam[i];
+            name.setPosition(position + nameOffset);
+            blueBoxes[i].setPosition(position);
         }
 
         if(dataSendTimer.getElapsedTime() > dataSendTime) {
@@ -207,7 +409,10 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
             }
         }
 
+
         window.clear();
+
+        window.draw(previousScreenSprite);
 
         window.draw(lobbySprite);
 
@@ -217,6 +422,29 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
             button->draw(window);
         }
+
+        for(auto& clip : redBoxes) {
+
+            window.draw(clip);
+        }
+
+        for(auto& clip : blueBoxes) {
+
+            window.draw(clip);
+        }
+
+        for(auto& name : redTeam) {
+
+            window.draw(name);
+        }
+
+        for(auto& name : blueTeam) {
+
+            window.draw(name);
+        }
+
+        window.draw(localIp);
+        window.draw(publicIp);
 
         window.display();
     }
@@ -698,7 +926,30 @@ void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& w
 
 void ServerGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
-    ///no components to handle input from just yet
+    if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+        if(inGameButtons[quitGame]->checkMouseTouching(mousePosition)) {
+
+            window.close();
+        }
+
+        if(inGameButtons[endMatch]->checkMouseTouching(mousePosition)) {
+
+            exitGameLoop = true;
+        }
+    }
+}
+
+ void ServerGameManager::handleStateEvents(sf::RenderWindow& window) {
+
+    sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+    for(auto& button : inGameButtons) {
+
+        button->checkMouseTouching(mousePosition);
+    }
 }
 
 void ServerGameManager::updateComponents(sf::RenderWindow& window) {
@@ -791,7 +1042,17 @@ void ServerGameManager::handlePostUpdate(sf::RenderWindow& window) {
 
 void ServerGameManager::drawComponents(sf::RenderWindow& window) {
 
-    drawPlayers(window);
+    ///drawPlayers(window);
+}
+
+void ServerGameManager::drawUI(sf::RenderWindow& window) {
+
+    window.draw(inGameSprite);
+
+    for(auto& button : inGameButtons) {
+
+        button->draw(window);
+    }
 }
 
 const unsigned ServerGameManager::getFloor() const {
