@@ -689,6 +689,10 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     //and also so player will set his position to server's position when the game starts
     userPlayer.setHealth(0);
 
+    //reset the user players stats
+    userPlayer.resetStats();
+    userPlayer.resetGun();
+
     waitingForOthers = true;
     matchEnded = false;
 
@@ -697,6 +701,9 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
 
     //clear scoreboards so they draw the correct scores the next time players are created
     score.clearScoreboard();
+
+    //reset all flags
+    getFlagManager()->resetFlags();
 }
 
 void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {

@@ -12,6 +12,13 @@
 //these players cannot update on the client and will onlly be used for drawing
 class InterpolatingPlayer : public PlayerBase {
 
+
+    private:
+
+        //text to draw the players name so you know who this player is
+        sf::Text nameText;
+        sf::Font font;
+
     protected:
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor);
@@ -25,6 +32,24 @@ class InterpolatingPlayer : public PlayerBase {
 
         //sets a rotation for hte player to interpolate towards
         void setInterpolationRotation(const float& newRotation);
+
+        virtual void interpolate(const float& deltaFraction) {
+
+            PlayerBase::interpolate(deltaFraction);
+
+            nameText.setString(playerName);
+            nameText.setPosition(currentHitBox.getPosition().x - nameText.getGlobalBounds().width / 2, currentHitBox.getGlobalBounds().top - nameText.getGlobalBounds().height - 18);
+        }
+
+        virtual void draw(sf::RenderWindow& window, const unsigned& drawingFloor = 0) {
+
+            PlayerBase::draw(window, drawingFloor);
+
+            if(drawingFloor == getFloor()) {
+
+                window.draw(nameText);
+            }
+        }
 
         //fire a gun and place the bullet at the given location
         void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);

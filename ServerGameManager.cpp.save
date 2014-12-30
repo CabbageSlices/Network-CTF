@@ -26,7 +26,7 @@ using std::vector;
 using std::string;
 
 void serverHelpMenu(sf::RenderWindow& window) {
-    
+
     //save the previous screen to draw it as a background
     sf::Texture previousScreen;
     previousScreen.create(window.getSize().x, window.getSize().y);
@@ -36,51 +36,64 @@ void serverHelpMenu(sf::RenderWindow& window) {
     previousScreenSprite.setTexture(previousScreen);
 
     window.setView(window.getDefaultView());
-    
+
     //load the image for the help menu
     sf::Texture helpTexture;
     helpTexture.loadFromFile("serverHelpScreen.png");
 
     sf::Sprite helpSprite;
     helpSprite.setTexture(helpTexture);
-    
+
     vector<shared_ptr<PredrawnButton> > buttons;
-    
-    buttons.push_back(shared_ptr<PredrawnButton>(PredrawnButton("backButton.png")));
-    
+
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+
     placeButtons("serverHelpScreen.png", buttons);
-    
+
+    unsigned backButton = 0;
+
     sf::Event event;
-    
+
     while(window.isOpen()) {
-        
+
         while(window.pollEvent(event)) {
-            
+
             if(event.type == sf::Event::Closed) {
-                
+
                 window.close();
             }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+                if(buttons[backButton]->checkMouseTouching(mousePosition)) {
+
+                    return;
+                }
+            }
+
         }
-        
+
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
         for(auto& button : buttons) {
 
             button->checkMouseTouching(mousePosition);
         }
-        
-        
+
+
         window.clear();
-        
+
         window.draw(previousScreenSprite);
-        
+
         window.draw(helpSprite);
-        
+
         for(auto& button : buttons) {
 
-            button->draw(mousePosition);
+            button->draw(window);
         }
-        
+
         window.display();
     }
 }
@@ -237,6 +250,10 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
                 } else if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
                     return;
+
+                } else if(buttons[helpButton]->checkMouseTouching(mousePosition)) {
+
+                    serverHelpMenu(window);
                 }
 
                 //don't let user change amount of points requried to win game
@@ -900,6 +917,9 @@ void ServerGameManager::setup(sf::RenderWindow& window) {
 
     //reset all scores
     teamManager.resetScores();
+    
+    //reset flag positions
+    flag
 }
 
 void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {

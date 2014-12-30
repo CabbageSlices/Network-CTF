@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1419833267 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1419969144 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -306,7 +306,7 @@
 	<cmath>
 	<cstdlib>
 
-1419886285 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1419969210 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -325,7 +325,7 @@
 1419210408 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1419894097 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1419969144 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -586,26 +586,26 @@
 1404765466 source:c:\users\nimesh\network-ctf\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1412132448 c:\users\nimesh\documents\github\network-ctf\healthbar.h
+1419971148 c:\users\nimesh\documents\github\network-ctf\healthbar.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1419378173 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
+1419971148 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1419366241 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
+1419974254 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
 	"InterpolatingPlayer.h"
 	"Gun.h"
 	"math.h"
 
-1419362384 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
+1419974334 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1419362384 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1419973824 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -615,7 +615,7 @@
 	<tr1/memory>
 	<string>
 
-1419825443 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1419974182 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -728,13 +728,14 @@
 	"SFML/Graphics.hpp"
 	<string>
 
-1408136052 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
+1419966883 source:c:\users\nimesh\documents\github\network-ctf\flagmanager.cpp
 	"FlagManager.h"
 	"TeamManager.h"
 	"math.h"
 	"Flag.h"
 	<stdexcept>
 	<iostream>
+	<string>
 	"PlayerBase.h"
 
 1408134685 c:\users\nimesh\documents\github\network-ctf\flagmanager.h
@@ -751,13 +752,13 @@
 	"TeamManager.h"
 	<iostream>
 
-1418702764 source:c:\users\nimesh\documents\github\network-ctf\flag.cpp
+1262333875 source:c:\users\nimesh\documents\github\network-ctf\flag.cpp
 	"Flag.h"
 	"Floors.h"
 	"math.h"
 	<iostream>
 
-1408741812 c:\users\nimesh\documents\github\network-ctf\flag.h
+1262333908 c:\users\nimesh\documents\github\network-ctf\flag.h
 	"SFML/Graphics.hpp"
 	"SFML/System.hpp"
 
@@ -854,7 +855,7 @@
 	<vector>
 	<tr1/memory>
 
-1419880545 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
+1419972713 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
 	"Scoreboard.h"
 	"PlayerBase.h"
 

@@ -9,7 +9,8 @@ class Flag {
     private:
 
         //flag image to draw
-        sf::CircleShape flag;
+        sf::Texture texture;
+        sf::Sprite sprite;
 
         //position of the spawn
         sf::Vector2f spawnPosition;
@@ -25,7 +26,7 @@ class Flag {
 
     public:
 
-        Flag(const sf::Vector2f& spawnLocation = sf::Vector2f(0, 0), const sf::Color& flagColor = sf::Color::Red);
+        Flag(const sf::Vector2f& spawnLocation = sf::Vector2f(0, 0), const std::string& flagTexturePath = "redFlag.png");
 
         void draw(sf::RenderWindow& window);
 

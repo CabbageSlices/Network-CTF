@@ -32,7 +32,7 @@ Scoreboard::Scoreboard():
     {
         scoreTexture.loadFromFile("scoreboard.png");
         scoreSprite.setTexture(scoreTexture);
-        scoreSprite.setColor(sf::Color(255, 255, 255, 175));
+        scoreSprite.setColor(sf::Color(255, 255, 255, 225));
 
         font.loadFromFile("font.ttf");
     }

@@ -38,8 +38,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }

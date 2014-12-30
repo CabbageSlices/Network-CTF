@@ -12,10 +12,20 @@
 //these players cannot update on the client and will onlly be used for drawing
 class InterpolatingPlayer : public PlayerBase {
 
+
+    private:
+        
+        //text to draw the players name so you know who this player is
+        sf::Text nameText;
+        sf::Font font;
+        
+        void drawName(sf::RenderWindow& window);
+        void updateNamePosition();
+    
     protected:
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor);
-        
+
         virtual DrawingState getDrawingState();
 
     public:
@@ -25,6 +35,10 @@ class InterpolatingPlayer : public PlayerBase {
 
         //sets a rotation for hte player to interpolate towards
         void setInterpolationRotation(const float& newRotation);
+        
+        virtual void interpolate(const float& deltaFraction);
+        
+        virtual void draw
 
         //fire a gun and place the bullet at the given location
         void fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor);

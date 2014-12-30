@@ -7,8 +7,9 @@
 using std::cout;
 using std::endl;
 
-Flag::Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor):
-    flag(),
+Flag::Flag(const sf::Vector2f& spawnLocation, const std::string& flagTexturePath):
+    texture(),
+    sprite(),
     spawnPosition(spawnLocation),
     beingHeld(false),
     atSpawn(true),
@@ -18,6 +19,13 @@ Flag::Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor):
         flag.setOrigin(calculateCenter(flag.getLocalBounds()));
         flag.setPosition(spawnPosition);
         flag.setFillColor(flagColor);
+        
+        texture.loadFromFile(flagTexturePath);
+        
+        sprite.setTexture(texture);
+        sprite.setOrigin(calculateCenter(sprite.getGlobalBounds()));
+        
+        sprite.setPosition(spawnPosition);
     }
 
 void Flag::draw(sf::RenderWindow& window) {

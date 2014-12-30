@@ -5,9 +5,11 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <string>
 
 #include "PlayerBase.h"
 
+using std::string;
 using std::map;
 using std::out_of_range;
 using std::cout;
@@ -156,8 +158,16 @@ void FlagManager::draw(sf::RenderWindow& window, const unsigned& floor) {
 
 void FlagManager::addFlag(const sf::Vector2f& flagSpawnLocation, unsigned short teamId) {
 
+    //get the name of the image file for each teams id
+    string flagImagePath = "redFlag.png";
+
+    if(teamId == TEAM_B_ID) {
+
+        flagImagePath = "blueFlag.png";
+    }
+
     //create a new flag at the given position
-    shared_ptr<Flag> flag(new Flag(flagSpawnLocation,  getTeamColor(teamId) ));
+    shared_ptr<Flag> flag(new Flag(flagSpawnLocation,  flagImagePath));
 
     flags[teamId] = flag;
 }

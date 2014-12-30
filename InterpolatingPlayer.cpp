@@ -3,9 +3,15 @@
 #include "math.h"
 
 InterpolatingPlayer::InterpolatingPlayer():
-    PlayerBase()
+    PlayerBase(),
+    nameText(),
+    font()
     {
-
+        font.loadFromFile("font.ttf");
+        nameText.setFont(font);
+        nameText.setScale(0.35, 0.35);
+        nameText.setString(playerName);
+        nameText.setColor(sf::Color::Black);
     }
 
 void InterpolatingPlayer::setInterpolationRotation(const float& newRotation) {

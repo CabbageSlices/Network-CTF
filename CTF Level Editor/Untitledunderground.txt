@@ -556,6 +556,36 @@ start blocks
 0
 end blocks
 start foreground
+undergroundgrass1.png
+224.715
+351.387
+undergroundgrass1.png
+3743.29
+351.387
+undergroundgrass1.png
+224.715
+1120.28
+undergroundgrass1.png
+3743.29
+1120.28
+undergroundgrass2.png
+1214.64
+479.104
+undergroundgrass2.png
+2753.36
+479.104
+undergroundgrass2.png
+1213.89
+991.804
+undergroundgrass2.png
+2754.11
+991.804
+undergroundgrass2.png
+1987.38
+479.74
+undergroundgrass2.png
+1989.38
+991.037
 end foreground
 begin portal
 1176.66

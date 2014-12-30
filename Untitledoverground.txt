@@ -561,6 +561,93 @@ start blocks
 0
 end blocks
 start foreground
+overgroundgrass1.png
+1455.68
+237.571
+overgroundgrass1.png
+2512.32
+237.571
+overgroundgrass1.png
+1454.68
+1230.76
+overgroundgrass1.png
+2513.32
+1230.76
+overgroundgrass4.png
+1184.68
+1184.76
+overgroundgrass4.png
+2783.32
+1184.76
+overgroundgrass4.png
+1183.77
+287.006
+overgroundgrass4.png
+2784.23
+287.006
+overgroundgrass1.png
+64.224
+61.5134
+overgroundgrass1.png
+3903.78
+61.5134
+overgroundgrass1.png
+125.994
+255.311
+overgroundgrass1.png
+3842.01
+255.311
+overgroundgrass1.png
+125.994
+1216.35
+overgroundgrass1.png
+3842.01
+1216.35
+overgroundgrass1.png
+62.9941
+1407.35
+overgroundgrass1.png
+3905.01
+1407.35
+overgroundgrass5.png
+2113.2
+1217.94
+overgroundgrass5.png
+1850.58
+250.968
+overgroundgrass6.png
+2114.35
+251.39
+overgroundgrass6.png
+1851.41
+1216.56
+overgroundgrass7.png
+1788.95
+735.035
+overgroundgrass7.png
+2179.05
+735.035
+overgroundgrass7.png
+1983.03
+997.898
+overgroundgrass7.png
+1984.7
+475.295
+overgroundgrass24.png
+1984.16
+736.845
+overgroundgrass33.png
+674.245
+1189.85
+overgroundgrass30.png
+666.923
+282.611
+overgroundgrass31.png
+3299.8
+284.169
+overgroundgrass32.png
+3297.27
+1186.17
 end foreground
 begin portal
 1173.28
@@ -706,12 +793,12 @@ begin overground image
 maptest.png
 end overground image
 begin red flag
-173.77
-734.855
+161.58
+735.555
 end red flag
 begin blue flag
-3794.23
-734.855
+3807.34
+737.276
 end blue flag
 begin red spawn
 343.153

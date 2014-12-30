@@ -3,9 +3,15 @@
 #include "math.h"
 
 InterpolatingPlayer::InterpolatingPlayer():
-    PlayerBase()
+    PlayerBase(),
+    nameText(),
+    font()
     {
-
+        font.loadFromFile("font.ttf");
+        nameText.setFont(font);
+        nameText.setScale(0.4, 0.4);
+        nameText.setString(playerName);
+        nameText.setColor(sf::Color::)
     }
 
 void InterpolatingPlayer::setInterpolationRotation(const float& newRotation) {
@@ -21,10 +27,16 @@ void InterpolatingPlayer::fireGun(const sf::Vector2f& bulletBegin, const sf::Vec
 
 void InterpolatingPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
+    gun->drawGun(window);
     gun->drawBullets(window, drawingFloor);
 }
 
-DrawingState InterpolatingPlayer::getDrawingState() {
+PlayerBase::DrawingState InterpolatingPlayer::getDrawingState() {
 
+    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds())) {
 
+        return STANDING;
+    }
+
+    return WALKING;
 }

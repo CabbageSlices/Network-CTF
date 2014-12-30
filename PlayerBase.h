@@ -25,6 +25,13 @@ class PlayerBase {
             WALKING
         };
 
+        //texture for the indicator that is drawn when player is holding a flag
+        //load the texture for both flag indicators so they only have to be loaded once
+        sf::Texture redIndicatorTexture;
+        sf::Texture blueIndicatorTexture;
+
+        sf::Sprite flagIndicator;
+
         //id of this player, supplied by the server
         int playerId;
 
@@ -138,12 +145,12 @@ class PlayerBase {
 
         //interpolate from previous position to the destination position
         ///time passed is what fraction of time has passed from the physics update to the next physics update, not the actual time passed
-        void interpolate(const float& deltaFraction);
+        virtual void interpolate(const float& deltaFraction);
         void stopInterpolation();
 
         void animate();
 
-        void draw(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
+        virtual void draw(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
 
         //drawing components to show on minimap
         void drawMinimap(sf::RenderWindow& window);
@@ -192,6 +199,9 @@ class PlayerBase {
 
         std::tr1::shared_ptr<Gun> getGun();
         void setGun(std::tr1::shared_ptr<Gun> newGun);
+
+        void resetStats();
+        void resetGun();
 
         const std::string& getName() const;
         const unsigned short& getKills() const;

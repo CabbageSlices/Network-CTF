@@ -7,27 +7,30 @@
 using std::cout;
 using std::endl;
 
-Flag::Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor):
-    flag(),
+Flag::Flag(const sf::Vector2f& spawnLocation, const std::string& flagTexturePath):
+    texture(),
+    sprite(),
     spawnPosition(spawnLocation),
     beingHeld(false),
     atSpawn(true),
     floor(OVERGROUND_FLOOR)
     {
-        flag.setRadius(20);
-        flag.setOrigin(calculateCenter(flag.getLocalBounds()));
-        flag.setPosition(spawnPosition);
-        flag.setFillColor(flagColor);
+        texture.loadFromFile(flagTexturePath);
+
+        sprite.setTexture(texture);
+        sprite.setOrigin(calculateCenter(sprite.getGlobalBounds()));
+
+        sprite.setPosition(spawnPosition);
     }
 
 void Flag::draw(sf::RenderWindow& window) {
 
-    window.draw(flag);
+    window.draw(sprite);
 }
 
 void Flag::setPosition(const sf::Vector2f& position) {
 
-    flag.setPosition(position);
+    sprite.setPosition(position);
     atSpawn = false;
 }
 
@@ -42,7 +45,7 @@ void Flag::reset() {
 
     atSpawn = true;
     beingHeld = false;
-    flag.setPosition(spawnPosition);
+    sprite.setPosition(spawnPosition);
     floor = OVERGROUND_FLOOR;
 }
 
@@ -68,12 +71,12 @@ const bool& Flag::isAtSpawn() const {
 
 const sf::FloatRect Flag::getCollisionBox() const {
 
-    return flag.getGlobalBounds();
+    return sprite.getGlobalBounds();
 }
 
 const sf::Vector2f Flag::getPosition() const {
 
-    return flag.getPosition();
+    return sprite.getPosition();
 }
 
 const unsigned& Flag::getFloor() const {

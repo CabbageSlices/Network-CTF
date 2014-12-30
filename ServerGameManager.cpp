@@ -910,13 +910,19 @@ void ServerGameManager::playerSpawnCollision(shared_ptr<ServerGameManager::Conne
 void ServerGameManager::setup(sf::RenderWindow& window) {
 
     //respawn all the players taht way they are in their proper spawn zones
+    //reset all player's stats as well and reset their guns as well
     for(auto& player : players) {
 
         player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
+        player->player.resetStats();
+        player->player.resetGun();
     }
 
     //reset all scores
     teamManager.resetScores();
+
+    //reset flag positions
+    getFlagManager()->resetFlags();
 }
 
 void ServerGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {

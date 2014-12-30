@@ -17,12 +17,15 @@ using std::endl;
 
 
 PlayerBase::PlayerBase():
+    redIndicatorTexture(),
+    blueIndicatorTexture(),
+    flagIndicator(),
     playerId(0),
     teamId(1),
     pastHitBox(sf::Vector2f(31, 35)),
     currentHitBox(pastHitBox),
     destinationHitBox(currentHitBox),
-    health(),
+    health(80, 4, 2),
     playerTexture(),
     playerSprite(),
     frame(0),
@@ -65,6 +68,9 @@ PlayerBase::PlayerBase():
 
         //default center based on image file of the character
         playerSprite.setOrigin(sf::Vector2f(22, 26));
+
+        redIndicatorTexture.loadFromFile("redFlagIndicator.png");
+        blueIndicatorTexture.loadFromFile("blueFlagIndicator.png");
     }
 
 PlayerBase::~PlayerBase() {
@@ -94,7 +100,20 @@ unsigned short PlayerBase::getTeam() const {
 
 void PlayerBase::setTeam(const unsigned short& team) {
 
+    //if the new team isn't the same as the current team then the player nee
     teamId = team;
+
+    //set the appropriate flag indicator
+    if(team == TEAM_B_ID) {
+
+        flagIndicator.setTexture(redIndicatorTexture);
+
+    } else {
+
+        flagIndicator.setTexture(blueIndicatorTexture);
+    }
+
+    flagIndicator.setScale(1.20, 1.20);
 
     currentHitBox.setOutlineColor(getTeamColor(team));
     currentHitBox.setFillColor(getTeamColor(team));
@@ -175,6 +194,10 @@ void PlayerBase::interpolate(const float& deltaFraction) {
 
     updateHitboxRotation();
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
+
+    //set the position of the flag indicator now
+    //position it over the health as well, so move it up by 10 pixels
+    flagIndicator.setPosition(currentHitBox.getPosition().x - 14, currentHitBox.getGlobalBounds().top - flagIndicator.getGlobalBounds().height - 29);
 }
 
 void PlayerBase::stopInterpolation() {
@@ -213,7 +236,13 @@ void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
     //update health position justb efore drawing because it could have moved
     updateHealthPosition();
 
-    window.draw(currentHitBox);
+    //draw the flag indicator if he is holding a flag
+    if(flagBeingHeld.lock()) {
+
+        window.draw(flagIndicator);
+    }
+
+    ///window.draw(currentHitBox);
     window.draw(playerSprite);
 
     this->drawGun(window, drawingFloor);
@@ -368,6 +397,19 @@ void PlayerBase::setGun(shared_ptr<Gun> newGun) {
     gun = newGun;
 }
 
+void PlayerBase::resetStats() {
+
+    kills = 0;
+    deaths = 0;
+    flagCaptures = 0;
+    flagReturns = 0;
+}
+
+void PlayerBase::resetGun() {
+
+    gun = shared_ptr<Gun>(new Pistol());
+}
+
 const std::string& PlayerBase::getName() const {
 
     return playerName;
@@ -466,8 +508,8 @@ void PlayerBase::updateHealthPosition() {
     //set the healthbar above the player's current position
     sf::Vector2f healthPosition(0, 0);
 
-    healthPosition.x = currentHitBox.getGlobalBounds().left - currentHitBox.getGlobalBounds().width;
-    healthPosition.y = currentHitBox.getGlobalBounds().top - 10;
+    healthPosition.x = currentHitBox.getGlobalBounds().left - currentHitBox.getGlobalBounds().width + 20;
+    healthPosition.y = currentHitBox.getGlobalBounds().top - 13;
 
     health.setPosition(healthPosition);
 }
