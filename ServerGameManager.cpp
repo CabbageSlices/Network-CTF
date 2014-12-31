@@ -119,7 +119,7 @@ ServerGameManager::ServerGameManager() :
         inGameSprite.setTexture(inGameTexture);
 
         inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("endMatch.png")));
-        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitGame.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")));
 
         placeButtons("serverInGame.png", inGameButtons);
     }

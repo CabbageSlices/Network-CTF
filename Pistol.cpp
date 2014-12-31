@@ -1,7 +1,7 @@
 #include "Pistol.h"
 
 Pistol::Pistol() :
-    Gun(15, 1200.f, sf::milliseconds(550), 4)
+    Gun(20, 1200.f, sf::milliseconds(400), 1.5)
     {
         //load the texture for the ui
         uiTexture.loadFromFile("pistolUI.png");

@@ -150,7 +150,7 @@ class Gun {
 
     public:
 
-        Gun(const int& damage = 15, const float& maxDist = 1200.f, const sf::Time& fireDelay = sf::milliseconds(550), const float& accuracyMod = 4);
+        Gun(const int& damage = 20, const float& maxDist = 1200.f, const sf::Time& fireDelay = sf::milliseconds(400), const float& accuracyMod = 1.5);
         virtual ~Gun(){}
 
         //handle a player's mouselick when he tries to fire a gun
