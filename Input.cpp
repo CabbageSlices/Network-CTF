@@ -32,7 +32,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     const float textScale = scale;
 
     inputText.setScale(textScale, textScale);
-    inputText.setColor(sf::Color::Blue);
+    inputText.setColor(sf::Color::Black);
 
     sf::Texture inputTexture;
     inputTexture.loadFromFile("inputMessage.png");
@@ -56,7 +56,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     inputMessage.setString(message);
     inputMessage.setScale(textScale, textScale);
     inputMessage.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputMessage.getGlobalBounds().width / 2,
-                             messageBox.getGlobalBounds().top + 10);
+                             messageBox.getGlobalBounds().top + 48);
 
     //offset from the bottom of the message box to display the player's input that way its not on the borders of the inputbox
     float distanceFromBottom = 80;

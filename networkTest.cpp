@@ -98,6 +98,11 @@ void clientTitleScreen(sf::RenderWindow& window) {
 
                     creditsScreen(window);
                 }
+
+                if(buttons[controlsButton]->checkMouseTouching(mousePosition)) {
+
+                    controlsScreen(window);
+                }
             }
         }
 

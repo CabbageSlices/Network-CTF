@@ -36,18 +36,90 @@ using std::string;
 using std::map;
 using std::next;
 
+void controlsScreen(sf::RenderWindow& window) {
+
+    //save the previous window
+    sf::Texture previousScreen;
+    previousScreen.create(window.getSize().x, window.getSize().y);
+    previousScreen.update(window);
+
+    sf::Sprite previousScreenSprite;
+    previousScreenSprite.setTexture(previousScreen);
+
+    //load the image for the credits
+    sf::Texture controlsTexture;
+    controlsTexture.loadFromFile("controlsMenu.png");
+
+    sf::Sprite controlsSprite;
+    controlsSprite.setTexture(controlsTexture);
+
+    //load the buttons
+    vector<shared_ptr<PredrawnButton> > buttons;
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+
+    unsigned backButton = 0;
+
+    placeButtons("controlsMenu.png", buttons);
+
+    sf::Event event;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+                if(buttons[backButton]->checkMouseTouching(mousePosition)) {
+
+                    return;
+                }
+            }
+        }
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+        for(auto& button : buttons) {
+
+            button->checkMouseTouching(mousePosition);
+        }
+
+        window.clear();
+        window.draw(previousScreenSprite);
+        window.draw(controlsSprite);
+
+        for(auto& button : buttons) {
+
+            button->draw(window);
+        }
+
+        window.display();
+    }
+}
+
 ClientGameManager::ClientGameManager() :
     GameManager(),
     endMatchButtons(),
     pausedMenuButtons(),
+    controlsButtons(),
     resultToLobbyId(0),
     resumeId(0),
     controlsId(1),
     quitMatch(2),
     quitGame(3),
+    backId(0),
     pausedTexture(),
     pausedSprite(),
     paused(false),
+    controlsTexture(),
+    controlsSprite(),
+    showControls(false),
     currentState(STATE_PLAYING),
     client("70.71.114.74", 8080),
     userPlayer(),
@@ -72,6 +144,13 @@ ClientGameManager::ClientGameManager() :
 
         pausedTexture.loadFromFile("clientPaused.png");
         pausedSprite.setTexture(pausedTexture);
+
+        controlsTexture.loadFromFile("controlsMenu.png");
+        controlsSprite.setTexture(controlsTexture);
+
+        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")) );
+
+        placeButtons("controlsMenu.png", controlsButtons);
 
     }
 
@@ -674,6 +753,11 @@ void ClientGameManager::checkButtons(const sf::Vector2f& mousePosition) {
 
         button->checkMouseTouching(mousePosition);
     }
+
+    for(auto& button : controlsButtons) {
+
+        button->checkMouseTouching(mousePosition);
+    }
 }
 
 void ClientGameManager::setup(sf::RenderWindow& window) {
@@ -734,7 +818,8 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
             return;
         }
 
-        if(paused) {
+        //don't let user click on paused menu buttons if he is viewing controls
+        if(paused && !showControls) {
 
             if(pausedMenuButtons[resumeId]->checkMouseTouching(mousePosition)) {
 
@@ -751,8 +836,21 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
                 window.close();
             }
 
+            if(pausedMenuButtons[controlsId]->checkMouseTouching(mousePosition)) {
+
+                showControls = true;
+            }
+
             //don't handle player inputs if game is paused
             return;
+        }
+
+        if(showControls) {
+
+            if(controlsButtons[backId]->checkMouseTouching(mousePosition)) {
+
+                showControls = false;
+            }
         }
     }
 
@@ -889,6 +987,16 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
         window.draw(pausedSprite);
 
         for(auto& button : pausedMenuButtons) {
+
+            button->draw(window);
+        }
+    }
+
+    if(showControls) {
+
+        window.draw(controlsSprite);
+
+        for(auto& button : controlsButtons) {
 
             button->draw(window);
         }

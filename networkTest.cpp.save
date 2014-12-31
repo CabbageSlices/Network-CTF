@@ -38,8 +38,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    clientTitleScreen(window);
-    ///serverTitleScreen(window);
+    ///clientTitleScreen(window);
+    serverTitleScreen(window);
 
     return 0;
 }
@@ -97,6 +97,11 @@ void clientTitleScreen(sf::RenderWindow& window) {
                 if(buttons[creditsButton]->checkMouseTouching(mousePosition)) {
 
                     creditsScreen(window);
+                }
+
+                if(buttons[controlsButton]->checkMouseTouching(mousePosition)) {
+
+                    controlsScreen(window);
                 }
             }
         }
@@ -483,6 +488,12 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                         displayError(window, "This port is unavailable.\nPlease choose a different\nport.");
                     }
+                    
+                } else if ()
+
+                if(buttons[quitButton]->checkMouseTouching(mousePosition)) {
+
+                    window.close();
                 }
 
                 if(changePortButton.contains(mousePosition)) {

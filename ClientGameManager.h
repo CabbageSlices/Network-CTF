@@ -36,6 +36,9 @@ class ClientGameManager: public GameManager {
         //buttons on the paused screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > pausedMenuButtons;
 
+        //buttons on the controls screen
+        std::vector<std::tr1::shared_ptr<PredrawnButton> > controlsButtons;
+
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
 
@@ -44,6 +47,9 @@ class ClientGameManager: public GameManager {
         unsigned controlsId;
         unsigned quitMatch;
         unsigned quitGame;
+
+        //id for buttons on controls menu
+        unsigned backId;
 
         //image to display when user pauses the game
         sf::Texture pausedTexture;
@@ -58,6 +64,12 @@ class ClientGameManager: public GameManager {
         sf::Sprite matchResultSprite;
 
         bool matchEnded;
+
+        //texture to draw in control screen
+        sf::Texture controlsTexture;
+        sf::Sprite controlsSprite;
+
+        bool showControls;
 
         GameState currentState;
 
@@ -176,5 +188,7 @@ class ClientGameManager: public GameManager {
 
         void gameLobby(sf::RenderWindow& window, sf::Font& font);
 };
+
+void controlsScreen(sf::RenderWindow& window);
 
 #endif // GAMEMANAGER_H_INCLUDED

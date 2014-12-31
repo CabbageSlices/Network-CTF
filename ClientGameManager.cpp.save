@@ -36,18 +36,90 @@ using std::string;
 using std::map;
 using std::next;
 
+void controlsScreen(sf::RenderWindow& window) {
+
+    //save the previous window
+    sf::Texture previousScreen;
+    previousScreen.create(window.getSize().x, window.getSize().y);
+    previousScreen.update(window);
+
+    sf::Sprite previousScreenSprite;
+    previousScreenSprite.setTexture(previousScreen);
+
+    //load the image for the credits
+    sf::Texture controlsTexture;
+    controlsTexture.loadFromFile("controlsMenu.png");
+
+    sf::Sprite controlsSprite;
+    controlsSprite.setTexture(controlsTexture);
+
+    //load the buttons
+    vector<shared_ptr<PredrawnButton> > buttons;
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+
+    unsigned backButton = 0;
+
+    placeButtons("controlsMenu.png", buttons);
+
+    sf::Event event;
+
+    while(window.isOpen()) {
+
+        while(window.pollEvent(event)) {
+
+            if(event.type == sf::Event::Closed) {
+
+                window.close();
+            }
+
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+                if(buttons[backButton]->checkMouseTouching(mousePosition)) {
+
+                    return;
+                }
+            }
+        }
+
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+
+        for(auto& button : buttons) {
+
+            button->checkMouseTouching(mousePosition);
+        }
+
+        window.clear();
+        window.draw(previousScreenSprite);
+        window.draw(controlsSprite);
+
+        for(auto& button : buttons) {
+
+            button->draw(window);
+        }
+
+        window.display();
+    }
+}
+
 ClientGameManager::ClientGameManager() :
     GameManager(),
     endMatchButtons(),
     pausedMenuButtons(),
+    controlsButtons(),
     resultToLobbyId(0),
     resumeId(0),
     controlsId(1),
     quitMatch(2),
     quitGame(3),
+    backId(0),
     pausedTexture(),
     pausedSprite(),
     paused(false),
+    controlsTexture(),
+    controlsSprite(),
+    showControls(false),
     currentState(STATE_PLAYING),
     client("70.71.114.74", 8080),
     userPlayer(),
@@ -72,6 +144,13 @@ ClientGameManager::ClientGameManager() :
 
         pausedTexture.loadFromFile("clientPaused.png");
         pausedSprite.setTexture(pausedTexture);
+        
+        controlsTexture.loadFromFile("controlsMenu.png");
+        controlsSprite.setTexture(controlsTexture);
+        
+        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")) );
+        
+        placeButtons("controlsMenu.png");
 
     }
 
@@ -510,7 +589,7 @@ void ClientGameManager::handleServerUpdates() {
 
                 getHeadsUpDisplay().getScoreDisplay().setBlueScore(pointsToWinGame);
             }
-            
+
             userPlayer.resetDataTimer();
 
         } else if(packetType == DEFEAT) {
@@ -535,7 +614,7 @@ void ClientGameManager::handleServerUpdates() {
 
                 getHeadsUpDisplay().getScoreDisplay().setRedScore(pointsToWinGame);
             }
-            
+
             userPlayer.resetDataTimer();
 
         } else if(packetType == LOBBY_CONNECTION_INFO) {
@@ -544,11 +623,11 @@ void ClientGameManager::handleServerUpdates() {
             ///but only if the client is not at the game over screen, because once the game is over the server
             ///automatically returns to lobby but the client should stay at the game over screen
             if(!matchEnded) {
-                
+
                 exitGameLoop = true;
-                
+
             } else {
-                
+
                 //if the match has ended then jsut use this packet as a "heartbeat" from the server so client knows he is still connected
                 userPlayer.resetDataTimer();
             }
@@ -689,6 +768,10 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     //and also so player will set his position to server's position when the game starts
     userPlayer.setHealth(0);
 
+    //reset the user players stats
+    userPlayer.resetStats();
+    userPlayer.resetGun();
+
     waitingForOthers = true;
     matchEnded = false;
 
@@ -697,6 +780,9 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
 
     //clear scoreboards so they draw the correct scores the next time players are created
     score.clearScoreboard();
+
+    //reset all flags
+    getFlagManager()->resetFlags();
 }
 
 void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& window) {
@@ -883,6 +969,16 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
 
         for(auto& button : pausedMenuButtons) {
 
+            button->draw(window);
+        }
+    }
+    
+    if(showControls) {
+        
+        window.draw(controlsSprite);
+        
+        for(auto& button : controlsButtons) {
+            
             button->draw(window);
         }
     }

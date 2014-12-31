@@ -38,13 +38,14 @@ void displayError(sf::RenderWindow& window, const string& message) {
     sf::Text errorMessage;
     errorMessage.setFont(font);
     errorMessage.setString(message);
-    errorMessage.setScale(0.44, 0.45);
+    errorMessage.setScale(0.41, 0.45);
     errorMessage.setPosition(363, 292);
+    errorMessage.setColor(sf::Color::Black);
 
     //button to return to previous screen
     //put in container to use button placer function
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("okButton.png") ));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png") ));
 
     placeButtons("errormessage.png", buttons);
 
