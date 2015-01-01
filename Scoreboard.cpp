@@ -37,15 +37,9 @@ Scoreboard::Scoreboard():
         font.loadFromFile("font.ttf");
     }
 
-void Scoreboard::handleEvents(sf::Event& event) {
+void Scoreboard::handleStateEvents() {
 
-    if(event.type == sf::Event::KeyPressed) {
-
-        if(event.key.code == TOGGLE_DISPLAY_KEY) {
-
-            drawDisplay = !drawDisplay;
-        }
-    }
+    drawDisplay = sf::Keyboard::isKeyPressed(TOGGLE_DISPLAY_KEY);
 }
 
 void Scoreboard::setDisplayCenter(const sf::Vector2f& center) {

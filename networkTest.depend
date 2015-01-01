@@ -201,7 +201,7 @@
 	<vector>
 	<tr1/memory>
 
-1419274883 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
+1420071599 c:\users\nimesh\documents\github\network-ctf\gamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"GameWorld.h"
@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1419985103 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1420075085 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -235,7 +235,7 @@
 	"PredrawnButton.h"
 	"ButtonPlacer.h"
 
-1419984856 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1420075045 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Client.h"
@@ -280,7 +280,7 @@
 1419113923 source:c:\users\nimesh\documents\github\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1419377757 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
+1420071581 source:c:\users\nimesh\documents\github\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
 	"Minimap.h"
@@ -306,7 +306,7 @@
 	<cmath>
 	<cstdlib>
 
-1419985975 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1420080989 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -325,7 +325,7 @@
 1419210408 source:c:\users\nimesh\documents\github\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1419985953 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
+1420080072 source:c:\users\nimesh\documents\github\network-ctf\servergamemanager.cpp
 	"ServerGameManager.h"
 	"PacketIdentification.h"
 	"PacketManipulators.h"
@@ -365,7 +365,7 @@
 	"SFML/Graphics.hpp"
 	<tr1/memory>
 
-1419458726 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
+1420081020 source:c:\users\nimesh\documents\github\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -374,9 +374,10 @@
 	"Floors.h"
 	<iostream>
 
-1419986442 c:\users\nimesh\documents\github\network-ctf\gun.h
+1420079916 c:\users\nimesh\documents\github\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
 	"GunTypes.h"
 	<tr1/memory>
 	<vector>
@@ -593,19 +594,19 @@
 1419971148 source:c:\users\nimesh\documents\github\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1419974254 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
+1420072404 source:c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.cpp
 	"InterpolatingPlayer.h"
 	"Gun.h"
 	"math.h"
 
-1419974334 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
+1420072415 c:\users\nimesh\documents\github\network-ctf\interpolatingplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1419973824 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1420080170 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Healthbar.h"
@@ -615,7 +616,7 @@
 	<tr1/memory>
 	<string>
 
-1419974334 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
+1420079944 source:c:\users\nimesh\documents\github\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -627,14 +628,14 @@
 	"TeamManager.h"
 	<iostream>
 
-1419362384 c:\users\nimesh\documents\github\network-ctf\userplayer.h
+1420079916 c:\users\nimesh\documents\github\network-ctf\userplayer.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"PlayerBase.h"
 	<vector>
 	<tr1/memory>
 
-1419372107 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1420080390 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
@@ -786,22 +787,22 @@
 1407778954 source:c:\users\nimesh\documents\github\network-ctf\floors.cpp
 	"Floors.h"
 
-1419986664 source:c:\users\nimesh\documents\github\network-ctf\pistol.cpp
+1420080870 source:c:\users\nimesh\documents\github\network-ctf\pistol.cpp
 	"Pistol.h"
 
-1419367476 c:\users\nimesh\documents\github\network-ctf\pistol.h
+1420068863 c:\users\nimesh\documents\github\network-ctf\pistol.h
 	"Gun.h"
 
-1419367476 c:\users\nimesh\documents\github\network-ctf\sniper.h
+1420075792 c:\users\nimesh\documents\github\network-ctf\sniper.h
 	"Gun.h"
 
-1419458764 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
+1420080870 source:c:\users\nimesh\documents\github\network-ctf\sniper.cpp
 	"Sniper.h"
 
-1419367712 c:\users\nimesh\documents\github\network-ctf\shotgun.h
+1420068863 c:\users\nimesh\documents\github\network-ctf\shotgun.h
 	"Gun.h"
 
-1419458764 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
+1420080989 source:c:\users\nimesh\documents\github\network-ctf\shotgun.cpp
 	"Shotgun.h"
 	<iostream>
 
@@ -818,7 +819,7 @@
 	"GunTypes.h"
 	<tr1/memory>
 
-1408741945 source:c:\users\nimesh\documents\github\network-ctf\gungiver.cpp
+1420080020 source:c:\users\nimesh\documents\github\network-ctf\gungiver.cpp
 	"GunGiver.h"
 	"PlayerBase.h"
 	"GunHandlers.h"
@@ -847,7 +848,7 @@
 	<tr1/memory>
 	"LargeImage.h"
 
-1419880545 c:\users\nimesh\documents\github\network-ctf\scoreboard.h
+1420075045 c:\users\nimesh\documents\github\network-ctf\scoreboard.h
 	"SFML/Window.hpp"
 	"SFML/Graphics.hpp"
 	"TeamManager.h"
@@ -855,7 +856,7 @@
 	<vector>
 	<tr1/memory>
 
-1419972713 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
+1420075045 source:c:\users\nimesh\documents\github\network-ctf\scoreboard.cpp
 	"Scoreboard.h"
 	"PlayerBase.h"
 
@@ -916,13 +917,16 @@
 	"ButtonPlacer.h"
 	"SFML/Graphics.hpp"
 
-1419206526 source:c:\users\nimesh\documents\github\network-ctf\predrawnbutton.cpp
+1420066830 source:c:\users\nimesh\documents\github\network-ctf\predrawnbutton.cpp
 	"PredrawnButton.h"
 
-1419206534 c:\users\nimesh\documents\github\network-ctf\predrawnbutton.h
+1420066935 c:\users\nimesh\documents\github\network-ctf\predrawnbutton.h
 	"SFML/Graphics.hpp"
 	"SFML/System.hpp"
+	"SFML/Audio.hpp"
 	<string>
+	<vector>
+	<tr1/memory>
 
 1419714978 c:\users\nimesh\documents\github\network-ctf\buttonplacer.h
 	<vector>
@@ -936,7 +940,7 @@
 1419113659 c:\users\nimesh\documents\github\network-ctf\typechecker.h
 	<string>
 
-1419985199 source:c:\users\nimesh\documents\github\network-ctf\errormessage.cpp
+1420066213 source:c:\users\nimesh\documents\github\network-ctf\errormessage.cpp
 	"ErrorMessage.h"
 	"PredrawnButton.h"
 	"ButtonPlacer.h"

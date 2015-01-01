@@ -7,7 +7,17 @@ class Pistol : public Gun {
 
     private:
 
+        static sf::SoundBuffer fireBuffer;
+        static sf::SoundBuffer reloadBuffer;
+
         void setupClips();
+
+    protected:
+
+        virtual void handleFireSound() {
+
+            fireSound.play();
+        }
 
     public:
 

@@ -56,7 +56,8 @@ void GunGiver::setPosition(const sf::Vector2f& position) {
 void GunGiver::handleCollision(PlayerBase& collidingPlayer) {
 
     //if player doesn't have this gun, give him this gun, otherwise reload his ammo
-    if(!isType(collidingPlayer.getGun(), gunToGive)) {
+    //only give gun if hes picking up gun
+    if(!isType(collidingPlayer.getGun(), gunToGive) && collidingPlayer.canPickUpGun()) {
 
         collidingPlayer.setGun(createGun(gunToGive));
 

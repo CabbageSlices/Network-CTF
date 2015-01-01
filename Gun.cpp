@@ -38,7 +38,10 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     reloading(false),
     animationTimer(),
     animationTime(sf::milliseconds(150)),
-    frame(0)
+    frame(0),
+    fireSound(),
+    reloadSound(),
+    shouldPlaySounds(true)
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0));
@@ -117,6 +120,11 @@ bool Gun::reload() {
         resetAnimation();
         reloading = true;
 
+        if(shouldPlaySounds) {
+
+            reloadSound.play();
+        }
+
         return true;
     }
 
@@ -161,6 +169,11 @@ void Gun::drawAll(sf::RenderWindow& window) {
     drawSight(window);
     drawBullets(window, floor);
     drawGun(window);
+}
+
+void Gun::drawBullets(sf::RenderWindow& window) {
+
+    drawBullets(window, floor);
 }
 
 void Gun::drawGun(sf::RenderWindow& window) {
@@ -363,6 +376,11 @@ void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bull
 
     //a bullet was just created
     createdBullet = true;
+
+    if(shouldPlaySounds) {
+
+       handleFireSound();
+    }
 }
 
 const float Gun::getAccuracyModifier() const {
@@ -372,7 +390,9 @@ const float Gun::getAccuracyModifier() const {
 
 bool Gun::canFireGun() const {
 
-    return timeSinceFired > fireDelay && fired && !reloading && (currentMagazine > 0);
+    //don't let gun fire if the reloading sound is still playing
+    bool reloadSoundPlaying = reloadSound.getStatus() == sf::Sound::Playing;
+    return timeSinceFired > fireDelay && fired && !reloading && (currentMagazine > 0) && !reloadSoundPlaying;
 }
 
 void Gun::finishReloading() {

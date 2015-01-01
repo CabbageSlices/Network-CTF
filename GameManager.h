@@ -86,6 +86,10 @@ class GameManager {
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
 
+        virtual void drawForeground(sf::RenderWindow& window) {
+
+        }
+
         //all UI that are drawn are drawn independantly from the camera so they don't need to be moved along with the camera inorder to say on screen
         //this also means that if you need to interact with the UI you need to reset the view to the default view in order to be able to click on them
         virtual void drawUI(sf::RenderWindow& window);

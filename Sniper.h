@@ -22,6 +22,9 @@ class Sniper : public Gun {
         //use vertex array to show the accuracy range of the sniper
         sf::VertexArray accuracyRange;
 
+        static sf::SoundBuffer fireBuffer;
+        static sf::SoundBuffer reloadBuffer;
+
         //calculate the points of the triangle on the accuracy range based on rotations
         void setupAccuracyRange();
         void setupAccuracyPoints();
@@ -38,6 +41,11 @@ class Sniper : public Gun {
         virtual void updateLineOfSight(const sf::Vector2f& origin);
         virtual const float getAccuracyModifier() const;
 
+        virtual void handleFireSound() {
+
+            fireSound.play();
+        }
+
     public:
 
         Sniper();
@@ -46,9 +54,19 @@ class Sniper : public Gun {
         virtual void handleButtonPress();
         virtual void handleButtonRelease();
 
+        virtual bool isAiming() {
+
+            return canIncreaseAccuracy();
+        }
+
         virtual void updateGunfire(const sf::Time& delta);
 
         virtual void drawSight(sf::RenderWindow& window);
+
+        virtual void setPlaySounds(bool shouldPlay) {
+
+            shouldPlaySounds = true;
+        }
 
         virtual GunTypes getGunType();
 };

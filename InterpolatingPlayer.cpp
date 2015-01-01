@@ -5,7 +5,8 @@
 InterpolatingPlayer::InterpolatingPlayer():
     PlayerBase(),
     nameText(),
-    font()
+    font(),
+    shouldDraw(true)
     {
         font.loadFromFile("font.ttf");
         nameText.setFont(font);

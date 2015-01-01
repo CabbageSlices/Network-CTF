@@ -101,6 +101,8 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     world.drawForeground(window, getFloor());
 
+    this->drawForeground(window);
+
     GameManager::drawUI(window);
 
     window.display();

@@ -1,15 +1,20 @@
 #include "Sniper.h"
 
+sf::SoundBuffer Sniper::fireBuffer;
+sf::SoundBuffer Sniper::reloadBuffer;
+
 Sniper::Sniper() :
-    Gun(75, 2500, sf::milliseconds(1000), 15),
+    Gun(75, 2500, sf::milliseconds(1000), 20),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
     accuracyChangeRate(8),
     accuracyRange(sf::Triangles, 3)
     {
+        animationTime = sf::milliseconds(200);
+
         originToLine = sf::Vector2f(38, 3);
-        maxCurrentMagazine = 2;
-        maxTotalMagazine = 10;
+        maxCurrentMagazine = 5;
+        maxTotalMagazine = 15;
         currentMagazine = maxCurrentMagazine;
         totalMagazine = maxTotalMagazine;
 
@@ -22,6 +27,15 @@ Sniper::Sniper() :
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
         setupClips();
+
+        if(fireBuffer.getDuration() == sf::seconds(0)) {
+
+            fireBuffer.loadFromFile("sounds/sniperFire.wav");
+            reloadBuffer.loadFromFile("sounds/sniperReload.wav");
+        }
+
+        fireSound.setBuffer(fireBuffer);
+        reloadSound.setBuffer(reloadBuffer);
     }
 
 void Sniper::handleButtonPress() {
@@ -66,6 +80,11 @@ void Sniper::updateGunfire(const sf::Time& delta) {
         //so gun wont fire by itself
         fired = false;
     }
+
+    if(!holdingFireButton) {
+
+        currentAccuracyModifier = accuracyModifier;
+    }
 }
 
 void Sniper::drawSight(sf::RenderWindow& window) {
@@ -81,7 +100,9 @@ GunTypes Sniper::getGunType() {
 
 bool Sniper::canIncreaseAccuracy() {
 
-    return timeSinceFired > fireDelay && holdingFireButton && !mustReload();
+    //don't allow user to incrase accuracy if the reload sound is playing
+    bool reloadSoundPlaying = reloadSound.getStatus() == sf::Sound::Playing;
+    return timeSinceFired > fireDelay && holdingFireButton && !mustReload() && !reloadSoundPlaying;
 }
 
 void Sniper::setupClips() {
@@ -133,7 +154,7 @@ void Sniper::setupAccuracyPoints() {
 
 void Sniper::setupAccuracyColour() {
 
-    accuracyRange[0].color = sf::Color(50, 50, 50);
+    accuracyRange[0].color = sf::Color(50, 50, 50, 80);
     accuracyRange[1].color = sf::Color::Transparent;
     accuracyRange[2].color = sf::Color::Transparent;
 }

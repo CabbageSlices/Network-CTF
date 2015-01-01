@@ -78,6 +78,7 @@ void controlsScreen(sf::RenderWindow& window) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
             }
@@ -144,13 +145,13 @@ ClientGameManager::ClientGameManager() :
 
         pausedTexture.loadFromFile("clientPaused.png");
         pausedSprite.setTexture(pausedTexture);
-        
+
         controlsTexture.loadFromFile("controlsMenu.png");
         controlsSprite.setTexture(controlsTexture);
-        
+
         controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")) );
-        
-        placeButtons("controlsMenu.png");
+
+        placeButtons("controlsMenu.png", controlsButtons);
 
     }
 
@@ -258,11 +259,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
 
                 if(buttons[switchTeams]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     sf::Packet packet;
 
                     //tell server user wants to switch teams
@@ -635,7 +638,8 @@ void ClientGameManager::handleServerUpdates() {
     }
 }
 
-void ClientGameManager::updateScoreboard(sf::RenderWindow& window) {
+void ClientGameManager::update
+(sf::RenderWindow& window) {
 
     if(score.canDisplayInfo()) {
 
@@ -746,12 +750,17 @@ void ClientGameManager::checkButtons(const sf::Vector2f& mousePosition) {
 
     for(auto& button : endMatchButtons) {
 
-        button->checkMouseTouching(mousePosition);
+        button->checkMouseTouching(mousePosition, matchEnded);
     }
 
     for(auto& button : pausedMenuButtons) {
 
-        button->checkMouseTouching(mousePosition);
+        button->checkMouseTouching(mousePosition, paused && !showControls);
+    }
+
+    for(auto& button : controlsButtons) {
+
+        button->checkMouseTouching(mousePosition, showControls);
     }
 }
 
@@ -806,6 +815,7 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
             if(endMatchButtons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 exitGameLoop = true;
             }
 
@@ -813,24 +823,45 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
             return;
         }
 
-        if(paused) {
+        //don't let user click on paused menu buttons if he is viewing controls
+        if(paused && !showControls) {
 
             if(pausedMenuButtons[resumeId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 paused = false;
             }
 
             if(pausedMenuButtons[quitMatch]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 exitGameLoop = true;
             }
 
             if(pausedMenuButtons[quitGame]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 window.close();
             }
 
+            if(pausedMenuButtons[controlsId]->checkMouseTouching(mousePosition)) {
+
+                PredrawnButton::playClickSound();
+                showControls = true;
+            }
+
             //don't handle player inputs if game is paused
+            return;
+        }
+
+        if(showControls) {
+
+            if(controlsButtons[backId]->checkMouseTouching(mousePosition)) {
+
+                PredrawnButton::playClickSound();
+                showControls = false;
+            }
+
             return;
         }
     }
@@ -929,7 +960,7 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     for(auto& player : connectedPlayers) {
 
-        if(player->getFloor() == userPlayer.getFloor()) {
+        if(player->getFloor() == userPlayer.getFloor() && player->isDrawingEnabled()) {
 
             player->draw(window, userPlayer.getFloor());
         }
@@ -972,13 +1003,13 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
             button->draw(window);
         }
     }
-    
+
     if(showControls) {
-        
+
         window.draw(controlsSprite);
-        
+
         for(auto& button : controlsButtons) {
-            
+
             button->draw(window);
         }
     }
@@ -1036,4 +1067,29 @@ void ClientGameManager::handleCollisions() {
     playerStaticCollision(userPlayer, getGameWorld().getBlocks(topLeft, topRight, userPlayer.getFloor()));
 
     playerForegroundCollision();
+
+    //disable gun sounds for any other player thats not in the player screen
+    for(auto& player : connectedPlayers) {
+
+        player->getGun()->setPlaySounds(player->getCollisionBox().intersects(camera.getCameraBounds()));
+
+        //only check for collision with the first foreground object this player collides with that way further collision checks dont enable drawing
+
+        //if a large part of another player collides with a foreground object and the user player is not colliding with it then hide the colliding player
+        for(auto& obj : getForeground(player->getFloor())) {
+
+            sf::FloatRect intersectingArea;
+            bool collides = obj->getCollisionBox().intersects(player->getCollisionBox(), intersectingArea);
+
+            if(collides && intersectingArea.width >= 25 && intersectingArea.height >= 25 && !obj->getCollisionBox().intersects(userPlayer.getCollisionBox())) {
+
+                player->disableDrawing();
+                break;
+
+            } else {
+
+                player->enableDrawing();
+            }
+        }
+    }
 }

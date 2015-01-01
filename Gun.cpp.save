@@ -38,7 +38,9 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     reloading(false),
     animationTimer(),
     animationTime(sf::milliseconds(150)),
-    frame(0)
+    frame(0),
+    fireSound(),
+    reloadSound()
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0));
@@ -116,6 +118,8 @@ bool Gun::reload() {
 
         resetAnimation();
         reloading = true;
+        
+        reloadSound.play();
 
         return true;
     }
@@ -363,6 +367,8 @@ void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bull
 
     //a bullet was just created
     createdBullet = true;
+
+    handleFireSound();
 }
 
 const float Gun::getAccuracyModifier() const {

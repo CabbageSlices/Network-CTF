@@ -89,7 +89,7 @@ class Scoreboard {
 
         Scoreboard();
 
-        void handleEvents(sf::Event& event);
+        void handleStateEvents();
 
         //center the scoreboard around the given position
         //give the size of the screen if you want to draw it on screen

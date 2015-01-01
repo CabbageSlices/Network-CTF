@@ -47,7 +47,8 @@ PlayerBase::PlayerBase():
     flagCaptures(0),
     flagReturns(0),
     maxInterpolationDist(260100),
-    currentFloor(OVERGROUND_FLOOR)
+    currentFloor(OVERGROUND_FLOOR),
+    pickingUpGun(false)
     {
         setupClips();
 

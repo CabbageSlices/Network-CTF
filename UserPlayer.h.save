@@ -30,6 +30,7 @@ class UserPlayer : public PlayerBase{
             RELEASE_DOWN,
 
             RELOAD,
+            PICKUP_GUN,
         };
 
         //information about what the player inputted and when he inputted it
@@ -109,8 +110,7 @@ class UserPlayer : public PlayerBase{
         sf::Clock regenerationTimer;
         sf::Time regenerationDelay;
 
-        const float getHorizontalVelocity() const;
-        const float getVerticalVelocity() const;
+        const float getVelocity() const;
 
         //what factor to reduce velocity by when player ish olding flag
         const float getVelocityReduction() const;
@@ -139,7 +139,7 @@ class UserPlayer : public PlayerBase{
     protected:
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor = 0);
-        
+
         virtual DrawingState getDrawingState();
 
     public:
@@ -197,6 +197,8 @@ class UserPlayer : public PlayerBase{
 
         //draw the gun's icon on the UI
         void drawGunUI(const sf::Vector2f& position, sf::RenderWindow& window);
+
+        void drawGunSights(sf::RenderWindow& window);
 };
 
 #endif // USERPLAYER_H_INCLUDED

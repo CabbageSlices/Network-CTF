@@ -112,6 +112,11 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
             gun->handleButtonPress();
         }
+        
+        if(even.mouseButton.button == sf::Mouse::Right) {
+            
+            placeIntoQueue(createInput(PICKUP_GUN));
+        }
     }
 
     if(event.type == sf::Event::MouseButtonReleased) {
@@ -293,29 +298,34 @@ void UserPlayer::drawGunUI(const sf::Vector2f& position, sf::RenderWindow& windo
     gun->drawUI(position, window);
 }
 
-void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
+void UserPlayer::drawGunSights(sf::RenderWindow& window) {
 
-    gun->drawAll(window);
+    gun->drawSight(window);
 }
 
-DrawingState UserPlayer::getDrawingState() {
-    
+void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
+
+    gun->drawGun(window);
+    gun->drawBullets(window);
+}
+
+PlayerBase::DrawingState UserPlayer::getDrawingState() {
+
     if(velocities.x == 0 && velocities.y == 0) {
-        
+
         return STANDING;
     }
-    
+
     return WALKING;
 }
 
-const float UserPlayer::getHorizontalVelocity() const {
+const float UserPlayer::getVelocity() const {
 
-    return 225;
-}
+    //if player is holdign a sniper and aiming then reduce velocity
+    float baseVelocity = 225;
 
-const float UserPlayer::getVerticalVelocity() const {
-
-    return 225;
+    float dampning = gun->getGunType() == SNIPER && gun->isAiming() ? 75 : 0;
+    return baseVelocity - dampning;
 }
 
 const float UserPlayer::getVelocityReduction() const {
@@ -434,11 +444,11 @@ void UserPlayer::determineMovement() {
 
     if(keystate.pressedLeft) {
 
-        velocities.x = -getHorizontalVelocity();
+        velocities.x = -getVelocity();
 
     } else if(keystate.pressedRight) {
 
-        velocities.x = getHorizontalVelocity();
+        velocities.x = getVelocity();
 
     } else {
 
@@ -447,11 +457,11 @@ void UserPlayer::determineMovement() {
 
     if(keystate.pressedUp) {
 
-        velocities.y = -getVerticalVelocity();
+        velocities.y = -getVelocity();
 
     } else if(keystate.pressedDown) {
 
-        velocities.y = getHorizontalVelocity();
+        velocities.y = getVelocity();
 
     } else {
 

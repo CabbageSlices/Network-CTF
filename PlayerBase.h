@@ -96,6 +96,8 @@ class PlayerBase {
         //current floor of the player, can only interact with others in the same floor
         unsigned short currentFloor;
 
+        bool pickingUpGun;
+
         void setupClips();
 
         //sets position without interpolation
@@ -202,6 +204,16 @@ class PlayerBase {
 
         void resetStats();
         void resetGun();
+
+        bool canPickUpGun() {
+
+            return pickingUpGun;
+        }
+
+        void setPickUpGun(bool toPick) {
+
+            pickingUpGun = toPick;
+        }
 
         const std::string& getName() const;
         const unsigned short& getKills() const;

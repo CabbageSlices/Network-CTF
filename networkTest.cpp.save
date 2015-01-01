@@ -38,8 +38,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }
@@ -86,21 +86,25 @@ void clientTitleScreen(sf::RenderWindow& window) {
 
                 if(buttons[playButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     findMatchScreen(window);
                 }
 
                 if(buttons[quitButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     window.close();
                 }
 
                 if(buttons[creditsButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     creditsScreen(window);
                 }
 
                 if(buttons[controlsButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     controlsScreen(window);
                 }
             }
@@ -168,6 +172,7 @@ void clientHelpMenu(sf::RenderWindow& window) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
             }
@@ -276,16 +281,19 @@ void findMatchScreen(sf::RenderWindow& window) {
 
                 if(serverIpBox.contains(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     string ipToConnectTo = receiveInput(window, "Enter the server's Ip Address", font, serverIpBox.width, textScale);
                     serverIp.setString(ipToConnectTo);
 
                 } else if(serverPortBox.contains(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     string portToConnectTo = receiveInput(window, "Enter the server's port", font, serverPortBox.width, textScale);
                     serverPort.setString(portToConnectTo);
 
                 } else if(nameBox.contains(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     string name = receiveInput(window, "Enter your player name", font, nameBox.width, textScale);
 
                     if(name != "") {
@@ -295,6 +303,7 @@ void findMatchScreen(sf::RenderWindow& window) {
 
                 } else if(buttons[playButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     //if the port is invalid then don't let player try to connect and make him enter a valid port
                     if(!isDigit(serverPort.getString().toAnsiString())) {
 
@@ -319,10 +328,12 @@ void findMatchScreen(sf::RenderWindow& window) {
 
                 } else if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
 
                 } else if(buttons[helpButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     clientHelpMenu(window);
                 }
             }
@@ -396,6 +407,7 @@ void creditsScreen(sf::RenderWindow& window) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
             }
@@ -476,7 +488,9 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                 //don't attempt to host a game if port isn't even a number
                 if(buttons[hostGameId]->checkMouseTouching(mousePosition) && isDigit(serverPortText.getString().toAnsiString())) {
-
+                    
+                    PredrawnButton::playClickSound();
+                    
                     unsigned port = atoi(serverPortText.getString().toAnsiString().c_str());
 
                     //attempt to bind to the socket, if failed then let user know
@@ -488,16 +502,17 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                         displayError(window, "This port is unavailable.\nPlease choose a different\nport.");
                     }
-                    
-                } else if ()
+                }
 
                 if(buttons[quitButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     window.close();
                 }
 
                 if(changePortButton.contains(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     string port = receiveInput(window, "Enter the host port.", font, changePortButton.width);
 
                     if(port.size() > 0) {

@@ -1,7 +1,10 @@
 #include "Pistol.h"
 
+sf::SoundBuffer Pistol::fireBuffer;
+sf::SoundBuffer Pistol::reloadBuffer;
+
 Pistol::Pistol() :
-    Gun(20, 1200.f, sf::milliseconds(400), 1.5)
+    Gun(20, 600, sf::milliseconds(400), 1.5)
     {
         //load the texture for the ui
         uiTexture.loadFromFile("pistolUI.png");
@@ -9,6 +12,15 @@ Pistol::Pistol() :
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
         setupClips();
+
+        if(fireBuffer.getDuration() == sf::seconds(0)) {
+
+            fireBuffer.loadFromFile("sounds/pistolFire.wav");
+            reloadBuffer.loadFromFile("sounds/pistolReload.wav");
+        }
+
+        fireSound.setBuffer(fireBuffer);
+        reloadSound.setBuffer(reloadBuffer);
     }
 
 void Pistol::setupClips() {

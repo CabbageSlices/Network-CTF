@@ -78,6 +78,7 @@ void controlsScreen(sf::RenderWindow& window) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
             }
@@ -258,11 +259,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
 
                 if(buttons[switchTeams]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     sf::Packet packet;
 
                     //tell server user wants to switch teams
@@ -746,17 +749,17 @@ void ClientGameManager::checkButtons(const sf::Vector2f& mousePosition) {
 
     for(auto& button : endMatchButtons) {
 
-        button->checkMouseTouching(mousePosition);
+        button->checkMouseTouching(mousePosition, matchEnded);
     }
 
     for(auto& button : pausedMenuButtons) {
 
-        button->checkMouseTouching(mousePosition);
+        button->checkMouseTouching(mousePosition, paused && !showControls);
     }
 
     for(auto& button : controlsButtons) {
 
-        button->checkMouseTouching(mousePosition);
+        button->checkMouseTouching(mousePosition, showControls);
     }
 }
 
@@ -801,8 +804,6 @@ void ClientGameManager::handleWindowEvents(sf::Event& event, sf::RenderWindow& w
 
 void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow& window) {
 
-    score.handleEvents(event);
-
     if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 
         sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
@@ -811,6 +812,7 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
             if(endMatchButtons[resultToLobbyId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 exitGameLoop = true;
             }
 
@@ -823,21 +825,25 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
             if(pausedMenuButtons[resumeId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 paused = false;
             }
 
             if(pausedMenuButtons[quitMatch]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 exitGameLoop = true;
             }
 
             if(pausedMenuButtons[quitGame]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 window.close();
             }
 
             if(pausedMenuButtons[controlsId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 showControls = true;
             }
 
@@ -849,8 +855,11 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
             if(controlsButtons[backId]->checkMouseTouching(mousePosition)) {
 
+                PredrawnButton::playClickSound();
                 showControls = false;
             }
+
+            return;
         }
     }
 
@@ -948,7 +957,7 @@ void ClientGameManager::drawComponents(sf::RenderWindow& window) {
 
     for(auto& player : connectedPlayers) {
 
-        if(player->getFloor() == userPlayer.getFloor()) {
+        if(player->getFloor() == userPlayer.getFloor() && player->isDrawingEnabled()) {
 
             player->draw(window, userPlayer.getFloor());
         }
@@ -1055,4 +1064,29 @@ void ClientGameManager::handleCollisions() {
     playerStaticCollision(userPlayer, getGameWorld().getBlocks(topLeft, topRight, userPlayer.getFloor()));
 
     playerForegroundCollision();
+
+    //disable gun sounds for any other player thats not in the player screen
+    for(auto& player : connectedPlayers) {
+
+        player->getGun()->setPlaySounds(player->getCollisionBox().intersects(camera.getCameraBounds()));
+
+        //only check for collision with the first foreground object this player collides with that way further collision checks dont enable drawing
+
+        //if a large part of another player collides with a foreground object and the user player is not colliding with it then hide the colliding player
+        for(auto& obj : getForeground(player->getFloor())) {
+
+            sf::FloatRect intersectingArea;
+            bool collides = obj->getCollisionBox().intersects(player->getCollisionBox(), intersectingArea);
+
+            if(collides && intersectingArea.width >= 25 && intersectingArea.height >= 25 && !obj->getCollisionBox().intersects(userPlayer.getCollisionBox())) {
+
+                player->disableDrawing();
+                break;
+
+            } else {
+
+                player->enableDrawing();
+            }
+        }
+    }
 }

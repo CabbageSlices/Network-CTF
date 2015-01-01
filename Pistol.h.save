@@ -4,11 +4,21 @@
 #include "Gun.h"
 
 class Pistol : public Gun {
-    
+
     private:
-    
-        setupClips();
         
+        static sf::SoundBuffer fireBuffer;
+        static sf::SoundBuffer reloadBuffer;
+        
+        void setupClips();
+
+    protected:
+
+        virtual void handleFireSound() {
+
+
+        }
+
     public:
 
         Pistol();

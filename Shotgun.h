@@ -20,11 +20,26 @@ class Shotgun : public Gun {
         //amount of bullets a shotgun needs to fire in order to reduce current magazine count is equal to bulletspershot
         int bulletsFired;
 
+        static sf::SoundBuffer fireBuffer;
+        static sf::SoundBuffer reloadBuffer;
+
+        sf::Clock soundTimer;
+        sf::Time soundDelay;
+
         void setupClips();
 
     protected:
 
         virtual void useAmmo();
+
+        virtual void handleFireSound() {
+
+            if(soundTimer.getElapsedTime() > soundDelay) {
+
+                fireSound.play();
+                soundTimer.restart();
+            }
+        }
 
     public:
 

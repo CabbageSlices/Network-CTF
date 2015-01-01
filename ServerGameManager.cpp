@@ -69,6 +69,7 @@ void serverHelpMenu(sf::RenderWindow& window) {
 
                 if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
                 }
             }
@@ -99,12 +100,12 @@ void serverHelpMenu(sf::RenderWindow& window) {
 }
 
 ServerGameManager::ServerGameManager() :
+    GameManager(),
     inGameTexture(),
     inGameSprite(),
     inGameButtons(),
     endMatch(0),
     quitGame(1),
-    GameManager(),
     server(false),
     players(),
     inputConfirmationTime(),
@@ -245,14 +246,17 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
                 if(buttons[startButton]->checkMouseTouching(mousePosition) && enoughPlayers && everyoneInLobby()) {
 
+                    PredrawnButton::playClickSound();
                     sendGameStarts = true;
 
                 } else if(buttons[backButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     return;
 
                 } else if(buttons[helpButton]->checkMouseTouching(mousePosition)) {
 
+                    PredrawnButton::playClickSound();
                     serverHelpMenu(window);
                 }
 
@@ -260,12 +264,14 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
                 //if he already started the game
                 if(buttons[decreasePoints]->checkMouseTouching(mousePosition) && !sendGameStarts) {
 
+                    PredrawnButton::playClickSound();
                     pointsToWinGame = pointsToWinGame > 1 ? pointsToWinGame - 1 : 1;
                     pointsText.setString(toString(pointsToWinGame));
                 }
 
                 if(buttons[increasePoints]->checkMouseTouching(mousePosition) && !sendGameStarts) {
 
+                    PredrawnButton::playClickSound();
                     pointsToWinGame = pointsToWinGame < 99 ? pointsToWinGame + 1 : 99;
                     pointsText.setString(toString(pointsToWinGame));
                 }
@@ -938,11 +944,13 @@ void ServerGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
         if(inGameButtons[quitGame]->checkMouseTouching(mousePosition)) {
 
+            PredrawnButton::playClickSound();
             window.close();
         }
 
         if(inGameButtons[endMatch]->checkMouseTouching(mousePosition)) {
 
+            PredrawnButton::playClickSound();
             exitGameLoop = true;
         }
     }
@@ -1083,5 +1091,8 @@ void ServerGameManager::handleCollisions() {
         collidePlayerFlag(player->player, *getFlagManager(), teamManager);
 
         playerSpawnCollision(player);
+
+        //reset all player's gun picking up state that way they aren't constantly trying to pick up a gun
+        player->player.setPickUpGun(false);
     }
 }

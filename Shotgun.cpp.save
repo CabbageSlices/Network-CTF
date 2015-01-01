@@ -5,14 +5,19 @@
 using std::cout;
 using std::endl;
 
+sf::SoundBuffer Shotgun::fireBuffer;
+sf::SoundBuffer Shotgun::reloadBuffer;
+
 Shotgun::Shotgun() :
-    Gun(15, 400, sf::milliseconds(1000), 30),
-    bulletsPerShot(5),
-    bulletsFired(0)
+    Gun(15, 450, sf::milliseconds(1000), 20),
+    bulletsPerShot(6),
+    bulletsFired(0),
+    soundTimer(),
+    soundDelay(sf::seconds(fireDelay.asSeconds() / 2))
     {
         originToLine = sf::Vector2f(43, 2);
 
-        maxCurrentMagazine = 4;
+        maxCurrentMagazine = 5;
         maxTotalMagazine = 12;
         currentMagazine = maxCurrentMagazine;
         totalMagazine = maxTotalMagazine;
@@ -23,6 +28,15 @@ Shotgun::Shotgun() :
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
         setupClips();
+
+        if(fireBuffer.getDuration() == sf::seconds(0)) {
+
+            fireBuffer.loadFromFile("sounds/shotgunFire.wav");
+            reloadBuffer.loadFromFile("sounds/shotgunReload.wav");
+        }
+
+        fireSound.setBuffer(fireBuffer);
+        reloadSound.setBuffer(reloadBuffer);
     }
 
 void Shotgun::updateGunfire(const sf::Time& delta) {
@@ -61,7 +75,6 @@ void Shotgun::setupClips() {
     shootingClips.push_back(sf::IntRect(66, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(129, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(192, animationHeight, 59, 43));
-    shootingClips.push_back(sf::IntRect(255, animationHeight, 59, 43));
 
 }
 

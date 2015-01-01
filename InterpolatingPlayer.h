@@ -19,6 +19,8 @@ class InterpolatingPlayer : public PlayerBase {
         sf::Text nameText;
         sf::Font font;
 
+        bool shouldDraw;
+
     protected:
 
         virtual void drawGun(sf::RenderWindow& window, const unsigned& drawingFloor);
@@ -49,6 +51,21 @@ class InterpolatingPlayer : public PlayerBase {
 
                 window.draw(nameText);
             }
+        }
+
+        void enableDrawing() {
+
+            shouldDraw = true;
+        }
+
+        void disableDrawing() {
+
+            shouldDraw = false;
+        }
+
+        bool isDrawingEnabled() {
+
+            return shouldDraw;
         }
 
         //fire a gun and place the bullet at the given location

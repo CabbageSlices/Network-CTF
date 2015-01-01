@@ -1,5 +1,8 @@
 #include "Sniper.h"
 
+sf::SoundBuffer Sniper::fireBuffer;
+sf::SoundBuffer Sniper::reloadBuffer;
+
 Sniper::Sniper() :
     Gun(75, 2500, sf::milliseconds(1000), 15),
     holdingFireButton(false),
@@ -7,9 +10,10 @@ Sniper::Sniper() :
     accuracyChangeRate(8),
     accuracyRange(sf::Triangles, 3)
     {
+        animationTime = sf::
         originToLine = sf::Vector2f(38, 3);
-        maxCurrentMagazine = 2;
-        maxTotalMagazine = 10;
+        maxCurrentMagazine = 5;
+        maxTotalMagazine = 15;
         currentMagazine = maxCurrentMagazine;
         totalMagazine = maxTotalMagazine;
 
@@ -18,10 +22,19 @@ Sniper::Sniper() :
         //load the texture for the ui
         uiTexture.loadFromFile("sniperUI.png");
         uiSprite.setTexture(uiTexture);
-        
+
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
         setupClips();
+
+        if(fireBuffer.getDuration() == sf::seconds(0)) {
+
+            fireBuffer.loadFromFile("sounds/sniperFire.wav");
+            reloadBuffer.loadFromFile("sounds/sniperReload.wav");
+        }
+
+        fireSound.setBuffer(fireBuffer);
+        reloadSound.setBuffer(reloadBuffer);
     }
 
 void Sniper::handleButtonPress() {
@@ -98,7 +111,6 @@ void Sniper::setupClips() {
     shootingClips.push_back(sf::IntRect(66, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(129, animationHeight, 59, 43));
     shootingClips.push_back(sf::IntRect(192, animationHeight, 59, 43));
-    shootingClips.push_back(sf::IntRect(255, animationHeight, 59, 43));
 }
 
 void Sniper::updateLineOfSight(const sf::Vector2f& origin) {

@@ -158,6 +158,8 @@ class ClientGameManager: public GameManager {
             checkButtons(mousePosition);
 
             userPlayer.handleStateEvents();
+
+            score.handleStateEvents();
         }
 
         virtual void updateComponents(sf::RenderWindow& window);
@@ -170,6 +172,11 @@ class ClientGameManager: public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
+
+        virtual void drawForeground(sf::RenderWindow& window) {
+
+            userPlayer.drawGunSights(window);
+        }
 
         virtual void drawUI(sf::RenderWindow& window);
 

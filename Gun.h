@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include "GunTypes.h"
 
 #include <tr1/memory>
@@ -121,6 +122,12 @@ class Gun {
         //current frame of animtion
         int frame;
 
+        sf::Sound fireSound;
+        sf::Sound reloadSound;
+
+        //guns shouldn't play sounds if the player isn't on the same screen as the user
+        bool shouldPlaySounds;
+
         //get the container of clips for the animation that is currently playing
         std::vector<sf::IntRect>& getCurrentClips();
 
@@ -148,6 +155,11 @@ class Gun {
         //different guns might handle ammo use differetly
         virtual void useAmmo();
 
+        //each gun should handle its gunfire sound effect differently
+        //for example the shotgun should only make a sound effect after a certain delay
+        //that way each bullet doesn't make a sound
+        virtual void handleFireSound() = 0;
+
     public:
 
         Gun(const int& damage = 20, const float& maxDist = 1200.f, const sf::Time& fireDelay = sf::milliseconds(400), const float& accuracyMod = 1.5);
@@ -157,6 +169,11 @@ class Gun {
         //have this function in order to have guns that handle button presses differently
         virtual void handleButtonPress();
         virtual void handleButtonRelease();
+
+        virtual bool isAiming() {
+
+            return false;
+        }
 
         //determines if it is time to fire again and fires
         virtual void updateGunfire(const sf::Time& delta);
@@ -188,6 +205,8 @@ class Gun {
         //only draw bullets that are on the drawingfloor because the player might not be on the same floor as the bullet
         void drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor);
 
+        void drawBullets(sf::RenderWindow& window);
+
         void drawUI(const sf::Vector2f& position, sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
@@ -196,6 +215,11 @@ class Gun {
         const std::vector<float>& getQueuedRotations() const;
 
         void clearRotations();
+
+        virtual void setPlaySounds(bool shouldPlay) {
+
+            shouldPlaySounds = shouldPlay;
+        }
 
         void setFloor(const unsigned& floor);
 

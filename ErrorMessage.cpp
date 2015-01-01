@@ -65,6 +65,7 @@ void displayError(sf::RenderWindow& window, const string& message) {
 
             if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 
+                PredrawnButton::playClickSound();
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
 
                 if(buttons[okButton]->checkMouseTouching(mousePosition)) {

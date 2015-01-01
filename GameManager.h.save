@@ -54,8 +54,8 @@ class GameManager {
     protected:
 
         //amount of points required for a team to win the game
-        unsigned pointsToWinGame;
-        
+        short unsigned pointsToWinGame;
+
         //when the player exits the game loop to return to lobby or something
         bool exitGameLoop;
 
@@ -70,7 +70,7 @@ class GameManager {
         //handle input from other components, different for each derived class
         virtual void handleComponentInputs(sf::Event& event, sf::RenderWindow& window) = 0;
 
-        virtual void handleStateEvents() {
+        virtual void handleStateEvents(sf::RenderWindow& window) {
 
             //empty for now
         }
@@ -85,6 +85,8 @@ class GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window) = 0;
+        
+        virtual void drawForeground(sf::RenderWindow& window)
 
         //all UI that are drawn are drawn independantly from the camera so they don't need to be moved along with the camera inorder to say on screen
         //this also means that if you need to interact with the UI you need to reset the view to the default view in order to be able to click on them
