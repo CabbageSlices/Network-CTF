@@ -21,3 +21,37 @@ http://www.freesound.org/people/EMSIarma/sounds/108852/
 
 sniperReload
 http://soundbible.com/1399-Chambering-A-Round.html
+
+errorSound
+https://www.freesound.org/people/Deflin/sounds/182341/
+
+keyboardClick
+https://www.freesound.org/people/Enok123/sounds/157766/
+
+inputFull
+https://www.freesound.org/people/kwahmah_02/sounds/259702/
+
+spawnSound
+https://www.freesound.org/people/bubaproducer/sounds/151022/
+
+flagSound
+https://www.freesound.org/people/GameAudio/sounds/220184/
+
+flagPickup
+https://www.freesound.org/people/timgormly/sounds/170170/
+
+victory
+https://www.freesound.org/people/limetoe/sounds/249524/
+
+
+kick shock
+
+"Kick Shock" Kevin MacLeod (incompetech.com) 
+Licensed under Creative Commons: By Attribution 3.0
+http://creativecommons.org/licenses/by/3.0/
+
+MTA
+
+"MTA" Kevin MacLeod (incompetech.com) 
+Licensed under Creative Commons: By Attribution 3.0
+http://creativecommons.org/licenses/by/3.0/
