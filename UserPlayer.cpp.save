@@ -112,9 +112,9 @@ void UserPlayer::handleEvents(sf::Event& event) {
 
             gun->handleButtonPress();
         }
-        
-        if(even.mouseButton.button == sf::Mouse::Right) {
-            
+
+        if(event.mouseButton.button == sf::Mouse::Right) {
+
             placeIntoQueue(createInput(PICKUP_GUN));
         }
     }
@@ -170,6 +170,11 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
 
         cout << stateUpdate.position.x << "     " << stateUpdate.position.y << endl;
         setPosition(stateUpdate.position);
+    }
+    
+    if(respawned) {
+        
+        respawnSound.play();
     }
 
     setFloor(destinationFloor);
@@ -305,8 +310,8 @@ void UserPlayer::drawGunSights(sf::RenderWindow& window) {
 
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
 
-    gun->drawGun(window);
     gun->drawBullets(window);
+    gun->drawGun(window);
 }
 
 PlayerBase::DrawingState UserPlayer::getDrawingState() {
@@ -403,6 +408,10 @@ void UserPlayer::processInput(const Input& inputToProcess) {
         keystate.pressedDown = false;
     }
 
+    if(action == PICKUP_GUN) {
+
+        pickingUpGun = true;
+    }
 }
 
 void UserPlayer::placeIntoQueue(Input inputToQueue) {

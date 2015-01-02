@@ -5,7 +5,7 @@ using std::string;
 
 string exitedFunction = "~/*//@#$?<>";
 
-string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font, const float& maxTextLengt, const sf::Vector2f& scaleFactor)
+string receiveInput(sf::RenderWindow& window, string message, const sf::Font& font, const float& maxTextLength, const float& scale)
 {
     //ensure the previous window has no view attached so the inputs don't get screwed up
     window.setView(window.getDefaultView());
@@ -29,10 +29,10 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     sf::Text inputText;
     inputText.setFont(font);
 
-    const float textScale = 0.6;
+    const float textScale = scale;
 
     inputText.setScale(textScale, textScale);
-    inputText.setColor(sf::Color::Blue);
+    inputText.setColor(sf::Color::Black);
 
     sf::Texture inputTexture;
     inputTexture.loadFromFile("inputMessage.png");
@@ -56,7 +56,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     inputMessage.setString(message);
     inputMessage.setScale(textScale, textScale);
     inputMessage.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputMessage.getGlobalBounds().width / 2,
-                             messageBox.getGlobalBounds().top + 10);
+                             messageBox.getGlobalBounds().top + 48);
 
     //offset from the bottom of the message box to display the player's input that way its not on the borders of the inputbox
     float distanceFromBottom = 80;
@@ -64,6 +64,12 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     sf::Event event;
 
     bool isActive = true;
+    
+    sf::SoundBuffer buffer;
+    buffer.loadFromFile("sounds/keyboardClick.wav");
+    
+    sf::Sound click;
+    click.setBuffer(buffer);
 
     while(isActive)
     {

@@ -9,6 +9,7 @@
 #include "GunHandlers.h"
 #include "GunTypes.h"
 
+#include <string>
 #include <iostream>
 #include "Bullet.h"
 #include "LineSegment.h"
@@ -16,6 +17,7 @@
 using std::cout;
 using std::endl;
 using std::vector;
+using std::string;
 using std::tr1::shared_ptr;
 
 //gives or takes a flag from a player depending on update from the server
@@ -34,6 +36,7 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
         bool scored = player.isAlive();
 
         player.dropFlag(serverPosition);
+        player.playScoreSound();
 
         if(scored) {
 
@@ -48,6 +51,7 @@ void setGunTo(PlayerBase& player, GunTypes gunType) {
     if(!isType(player.getGun(), gunType)) {
 
         player.setGun(createGun(gunType));
+        player.getGun()->playReloadSound();
     }
 }
 
@@ -96,7 +100,7 @@ void createStatePacket(const UserPlayer& player, sf::Packet& dataDestination) {
     dataDestination << keystate.inputId;
 }
 
-void createUpdatePacket(shared_ptr<FlagManager> flagManager, const UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
+void createUpdatePacket(shared_ptr<FlagManager> flagManager, UserPlayer& player, const sf::Uint32& lastConfirmedInput, sf::Packet& dataDestination,
                         TeamManager& teamManager) {
 
     //set the packet type
@@ -214,6 +218,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> flagABase >> flagBBase >> flagAHeld >> flagBHeld;
 
     if(flagABase) {
+            
+        //if a flags at a
 
         flagManager->teamAFlag()->reset();
     }
@@ -274,6 +280,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     for(auto& player : players) {
 
         updatePacket << player->player.getId();
+        updatePacket << player->player.getName();
         updatePacket << player->player.getDestinationPosition().x << player->player.getDestinationPosition().y;
         updatePacket << player->player.getRotation();
         updatePacket << player->player.getHealth();
@@ -332,6 +339,9 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
 
         int playerId = 0;
         statePacket >> playerId;
+
+        string playerName;
+        statePacket >> playerName;
 
         sf::Vector2f playerPosition(0, 0);
         statePacket >> playerPosition.x >> playerPosition.y;
@@ -433,6 +443,7 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         }
 
         updatedPlayer->setId(playerId);
+        updatedPlayer->setName(playerName);
         updatedPlayer->setInterpolationPositionV2(playerPosition);
         updatedPlayer->setInterpolationRotation(playerRotation);
         updatedPlayer->setHealth(playerHealth);
@@ -453,7 +464,7 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
             updatedPlayer->fireGun(bullet.beginPosition, bullet.endPosition, bullet.floor);
         }
     }
-    
+
     return true;
 }
 

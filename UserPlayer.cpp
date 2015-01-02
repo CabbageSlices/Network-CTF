@@ -172,6 +172,11 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
         setPosition(stateUpdate.position);
     }
 
+    if(respawned) {
+
+        respawnSound.play();
+    }
+
     setFloor(destinationFloor);
 
     //now load the health from the server update

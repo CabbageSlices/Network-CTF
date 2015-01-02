@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include "Healthbar.h"
 #include "FlagManager.h"
 
@@ -98,6 +99,15 @@ class PlayerBase {
 
         bool pickingUpGun;
 
+        sf::SoundBuffer respawnBuffer;
+        sf::Sound respawnSound;
+
+        sf::SoundBuffer getFlagBuffer;
+        sf::Sound getFlagSound;
+
+        sf::SoundBuffer scoreBuffer;
+        sf::Sound scoreSound;
+
         void setupClips();
 
         //sets position without interpolation
@@ -192,6 +202,11 @@ class PlayerBase {
 
         //drop the flag at the given position
         void dropFlag(const sf::Vector2f& position);
+
+        void playScoreSound() {
+
+            scoreSound.play();
+        }
 
         void setFloor(const unsigned& destinationFloor);
         const unsigned getFloor() const;

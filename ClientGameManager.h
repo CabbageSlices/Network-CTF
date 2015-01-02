@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 #include "Client.h"
 #include "UserPlayer.h"
@@ -38,6 +39,8 @@ class ClientGameManager: public GameManager {
 
         //buttons on the controls screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > controlsButtons;
+
+        sf::Music gameBgm;
 
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
@@ -193,7 +196,7 @@ class ClientGameManager: public GameManager {
         bool connectToServer(std::string serverIp, unsigned short serverPort);
         void setPlayerName(std::string name);
 
-        void gameLobby(sf::RenderWindow& window, sf::Font& font);
+        void gameLobby(sf::RenderWindow& window, sf::Font& font, sf::Music& bgm);
 };
 
 void controlsScreen(sf::RenderWindow& window);

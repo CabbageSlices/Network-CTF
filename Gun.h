@@ -240,6 +240,11 @@ class Gun {
             totalMagazine = maxTotalMagazine;
         }
 
+        void playReloadSound() {
+
+            reloadSound.play();
+        }
+
         virtual GunTypes getGunType();
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot

@@ -215,7 +215,7 @@
 	"SFML/Graphics.hpp"
 	<vector>
 
-1420075085 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
+1420165113 source:c:\users\nimesh\documents\github\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -235,9 +235,10 @@
 	"PredrawnButton.h"
 	"ButtonPlacer.h"
 
-1420075045 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
+1420158274 c:\users\nimesh\documents\github\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
 	"Client.h"
 	"UserPlayer.h"
 	"Camera.h"
@@ -306,7 +307,7 @@
 	<cmath>
 	<cstdlib>
 
-1420080989 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
+1420162708 source:c:\users\nimesh\documents\github\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -374,7 +375,7 @@
 	"Floors.h"
 	<iostream>
 
-1420079916 c:\users\nimesh\documents\github\network-ctf\gun.h
+1420165197 c:\users\nimesh\documents\github\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
@@ -383,7 +384,7 @@
 	<vector>
 	<iostream>
 
-1419216721 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
+1420165677 source:c:\users\nimesh\documents\github\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -606,9 +607,10 @@
 	<vector>
 	<tr1/memory>
 
-1420080170 c:\users\nimesh\documents\github\network-ctf\playerbase.h
+1420165514 c:\users\nimesh\documents\github\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
 	"Healthbar.h"
 	"FlagManager.h"
 	<vector>
@@ -635,7 +637,7 @@
 	<vector>
 	<tr1/memory>
 
-1420080390 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
+1420165999 source:c:\users\nimesh\documents\github\network-ctf\userplayer.cpp
 	"UserPlayer.h"
 	"math.h"
 	"Gun.h"
@@ -895,8 +897,9 @@
 	"ScoreDisplay.h"
 	"Conversion.h"
 
-1419983824 source:c:\users\nimesh\documents\github\network-ctf\input.cpp
+1420163692 source:c:\users\nimesh\documents\github\network-ctf\input.cpp
 	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
 	"Input.h"
 
 1262333934 c:\users\nimesh\documents\github\network-ctf\input.h
@@ -940,7 +943,7 @@
 1419113659 c:\users\nimesh\documents\github\network-ctf\typechecker.h
 	<string>
 
-1420066213 source:c:\users\nimesh\documents\github\network-ctf\errormessage.cpp
+1420162651 source:c:\users\nimesh\documents\github\network-ctf\errormessage.cpp
 	"ErrorMessage.h"
 	"PredrawnButton.h"
 	"ButtonPlacer.h"

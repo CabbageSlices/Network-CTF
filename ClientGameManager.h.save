@@ -3,6 +3,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 #include "Client.h"
 #include "UserPlayer.h"
@@ -35,9 +36,11 @@ class ClientGameManager: public GameManager {
 
         //buttons on the paused screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > pausedMenuButtons;
-        
+
         //buttons on the controls screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > controlsButtons;
+        
+        sf::Music 
 
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
@@ -47,7 +50,7 @@ class ClientGameManager: public GameManager {
         unsigned controlsId;
         unsigned quitMatch;
         unsigned quitGame;
-        
+
         //id for buttons on controls menu
         unsigned backId;
 
@@ -64,11 +67,11 @@ class ClientGameManager: public GameManager {
         sf::Sprite matchResultSprite;
 
         bool matchEnded;
-        
+
         //texture to draw in control screen
         sf::Texture controlsTexture;
         sf::Sprite controlsSprite;
-        
+
         bool showControls;
 
         GameState currentState;
@@ -158,6 +161,8 @@ class ClientGameManager: public GameManager {
             checkButtons(mousePosition);
 
             userPlayer.handleStateEvents();
+
+            score.handleStateEvents();
         }
 
         virtual void updateComponents(sf::RenderWindow& window);
@@ -170,6 +175,11 @@ class ClientGameManager: public GameManager {
 
         //draw all components
         virtual void drawComponents(sf::RenderWindow& window);
+
+        virtual void drawForeground(sf::RenderWindow& window) {
+
+            userPlayer.drawGunSights(window);
+        }
 
         virtual void drawUI(sf::RenderWindow& window);
 
@@ -186,7 +196,7 @@ class ClientGameManager: public GameManager {
         bool connectToServer(std::string serverIp, unsigned short serverPort);
         void setPlayerName(std::string name);
 
-        void gameLobby(sf::RenderWindow& window, sf::Font& font);
+        void gameLobby(sf::RenderWindow& window, sf::Font& font, sf::Music& bgm);
 };
 
 void controlsScreen(sf::RenderWindow& window);

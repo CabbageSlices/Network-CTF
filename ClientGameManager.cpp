@@ -109,6 +109,7 @@ ClientGameManager::ClientGameManager() :
     endMatchButtons(),
     pausedMenuButtons(),
     controlsButtons(),
+    gameBgm(),
     resultToLobbyId(0),
     resumeId(0),
     controlsId(1),
@@ -131,6 +132,9 @@ ClientGameManager::ClientGameManager() :
     lastStateUpdateId(0),
     waitingForOthers(true)
     {
+        gameBgm.openFromFile("sounds/kick_shock.wav");
+        gameBgm.setLoop(true);
+
         endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("continueButton.png")) );
 
         //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
@@ -177,7 +181,7 @@ bool ClientGameManager::connectToServer(string serverIp, unsigned short serverPo
     return false;
 }
 
-void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
+void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::Music& lobbyBgm) {
 
     //save the previous screen, that way this screen can just draw overtop of it
     sf::Texture previousScreen;
@@ -360,8 +364,17 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font) {
 
             } else if(packetType == START_GAME) {
 
+                //disable current bgm so that the ingame bgm starts playing
+                lobbyBgm.stop();
+
                 //run the game, will go to the game stage but won't start until server sends state update packet
                 runGame(window);
+
+                //disable ingame bgm
+                gameBgm.stop();
+
+                //replay current bgm
+                lobbyBgm.play();
 
                 //reset the view that way you cna see the menu
                 window.setView(window.getDefaultView());
@@ -563,8 +576,12 @@ void ClientGameManager::handleServerUpdates() {
 
                 serverUpdateTime = stateUpdateTimer.restart();
 
-                //if player is receiving state updates that meanst he game already started
-                waitingForOthers = false;
+                //if he was previously waiting for others it means the game has now started so start playing music and stop waiting for others
+                if(waitingForOthers) {
+
+                    waitingForOthers = false;
+                    gameBgm.play();
+                }
             }
 
             //when looking at victory or defeat only load textures
@@ -865,7 +882,16 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 
-        paused = !paused;
+        if(!paused) {
+
+            paused = true;
+            gameBgm.pause();
+
+        } else {
+
+            paused = false;
+            gameBgm.play();
+        }
     }
 
     //handle the player's inputs
@@ -1078,7 +1104,7 @@ void ClientGameManager::handleCollisions() {
             sf::FloatRect intersectingArea;
             bool collides = obj->getCollisionBox().intersects(player->getCollisionBox(), intersectingArea);
 
-            if(collides && intersectingArea.width >= 25 && intersectingArea.height >= 25 && !obj->getCollisionBox().intersects(userPlayer.getCollisionBox())) {
+            if(player->getTeam() != userPlayer.getTeam() && collides && intersectingArea.width >= 25 && intersectingArea.height >= 25 && !obj->getCollisionBox().intersects(userPlayer.getCollisionBox())) {
 
                 player->disableDrawing();
                 break;

@@ -23,7 +23,7 @@ using std::atoi;
 
 void clientTitleScreen(sf::RenderWindow& window);
 void clientHelpMenu(sf::RenderWindow& window);
-void findMatchScreen(sf::RenderWindow& window);
+void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm);
 void creditsScreen(sf::RenderWindow& window);
 
 void serverTitleScreen(sf::RenderWindow& window);
@@ -45,6 +45,15 @@ int main() {
 }
 
 void clientTitleScreen(sf::RenderWindow& window) {
+
+    sf::Music bgm;
+
+    bgm.openFromFile("sounds/TriumphantReturn.wav");
+
+    bgm.setLoop(true);
+
+    bgm.play();
+    bgm.setVolume(20);
 
     //load up the image of the title screen
     sf::Texture titleScreenTexture;
@@ -87,7 +96,7 @@ void clientTitleScreen(sf::RenderWindow& window) {
                 if(buttons[playButton]->checkMouseTouching(mousePosition)) {
 
                     PredrawnButton::playClickSound();
-                    findMatchScreen(window);
+                    findMatchScreen(window, bgm);
                 }
 
                 if(buttons[quitButton]->checkMouseTouching(mousePosition)) {
@@ -199,7 +208,7 @@ void clientHelpMenu(sf::RenderWindow& window) {
     }
 }
 
-void findMatchScreen(sf::RenderWindow& window) {
+void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 
     //save the previous window image as a backgroud image that way you don't have to load the background again
     sf::Texture background;
@@ -319,7 +328,7 @@ void findMatchScreen(sf::RenderWindow& window) {
 
                     if(client.connectToServer(ipAddress, port)) {
 
-                        client.gameLobby(window, font);
+                        client.gameLobby(window, font, bgm);
 
                     } else {
 

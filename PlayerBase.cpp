@@ -48,7 +48,13 @@ PlayerBase::PlayerBase():
     flagReturns(0),
     maxInterpolationDist(260100),
     currentFloor(OVERGROUND_FLOOR),
-    pickingUpGun(false)
+    pickingUpGun(false),
+    respawnBuffer(),
+    respawnSound(),
+    getFlagBuffer(),
+    getFlagSound(),
+    scoreBuffer(),
+    scoreSound()
     {
         setupClips();
 
@@ -72,6 +78,15 @@ PlayerBase::PlayerBase():
 
         redIndicatorTexture.loadFromFile("redFlagIndicator.png");
         blueIndicatorTexture.loadFromFile("blueFlagIndicator.png");
+
+        respawnBuffer.loadFromFile("sounds/respawn.wav");
+        respawnSound.setBuffer(respawnBuffer);
+
+        getFlagBuffer.loadFromFile("sounds/flagPickup.wav");
+        getFlagSound.setBuffer(getFlagBuffer);
+
+        scoreBuffer.loadFromFile("sounds/flagSound.wav");
+        scoreSound.setBuffer(scoreBuffer);
     }
 
 PlayerBase::~PlayerBase() {
@@ -306,6 +321,8 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
 
     setPosition(spawnPosition);
     health.refillHealth();
+
+    respawnSound.play();
 }
 
 void PlayerBase::getHit(int damage) {
@@ -346,6 +363,8 @@ void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
 
     flagBeingHeld = flagToHold;
     flagToHold->pickUpFlag();
+
+    getFlagSound.play();
 }
 
 void PlayerBase::dropFlag() {
@@ -534,4 +553,6 @@ void PlayerBase::die() {
 
     //increase the amount of deaths
     setDeaths(getDeaths() + 1);
+
+    respawnSound.play();
 }

@@ -39,6 +39,7 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
 
         if(scored) {
 
+            player.playScoreSound();
             flagManager->resetFlags();
         }
     }
@@ -50,6 +51,7 @@ void setGunTo(PlayerBase& player, GunTypes gunType) {
     if(!isType(player.getGun(), gunType)) {
 
         player.setGun(createGun(gunType));
+        player.getGun()->playReloadSound();
     }
 }
 
@@ -217,10 +219,21 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     if(flagABase) {
 
+        //if a flags at base on server, but not on the client that means the flag was returned to base, so play the score sound which is also the return to base sound
+        if(!flagManager->teamAFlag()->isAtSpawn()) {
+
+            player.playScoreSound();
+        }
+
         flagManager->teamAFlag()->reset();
     }
 
     if(flagBBase) {
+
+        if(!flagManager->teamBFlag()->isAtSpawn()) {
+
+            player.playScoreSound();
+        }
 
         flagManager->teamBFlag()->reset();
     }

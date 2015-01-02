@@ -1,4 +1,5 @@
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include "Input.h"
 
 using std::string;
@@ -65,6 +66,22 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
 
     bool isActive = true;
 
+    sf::SoundBuffer buffer;
+    buffer.loadFromFile("sounds/keyboardClick.wav");
+
+    sf::SoundBuffer errorBuffer;
+    errorBuffer.loadFromFile("sounds/inputError.wav");
+
+    sf::Sound click;
+    click.setBuffer(buffer);
+
+    sf::Sound error;
+    error.setBuffer(errorBuffer);
+
+    //keep track of the previous length of the string that way you can play a sound if the length changed
+    //if you enter a key or erase a key and the length changes a sound should play, otherwise there is no space for input and sound shouldn't play
+    int previousLength = input.size();
+
     while(isActive)
     {
         while(window.pollEvent(event))
@@ -101,11 +118,6 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
             }
         }
 
-        //set the message and place the text at the center of the message box
-        inputText.setString(input);
-        inputText.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputText.getGlobalBounds().width / 2,
-                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - distanceFromBottom);
-
         //if the size of the text exceeds the size of the message box then erase the last letter of the message so it fits
         while(inputText.getGlobalBounds().width > maxInputLength)
         {
@@ -113,8 +125,22 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
             {
                 input.erase(input.end() - 1);
                 inputText.setString(input);
+
+                error.play();
             }
         }
+
+        //set the message and place the text at the center of the message box
+        inputText.setString(input);
+        inputText.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputText.getGlobalBounds().width / 2,
+                              messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - distanceFromBottom);
+
+        if(previousLength != input.size()) {
+
+            click.play();
+        }
+
+        previousLength = input.size();
 
         window.clear();
 

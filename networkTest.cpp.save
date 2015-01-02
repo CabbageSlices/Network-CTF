@@ -46,6 +46,14 @@ int main() {
 
 void clientTitleScreen(sf::RenderWindow& window) {
 
+    sf::Music bgm;
+
+    bgm.openFromFile("sounds/MTA.wav");
+
+    bgm.setLoop(true);
+
+    bgm.play();
+
     //load up the image of the title screen
     sf::Texture titleScreenTexture;
     titleScreenTexture.loadFromFile("clientMainMenu.png");
@@ -488,9 +496,9 @@ void serverTitleScreen(sf::RenderWindow& window) {
 
                 //don't attempt to host a game if port isn't even a number
                 if(buttons[hostGameId]->checkMouseTouching(mousePosition) && isDigit(serverPortText.getString().toAnsiString())) {
-                    
+
                     PredrawnButton::playClickSound();
-                    
+
                     unsigned port = atoi(serverPortText.getString().toAnsiString().c_str());
 
                     //attempt to bind to the socket, if failed then let user know

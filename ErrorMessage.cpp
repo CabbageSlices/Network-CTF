@@ -49,6 +49,13 @@ void displayError(sf::RenderWindow& window, const string& message) {
 
     placeButtons("errormessage.png", buttons);
 
+    sf::SoundBuffer errorBuffer;
+    errorBuffer.loadFromFile("sounds/errorSound.wav");
+
+    sf::Sound errorSound;
+    errorSound.setBuffer(errorBuffer);
+    errorSound.play();
+
     //index of buttons
     unsigned okButton = 0;
 
