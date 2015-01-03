@@ -26,7 +26,7 @@ UserPlayer::UserPlayer():
     keystateUpdateTimer(),
     keystateUpdateDelay(sf::milliseconds(60)),
     keystate(),
-    healthRecovered(10),
+    healthRecovered(23),
     regenerationTimer(),
     regenerationDelay(sf::seconds(3))
     {

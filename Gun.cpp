@@ -41,7 +41,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     frame(0),
     fireSound(),
     reloadSound(),
-    shouldPlaySounds(false)
+    shouldPlaySounds(true)
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0));

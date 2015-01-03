@@ -26,7 +26,7 @@ UserPlayer::UserPlayer():
     keystateUpdateTimer(),
     keystateUpdateDelay(sf::milliseconds(60)),
     keystate(),
-    healthRecovered(10),
+    healthRecovered(23),
     regenerationTimer(),
     regenerationDelay(sf::seconds(3))
     {
@@ -285,6 +285,13 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
+    //if player is spawning dont let him move
+    if(playSpawnAnimation) {
+
+        velocities.x = 0;
+        velocities.y = 0;
+    }
+
     sf::Vector2f position = destinationHitBox.getPosition();
     position.x += velocities.x * delta;
     position.y += velocities.y * delta;
@@ -330,9 +337,9 @@ PlayerBase::DrawingState UserPlayer::getDrawingState() {
 
         return DYING;
     }
-    
+
     if(playSpawnAnimation) {
-        
+
         return SPAWNING;
     }
 
@@ -342,7 +349,7 @@ PlayerBase::DrawingState UserPlayer::getDrawingState() {
 const float UserPlayer::getVelocity() const {
 
     //if player is holdign a sniper and aiming then reduce velocity
-    float baseVelocity = 225;
+    float baseVelocity = 25;
 
     float dampning = gun->getGunType() == SNIPER && gun->isAiming() ? 75 : 0;
     return baseVelocity - dampning;
