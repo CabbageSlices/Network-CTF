@@ -396,7 +396,7 @@ bool loadBackground(fstream& file, LargeImage& image, const string& beginTag, co
     //read the image path
     getline(file, imagePath);
 
-    image.load(imagePath);
+    image.load("images/" + imagePath);
 
     return file.good();
 }

@@ -14,7 +14,7 @@ ForegroundObject::ForegroundObject(const string& imagePath) :
     hasTexture(false),
     hidingPlayer(false)
     {
-        hasTexture = foregroundTexture.loadFromFile(imagePath);
+        hasTexture = foregroundTexture.loadFromFile("images/" + imagePath);
 
         collisionBox.setTexture(&foregroundTexture);
         collisionBox.setSize(sf::Vector2f(foregroundTexture.getSize().x, foregroundTexture.getSize().y));

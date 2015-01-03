@@ -19,7 +19,7 @@ GameManager::GameManager() :
     pointsToWinGame(1),
     exitGameLoop(false)
     {
-        world.load("untitled");
+        world.load("level/untitled");
         headsUpDisplay.getMinimap().setLevelSize(sf::Vector2f(3968, 1472));
     }
 
