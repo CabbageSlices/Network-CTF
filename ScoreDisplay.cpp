@@ -9,7 +9,9 @@ ScoreDisplay::ScoreDisplay(const sf::Vector2u& screenSize):
     font(),
     TEXT_SCALE(0.35),
     redScore(),
-    blueScore()
+    blueScore(),
+    redScoreNum(0),
+    blueScoreNum(0)
     {
         scoreTexture.loadFromFile("scoredisplay.png");
         scoreSprite.setTexture(scoreTexture);
@@ -38,11 +40,13 @@ void ScoreDisplay::handleScreenResize(const sf::Vector2u& screenSize) {
 void ScoreDisplay::setRedScore(unsigned short& score) {
 
     redScore.setString(toString(score));
+    redScoreNum = score;
 }
 
 void ScoreDisplay::setBlueScore(unsigned short& score) {
 
     blueScore.setString(toString(score));
+    blueScoreNum = score;
 }
 
 void ScoreDisplay::draw(sf::RenderWindow& window) {

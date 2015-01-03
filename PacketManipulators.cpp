@@ -39,7 +39,6 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
 
         if(scored) {
 
-            player.playScoreSound();
             flagManager->resetFlags();
         }
     }
@@ -185,6 +184,12 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     unsigned short team_B_Score = 0;
 
     updatePacket >> team_A_Score >> team_B_Score;
+
+    //if either teams score is bigger on the server side than the client side it means someone scored so play score sound
+    if(scoreDisplay.getRedScore() < team_A_Score || scoreDisplay.getBlueScore() < team_B_Score) {
+
+        player.playScoreSound();
+    }
 
     scoreDisplay.setRedScore(team_A_Score);
     scoreDisplay.setBlueScore(team_B_Score);

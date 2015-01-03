@@ -110,6 +110,10 @@ ClientGameManager::ClientGameManager() :
     pausedMenuButtons(),
     controlsButtons(),
     gameBgm(),
+    winSoundBuffer(),
+    loseSoundBuffer(),
+    winSound(),
+    loseSound(),
     resultToLobbyId(0),
     resumeId(0),
     controlsId(1),
@@ -133,6 +137,7 @@ ClientGameManager::ClientGameManager() :
     waitingForOthers(true)
     {
         gameBgm.openFromFile("sounds/kick_shock.wav");
+        gameBgm.setVolume(35);
         gameBgm.setLoop(true);
 
         endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("continueButton.png")) );
@@ -157,6 +162,11 @@ ClientGameManager::ClientGameManager() :
 
         placeButtons("controlsMenu.png", controlsButtons);
 
+        winSoundBuffer.loadFromFile("sounds/victory.wav");
+        winSound.setBuffer(winSoundBuffer);
+        
+        loseSoundBuffer.loadFromFile("sounds/defeat.wav");
+        loseSound.setBuffer(loseSoundBuffer);
     }
 
 void ClientGameManager::setPlayerName(string name) {
@@ -593,6 +603,10 @@ void ClientGameManager::handleServerUpdates() {
 
                 loadVictoryTexture(matchResultTexture);
                 matchResultSprite.setTexture(matchResultTexture);
+
+                //disable the previous bgm and play the victor sound
+                winSound.play();
+                gameBgm.pause();
             }
 
             matchEnded = true;
@@ -618,6 +632,10 @@ void ClientGameManager::handleServerUpdates() {
 
                 loadDefeatTexture(matchResultTexture);
                 matchResultSprite.setTexture(matchResultTexture);
+                
+                //disable the previous bgm and play the loss sound
+                loseSound.play();
+                gameBgm.pause();
             }
 
             matchEnded = true;
@@ -1094,7 +1112,7 @@ void ClientGameManager::handleCollisions() {
     //disable gun sounds for any other player thats not in the player screen
     for(auto& player : connectedPlayers) {
 
-        player->getGun()->setPlaySounds(player->getCollisionBox().intersects(camera.getCameraBounds()));
+        player->setPlaySounds(player->getCollisionBox().intersects(camera.getCameraBounds()));
 
         //only check for collision with the first foreground object this player collides with that way further collision checks dont enable drawing
 

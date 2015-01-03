@@ -42,6 +42,13 @@ class ClientGameManager: public GameManager {
 
         sf::Music gameBgm;
 
+        //sound effect for when you win or lose the game
+        sf::SoundBuffer winSoundBuffer;
+        sf::SoundBuffer loseSoundBuffer;
+
+        sf::Sound winSound;
+        sf::Sound loseSound;
+
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
 

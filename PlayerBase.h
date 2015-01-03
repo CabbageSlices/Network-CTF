@@ -6,6 +6,7 @@
 #include "SFML/Audio.hpp"
 #include "Healthbar.h"
 #include "FlagManager.h"
+#include "Gun.h"
 
 #include <vector>
 #include <map>
@@ -108,6 +109,8 @@ class PlayerBase {
         sf::SoundBuffer scoreBuffer;
         sf::Sound scoreSound;
 
+        bool shouldPlaySounds;
+
         void setupClips();
 
         //sets position without interpolation
@@ -206,6 +209,12 @@ class PlayerBase {
         void playScoreSound() {
 
             scoreSound.play();
+        }
+
+        void setPlaySounds(bool play) {
+
+            shouldPlaySounds = play;
+            gun->setPlaySounds(play);
         }
 
         void setFloor(const unsigned& destinationFloor);

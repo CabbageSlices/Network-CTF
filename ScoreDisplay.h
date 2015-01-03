@@ -22,6 +22,10 @@ class ScoreDisplay {
         sf::Text redScore;
         sf::Text blueScore;
 
+        //save the scores as numbers as well that way you can easily access them
+        unsigned redScoreNum;
+        unsigned blueScoreNum;
+
         //position the entire score display
         void positionDisplay(const sf::Vector2u& screenSize);
 
@@ -36,6 +40,16 @@ class ScoreDisplay {
 
         void setRedScore(unsigned short& score);
         void setBlueScore(unsigned short& score);
+
+        const unsigned& getRedScore() {
+
+            return redScoreNum;
+        }
+
+        const unsigned& getBlueScore() {
+
+            return blueScoreNum;
+        }
 
         void draw(sf::RenderWindow& window);
 };

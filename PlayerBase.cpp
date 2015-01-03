@@ -54,7 +54,8 @@ PlayerBase::PlayerBase():
     getFlagBuffer(),
     getFlagSound(),
     scoreBuffer(),
-    scoreSound()
+    scoreSound(),
+    shouldPlaySounds(true)
     {
         setupClips();
 
@@ -322,7 +323,10 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
     setPosition(spawnPosition);
     health.refillHealth();
 
-    respawnSound.play();
+    if(shouldPlaySounds) {
+
+        respawnSound.play();
+    }
 }
 
 void PlayerBase::getHit(int damage) {
@@ -364,7 +368,10 @@ void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
     flagBeingHeld = flagToHold;
     flagToHold->pickUpFlag();
 
-    getFlagSound.play();
+    if(shouldPlaySounds) {
+
+        getFlagSound.play();
+    }
 }
 
 void PlayerBase::dropFlag() {
@@ -554,5 +561,8 @@ void PlayerBase::die() {
     //increase the amount of deaths
     setDeaths(getDeaths() + 1);
 
-    respawnSound.play();
+    if(shouldPlaySounds) {
+
+        respawnSound.play();
+    }
 }

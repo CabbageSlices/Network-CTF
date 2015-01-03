@@ -955,3 +955,602 @@
 	"SFML/Graphics.hpp"
 	<string>
 
+1417455984 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\block.cpp
+	"Block.h"
+	"math.h"
+
+1417458208 c:\users\nimesh\documents\github\network-ctf\network-ctf\block.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"StaticObject.h"
+
+1417146992 c:\users\nimesh\documents\github\network-ctf\network-ctf\staticobject.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1419795348 c:\users\nimesh\documents\github\network-ctf\network-ctf\math.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1417320204 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\bullet.cpp
+	"Bullet.h"
+	"LineSegment.h"
+	"math.h"
+	<cmath>
+	<iostream>
+
+1417147202 c:\users\nimesh\documents\github\network-ctf\network-ctf\bullet.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+
+1405145332 c:\users\nimesh\documents\github\network-ctf\network-ctf\linesegment.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+	<string>
+
+1419032196 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\button.cpp
+	"Button.h"
+	<iostream>
+
+1419032196 c:\users\nimesh\documents\github\network-ctf\network-ctf\button.h
+	"SFML/Graphics.hpp"
+	"SFML/Window.hpp"
+	<string>
+	<functional>
+
+1419711184 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\buttonplacer.cpp
+	"ButtonPlacer.h"
+	"SFML/Graphics.hpp"
+
+1419714980 c:\users\nimesh\documents\github\network-ctf\network-ctf\buttonplacer.h
+	<vector>
+	<string>
+	"SFML/Graphics.hpp"
+
+1419364810 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\camera.cpp
+	"Camera.h"
+	"math.h"
+	<iostream>
+
+1419364810 c:\users\nimesh\documents\github\network-ctf\network-ctf\camera.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1418953424 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\client.cpp
+	"Client.h"
+	"PacketIdentification.h"
+	"PacketManipulators.h"
+	<iostream>
+
+1418859016 c:\users\nimesh\documents\github\network-ctf\network-ctf\client.h
+	"SFML/Network.hpp"
+	"ConnectionManager.h"
+	<string>
+
+1419112920 c:\users\nimesh\documents\github\network-ctf\network-ctf\connectionmanager.h
+	"SFML/Network.hpp"
+
+1419210410 c:\users\nimesh\documents\github\network-ctf\network-ctf\packetidentification.h
+
+1419121158 c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.h
+	"SFML/Network.hpp"
+	"ServerGameManager.h"
+	<vector>
+	<tr1/memory>
+
+1419893982 c:\users\nimesh\documents\github\network-ctf\network-ctf\servergamemanager.h
+	"SFML/Network.hpp"
+	"UserPlayer.h"
+	"ConnectionManager.h"
+	"GameManager.h"
+	"StateTracker.h"
+	"TeamManager.h"
+	<vector>
+	<tr1/memory>
+
+1420079918 c:\users\nimesh\documents\github\network-ctf\network-ctf\userplayer.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"PlayerBase.h"
+	<vector>
+	<tr1/memory>
+
+1420245115 c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
+	"Healthbar.h"
+	"FlagManager.h"
+	"Gun.h"
+	<vector>
+	<map>
+	<tr1/memory>
+	<string>
+
+1419971150 c:\users\nimesh\documents\github\network-ctf\network-ctf\healthbar.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1408134686 c:\users\nimesh\documents\github\network-ctf\network-ctf\flagmanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<tr1/memory>
+	<map>
+
+1420071600 c:\users\nimesh\documents\github\network-ctf\network-ctf\gamemanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"GameWorld.h"
+	"HeadsUpDisplay.h"
+	"Floors.h"
+	<vector>
+	<tr1/memory>
+
+1408920068 c:\users\nimesh\documents\github\network-ctf\network-ctf\gameworld.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Floors.h"
+	"LargeImage.h"
+	"Floor.h"
+	<map>
+	<vector>
+	<tr1/memory>
+	<string>
+
+1407778956 c:\users\nimesh\documents\github\network-ctf\network-ctf\floors.h
+
+1408727396 c:\users\nimesh\documents\github\network-ctf\network-ctf\largeimage.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+	<tr1/memory>
+	<string>
+
+1408729096 c:\users\nimesh\documents\github\network-ctf\network-ctf\floor.h
+	<vector>
+	<tr1/memory>
+	"LargeImage.h"
+
+1419377836 c:\users\nimesh\documents\github\network-ctf\network-ctf\headsupdisplay.h
+	"Minimap.h"
+	"StatDisplay.h"
+	"ScoreDisplay.h"
+	<string>
+	<tr1/memory>
+
+1419364640 c:\users\nimesh\documents\github\network-ctf\network-ctf\minimap.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+
+1419120806 c:\users\nimesh\documents\github\network-ctf\network-ctf\statdisplay.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Healthbar.h"
+	<string>
+	<vector>
+	<tr1/memory>
+
+1420244142 c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.h
+	"SFML/Graphics.hpp"
+	"SFML/System.hpp"
+
+1405145332 c:\users\nimesh\documents\github\network-ctf\network-ctf\statetracker.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<vector>
+
+1418948118 c:\users\nimesh\documents\github\network-ctf\network-ctf\teammanager.h
+	<map>
+	"SFML/Graphics.hpp"
+
+1420247394 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
+	"ClientGameManager.h"
+	"PacketManipulators.h"
+	"PacketIdentification.h"
+	"Bullet.h"
+	"LineSegment.h"
+	"Collision.h"
+	"InterpolatingPlayer.h"
+	"ForegroundObject.h"
+	"TeamManager.h"
+	"Block.h"
+	"Gun.h"
+	"ErrorMessage.h"
+	<cstdlib>
+	<iostream>
+	<map>
+	<iterator>
+	"PredrawnButton.h"
+	"ButtonPlacer.h"
+
+1420244249 c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
+	"Client.h"
+	"UserPlayer.h"
+	"Camera.h"
+	"GameManager.h"
+	"Scoreboard.h"
+	"HeadsUpDisplay.h"
+	<tr1/memory>
+	<vector>
+	<string>
+
+1420075046 c:\users\nimesh\documents\github\network-ctf\network-ctf\scoreboard.h
+	"SFML/Window.hpp"
+	"SFML/Graphics.hpp"
+	"TeamManager.h"
+	"Conversion.h"
+	<vector>
+	<tr1/memory>
+
+1409847446 c:\users\nimesh\documents\github\network-ctf\network-ctf\conversion.h
+	<string>
+	<sstream>
+
+1409594626 c:\users\nimesh\documents\github\network-ctf\network-ctf\collision.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Bullet.h"
+	<tr1/memory>
+	<vector>
+	<functional>
+
+1420072416 c:\users\nimesh\documents\github\network-ctf\network-ctf\interpolatingplayer.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"PlayerBase.h"
+	<vector>
+	<tr1/memory>
+
+1408741428 c:\users\nimesh\documents\github\network-ctf\network-ctf\foregroundobject.h
+	"StaticObject.h"
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<string>
+
+1420165198 c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
+	"GunTypes.h"
+	<tr1/memory>
+	<vector>
+	<iostream>
+
+1408042932 c:\users\nimesh\documents\github\network-ctf\network-ctf\guntypes.h
+
+1419276408 c:\users\nimesh\documents\github\network-ctf\network-ctf\errormessage.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<string>
+
+1420066936 c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.h
+	"SFML/Graphics.hpp"
+	"SFML/System.hpp"
+	"SFML/Audio.hpp"
+	<string>
+	<vector>
+	<tr1/memory>
+
+1408055964 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\collision.cpp
+	"Collision.h"
+	"LineSegment.h"
+	"math.h"
+	"Bullet.h"
+	"userPlayer.h"
+	"Portal.h"
+	"Block.h"
+	"GunGiver.h"
+	<cmath>
+
+1408741706 c:\users\nimesh\documents\github\network-ctf\network-ctf\portal.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"StaticObject.h"
+	"Floors.h"
+
+1408741496 c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.h
+	"GunTypes.h"
+	"StaticObject.h"
+	<map>
+
+1419113924 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\connectionmanager.cpp
+	"ConnectionManager.h"
+
+1420162652 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\errormessage.cpp
+	"ErrorMessage.h"
+	"PredrawnButton.h"
+	"ButtonPlacer.h"
+	<vector>
+	<tr1/memory>
+
+1262333876 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\flag.cpp
+	"Flag.h"
+	"Floors.h"
+	"math.h"
+	<iostream>
+
+1262333910 c:\users\nimesh\documents\github\network-ctf\network-ctf\flag.h
+	"SFML/Graphics.hpp"
+	"SFML/System.hpp"
+
+1419966884 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\flagmanager.cpp
+	"FlagManager.h"
+	"TeamManager.h"
+	"math.h"
+	"Flag.h"
+	<stdexcept>
+	<iostream>
+	<string>
+	"PlayerBase.h"
+
+1407778956 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\floors.cpp
+	"Floors.h"
+
+1417146746 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\foregroundobject.cpp
+	"ForegroundObject.h"
+	"math.h"
+	<iostream>
+
+1420071582 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gamemanager.cpp
+	"GameManager.h"
+	"LevelManager.h"
+	"Minimap.h"
+	<iostream>
+
+1408736310 c:\users\nimesh\documents\github\network-ctf\network-ctf\levelmanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	<string>
+	<vector>
+	<tr1/memory>
+	<fstream>
+	"Floor.h"
+	"Flag.h"
+
+1419377142 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gameworld.cpp
+	"GameWorld.h"
+	"Block.h"
+	"LevelManager.h"
+	"ForegroundObject.h"
+	"FlagManager.h"
+	"TeamManager.h"
+	"PlayerBase.h"
+	"Portal.h"
+	"math.h"
+	"GunGiver.h"
+	<cmath>
+	<iostream>
+	<algorithm>
+
+1420081022 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.cpp
+	"Gun.h"
+	"LineSegment.h"
+	"Bullet.h"
+	<cmath>
+	"math.h"
+	"Floors.h"
+	<iostream>
+
+1420080022 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.cpp
+	"GunGiver.h"
+	"PlayerBase.h"
+	"GunHandlers.h"
+	"Gun.h"
+	"math.h"
+	<iostream>
+
+1408043568 c:\users\nimesh\documents\github\network-ctf\network-ctf\gunhandlers.h
+	"GunTypes.h"
+	<tr1/memory>
+
+1408046660 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gunhandlers.cpp
+	"GunHandlers.h"
+	"Gun.h"
+	"Sniper.h"
+	"Shotgun.h"
+	"Pistol.h"
+
+1420075794 c:\users\nimesh\documents\github\network-ctf\network-ctf\sniper.h
+	"Gun.h"
+
+1420068864 c:\users\nimesh\documents\github\network-ctf\network-ctf\shotgun.h
+	"Gun.h"
+
+1420068864 c:\users\nimesh\documents\github\network-ctf\network-ctf\pistol.h
+	"Gun.h"
+
+1416975714 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\headsupdisplay.cpp
+	"HeadsUpDisplay.h"
+
+1419971150 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\healthbar.cpp
+	"Healthbar.h"
+
+1420163694 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\input.cpp
+	"SFML/Graphics.hpp"
+	"SFML/Audio.hpp"
+	"Input.h"
+
+1262333936 c:\users\nimesh\documents\github\network-ctf\network-ctf\input.h
+	"SFML/Graphics.hpp"
+	<string>
+
+1420072406 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\interpolatingplayer.cpp
+	"InterpolatingPlayer.h"
+	"Gun.h"
+	"math.h"
+
+1408736732 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\largeimage.cpp
+	"LargeImage.h"
+	<cmath>
+
+1408040162 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\lerp.cpp
+	"Lerp.h"
+	<iostream>
+
+1408040162 c:\users\nimesh\documents\github\network-ctf\network-ctf\lerp.h
+
+1417458176 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\levelmanager.cpp
+	"LevelManager.h"
+	"Block.h"
+	"ForegroundObject.h"
+	"Portal.h"
+	"GunGiver.h"
+	"GunTypes.h"
+	"LargeImage.h"
+	"StaticObject.h"
+	<iostream>
+	<cstdlib>
+
+1407949904 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\linesegment.cpp
+	"LineSegment.h"
+	"UndefinedLineSegment.h"
+	<cmath>
+	<iostream>
+
+1405145332 c:\users\nimesh\documents\github\network-ctf\network-ctf\undefinedlinesegment.h
+	"LineSegment.h"
+
+1419795348 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\math.cpp
+	"math.h"
+	<cmath>
+	<cstdlib>
+
+1419363960 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\minimap.cpp
+	"Minimap.h"
+
+1420162710 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\networktest.cpp
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"ClientGameManager.h"
+	"ServerGameManager.h"
+	"Input.h"
+	"PredrawnButton.h"
+	"ButtonPlacer.h"
+	"TypeChecker.h"
+	"ErrorMessage.h"
+	<tr1/memory>
+	<vector>
+	<iostream>
+	<string>
+	<cstdlib>
+
+1419113660 c:\users\nimesh\documents\github\network-ctf\network-ctf\typechecker.h
+	<string>
+
+1419210410 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetidentification.cpp
+	"PacketIdentification.h"
+
+1420244249 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.cpp
+	"PacketManipulators.h"
+	"PacketIdentification.h"
+	"UserPlayer.h"
+	"InterpolatingPlayer.h"
+	"TeamManager.h"
+	"PlayerBase.h"
+	"Flag.h"
+	"Gun.h"
+	"GunHandlers.h"
+	"GunTypes.h"
+	<string>
+	<iostream>
+	"Bullet.h"
+	"LineSegment.h"
+
+1420080872 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\pistol.cpp
+	"Pistol.h"
+
+1417304468 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\portal.cpp
+	"Portal.h"
+	"Floors.h"
+	"UserPlayer.h"
+	"math.h"
+
+1420066832 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.cpp
+	"PredrawnButton.h"
+
+1420075046 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoreboard.cpp
+	"Scoreboard.h"
+	"PlayerBase.h"
+
+1420244168 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
+	"ScoreDisplay.h"
+	"Conversion.h"
+
+1420080074 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\servergamemanager.cpp
+	"ServerGameManager.h"
+	"PacketIdentification.h"
+	"PacketManipulators.h"
+	"Bullet.h"
+	"LineSegment.h"
+	"FlagManager.h"
+	"Collision.h"
+	"math.h"
+	"Block.h"
+	"Floors.h"
+	"Portal.h"
+	"GunGiver.h"
+	"ButtonPlacer.h"
+	"PredrawnButton.h"
+	"Conversion.h"
+	"ErrorMessage.h"
+	<string>
+	<iostream>
+
+1420080990 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\shotgun.cpp
+	"Shotgun.h"
+	<iostream>
+
+1420080872 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\sniper.cpp
+	"Sniper.h"
+
+1419881480 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\statdisplay.cpp
+	"StatDisplay.h"
+	"Conversion.h"
+	"Gun.h"
+
+1405145332 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\statetracker.cpp
+	"StateTracker.h"
+	"Lerp.h"
+
+1417307028 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\staticobject.cpp
+	"StaticObject.h"
+	"math.h"
+	"UserPlayer.h"
+	"Collision.h"
+	<iostream>
+
+1418949818 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\teammanager.cpp
+	"TeamManager.h"
+	<iostream>
+
+1419113726 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\typechecker.cpp
+	"TypeChecker.h"
+	<ctype.h>
+
+1405145332 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\undefinedlinesegment.cpp
+	"UndefinedLineSegment.h"
+	<cmath>
+
+1420166000 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\userplayer.cpp
+	"UserPlayer.h"
+	"math.h"
+	"Gun.h"
+	<iostream>
+
+1420245151 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.cpp
+	"PlayerBase.h"
+	"Lerp.h"
+	"math.h"
+	"Flag.h"
+	"Sniper.h"
+	"Pistol.h"
+	"Shotgun.h"
+	"Floors.h"
+	"TeamManager.h"
+	<iostream>
+

@@ -43,6 +43,9 @@ https://www.freesound.org/people/timgormly/sounds/170170/
 victory
 https://www.freesound.org/people/limetoe/sounds/249524/
 
+defeat
+https://www.freesound.org/people/fins/sounds/171673/
+
 
 kick shock
 
@@ -50,8 +53,5 @@ kick shock
 Licensed under Creative Commons: By Attribution 3.0
 http://creativecommons.org/licenses/by/3.0/
 
-MTA
-
-"MTA" Kevin MacLeod (incompetech.com) 
-Licensed under Creative Commons: By Attribution 3.0
-http://creativecommons.org/licenses/by/3.0/
+triumphantReturn
+http://audionautix.com/
