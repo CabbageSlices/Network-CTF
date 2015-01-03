@@ -34,9 +34,19 @@ void InterpolatingPlayer::drawGun(sf::RenderWindow& window, const unsigned& draw
 
 PlayerBase::DrawingState InterpolatingPlayer::getDrawingState() {
 
-    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds())) {
+    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds()) && health.getCurrentHealth() > 0 && !playSpawnAnimation) {
 
         return STANDING;
+    }
+
+    if(health.getCurrentHealth() == 0) {
+
+        return DYING;
+    }
+
+    if(playSpawnAnimation) {
+
+        return SPAWNING;
     }
 
     return WALKING;

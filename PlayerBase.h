@@ -25,7 +25,9 @@ class PlayerBase {
         enum DrawingState {
 
             STANDING,
-            WALKING
+            WALKING,
+            DYING,
+            SPAWNING
         };
 
         //texture for the indicator that is drawn when player is holding a flag
@@ -65,6 +67,17 @@ class PlayerBase {
         //connect the player's team to an animation clip
         //key is player team, animation clips for that teams color
         std::map<unsigned short, std::vector<sf::IntRect> > clips;
+
+        bool canPlayDeathAnimation;
+        bool playSpawnAnimation;
+
+        //texture, clip, and sprites for the spawn and death animations
+        sf::Texture spawnTexture;
+
+        sf::Sprite spawnSprite;
+
+        std::vector<sf::IntRect> spawnClips;
+        std::vector<sf::IntRect> deathClips;
 
         //rotation of the player in degrees, interolates like the hitbox
         float pastRotation;

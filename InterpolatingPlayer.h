@@ -47,7 +47,7 @@ class InterpolatingPlayer : public PlayerBase {
 
             PlayerBase::draw(window, drawingFloor);
 
-            if(drawingFloor == getFloor()) {
+            if(drawingFloor == getFloor() && getDrawingState() != DYING) {
 
                 window.draw(nameText);
             }

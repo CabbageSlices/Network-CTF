@@ -32,6 +32,12 @@ PlayerBase::PlayerBase():
     animationTimer(),
     animationTime(sf::milliseconds(100)),
     clips(),
+    canPlayDeathAnimation(true),
+    playSpawnAnimation(false),
+    spawnTexture(),
+    spawnSprite(),
+    spawnClips(),
+    deathClips(),
     pastRotation(0),
     currentRotation(0),
     destinationRotation(0),
@@ -88,6 +94,12 @@ PlayerBase::PlayerBase():
 
         scoreBuffer.loadFromFile("sounds/flagSound.wav");
         scoreSound.setBuffer(scoreBuffer);
+
+        spawnTexture.loadFromFile("spawn Animation.png");
+
+        spawnSprite.setTexture(spawnTexture);
+        spawnSprite.setTextureRect(spawnClips[0]);
+        spawnSprite.setOrigin(spawnSprite.getGlobalBounds().width / 2, spawnSprite.getGlobalBounds().height / 2);
     }
 
 PlayerBase::~PlayerBase() {
@@ -212,6 +224,9 @@ void PlayerBase::interpolate(const float& deltaFraction) {
     updateHitboxRotation();
     gun->updateRotation(currentHitBox.getPosition(), currentRotation);
 
+    //update position of spawn sprite since its a seperate thing
+    spawnSprite.setPosition(currentHitBox.getPosition());
+
     //set the position of the flag indicator now
     //position it over the health as well, so move it up by 10 pixels
     flagIndicator.setPosition(currentHitBox.getPosition().x - 14, currentHitBox.getGlobalBounds().top - flagIndicator.getGlobalBounds().height - 29);
@@ -225,6 +240,50 @@ void PlayerBase::stopInterpolation() {
 }
 
 void PlayerBase::animate() {
+
+    //if the player is running the dying animation then don't handle the animations as normal
+    if(getDrawingState() == DYING || getDrawingState() == SPAWNING) {
+
+        if(animationTimer.getElapsedTime() > animationTime) {
+
+            frame += 1;
+
+            if(getDrawingState() == SPAWNING && frame >= spawnClips.size()) {
+
+                playSpawnAnimation = false;
+                frame = 0;
+
+                //set the current clip onto the sprite in order to draw it
+                playerSprite.setTextureRect(clips[teamId][frame]);
+
+                return;
+            }
+
+            animationTimer.restart();
+        }
+
+        //if the death animation can play it means the death animation hasn't started yet, and if the frame is greather than 0 it will draw some weird frame so reset frame
+        //but only do this if he isn't spawning because when he is spawning he can play the death animation
+        if(canPlayDeathAnimation && getDrawingState() != SPAWNING) {
+
+            frame = 0;
+        }
+
+        if(frame < spawnClips.size()) {
+
+            if(getDrawingState() == DYING) {
+
+                spawnSprite.setTextureRect(deathClips[frame]);
+
+            } else {
+
+                spawnSprite.setTextureRect(spawnClips[frame]);
+            }
+        }
+
+        return;
+    }
+
 
     if(animationTimer.getElapsedTime() > animationTime) {
 
@@ -259,12 +318,22 @@ void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
         window.draw(flagIndicator);
     }
 
-    ///window.draw(currentHitBox);
-    window.draw(playerSprite);
+    //dont draw the normal sprite if player is dying
+    if(getDrawingState() != DYING && getDrawingState() != SPAWNING) {
 
-    this->drawGun(window, drawingFloor);
+        window.draw(playerSprite);
+        this->drawGun(window, drawingFloor);
+        health.draw(window);
 
-    health.draw(window);
+    } else {
+
+        //if the current frame exceeds the number of frames in the naimtion then don't draw the player at all
+        if(frame < spawnClips.size()) {
+
+            window.draw(spawnSprite);
+        }
+    }
+
 }
 
 void PlayerBase::drawMinimap(sf::RenderWindow& window) {
@@ -327,6 +396,15 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
 
         respawnSound.play();
     }
+
+    frame = 0;
+    animationTimer.restart();
+
+    //allow death animtion to play once player dies
+    canPlayDeathAnimation = true;
+
+    //start spawn animation
+    playSpawnAnimation = true;
 }
 
 void PlayerBase::getHit(int damage) {
@@ -511,6 +589,20 @@ void PlayerBase::setupClips() {
     clips[TEAM_A_ID].push_back(sf::IntRect(318, 50, 59, 43));
     clips[TEAM_A_ID].push_back(sf::IntRect(381, 50, 59, 43));
     clips[TEAM_A_ID].push_back(sf::IntRect(444, 50, 59, 43));
+
+    deathClips.push_back(sf::IntRect(2, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(41, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(80, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(119, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(158, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(197, 1, 37, 65));
+    deathClips.push_back(sf::IntRect(236, 1, 37, 65));
+
+    //spawn animation is the death animation played in reverse so just reverse the death clips
+    for(int i = deathClips.size() - 1; i >= 0; --i) {
+
+        spawnClips.push_back(deathClips[i]);
+    }
 }
 
 void PlayerBase::setPosition(const sf::Vector2f& position) {
@@ -564,5 +656,15 @@ void PlayerBase::die() {
     if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
 
         respawnSound.play();
+    }
+
+    //start the death animation if it hasn't already started
+    ///because the die functon is called whenever hte player has 0 health this function will always be called on the client after each server update if the health is 0
+    ///so only reset the death animation after he spawns
+    if(canPlayDeathAnimation) {
+
+        frame = 0;
+        animationTimer.restart();
+        canPlayDeathAnimation = false;
     }
 }

@@ -175,6 +175,7 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
     if(respawned) {
 
         respawnSound.play();
+        respawn(stateUpdate.position);
     }
 
     setFloor(destinationFloor);
@@ -284,6 +285,13 @@ void UserPlayer::update(const float& delta, const sf::Vector2f& screenSize) {
 
     determineMovement();
 
+    //if player is spawning dont let him move
+    if(playSpawnAnimation) {
+
+        velocities.x = 0;
+        velocities.y = 0;
+    }
+
     sf::Vector2f position = destinationHitBox.getPosition();
     position.x += velocities.x * delta;
     position.y += velocities.y * delta;
@@ -305,7 +313,10 @@ void UserPlayer::drawGunUI(const sf::Vector2f& position, sf::RenderWindow& windo
 
 void UserPlayer::drawGunSights(sf::RenderWindow& window) {
 
-    gun->drawSight(window);
+    if(getDrawingState() != DYING) {
+
+        gun->drawSight(window);
+    }
 }
 
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
@@ -316,9 +327,20 @@ void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor)
 
 PlayerBase::DrawingState UserPlayer::getDrawingState() {
 
-    if(velocities.x == 0 && velocities.y == 0) {
+    if(velocities.x == 0 && velocities.y == 0 && health.getCurrentHealth() > 0 && !playSpawnAnimation) {
 
         return STANDING;
+
+    }
+
+    if(health.getCurrentHealth() == 0) {
+
+        return DYING;
+    }
+
+    if(playSpawnAnimation) {
+
+        return SPAWNING;
     }
 
     return WALKING;

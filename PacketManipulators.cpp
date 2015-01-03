@@ -179,11 +179,6 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
 
-    player.setKills(kills);
-    player.setDeaths(deaths);
-    player.setCaptures(flagCaptures);
-    player.setReturns(flagReturns);
-
     unsigned short team_A_Score = 0;
     unsigned short team_B_Score = 0;
 
@@ -227,6 +222,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     ///apply to player
     player.handleServerUpdate(updatedState, floor, inputId);
+
+    player.setKills(kills);
+    player.setDeaths(deaths);
+    player.setCaptures(flagCaptures);
+    player.setReturns(flagReturns);
 
     int gunType = 0;
     updatePacket >> gunType;

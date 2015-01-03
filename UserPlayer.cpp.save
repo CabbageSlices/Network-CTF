@@ -171,10 +171,11 @@ void UserPlayer::handleServerUpdate(const State& stateUpdate, const unsigned& de
         cout << stateUpdate.position.x << "     " << stateUpdate.position.y << endl;
         setPosition(stateUpdate.position);
     }
-    
+
     if(respawned) {
-        
+
         respawnSound.play();
+        respawn(stateUpdate.position);
     }
 
     setFloor(destinationFloor);
@@ -305,7 +306,10 @@ void UserPlayer::drawGunUI(const sf::Vector2f& position, sf::RenderWindow& windo
 
 void UserPlayer::drawGunSights(sf::RenderWindow& window) {
 
-    gun->drawSight(window);
+    if(getDrawingState() != DYING) {
+
+        gun->drawSight(window);
+    }
 }
 
 void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor) {
@@ -316,9 +320,20 @@ void UserPlayer::drawGun(sf::RenderWindow& window, const unsigned& drawingFloor)
 
 PlayerBase::DrawingState UserPlayer::getDrawingState() {
 
-    if(velocities.x == 0 && velocities.y == 0) {
+    if(velocities.x == 0 && velocities.y == 0 && health.getCurrentHealth() > 0 && !playSpawnAnimation) {
 
         return STANDING;
+
+    }
+
+    if(health.getCurrentHealth() == 0) {
+
+        return DYING;
+    }
+    
+    if(playSpawnAnimation) {
+        
+        return SPAWNING;
     }
 
     return WALKING;

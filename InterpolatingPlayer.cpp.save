@@ -5,13 +5,14 @@
 InterpolatingPlayer::InterpolatingPlayer():
     PlayerBase(),
     nameText(),
-    font()
+    font(),
+    shouldDraw(true)
     {
         font.loadFromFile("font.ttf");
         nameText.setFont(font);
-        nameText.setScale(0.4, 0.4);
+        nameText.setScale(0.35, 0.35);
         nameText.setString(playerName);
-        nameText.setColor(sf::Color::)
+        nameText.setColor(sf::Color::Black);
     }
 
 void InterpolatingPlayer::setInterpolationRotation(const float& newRotation) {
@@ -33,9 +34,19 @@ void InterpolatingPlayer::drawGun(sf::RenderWindow& window, const unsigned& draw
 
 PlayerBase::DrawingState InterpolatingPlayer::getDrawingState() {
 
-    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds())) {
+    if(compareFloatRects(destinationHitBox.getGlobalBounds(), pastHitBox.getGlobalBounds()) && health.getCurrentHealth() > 0 && !playSpa) {
 
         return STANDING;
+    }
+
+    if(health.getCurrentHealth() == 0) {
+
+        return DYING;
+    }
+    
+    if(playSpawnAnimation) {
+        
+        return SPAWNING;
     }
 
     return WALKING;
