@@ -50,7 +50,7 @@ bool PredrawnButton::checkMouseTouching(const sf::Vector2f& mousePosition, bool 
 
         sprite.setColor(sf::Color(150, 150, 150, 255));
 
-        if(!wasMouseTouching && playSoundEffect) {
+        if(!wasMouseTouching && playSoundEffect && GLO_PLAY_SOUNDS) {
 
             //mouse started being touched this frame so create a sound
             hoverSound.play();

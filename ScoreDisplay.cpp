@@ -5,7 +5,7 @@ ScoreDisplay::ScoreDisplay(const sf::Vector2u& screenSize):
     scoreTexture(),
     scoreSprite(),
     RED_SCORE_OFFSET(125, 88),
-    BLUE_SCORE_OFFSET(163, 88),
+    BLUE_SCORE_OFFSET(168, 88),
     font(),
     TEXT_SCALE(0.35),
     redScore(),

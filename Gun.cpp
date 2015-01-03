@@ -120,7 +120,7 @@ bool Gun::reload() {
         resetAnimation();
         reloading = true;
 
-        if(shouldPlaySounds) {
+        if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
 
             reloadSound.play();
         }

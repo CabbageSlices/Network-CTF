@@ -12,6 +12,8 @@
 #include "Scoreboard.h"
 #include "HeadsUpDisplay.h"
 
+#include "soundSettings.h"
+
 #include <tr1/memory>
 #include <vector>
 #include <string>
@@ -57,6 +59,8 @@ class ClientGameManager: public GameManager {
         unsigned controlsId;
         unsigned quitMatch;
         unsigned quitGame;
+        unsigned musicId;
+        unsigned soundId;
 
         //id for buttons on controls menu
         unsigned backId;

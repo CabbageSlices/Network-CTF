@@ -39,8 +39,15 @@ class ClientGameManager: public GameManager {
 
         //buttons on the controls screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > controlsButtons;
-        
-        sf::Music 
+
+        sf::Music gameBgm;
+
+        //sound effect for when you win or lose the game
+        sf::SoundBuffer winSoundBuffer;
+        sf::SoundBuffer loseSoundBuffer;
+
+        sf::Sound winSound;
+        sf::Sound loseSound;
 
         //id for the button that needs to be pressed in order to return to lobby after reaching the result screen
         unsigned resultToLobbyId;
@@ -50,6 +57,8 @@ class ClientGameManager: public GameManager {
         unsigned controlsId;
         unsigned quitMatch;
         unsigned quitGame;
+        unsigned musicId;
+        unsigned soundId;
 
         //id for buttons on controls menu
         unsigned backId;

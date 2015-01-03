@@ -43,7 +43,10 @@ class Sniper : public Gun {
 
         virtual void handleFireSound() {
 
-            fireSound.play();
+            if(GLO_PLAY_SOUNDS) {
+
+                fireSound.play();
+            }
         }
 
     public:

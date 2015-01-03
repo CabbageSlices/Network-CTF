@@ -323,7 +323,7 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
     setPosition(spawnPosition);
     health.refillHealth();
 
-    if(shouldPlaySounds) {
+    if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
 
         respawnSound.play();
     }
@@ -368,7 +368,7 @@ void PlayerBase::holdFlag(shared_ptr<Flag> flagToHold) {
     flagBeingHeld = flagToHold;
     flagToHold->pickUpFlag();
 
-    if(shouldPlaySounds) {
+    if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
 
         getFlagSound.play();
     }
@@ -561,7 +561,7 @@ void PlayerBase::die() {
     //increase the amount of deaths
     setDeaths(getDeaths() + 1);
 
-    if(shouldPlaySounds) {
+    if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
 
         respawnSound.play();
     }

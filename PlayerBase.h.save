@@ -6,6 +6,8 @@
 #include "SFML/Audio.hpp"
 #include "Healthbar.h"
 #include "FlagManager.h"
+#include "Gun.h"
+#include "soundSettings.h"
 
 #include <vector>
 #include <map>
@@ -107,7 +109,7 @@ class PlayerBase {
 
         sf::SoundBuffer scoreBuffer;
         sf::Sound scoreSound;
-        
+
         bool shouldPlaySounds;
 
         void setupClips();
@@ -207,11 +209,14 @@ class PlayerBase {
 
         void playScoreSound() {
 
-            scoreSound.play();
+            if(GLO_PLAY_SOUNDS) {
+
+                scoreSound.play();
+            }
         }
-        
+
         void setPlaySounds(bool play) {
-            
+
             shouldPlaySounds = play;
             gun->setPlaySounds(play);
         }

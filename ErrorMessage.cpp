@@ -54,7 +54,11 @@ void displayError(sf::RenderWindow& window, const string& message) {
 
     sf::Sound errorSound;
     errorSound.setBuffer(errorBuffer);
-    errorSound.play();
+
+    if(GLO_PLAY_SOUNDS) {
+
+        errorSound.play();
+    }
 
     //index of buttons
     unsigned okButton = 0;

@@ -90,6 +90,8 @@
 		<Unit filename="LineSegment.h" />
 		<Unit filename="Minimap.cpp" />
 		<Unit filename="Minimap.h" />
+		<Unit filename="OnOffButton.cpp" />
+		<Unit filename="OnOffButton.h" />
 		<Unit filename="PacketIdentification.cpp" />
 		<Unit filename="PacketIdentification.h" />
 		<Unit filename="PacketManipulators.cpp" />
@@ -129,6 +131,8 @@
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="networkTest.cpp" />
+		<Unit filename="soundSettings.cpp" />
+		<Unit filename="soundSettings.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

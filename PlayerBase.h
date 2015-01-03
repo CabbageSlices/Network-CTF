@@ -7,6 +7,7 @@
 #include "Healthbar.h"
 #include "FlagManager.h"
 #include "Gun.h"
+#include "soundSettings.h"
 
 #include <vector>
 #include <map>
@@ -208,13 +209,21 @@ class PlayerBase {
 
         void playScoreSound() {
 
-            scoreSound.play();
+            if(GLO_PLAY_SOUNDS) {
+
+                scoreSound.play();
+            }
         }
 
         void setPlaySounds(bool play) {
 
             shouldPlaySounds = play;
             gun->setPlaySounds(play);
+        }
+
+        bool checkPlaySounds() {
+
+            return shouldPlaySounds;
         }
 
         void setFloor(const unsigned& destinationFloor);

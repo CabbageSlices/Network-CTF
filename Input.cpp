@@ -1,6 +1,7 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 #include "Input.h"
+#include "soundSettings.h"
 
 using std::string;
 
@@ -118,24 +119,24 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
             }
         }
 
-        //if the size of the text exceeds the size of the message box then erase the last letter of the message so it fits
-        while(inputText.getGlobalBounds().width > maxInputLength)
-        {
-            if(input.size() > 0)
-            {
-                input.erase(input.end() - 1);
-                inputText.setString(input);
-
-                error.play();
-            }
-        }
-
         //set the message and place the text at the center of the message box
         inputText.setString(input);
         inputText.setPosition(messageBox.getGlobalBounds().left + messageBox.getGlobalBounds().width / 2 - inputText.getGlobalBounds().width / 2,
                               messageBox.getGlobalBounds().top + messageBox.getGlobalBounds().height - distanceFromBottom);
 
-        if(previousLength != input.size()) {
+        //if the size of the text exceeds the size of the message box then erase the last letter of the message so it fits
+        while(inputText.getGlobalBounds().width >= maxInputLength)
+        {
+            input.pop_back();
+            inputText.setString(input);
+
+            if(GLO_PLAY_SOUNDS) {
+
+                error.play();
+            }
+        }
+
+        if(previousLength != input.size() && GLO_PLAY_SOUNDS) {
 
             click.play();
         }

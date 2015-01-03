@@ -50,7 +50,11 @@ void setGunTo(PlayerBase& player, GunTypes gunType) {
     if(!isType(player.getGun(), gunType)) {
 
         player.setGun(createGun(gunType));
-        player.getGun()->playReloadSound();
+
+        if(player.checkPlaySounds()) {
+
+            player.getGun()->playReloadSound();
+        }
     }
 }
 

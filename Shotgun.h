@@ -34,7 +34,7 @@ class Shotgun : public Gun {
 
         virtual void handleFireSound() {
 
-            if(soundTimer.getElapsedTime() > soundDelay) {
+            if(soundTimer.getElapsedTime() > soundDelay && GLO_PLAY_SOUNDS) {
 
                 fireSound.play();
                 soundTimer.restart();

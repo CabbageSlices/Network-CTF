@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 #include "GunTypes.h"
+#include "soundSettings.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -242,7 +243,10 @@ class Gun {
 
         void playReloadSound() {
 
-            reloadSound.play();
+            if(GLO_PLAY_SOUNDS && shouldPlaySounds) {
+
+                reloadSound.play();
+            }
         }
 
         virtual GunTypes getGunType();

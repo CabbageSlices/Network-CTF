@@ -17,6 +17,7 @@
 #include <iterator>
 #include "PredrawnButton.h"
 #include "ButtonPlacer.h"
+#include "OnOffButton.h"
 
 /**
 
@@ -119,6 +120,8 @@ ClientGameManager::ClientGameManager() :
     controlsId(1),
     quitMatch(2),
     quitGame(3),
+    musicId(4),
+    soundId(5),
     backId(0),
     pausedTexture(),
     pausedSprite(),
@@ -149,10 +152,12 @@ ClientGameManager::ClientGameManager() :
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("controlsButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitMatchButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
 
-        placeButtons("clientPaused.png", pausedMenuButtons);
+        placeButtons("escapeMenu.png", pausedMenuButtons);
 
-        pausedTexture.loadFromFile("clientPaused.png");
+        pausedTexture.loadFromFile("escapeMenu.png");
         pausedSprite.setTexture(pausedTexture);
 
         controlsTexture.loadFromFile("controlsMenu.png");
@@ -383,8 +388,12 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
                 //disable ingame bgm
                 gameBgm.stop();
 
-                //replay current bgm
-                lobbyBgm.play();
+                if(GLO_PLAY_MUSIC) {
+
+                    //replay current bgm
+                    lobbyBgm.play();
+                }
+
 
                 //reset the view that way you cna see the menu
                 window.setView(window.getDefaultView());
@@ -590,7 +599,12 @@ void ClientGameManager::handleServerUpdates() {
                 if(waitingForOthers) {
 
                     waitingForOthers = false;
-                    gameBgm.play();
+
+                    if(GLO_PLAY_MUSIC) {
+
+                        gameBgm.play();
+                    }
+
                 }
             }
 
@@ -604,8 +618,12 @@ void ClientGameManager::handleServerUpdates() {
                 loadVictoryTexture(matchResultTexture);
                 matchResultSprite.setTexture(matchResultTexture);
 
-                //disable the previous bgm and play the victor sound
-                winSound.play();
+                if(GLO_PLAY_SOUNDS) {
+
+                    //disable the previous bgm and play the victor sound
+                    winSound.play();
+                }
+
                 gameBgm.pause();
             }
 
@@ -634,7 +652,11 @@ void ClientGameManager::handleServerUpdates() {
                 matchResultSprite.setTexture(matchResultTexture);
 
                 //disable the previous bgm and play the loss sound
-                loseSound.play();
+                if(GLO_PLAY_SOUNDS) {
+
+                    loseSound.play();
+                }
+
                 gameBgm.pause();
             }
 
@@ -882,6 +904,29 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
                 showControls = true;
             }
 
+            if(pausedMenuButtons[musicId]->checkMouseTouching(mousePosition)) {
+
+                PredrawnButton::playClickSound();
+                pausedMenuButtons[musicId]->onClick();
+                GLO_PLAY_MUSIC = pausedMenuButtons[musicId]->checkIsOn();
+
+                if(!GLO_PLAY_MUSIC) {
+
+                    gameBgm.pause();
+
+                } else {
+
+                    gameBgm.play();
+                }
+            }
+
+            if(pausedMenuButtons[soundId]->checkMouseTouching(mousePosition)) {
+
+                PredrawnButton::playClickSound();
+                pausedMenuButtons[soundId]->onClick();
+                GLO_PLAY_SOUNDS = pausedMenuButtons[soundId]->checkIsOn();
+            }
+
             //don't handle player inputs if game is paused
             return;
         }
@@ -900,16 +945,13 @@ void ClientGameManager::handleComponentInputs(sf::Event& event, sf::RenderWindow
 
     if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 
-        if(!paused) {
+        paused = !paused;
+    }
 
-            paused = true;
-            gameBgm.pause();
+    //if the game isn't paused and the music should be playing but its not playing then play the music
+    if(!paused && GLO_PLAY_MUSIC && gameBgm.getStatus() != sf::Sound::Playing) {
 
-        } else {
-
-            paused = false;
-            gameBgm.play();
-        }
+        gameBgm.play();
     }
 
     //handle the player's inputs

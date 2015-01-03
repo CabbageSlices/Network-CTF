@@ -1057,13 +1057,14 @@
 	<vector>
 	<tr1/memory>
 
-1420245115 c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.h
+1420260493 c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
 	"Healthbar.h"
 	"FlagManager.h"
 	"Gun.h"
+	"soundSettings.h"
 	<vector>
 	<map>
 	<tr1/memory>
@@ -1146,7 +1147,7 @@
 	<map>
 	"SFML/Graphics.hpp"
 
-1420251792 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
+1420260347 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -1165,8 +1166,9 @@
 	<iterator>
 	"PredrawnButton.h"
 	"ButtonPlacer.h"
+	"OnOffButton.h"
 
-1420244249 c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.h
+1420258314 c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
@@ -1176,6 +1178,7 @@
 	"GameManager.h"
 	"Scoreboard.h"
 	"HeadsUpDisplay.h"
+	"soundSettings.h"
 	<tr1/memory>
 	<vector>
 	<string>
@@ -1213,11 +1216,12 @@
 	"SFML/Graphics.hpp"
 	<string>
 
-1420165198 c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.h
+1420260025 c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
 	"GunTypes.h"
+	"soundSettings.h"
 	<tr1/memory>
 	<vector>
 	<iostream>
@@ -1229,10 +1233,11 @@
 	"SFML/Graphics.hpp"
 	<string>
 
-1420066936 c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.h
+1420258845 c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.h
 	"SFML/Graphics.hpp"
 	"SFML/System.hpp"
 	"SFML/Audio.hpp"
+	"soundSettings.h"
 	<string>
 	<vector>
 	<tr1/memory>
@@ -1262,7 +1267,7 @@
 1419113924 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\connectionmanager.cpp
 	"ConnectionManager.h"
 
-1420162652 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\errormessage.cpp
+1420258582 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\errormessage.cpp
 	"ErrorMessage.h"
 	"PredrawnButton.h"
 	"ButtonPlacer.h"
@@ -1328,7 +1333,7 @@
 	<iostream>
 	<algorithm>
 
-1420081022 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.cpp
+1420258582 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -1356,13 +1361,13 @@
 	"Shotgun.h"
 	"Pistol.h"
 
-1420075794 c:\users\nimesh\documents\github\network-ctf\network-ctf\sniper.h
+1420258748 c:\users\nimesh\documents\github\network-ctf\network-ctf\sniper.h
 	"Gun.h"
 
-1420068864 c:\users\nimesh\documents\github\network-ctf\network-ctf\shotgun.h
+1420258748 c:\users\nimesh\documents\github\network-ctf\network-ctf\shotgun.h
 	"Gun.h"
 
-1420068864 c:\users\nimesh\documents\github\network-ctf\network-ctf\pistol.h
+1420258748 c:\users\nimesh\documents\github\network-ctf\network-ctf\pistol.h
 	"Gun.h"
 
 1416975714 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\headsupdisplay.cpp
@@ -1371,10 +1376,11 @@
 1419971150 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\healthbar.cpp
 	"Healthbar.h"
 
-1420163694 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\input.cpp
+1420258895 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\input.cpp
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
 	"Input.h"
+	"soundSettings.h"
 
 1262333936 c:\users\nimesh\documents\github\network-ctf\network-ctf\input.h
 	"SFML/Graphics.hpp"
@@ -1424,7 +1430,7 @@
 1419363960 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\minimap.cpp
 	"Minimap.h"
 
-1420162710 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\networktest.cpp
+1420258794 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -1434,6 +1440,7 @@
 	"ButtonPlacer.h"
 	"TypeChecker.h"
 	"ErrorMessage.h"
+	"soundSettings.h"
 	<tr1/memory>
 	<vector>
 	<iostream>
@@ -1446,7 +1453,7 @@
 1419210410 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1420244249 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.cpp
+1420260472 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -1471,14 +1478,14 @@
 	"UserPlayer.h"
 	"math.h"
 
-1420066832 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.cpp
+1420258748 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\predrawnbutton.cpp
 	"PredrawnButton.h"
 
 1420075046 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoreboard.cpp
 	"Scoreboard.h"
 	"PlayerBase.h"
 
-1420253890 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
+1420259473 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
 	"ScoreDisplay.h"
 	"Conversion.h"
 
@@ -1543,7 +1550,7 @@
 	"Gun.h"
 	<iostream>
 
-1420245151 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.cpp
+1420258748 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\playerbase.cpp
 	"PlayerBase.h"
 	"Lerp.h"
 	"math.h"
@@ -1554,4 +1561,15 @@
 	"Floors.h"
 	"TeamManager.h"
 	<iostream>
+
+1420258207 c:\users\nimesh\documents\github\network-ctf\network-ctf\soundsettings.h
+
+1420257642 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\onoffbutton.cpp
+	"OnOffButton.h"
+
+1420259009 c:\users\nimesh\documents\github\network-ctf\network-ctf\onoffbutton.h
+	"PredrawnButton.h"
+
+1420258234 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\soundsettings.cpp
+	"soundSettings.h"
 

@@ -5,6 +5,8 @@
 #include "SFML/System.hpp"
 #include "SFML/Audio.hpp"
 
+#include "soundSettings.h"
+
 #include <string>
 #include <vector>
 #include <tr1/memory>
@@ -14,7 +16,7 @@
 ///because predrawn buttons might not be squares and placing a cover might make a square border around the button
 class PredrawnButton {
 
-    private:
+    protected:
 
         sf::Texture texture;
         sf::Sprite sprite;
@@ -34,6 +36,10 @@ class PredrawnButton {
 
         PredrawnButton(const std::string& imagePath);
 
+        virtual ~PredrawnButton() {
+
+        }
+
         void setPosition(const sf::Vector2f& position);
 
         //if mouse is touching button it also sets isMouseTouching to true that way it can darken the image for effect
@@ -41,9 +47,21 @@ class PredrawnButton {
         //if a button is not on the currently drawn screen then you would need to disable the sound effect
         bool checkMouseTouching(const sf::Vector2f& mousePosition, bool playSound = true);
 
+        virtual void onClick() {
+
+        }
+
+        virtual bool checkIsOn() {
+
+            return true;
+        }
+
         static void playClickSound() {
 
-            clickSound.play();
+            if(GLO_PLAY_SOUNDS) {
+
+                clickSound.play();
+            }
         }
 
         void draw(sf::RenderWindow& window);

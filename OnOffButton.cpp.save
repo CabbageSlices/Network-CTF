@@ -1,0 +1,4 @@
+#include "OnOffButton.h"
+
+OnOffButton::OnOffButton():
+    PredrawnButton()

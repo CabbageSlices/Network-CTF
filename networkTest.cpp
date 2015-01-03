@@ -7,6 +7,7 @@
 #include "ButtonPlacer.h"
 #include "TypeChecker.h"
 #include "ErrorMessage.h"
+#include "soundSettings.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -52,7 +53,11 @@ void clientTitleScreen(sf::RenderWindow& window) {
 
     bgm.setLoop(true);
 
-    bgm.play();
+    if(GLO_PLAY_MUSIC) {
+
+        bgm.play();
+    }
+
     bgm.setVolume(20);
 
     //load up the image of the title screen

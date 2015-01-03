@@ -3,7 +3,9 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include "GunTypes.h"
+#include "soundSettings.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -120,9 +122,12 @@ class Gun {
 
         //current frame of animtion
         int frame;
-        
+
         sf::Sound fireSound;
         sf::Sound reloadSound;
+
+        //guns shouldn't play sounds if the player isn't on the same screen as the user
+        bool shouldPlaySounds;
 
         //get the container of clips for the animation that is currently playing
         std::vector<sf::IntRect>& getCurrentClips();
@@ -154,7 +159,7 @@ class Gun {
         //each gun should handle its gunfire sound effect differently
         //for example the shotgun should only make a sound effect after a certain delay
         //that way each bullet doesn't make a sound
-        virtual handleFireSound() = 0;
+        virtual void handleFireSound() = 0;
 
     public:
 
@@ -165,6 +170,11 @@ class Gun {
         //have this function in order to have guns that handle button presses differently
         virtual void handleButtonPress();
         virtual void handleButtonRelease();
+
+        virtual bool isAiming() {
+
+            return false;
+        }
 
         //determines if it is time to fire again and fires
         virtual void updateGunfire(const sf::Time& delta);
@@ -196,6 +206,8 @@ class Gun {
         //only draw bullets that are on the drawingfloor because the player might not be on the same floor as the bullet
         void drawBullets(sf::RenderWindow& window, const unsigned& drawingFloor);
 
+        void drawBullets(sf::RenderWindow& window);
+
         void drawUI(const sf::Vector2f& position, sf::RenderWindow& window);
 
         std::vector<std::tr1::shared_ptr<Bullet> >& getBullets();
@@ -204,6 +216,11 @@ class Gun {
         const std::vector<float>& getQueuedRotations() const;
 
         void clearRotations();
+
+        virtual void setPlaySounds(bool shouldPlay) {
+
+            shouldPlaySounds = shouldPlay;
+        }
 
         void setFloor(const unsigned& floor);
 
@@ -222,6 +239,14 @@ class Gun {
         void refillTotalAmmo() {
 
             totalMagazine = maxTotalMagazine;
+        }
+
+        void playReloadSound() {
+
+            if(GLO_PLAY_SOUNDS) {
+
+                reloadSound.play();
+            }
         }
 
         virtual GunTypes getGunType();
