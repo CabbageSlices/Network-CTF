@@ -37,7 +37,14 @@ int main() {
     sf::Vector2f screenSize(1024, 768);
 
     //disable the resizing in the window at the beginning because the title screen and such have a fixed size
-    sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Capture The Flag", sf::Style::Titlebar | sf::Style::Close);
+
+    //load an icon for the window
+    sf::Image iconImg;
+    iconImg.loadFromFile("images/ICON.png");
+
+    window.setIcon(iconImg.getSize().x, iconImg.getSize().y, iconImg.getPixelsPtr());
+
     window.setKeyRepeatEnabled(false);
 
     clientTitleScreen(window);
