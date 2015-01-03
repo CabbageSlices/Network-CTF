@@ -1054,6 +1054,9 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
             button->draw(window);
         }
     }
+
+    //draw any messages the gun givers have
+    getGameWorld().drawGunGiverMessages(window);
 }
 
 void ClientGameManager::drawMinimap(sf::RenderWindow& window) {
@@ -1132,5 +1135,13 @@ void ClientGameManager::handleCollisions() {
                 player->enableDrawing();
             }
         }
+    }
+
+    //if player collides with a gun giver then make the gun giver display a message to tell user to pick up the gun
+    vector<shared_ptr<GunGiver> >& givers = getGameWorld().getGunGivers(userPlayer.getFloor());
+
+    for(auto& giver : givers) {
+
+        giver->setDrawMessage(giver->getCollisionBox().intersects(userPlayer.getCollisionBox()));
     }
 }

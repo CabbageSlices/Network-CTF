@@ -2,6 +2,7 @@
 #include "PlayerBase.h"
 #include "GunHandlers.h"
 #include "Gun.h"
+#include "math.h"
 
 #include <iostream>
 
@@ -12,6 +13,10 @@ using std::map;
 map<GunTypes, sf::Texture> GunGiver::textures;
 bool GunGiver::texturesCreated = false;
 
+sf::Texture GunGiver::messageTextures;
+
+map<GunTypes, sf::Sprite> GunGiver::messageSprites;
+
 GunGiver::GunGiver(const GunTypes& gun) :
     StaticObject(sf::Vector2f(0, 0)),
     gunToGive(gun)
@@ -19,7 +24,7 @@ GunGiver::GunGiver(const GunTypes& gun) :
         //if the textures for the gun givers aren't created yet, then create them
         if(!texturesCreated) {
 
-            initializeTextures();
+            initialize();
         }
 
         //textures are created so set the texture for this collision box
@@ -28,7 +33,7 @@ GunGiver::GunGiver(const GunTypes& gun) :
         collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds()));
     }
 
-void GunGiver::initializeTextures() {
+void GunGiver::initialize() {
 
     textures[SHOTGUN] = sf::Texture();
     textures[SHOTGUN].loadFromFile("shotgunIcon.png");
@@ -38,6 +43,29 @@ void GunGiver::initializeTextures() {
 
     textures[SNIPER] = sf::Texture();
     textures[SNIPER].loadFromFile("sniperIcon.png");
+
+    messageTextures.loadFromFile("gameText.png");
+
+    //create sprites for each gun type
+    sprites[SHOTGUN] = sf::Sprite();
+    sprites[SHOTGUN].setTexture(messageTextures);
+    sprites[SHOTGUN].setTextureRect(1, 129, 382, 31);
+
+    sprites[PISTOL] = sf::Sprite();
+    sprites[PISTOL].setTexture(messageTextures);
+    sprites[PISTOL].setTextureRect(1, 161, 382, 31);
+
+    sprites[SNIPER] = sf::Sprite();
+    sprites[SNIPER].setTexture(messageTextures);
+    sprites[SNIPER].setTextureRect(1, 193, 328, 31);
+
+    //position all sprites now
+    for(auto& pair: sprites) {
+
+        sf::Sprite& sprite = pair.second
+        //window size is always 1024 by 768 so just center each sprite at the very bottom of the window
+        sprite.setPosition(1024 / 2 - sprite.getGlobalBounds().width / 2, 768 - sprite.getGlobalBounds().height)
+    }
 
     texturesCreated = true;
 }
@@ -55,7 +83,8 @@ void GunGiver::setPosition(const sf::Vector2f& position) {
 void GunGiver::handleCollision(PlayerBase& collidingPlayer) {
 
     //if player doesn't have this gun, give him this gun, otherwise reload his ammo
-    if(!isType(collidingPlayer.getGun(), gunToGive)) {
+    //only give gun if hes picking up gun
+    if(!isType(collidingPlayer.getGun(), gunToGive) && collidingPlayer.canPickUpGun()) {
 
         collidingPlayer.setGun(createGun(gunToGive));
 

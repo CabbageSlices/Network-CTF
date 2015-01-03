@@ -1088,12 +1088,13 @@
 	<vector>
 	<tr1/memory>
 
-1408920068 c:\users\nimesh\documents\github\network-ctf\network-ctf\gameworld.h
+1420251780 c:\users\nimesh\documents\github\network-ctf\network-ctf\gameworld.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"Floors.h"
 	"LargeImage.h"
 	"Floor.h"
+	"GunGiver.h"
 	<map>
 	<vector>
 	<tr1/memory>
@@ -1132,7 +1133,7 @@
 	<vector>
 	<tr1/memory>
 
-1420244142 c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.h
+1420253890 c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.h
 	"SFML/Graphics.hpp"
 	"SFML/System.hpp"
 
@@ -1145,7 +1146,7 @@
 	<map>
 	"SFML/Graphics.hpp"
 
-1420247394 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
+1420251792 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -1253,7 +1254,7 @@
 	"StaticObject.h"
 	"Floors.h"
 
-1408741496 c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.h
+1420251858 c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.h
 	"GunTypes.h"
 	"StaticObject.h"
 	<map>
@@ -1336,7 +1337,7 @@
 	"Floors.h"
 	<iostream>
 
-1420080022 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.cpp
+1420251948 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.cpp
 	"GunGiver.h"
 	"PlayerBase.h"
 	"GunHandlers.h"
@@ -1477,7 +1478,7 @@
 	"Scoreboard.h"
 	"PlayerBase.h"
 
-1420244168 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
+1420253890 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
 	"ScoreDisplay.h"
 	"Conversion.h"
 

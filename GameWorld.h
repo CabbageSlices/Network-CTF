@@ -6,6 +6,7 @@
 #include "Floors.h"
 #include "LargeImage.h"
 #include "Floor.h"
+#include "GunGiver.h"
 
 #include <map>
 #include <vector>
@@ -17,7 +18,6 @@ class ForegroundObject;
 class FlagManager;
 class PlayerBase;
 class Portal;
-class GunGiver;
 
 //class to manage the game world by keeping track of all of the objects and events
 class GameWorld {
@@ -90,6 +90,16 @@ class GameWorld {
         //draw the objects of the given floor
         void drawBackground(sf::RenderWindow& window, const unsigned& floor);
         void drawForeground(sf::RenderWindow& window, const unsigned& floor);
+
+        void drawGunGiverMessages(sf::RenderWindow& window) {
+
+            auto& givers = floors[OVERGROUND_FLOOR]->gunGivers;
+
+            for(auto& giver : givers) {
+
+                giver->drawMessage(window);
+            }
+        }
 };
 
 #endif // GAMEWORLD_H_INCLUDED

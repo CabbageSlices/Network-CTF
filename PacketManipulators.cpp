@@ -186,9 +186,33 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> team_A_Score >> team_B_Score;
 
     //if either teams score is bigger on the server side than the client side it means someone scored so play score sound
-    if(scoreDisplay.getRedScore() < team_A_Score || scoreDisplay.getBlueScore() < team_B_Score) {
+    if(scoreDisplay.getRedScore() < team_A_Score) {
 
         player.playScoreSound();
+
+        if(player.getTeam() == TEAM_A_ID) {
+
+            scoreDisplay.drawAllyCapture();
+
+        } else {
+
+            scoreDisplay.drawEnemyCapture();
+        }
+
+    }
+
+    if(scoreDisplay.getBlueScore() < team_B_Score) {
+
+        player.playScoreSound();
+
+        if(player.getTeam() == TEAM_B_ID) {
+
+            scoreDisplay.drawAllyCapture();
+
+        } else {
+
+            scoreDisplay.drawEnemyCapture();
+        }
     }
 
     scoreDisplay.setRedScore(team_A_Score);
@@ -279,6 +303,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     flagManager->teamAFlag()->setFloor(flagAFloor);
     flagManager->teamBFlag()->setFloor(flagBFloor);
+
+    //tell player if a flag is stolen, flag is stolen if its not at base
+    scoreDisplay.setEnemyStolen(!flagManager->getFlag(player.getTeam())->isAtSpawn());
+
+    scoreDisplay.setAllyStolen(!flagManager->getFlag(getOpposingTeam(player.getTeam()))->isAtSpawn());
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {

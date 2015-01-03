@@ -13,14 +13,19 @@ using std::map;
 map<GunTypes, sf::Texture> GunGiver::textures;
 bool GunGiver::texturesCreated = false;
 
+sf::Texture GunGiver::messageTextures;
+
+map<GunTypes, sf::Sprite> GunGiver::messageSprites;
+
 GunGiver::GunGiver(const GunTypes& gun) :
     StaticObject(sf::Vector2f(0, 0)),
-    gunToGive(gun)
+    gunToGive(gun),
+    shouldDrawMessage(false)
     {
         //if the textures for the gun givers aren't created yet, then create them
         if(!texturesCreated) {
 
-            initializeTextures();
+            initialize();
         }
 
         //textures are created so set the texture for this collision box
@@ -29,7 +34,7 @@ GunGiver::GunGiver(const GunTypes& gun) :
         collisionBox.setOrigin(calculateCenter(collisionBox.getGlobalBounds()));
     }
 
-void GunGiver::initializeTextures() {
+void GunGiver::initialize() {
 
     textures[SHOTGUN] = sf::Texture();
     textures[SHOTGUN].loadFromFile("shotgunIcon.png");
@@ -39,6 +44,30 @@ void GunGiver::initializeTextures() {
 
     textures[SNIPER] = sf::Texture();
     textures[SNIPER].loadFromFile("sniperIcon.png");
+
+    messageTextures.loadFromFile("gameText.png");
+
+    //create sprites for each gun type
+    messageSprites[SHOTGUN] = sf::Sprite();
+    messageSprites[SHOTGUN].setTexture(messageTextures);
+    messageSprites[SHOTGUN].setTextureRect(sf::IntRect(1, 129, 382, 31));
+
+    messageSprites[PISTOL] = sf::Sprite();
+    messageSprites[PISTOL].setTexture(messageTextures);
+    messageSprites[PISTOL].setTextureRect(sf::IntRect(1, 161, 382, 31));
+
+    messageSprites[SNIPER] = sf::Sprite();
+    messageSprites[SNIPER].setTexture(messageTextures);
+    messageSprites[SNIPER].setTextureRect(sf::IntRect(1, 193, 382, 31));
+
+    //position all sprites now
+    for(auto& pair: messageSprites) {
+
+        sf::Sprite& sprite = pair.second;
+
+        //window size is always 1024 by 768 so just center each sprite at the very bottom of the window
+        sprite.setPosition(1024 / 2 - sprite.getGlobalBounds().width / 2, 768 - sprite.getGlobalBounds().height);
+    }
 
     texturesCreated = true;
 }

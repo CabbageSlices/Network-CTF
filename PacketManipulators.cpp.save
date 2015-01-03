@@ -36,7 +36,6 @@ void updateFlagInfo(const bool& holdingFlagServer, const sf::Vector2f& serverPos
         bool scored = player.isAlive();
 
         player.dropFlag(serverPosition);
-        player.playScoreSound();
 
         if(scored) {
 
@@ -186,6 +185,12 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> team_A_Score >> team_B_Score;
 
+    //if either teams score is bigger on the server side than the client side it means someone scored so play score sound
+    if(scoreDisplay.getRedScore() < team_A_Score || scoreDisplay.getBlueScore() < team_B_Score) {
+
+        player.playScoreSound();
+    }
+
     scoreDisplay.setRedScore(team_A_Score);
     scoreDisplay.setBlueScore(team_B_Score);
 
@@ -218,13 +223,22 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     updatePacket >> flagABase >> flagBBase >> flagAHeld >> flagBHeld;
 
     if(flagABase) {
-            
-        //if a flags at a
+
+        //if a flags at base on server, but not on the client that means the flag was returned to base, so play the score sound which is also the return to base sound
+        if(!flagManager->teamAFlag()->isAtSpawn()) {
+
+            player.playScoreSound();
+        }
 
         flagManager->teamAFlag()->reset();
     }
 
     if(flagBBase) {
+
+        if(!flagManager->teamBFlag()->isAtSpawn()) {
+
+            player.playScoreSound();
+        }
 
         flagManager->teamBFlag()->reset();
     }
@@ -265,6 +279,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     flagManager->teamAFlag()->setFloor(flagAFloor);
     flagManager->teamBFlag()->setFloor(flagBFloor);
+    
+    //tell player if a flag is stolen, flag is stolen if its not at base
+    scoreDisplay.setAllyStolen(!flagManager->getFlag(userPlayer.getTeam())->isAtSpawn());
+    
+    scoreDisplay.setEnemyStolen(!flagManager->getFlag(get))
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {
