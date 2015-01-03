@@ -1,7 +1,7 @@
 #include "OnOffButton.h"
 
 OnOffButton::OnOffButton():
-    PredrawnButton("soundButtons.png"),
+    PredrawnButton("images/soundButtons.png"),
     onClip(0, 0, 63, 24),
     offClip(65, 0, 63, 24),
     isOn(true)

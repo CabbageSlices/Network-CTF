@@ -39,16 +39,16 @@ void serverHelpMenu(sf::RenderWindow& window) {
 
     //load the image for the help menu
     sf::Texture helpTexture;
-    helpTexture.loadFromFile("serverHelpScreen.png");
+    helpTexture.loadFromFile("images/serverHelpScreen.png");
 
     sf::Sprite helpSprite;
     helpSprite.setTexture(helpTexture);
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
 
-    placeButtons("serverHelpScreen.png", buttons);
+    placeButtons("images/serverHelpScreen.png", buttons);
 
     unsigned backButton = 0;
 
@@ -116,13 +116,13 @@ ServerGameManager::ServerGameManager() :
     lastPlayerId(0),
     teamManager()
     {
-        inGameTexture.loadFromFile("serverInGame.png");
+        inGameTexture.loadFromFile("images/serverInGame.png");
         inGameSprite.setTexture(inGameTexture);
 
-        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("endMatch.png")));
-        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/endMatch.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")));
 
-        placeButtons("serverInGame.png", inGameButtons);
+        placeButtons("images/serverInGame.png", inGameButtons);
     }
 
 void ServerGameManager::gameLobby(sf::RenderWindow& window) {
@@ -139,17 +139,17 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
     //load the image for the server lobby
     sf::Texture lobbyTexture;
-    lobbyTexture.loadFromFile("serverLobby.png");
+    lobbyTexture.loadFromFile("images/serverLobby.png");
 
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
 
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("helpButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("startButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("decreaseArrow.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("increaseArrow.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/helpButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/startButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/decreaseArrow.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/increaseArrow.png")));
 
     //indices to access buttons
     unsigned helpButton = 0;
@@ -158,7 +158,7 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
     unsigned decreasePoints = 3;
     unsigned increasePoints = 4;
 
-    placeButtons("serverLobby.png", buttons);
+    placeButtons("images/serverLobby.png", buttons);
 
     sf::Event event;
 
@@ -196,7 +196,7 @@ void ServerGameManager::gameLobby(sf::RenderWindow& window) {
 
     //texture for the red and blue boxes
     sf::Texture teamBoxTexture;
-    teamBoxTexture.loadFromFile("teamSelect.png");
+    teamBoxTexture.loadFromFile("images/teamSelect.png");
 
     //clips for the red and blue team's colored boxes in the teamboxtexture
     sf::IntRect redClip(0, 0, 255, 41);

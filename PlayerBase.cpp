@@ -77,14 +77,14 @@ PlayerBase::PlayerBase():
         pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
         destinationHitBox.setFillColor(sf::Color(255, 0, 0, 100));
 
-        playerTexture.loadFromFile("character.png");
+        playerTexture.loadFromFile("images/character.png");
         playerSprite.setTexture(playerTexture);
 
         //default center based on image file of the character
         playerSprite.setOrigin(sf::Vector2f(22, 26));
 
-        redIndicatorTexture.loadFromFile("redFlagIndicator.png");
-        blueIndicatorTexture.loadFromFile("blueFlagIndicator.png");
+        redIndicatorTexture.loadFromFile("images/redFlagIndicator.png");
+        blueIndicatorTexture.loadFromFile("images/blueFlagIndicator.png");
 
         respawnBuffer.loadFromFile("sounds/respawn.wav");
         respawnSound.setBuffer(respawnBuffer);
@@ -95,7 +95,7 @@ PlayerBase::PlayerBase():
         scoreBuffer.loadFromFile("sounds/flagSound.wav");
         scoreSound.setBuffer(scoreBuffer);
 
-        spawnTexture.loadFromFile("spawn Animation.png");
+        spawnTexture.loadFromFile("images/spawn Animation.png");
 
         spawnSprite.setTexture(spawnTexture);
         spawnSprite.setTextureRect(spawnClips[0]);

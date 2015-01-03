@@ -30,7 +30,7 @@ Scoreboard::Scoreboard():
     redTeam(),
     blueTeam()
     {
-        scoreTexture.loadFromFile("scoreboard.png");
+        scoreTexture.loadFromFile("images/scoreboard.png");
         scoreSprite.setTexture(scoreTexture);
         scoreSprite.setColor(sf::Color(255, 255, 255, 225));
 

@@ -48,9 +48,9 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
         lineOfSight[0].texCoords = sf::Vector2f(0, 0);
         lineOfSight[1].texCoords = sf::Vector2f(100, 0);
 
-        lineTexture.loadFromFile("texture.png");
+        lineTexture.loadFromFile("images/texture.png");
 
-        texture.loadFromFile("character.png");
+        texture.loadFromFile("images/character.png");
         sprite.setTexture(texture);
 
         //default center for sprite based on character image

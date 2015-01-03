@@ -37,7 +37,7 @@ string receiveInput(sf::RenderWindow& window, string message, const sf::Font& fo
     inputText.setColor(sf::Color::Black);
 
     sf::Texture inputTexture;
-    inputTexture.loadFromFile("inputMessage.png");
+    inputTexture.loadFromFile("images/inputMessage.png");
 
     //box to hold the message
     //its scaled by some random value that i chose that way there is more space to type

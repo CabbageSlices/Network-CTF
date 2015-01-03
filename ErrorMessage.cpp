@@ -25,7 +25,7 @@ void displayError(sf::RenderWindow& window, const string& message) {
 
     //load up the texture for the error message screen
     sf::Texture errorScreen;
-    errorScreen.loadFromFile("errorMessage.png");
+    errorScreen.loadFromFile("images/errorMessage.png");
 
     sf::Sprite errorSprite;
     errorSprite.setTexture(errorScreen);
@@ -45,9 +45,9 @@ void displayError(sf::RenderWindow& window, const string& message) {
     //button to return to previous screen
     //put in container to use button placer function
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png") ));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png") ));
 
-    placeButtons("errormessage.png", buttons);
+    placeButtons("images/errormessage.png", buttons);
 
     sf::SoundBuffer errorBuffer;
     errorBuffer.loadFromFile("sounds/errorSound.wav");

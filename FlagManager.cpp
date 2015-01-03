@@ -159,11 +159,11 @@ void FlagManager::draw(sf::RenderWindow& window, const unsigned& floor) {
 void FlagManager::addFlag(const sf::Vector2f& flagSpawnLocation, unsigned short teamId) {
 
     //get the name of the image file for each teams id
-    string flagImagePath = "redFlag.png";
+    string flagImagePath = "images/redFlag.png";
 
     if(teamId == TEAM_B_ID) {
 
-        flagImagePath = "blueFlag.png";
+        flagImagePath = "images/blueFlag.png";
     }
 
     //create a new flag at the given position

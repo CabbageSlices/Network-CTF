@@ -41,25 +41,25 @@ void controlsScreen(sf::RenderWindow& window) {
 
     //save the previous window
     sf::Texture background;
-    background.loadFromFile("defaultBackscreen.png");
+    background.loadFromFile("images/defaultBackscreen.png");
 
     sf::Sprite previousScreenSprite;
     previousScreenSprite.setTexture(background);
 
     //load the image for the credits
     sf::Texture controlsTexture;
-    controlsTexture.loadFromFile("controlsMenu.png");
+    controlsTexture.loadFromFile("images/controlsMenu.png");
 
     sf::Sprite controlsSprite;
     controlsSprite.setTexture(controlsTexture);
 
     //load the buttons
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
 
     unsigned backButton = 0;
 
-    placeButtons("controlsMenu.png", buttons);
+    placeButtons("images/controlsMenu.png", buttons);
 
     sf::Event event;
 
@@ -142,29 +142,29 @@ ClientGameManager::ClientGameManager() :
         gameBgm.setVolume(20);
         gameBgm.setLoop(true);
 
-        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("continueButton.png")) );
+        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/continueButton.png")) );
 
         //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
-        placeButtons("victory.png", endMatchButtons);
+        placeButtons("images/victory.png", endMatchButtons);
 
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("resumeButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("controlsButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitMatchButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/resumeButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/controlsButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitMatchButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
 
-        placeButtons("escapeMenu.png", pausedMenuButtons);
+        placeButtons("images/escapeMenu.png", pausedMenuButtons);
 
-        pausedTexture.loadFromFile("escapeMenu.png");
+        pausedTexture.loadFromFile("images/escapeMenu.png");
         pausedSprite.setTexture(pausedTexture);
 
-        controlsTexture.loadFromFile("controlsMenu.png");
+        controlsTexture.loadFromFile("images/controlsMenu.png");
         controlsSprite.setTexture(controlsTexture);
 
-        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")) );
+        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")) );
 
-        placeButtons("controlsMenu.png", controlsButtons);
+        placeButtons("images/controlsMenu.png", controlsButtons);
 
         winSoundBuffer.loadFromFile("sounds/victory.wav");
         winSound.setBuffer(winSoundBuffer);
@@ -207,7 +207,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     //load the image of the game lobby
     sf::Texture lobbyTexture;
-    lobbyTexture.loadFromFile("lobby.png");
+    lobbyTexture.loadFromFile("images/lobby.png");
 
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
@@ -223,7 +223,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     //texture for the red and blue boxes
     sf::Texture teamBoxTexture;
-    teamBoxTexture.loadFromFile("teamSelect.png");
+    teamBoxTexture.loadFromFile("images/teamSelect.png");
 
     //clips for the red and blue team's colored boxes in the teamboxtexture
     sf::IntRect redClip(0, 0, 255, 41);
@@ -242,13 +242,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("switchTeams.png")));
-    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images/switchTeams.png")));
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images/backButton.png")));
 
     unsigned switchTeams = 0;
     unsigned backButton = 1;
 
-    placeButtons("lobby.png", buttons);
+    placeButtons("images/lobby.png", buttons);
 
     sf::Event event;
 

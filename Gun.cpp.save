@@ -40,16 +40,17 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     animationTime(sf::milliseconds(150)),
     frame(0),
     fireSound(),
-    reloadSound()
+    reloadSound(),
+    shouldPlaySounds(true)
     {
         //set a default location for the line of sight
         updateLineOfSight(sf::Vector2f(0, 0));
         lineOfSight[0].texCoords = sf::Vector2f(0, 0);
         lineOfSight[1].texCoords = sf::Vector2f(100, 0);
 
-        lineTexture.loadFromFile("texture.png");
+        lineTexture.loadFromFile("images\texture.png");
 
-        texture.loadFromFile("character.png");
+        texture.loadFromFile("images\character.png");
         sprite.setTexture(texture);
 
         //default center for sprite based on character image
@@ -118,8 +119,11 @@ bool Gun::reload() {
 
         resetAnimation();
         reloading = true;
-        
-        reloadSound.play();
+
+        if(shouldPlaySounds && GLO_PLAY_SOUNDS) {
+
+            reloadSound.play();
+        }
 
         return true;
     }
@@ -165,6 +169,11 @@ void Gun::drawAll(sf::RenderWindow& window) {
     drawSight(window);
     drawBullets(window, floor);
     drawGun(window);
+}
+
+void Gun::drawBullets(sf::RenderWindow& window) {
+
+    drawBullets(window, floor);
 }
 
 void Gun::drawGun(sf::RenderWindow& window) {
@@ -368,7 +377,10 @@ void Gun::createBullet(const sf::Vector2f& bulletBegin, const sf::Vector2f& bull
     //a bullet was just created
     createdBullet = true;
 
-    handleFireSound();
+    if(shouldPlaySounds) {
+
+       handleFireSound();
+    }
 }
 
 const float Gun::getAccuracyModifier() const {
@@ -378,7 +390,9 @@ const float Gun::getAccuracyModifier() const {
 
 bool Gun::canFireGun() const {
 
-    return timeSinceFired > fireDelay && fired && !reloading && (currentMagazine > 0);
+    //don't let gun fire if the reloading sound is still playing
+    bool reloadSoundPlaying = reloadSound.getStatus() == sf::Sound::Playing;
+    return timeSinceFired > fireDelay && fired && !reloading && (currentMagazine > 0) && !reloadSoundPlaying;
 }
 
 void Gun::finishReloading() {

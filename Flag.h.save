@@ -9,7 +9,8 @@ class Flag {
     private:
 
         //flag image to draw
-        sf::CircleShape flag;
+        sf::Texture texture;
+        sf::Sprite sprite;
 
         //position of the spawn
         sf::Vector2f spawnPosition;
@@ -19,17 +20,18 @@ class Flag {
 
         //if the flag is at the spawn
         bool atSpawn;
-        
+
         //current floor the flag exist on
         unsigned floor;
 
     public:
 
-        Flag(const sf::Vector2f& spawnLocation, const sf::Color& flagColor = sf::Color::Red);
+        Flag(const sf::Vector2f& spawnLocation = sf::Vector2f(0, 0), const std::string& flagTexturePath = "images\redFlag.png");
 
         void draw(sf::RenderWindow& window);
 
         void setPosition(const sf::Vector2f& position);
+        void setSpawn(const sf::Vector2f& position);
         void reset();
 
         void dropFlag();
@@ -40,8 +42,11 @@ class Flag {
 
         const sf::FloatRect getCollisionBox() const;
         const sf::Vector2f getPosition() const;
+        const unsigned& getFloor() const;
+        const sf::Vector2f& getSpawn() const;
 
         void setHeld(bool held);
+        void setFloor(const unsigned& floor);
 };
 
 #endif // FLAG_H_INCLUDED

@@ -23,7 +23,7 @@ ScoreDisplay::ScoreDisplay(const sf::Vector2u& screenSize):
     drawAllyStolen(false),
     drawEnemyStolen(false)
     {
-        scoreTexture.loadFromFile("scoredisplay.png");
+        scoreTexture.loadFromFile("images/scoredisplay.png");
         scoreSprite.setTexture(scoreTexture);
 
         font.loadFromFile("font.ttf");
@@ -108,7 +108,7 @@ void ScoreDisplay::positionScores() {
 
 void ScoreDisplay::initMessages() {
 
-    messageTexture.loadFromFile("gameText.png");
+    messageTexture.loadFromFile("images/gameText.png");
 
     //window is always 1024 by 768 so position messages from bottom of the window
     //leave a 2 message gap from the bottom of the screen to the ally messages

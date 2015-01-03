@@ -22,14 +22,14 @@ StatDisplay::StatDisplay(const sf::Vector2u& screenSize) :
     playerName(),
     totalAmmo()
     {
-        statDisplayTexture.loadFromFile("statDisplay.png");
+        statDisplayTexture.loadFromFile("images/statDisplay.png");
         statDisplaySprite.setTexture(statDisplayTexture);
 
-        availableAmmoTexture.loadFromFile("availableAmmo.png");
+        availableAmmoTexture.loadFromFile("images/availableAmmo.png");
         availableAmmoTexture.setRepeated(true);
         availableAmmo.setTexture(availableAmmoTexture);
 
-        usedAmmoTexture.loadFromFile("usedAmmo.png");
+        usedAmmoTexture.loadFromFile("images/usedAmmo.png");
         usedAmmoTexture.setRepeated(true);
         usedAmmo.setTexture(usedAmmoTexture);
 

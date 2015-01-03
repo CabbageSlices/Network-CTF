@@ -39,16 +39,16 @@ void serverHelpMenu(sf::RenderWindow& window) {
 
     //load the image for the help menu
     sf::Texture helpTexture;
-    helpTexture.loadFromFile("serverHelpScreen.png");
+    helpTexture.loadFromFile("images\serverHelpScreen.png");
 
     sf::Sprite helpSprite;
     helpSprite.setTexture(helpTexture);
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\backButton.png")));
 
-    placeButtons("serverHelpScreen.png", buttons);
+    placeButtons("images\serverHelpScreen.png", buttons);
 
     unsigned backButton = 0;
 
@@ -116,13 +116,13 @@ ServerGameManager::ServerGameManager() :
     lastPlayerId(0),
     teamManager()
     {
-        inGameTexture.loadFromFile("serverInGame.png");
+        inGameTexture.loadFromFile("images\serverInGame.png");
         inGameSprite.setTexture(inGameTexture);
 
-        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("endMatch.png")));
-        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\endMatch.png")));
+        inGameButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\quitButton.png")));
 
-        placeButtons("serverInGame.png", inGameButtons);
+        placeButtons("images\serverInGame.png", inGameButtons);
     }
 
 void ServerGameManager::gameLobby(sf::RenderWindow& window) {
@@ -1091,8 +1091,8 @@ void ServerGameManager::handleCollisions() {
         collidePlayerFlag(player->player, *getFlagManager(), teamManager);
 
         playerSpawnCollision(player);
-        
+
         //reset all player's gun picking up state that way they aren't constantly trying to pick up a gun
-        player-
+        player->player.setPickUpGun(false);
     }
 }

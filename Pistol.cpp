@@ -7,7 +7,7 @@ Pistol::Pistol() :
     Gun(20, 600, sf::milliseconds(400), 1.5)
     {
         //load the texture for the ui
-        uiTexture.loadFromFile("pistolUI.png");
+        uiTexture.loadFromFile("images/pistolUI.png");
         uiSprite.setTexture(uiTexture);
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 

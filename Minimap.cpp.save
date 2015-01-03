@@ -1,34 +1,32 @@
 #include "Minimap.h"
 
-Minimap::Minimap(const sf::Vector2f& minimapSize, const sf::Vector2u& windowSize):
+Minimap::Minimap(const sf::Vector2u& windowSize):
     view(),
     borderTexture(),
     borderSprite(),
-    viewingAreaOffset(22, 35),
-    viewingAreaSize(194, 126),
+    viewingAreaOffset(27, 43),
+    viewingAreaSize(242, 158),
     levelSize(1024, 768),
     movementOffset(0.01)
     {
-        borderTexture.loadFromFile("minimap.png");
+        borderTexture.loadFromFile("images\minimap.png");
         borderSprite.setTexture(borderTexture);
-        
+
         setupBorderPosition(windowSize);
 
         setupViewingRegion(windowSize);
 
         //set level size to the default level size
         setLevelSize(levelSize);
-        
+
         handleScreenResize(windowSize);
     }
 
 void Minimap::setLevelSize(const sf::Vector2f& size) {
 
+    //keep the aspect ratio of the level on the minimap but make it more zoomed in
     levelSize = size;
-    view.setSize(levelSize);
-
-    //center the view at the center of the level
-    view.setCenter(levelSize.x / 2, levelSize.y / 2);
+    view.setSize(levelSize.x / 2.5, levelSize.y / 2.5);
 }
 
 void Minimap::applyMinimap(sf::RenderWindow& window) const {

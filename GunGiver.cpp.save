@@ -19,7 +19,8 @@ map<GunTypes, sf::Sprite> GunGiver::messageSprites;
 
 GunGiver::GunGiver(const GunTypes& gun) :
     StaticObject(sf::Vector2f(0, 0)),
-    gunToGive(gun)
+    gunToGive(gun),
+    shouldDrawMessage(false)
     {
         //if the textures for the gun givers aren't created yet, then create them
         if(!texturesCreated) {
@@ -36,35 +37,36 @@ GunGiver::GunGiver(const GunTypes& gun) :
 void GunGiver::initialize() {
 
     textures[SHOTGUN] = sf::Texture();
-    textures[SHOTGUN].loadFromFile("shotgunIcon.png");
+    textures[SHOTGUN].loadFromFile("images\shotgunIcon.png");
 
     textures[PISTOL] = sf::Texture();
-    textures[PISTOL].loadFromFile("pistolIcon.png");
+    textures[PISTOL].loadFromFile("images\pistolIcon.png");
 
     textures[SNIPER] = sf::Texture();
-    textures[SNIPER].loadFromFile("sniperIcon.png");
+    textures[SNIPER].loadFromFile("images\sniperIcon.png");
 
-    messageTextures.loadFromFile("gameText.png");
+    messageTextures.loadFromFile("images\gameText.png");
 
     //create sprites for each gun type
-    sprites[SHOTGUN] = sf::Sprite();
-    sprites[SHOTGUN].setTexture(messageTextures);
-    sprites[SHOTGUN].setTextureRect(1, 129, 382, 31);
+    messageSprites[SHOTGUN] = sf::Sprite();
+    messageSprites[SHOTGUN].setTexture(messageTextures);
+    messageSprites[SHOTGUN].setTextureRect(sf::IntRect(1, 129, 382, 31));
 
-    sprites[PISTOL] = sf::Sprite();
-    sprites[PISTOL].setTexture(messageTextures);
-    sprites[PISTOL].setTextureRect(1, 161, 382, 31);
+    messageSprites[PISTOL] = sf::Sprite();
+    messageSprites[PISTOL].setTexture(messageTextures);
+    messageSprites[PISTOL].setTextureRect(sf::IntRect(1, 161, 382, 31));
 
-    sprites[SNIPER] = sf::Sprite();
-    sprites[SNIPER].setTexture(messageTextures);
-    sprites[SNIPER].setTextureRect(1, 193, 328, 31);
+    messageSprites[SNIPER] = sf::Sprite();
+    messageSprites[SNIPER].setTexture(messageTextures);
+    messageSprites[SNIPER].setTextureRect(sf::IntRect(1, 193, 382, 31));
 
     //position all sprites now
-    for(auto& pair: sprites) {
+    for(auto& pair: messageSprites) {
 
-        sf::Sprite& sprite = pair.second
+        sf::Sprite& sprite = pair.second;
+
         //window size is always 1024 by 768 so just center each sprite at the very bottom of the window
-        sprite.setPosition(1024 / 2 - sprite.getGlobalBounds().width / 2, 768 - sprite.getGlobalBounds().height)
+        sprite.setPosition(1024 / 2 - sprite.getGlobalBounds().width / 2, 768 - sprite.getGlobalBounds().height);
     }
 
     texturesCreated = true;
@@ -88,7 +90,7 @@ void GunGiver::handleCollision(PlayerBase& collidingPlayer) {
 
         collidingPlayer.setGun(createGun(gunToGive));
 
-    } else {
+    } else if(isType(collidingPlayer.getGun(), gunToGive)) {
 
         //same guns so refil ammo
         collidingPlayer.getGun()->refillTotalAmmo();

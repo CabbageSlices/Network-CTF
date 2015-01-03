@@ -37,15 +37,15 @@ GunGiver::GunGiver(const GunTypes& gun) :
 void GunGiver::initialize() {
 
     textures[SHOTGUN] = sf::Texture();
-    textures[SHOTGUN].loadFromFile("shotgunIcon.png");
+    textures[SHOTGUN].loadFromFile("images/shotgunIcon.png");
 
     textures[PISTOL] = sf::Texture();
-    textures[PISTOL].loadFromFile("pistolIcon.png");
+    textures[PISTOL].loadFromFile("images/pistolIcon.png");
 
     textures[SNIPER] = sf::Texture();
-    textures[SNIPER].loadFromFile("sniperIcon.png");
+    textures[SNIPER].loadFromFile("images/sniperIcon.png");
 
-    messageTextures.loadFromFile("gameText.png");
+    messageTextures.loadFromFile("images/gameText.png");
 
     //create sprites for each gun type
     messageSprites[SHOTGUN] = sf::Sprite();

@@ -63,7 +63,7 @@ void clientTitleScreen(sf::RenderWindow& window) {
 
     //load up the image of the title screen
     sf::Texture titleScreenTexture;
-    titleScreenTexture.loadFromFile("clientMainMenu.png");
+    titleScreenTexture.loadFromFile("images/clientMainMenu.png");
 
     sf::Sprite titleScreenSprite;
     titleScreenSprite.setTexture(titleScreenTexture);
@@ -71,10 +71,10 @@ void clientTitleScreen(sf::RenderWindow& window) {
     //create buttons and place them
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("playButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("controlsButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("creditsButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/playButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/controlsButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/creditsButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")));
     buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
     buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
 
@@ -86,7 +86,7 @@ void clientTitleScreen(sf::RenderWindow& window) {
     unsigned musicId = 4;
     unsigned soundId = 5;
 
-    placeButtons("clientMainMenu.png", buttons);
+    placeButtons("images/clientMainMenu.png", buttons);
 
     sf::Event event;
 
@@ -175,23 +175,23 @@ void clientTitleScreen(sf::RenderWindow& window) {
 void clientHelpMenu(sf::RenderWindow& window) {
 
     sf::Texture background;
-    background.loadFromFile("defaultBackscreen.png");
+    background.loadFromFile("images/defaultBackscreen.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(background);
 
     //load image for the help menu
     sf::Texture helpScreen;
-    helpScreen.loadFromFile("clientHelpMenu.png");
+    helpScreen.loadFromFile("images/clientHelpMenu.png");
 
     sf::Sprite helpScreenSprite;
     helpScreenSprite.setTexture(helpScreen);
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
 
-    placeButtons("clientHelpMenu.png", buttons);
+    placeButtons("images/clientHelpMenu.png", buttons);
 
     unsigned backButton = 0;
 
@@ -242,14 +242,14 @@ void clientHelpMenu(sf::RenderWindow& window) {
 void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 
     sf::Texture background;
-    background.loadFromFile("defaultBackscreen.png");
+    background.loadFromFile("images/defaultBackscreen.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(background);
 
     //load the images and buttons required for the find match screen
     sf::Texture findMatchTexture;
-    findMatchTexture.loadFromFile("playMenu.png");
+    findMatchTexture.loadFromFile("images/playMenu.png");
 
     sf::Sprite findMatchSprite;
     findMatchSprite.setTexture(findMatchTexture);
@@ -261,14 +261,14 @@ void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("textButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("textButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("textButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("playButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("helpButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/textButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/textButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/textButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/playButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/helpButton.png")));
 
-    placeButtons("playMenu.png", buttons);
+    placeButtons("images/playMenu.png", buttons);
 
     //indices for buttons
     unsigned playButton = 3;
@@ -406,25 +406,25 @@ void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 void creditsScreen(sf::RenderWindow& window) {
 
     sf::Texture background;
-    background.loadFromFile("defaultBackscreen.png");
+    background.loadFromFile("images/defaultBackscreen.png");
 
     sf::Sprite previousScreenSprite;
     previousScreenSprite.setTexture(background);
 
     //load the image for the credits
     sf::Texture creditsTexture;
-    creditsTexture.loadFromFile("creditsMenu.png");
+    creditsTexture.loadFromFile("images/creditsMenu.png");
 
     sf::Sprite creditsSprite;
     creditsSprite.setTexture(creditsTexture);
 
     //load the buttons
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
 
     unsigned backButton = 0;
 
-    placeButtons("creditsMenu.png", buttons);
+    placeButtons("images/creditsMenu.png", buttons);
 
     sf::Event event;
 
@@ -474,22 +474,22 @@ void serverTitleScreen(sf::RenderWindow& window) {
     sf::Texture titleScreenTexture;
     sf::Sprite titleScreenSprite;
 
-    titleScreenTexture.loadFromFile("serverTitleScreen.png");
+    titleScreenTexture.loadFromFile("images/serverTitleScreen.png");
     titleScreenSprite.setTexture(titleScreenTexture);
 
     //create buttons for user to press
     vector<shared_ptr<PredrawnButton> > buttons;
 
     //create all buttons
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("serverTextBox.png")) );
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("hostGameButton.png")) );
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")) );
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/serverTextBox.png")) );
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/hostGameButton.png")) );
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")) );
 
     //id for each button that is in the vector that way its easy to access
     unsigned hostGameId = 1;
     unsigned quitButton = 2;
 
-    placeButtons<shared_ptr<PredrawnButton> >("serverTitlescreen.png" , buttons);
+    placeButtons<shared_ptr<PredrawnButton> >("images/serverTitlescreen.png" , buttons);
 
     //create a button for user to press in order to change port numbers
     sf::FloatRect changePortButton(528, 351, 131, 20);

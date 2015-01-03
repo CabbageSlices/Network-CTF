@@ -12,6 +12,8 @@
 #include "Scoreboard.h"
 #include "HeadsUpDisplay.h"
 
+#include "soundSettings.h"
+
 #include <tr1/memory>
 #include <vector>
 #include <string>
@@ -139,12 +141,12 @@ class ClientGameManager: public GameManager {
 
         void loadVictoryTexture(sf::Texture& textureToFill) {
 
-            textureToFill.loadFromFile("victory.png");
+            textureToFill.loadFromFile("images\victory.png");
         }
 
         void loadDefeatTexture(sf::Texture& textureToFill){
 
-            textureToFill.loadFromFile("defeat.png");
+            textureToFill.loadFromFile("images\defeat.png");
         }
 
         //go through all buttons and check if they're touching the mouse that way they darken out when mouse is hovering over them

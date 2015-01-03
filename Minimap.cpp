@@ -9,7 +9,7 @@ Minimap::Minimap(const sf::Vector2u& windowSize):
     levelSize(1024, 768),
     movementOffset(0.01)
     {
-        borderTexture.loadFromFile("minimap.png");
+        borderTexture.loadFromFile("images/minimap.png");
         borderSprite.setTexture(borderTexture);
 
         setupBorderPosition(windowSize);

@@ -21,7 +21,7 @@ Sniper::Sniper() :
         setupAccuracyRange();
 
         //load the texture for the ui
-        uiTexture.loadFromFile("sniperUI.png");
+        uiTexture.loadFromFile("images/sniperUI.png");
         uiSprite.setTexture(uiTexture);
 
         uiSprite.setColor(sf::Color(255, 255, 255, 150));

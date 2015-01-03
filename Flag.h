@@ -26,7 +26,7 @@ class Flag {
 
     public:
 
-        Flag(const sf::Vector2f& spawnLocation = sf::Vector2f(0, 0), const std::string& flagTexturePath = "redFlag.png");
+        Flag(const sf::Vector2f& spawnLocation = sf::Vector2f(0, 0), const std::string& flagTexturePath = "images/redFlag.png");
 
         void draw(sf::RenderWindow& window);
 

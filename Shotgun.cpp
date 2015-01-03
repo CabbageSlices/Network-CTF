@@ -23,7 +23,7 @@ Shotgun::Shotgun() :
         totalMagazine = maxTotalMagazine;
 
         //load the texture for the ui
-        uiTexture.loadFromFile("shotgunUI.png");
+        uiTexture.loadFromFile("images/shotgunUI.png");
         uiSprite.setTexture(uiTexture);
         uiSprite.setColor(sf::Color(255, 255, 255, 150));
 
