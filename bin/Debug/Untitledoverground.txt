@@ -573,18 +573,6 @@ overgroundgrass1.png
 overgroundgrass1.png
 2513.32
 1230.76
-overgroundgrass4.png
-1184.68
-1184.76
-overgroundgrass4.png
-2783.32
-1184.76
-overgroundgrass4.png
-1183.77
-287.006
-overgroundgrass4.png
-2784.23
-287.006
 overgroundgrass1.png
 64.224
 61.5134
@@ -603,12 +591,6 @@ overgroundgrass1.png
 overgroundgrass1.png
 3842.01
 1216.35
-overgroundgrass1.png
-62.9941
-1407.35
-overgroundgrass1.png
-3905.01
-1407.35
 overgroundgrass5.png
 2113.2
 1217.94
@@ -648,6 +630,12 @@ overgroundgrass31.png
 overgroundgrass32.png
 3297.27
 1186.17
+overgroundgrass1.png
+3904.67
+1406.87
+overgroundgrass1.png
+63.3264
+1406.87
 end foreground
 begin portal
 1173.28
@@ -755,12 +743,12 @@ begin portal
 2440.06
 228.569
 2
-54.7639
-1400.35
-19.125
-18
-58.1389
-1342.41
+55.8142
+1399.86
+17.7188
+16.875
+57.5017
+1256.46
 2
 end portal
 begin gun giver

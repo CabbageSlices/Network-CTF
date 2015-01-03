@@ -90,7 +90,7 @@ void GunGiver::handleCollision(PlayerBase& collidingPlayer) {
 
         collidingPlayer.setGun(createGun(gunToGive));
 
-    } else {
+    } else if(isType(collidingPlayer.getGun(), gunToGive)) {
 
         //same guns so refil ammo
         collidingPlayer.getGun()->refillTotalAmmo();
