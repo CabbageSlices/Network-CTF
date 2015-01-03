@@ -95,13 +95,13 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     window.clear();
 
-    world.drawBackground(window, getFloor());
+    ///world.drawBackground(window, getFloor());
 
-    this->drawComponents(window);
+    ///this->drawComponents(window);
 
-    world.drawForeground(window, getFloor());
+    ///world.drawForeground(window, getFloor());
 
-    this->drawForeground(window);
+    ///this->drawForeground(window);
 
     GameManager::drawUI(window);
 
@@ -139,7 +139,7 @@ void GameManager::drawUI(sf::RenderWindow& window) {
     //all UI is drawn on the defualt window because they don't move along with the camera and always stay on the same spot on the screen
     window.setView(currentWindow);
 
-    headsUpDisplay.draw(window);
+    ///headsUpDisplay.draw(window);
 
     ///GameManager::drawMinimap(window);
 
