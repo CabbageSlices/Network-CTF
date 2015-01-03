@@ -1302,7 +1302,7 @@
 	"math.h"
 	<iostream>
 
-1420071582 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gamemanager.cpp
+1420265323 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gamemanager.cpp
 	"GameManager.h"
 	"LevelManager.h"
 	"Minimap.h"
@@ -1333,7 +1333,7 @@
 	<iostream>
 	<algorithm>
 
-1420258582 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.cpp
+1420263569 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gun.cpp
 	"Gun.h"
 	"LineSegment.h"
 	"Bullet.h"
@@ -1342,7 +1342,7 @@
 	"Floors.h"
 	<iostream>
 
-1420251948 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.cpp
+1420262959 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\gungiver.cpp
 	"GunGiver.h"
 	"PlayerBase.h"
 	"GunHandlers.h"
@@ -1430,7 +1430,7 @@
 1419363960 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\minimap.cpp
 	"Minimap.h"
 
-1420258794 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\networktest.cpp
+1420265811 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\networktest.cpp
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"ClientGameManager.h"
@@ -1440,6 +1440,7 @@
 	"ButtonPlacer.h"
 	"TypeChecker.h"
 	"ErrorMessage.h"
+	"OnOffButton.h"
 	"soundSettings.h"
 	<tr1/memory>
 	<vector>

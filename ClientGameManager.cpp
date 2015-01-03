@@ -40,12 +40,11 @@ using std::next;
 void controlsScreen(sf::RenderWindow& window) {
 
     //save the previous window
-    sf::Texture previousScreen;
-    previousScreen.create(window.getSize().x, window.getSize().y);
-    previousScreen.update(window);
+    sf::Texture background;
+    background.loadFromFile("defaultBackscreen.png");
 
     sf::Sprite previousScreenSprite;
-    previousScreenSprite.setTexture(previousScreen);
+    previousScreenSprite.setTexture(background);
 
     //load the image for the credits
     sf::Texture controlsTexture;

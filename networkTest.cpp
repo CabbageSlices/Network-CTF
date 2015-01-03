@@ -7,6 +7,7 @@
 #include "ButtonPlacer.h"
 #include "TypeChecker.h"
 #include "ErrorMessage.h"
+#include "OnOffButton.h"
 #include "soundSettings.h"
 
 #include <tr1/memory>
@@ -39,8 +40,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Network Test", sf::Style::Titlebar | sf::Style::Close);
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }
@@ -74,12 +75,16 @@ void clientTitleScreen(sf::RenderWindow& window) {
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("controlsButton.png")));
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("creditsButton.png")));
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("quitButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
+    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
 
     //indices for each button
     unsigned playButton = 0;
     unsigned controlsButton = 1;
     unsigned creditsButton = 2;
     unsigned quitButton = 3;
+    unsigned musicId = 4;
+    unsigned soundId = 5;
 
     placeButtons("clientMainMenu.png", buttons);
 
@@ -121,6 +126,29 @@ void clientTitleScreen(sf::RenderWindow& window) {
                     PredrawnButton::playClickSound();
                     controlsScreen(window);
                 }
+
+                if(buttons[musicId]->checkMouseTouching(mousePosition)) {
+
+                    PredrawnButton::playClickSound();
+                    buttons[musicId]->onClick();
+                    GLO_PLAY_MUSIC = buttons[musicId]->checkIsOn();
+
+                    if(!GLO_PLAY_MUSIC) {
+
+                        bgm.pause();
+
+                    } else {
+
+                        bgm.play();
+                    }
+                }
+
+                if(buttons[soundId]->checkMouseTouching(mousePosition)) {
+
+                    PredrawnButton::playClickSound();
+                    buttons[soundId]->onClick();
+                    GLO_PLAY_SOUNDS = buttons[soundId]->checkIsOn();
+                }
             }
         }
 
@@ -146,10 +174,8 @@ void clientTitleScreen(sf::RenderWindow& window) {
 
 void clientHelpMenu(sf::RenderWindow& window) {
 
-    //save the previous window image as a backgroud image that way you don't have to load the background again
     sf::Texture background;
-    background.create(window.getSize().x, window.getSize().y);
-    background.update(window);
+    background.loadFromFile("defaultBackscreen.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(background);
@@ -215,10 +241,8 @@ void clientHelpMenu(sf::RenderWindow& window) {
 
 void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 
-    //save the previous window image as a backgroud image that way you don't have to load the background again
     sf::Texture background;
-    background.create(window.getSize().x, window.getSize().y);
-    background.update(window);
+    background.loadFromFile("defaultBackscreen.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(background);
@@ -381,13 +405,11 @@ void findMatchScreen(sf::RenderWindow& window, sf::Music& bgm) {
 
 void creditsScreen(sf::RenderWindow& window) {
 
-    //save the previous window
-    sf::Texture previousScreen;
-    previousScreen.create(window.getSize().x, window.getSize().y);
-    previousScreen.update(window);
+    sf::Texture background;
+    background.loadFromFile("defaultBackscreen.png");
 
     sf::Sprite previousScreenSprite;
-    previousScreenSprite.setTexture(previousScreen);
+    previousScreenSprite.setTexture(background);
 
     //load the image for the credits
     sf::Texture creditsTexture;
