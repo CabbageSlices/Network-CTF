@@ -550,6 +550,11 @@ void ServerGameManager::handleData(shared_ptr<ConnectedPlayer> player, sf::Packe
 
            player->readyToPlay = true;
         }
+
+    }  else if(checkPacketType(data, CLIENT_DAMAGE_REPORT)) {
+
+        handleDamageReport(player, data);
+
     } else if(checkPacketType(data, CHANGE_TEAM)) {
 
         unsigned short destinationTeam = getOpposingTeam(player->player.getTeam());
@@ -663,6 +668,38 @@ void ServerGameManager::handlePlayerKeystate(shared_ptr<ConnectedPlayer> player,
     }
 }
 
+void ServerGameManager::handleDamageReport(shared_ptr<ConnectedPlayer> player, sf::Packet& packet) {
+
+    //read the id of the packet first
+    unsigned packetId = 0;
+    packet >> packetId;
+
+    //now take all the playrs that have received damage and damage them
+    while(!packet.endOfPacket()) {
+
+        unsigned playerId = 0;
+        int damage = 0;
+
+        packet >> playerId;
+        packet >> damage;
+
+        //find player with the given id and if he is still alive damage him
+        for(auto& playerToHit : players) {
+
+            if(playerToHit->player.getId() == playerId && playerToHit->player.isAlive()) {
+
+                playerToHit->player.getHit(damage);
+
+                //if he died then increase the kill count for the player who shot the bullet
+                if(!playerToHit->player.isAlive()) {
+
+                    player->player.setKills(player->player.getKills() + 1);
+                }
+            }
+        }
+    }
+}
+
 void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket) {
 
     //what fraction of time has passed on the clients side since the server last sent an update
@@ -674,7 +711,7 @@ void ServerGameManager::handlePlayerGunfire(shared_ptr<ConnectedPlayer> player, 
 
     readGunfirePacket(player->player, deltaFraction, clientUpdateId, inputPacket);
 
-    handleGunfireCollision(player, deltaFraction, clientUpdateId);
+    ///handleGunfireCollision(player, deltaFraction, clientUpdateId);
 }
 
 void ServerGameManager::handleGunfireCollision(shared_ptr<ConnectedPlayer> player, const float& deltaFraction, const sf::Uint32& clientUpdateId) {
@@ -919,10 +956,11 @@ void ServerGameManager::setup(sf::RenderWindow& window) {
     //reset all player's stats as well and reset their guns as well
     for(auto& player : players) {
 
-        player->player.die();
+        player->player.setHealth(0);
         player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
         player->player.resetStats();
         player->player.resetGun();
+        player->player.setFloor(OVERGROUND_FLOOR);
     }
 
     //reset all scores

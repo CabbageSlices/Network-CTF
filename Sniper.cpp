@@ -7,7 +7,7 @@ Sniper::Sniper() :
     Gun(75, 2500, sf::milliseconds(1000), 20),
     holdingFireButton(false),
     currentAccuracyModifier(accuracyModifier),
-    accuracyChangeRate(8),
+    accuracyChangeRate(12),
     accuracyRange(sf::Triangles, 3)
     {
         animationTime = sf::milliseconds(200);

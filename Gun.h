@@ -249,6 +249,12 @@ class Gun {
             }
         }
 
+        //adds the last bullet created to the client bullet container so it can be sent to clients later
+        void sendLastBulletToClient() {
+
+            bulletsForClients.push_back(bullets[bullets.size() - 1]);
+        }
+
         virtual GunTypes getGunType();
 
         //returns the angle the gun shot the bullet at because guns could have different accuracies, this can be used to determine where the gun was shot

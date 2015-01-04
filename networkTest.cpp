@@ -47,8 +47,8 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    ///clientTitleScreen(window);
-    serverTitleScreen(window);
+    clientTitleScreen(window);
+    ///serverTitleScreen(window);
 
     return 0;
 }
@@ -82,8 +82,8 @@ void clientTitleScreen(sf::RenderWindow& window) {
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/controlsButton.png")));
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/creditsButton.png")));
     buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")));
-    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
-    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton()));
+    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton(GLO_PLAY_MUSIC)));
+    buttons.push_back(shared_ptr<PredrawnButton>(new OnOffButton(GLO_PLAY_SOUNDS)));
 
     //indices for each button
     unsigned playButton = 0;

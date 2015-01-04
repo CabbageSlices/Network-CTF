@@ -96,3 +96,12 @@ void GunGiver::handleCollision(PlayerBase& collidingPlayer) {
         collidingPlayer.getGun()->refillTotalAmmo();
     }
 }
+
+void GunGiver::handleRefillAmmo(PlayerBase& collidingPlayer) {
+
+    if(isType(collidingPlayer.getGun(), gunToGive)) {
+
+        //same guns so refil ammo
+        collidingPlayer.getGun()->refillTotalAmmo();
+    }
+}

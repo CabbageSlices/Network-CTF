@@ -282,7 +282,7 @@ float Gun::fire() {
     createBullet(lineOfSight[0].position, bulletEndPoint, floor);
 
     //now queue the rotation so data can be sent to server later
-    queuedRotations.push_back(gunfireAngle);
+    ///queuedRotations.push_back(gunfireAngle);
 
     useAmmo();
 

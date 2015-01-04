@@ -142,6 +142,8 @@ void PlayerBase::setTeam(const unsigned short& team) {
         flagIndicator.setTexture(blueIndicatorTexture);
     }
 
+
+
     flagIndicator.setScale(1.20, 1.20);
 
     currentHitBox.setOutlineColor(getTeamColor(team));
@@ -396,6 +398,9 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
 
         respawnSound.play();
     }
+
+    gun->refillTotalAmmo();
+    gun->setCurrentAmmo(gun->getMaxCurrentAmmo());
 
     frame = 0;
     animationTimer.restart();

@@ -10,6 +10,7 @@
 #include "Block.h"
 #include "Gun.h"
 #include "ErrorMessage.h"
+#include "math.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -106,6 +107,7 @@ void controlsScreen(sf::RenderWindow& window) {
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
+    damageDealt(),
     endMatchButtons(),
     pausedMenuButtons(),
     controlsButtons(),
@@ -151,8 +153,8 @@ ClientGameManager::ClientGameManager() :
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/controlsButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitMatchButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton(GLO_PLAY_MUSIC) ));
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton(GLO_PLAY_SOUNDS) ));
 
         placeButtons("images/escapeMenu.png", pausedMenuButtons);
 
@@ -381,6 +383,9 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
                 //disable current bgm so that the ingame bgm starts playing
                 lobbyBgm.stop();
 
+                //delete all previously connected players that way they can move to their spawns
+                connectedPlayers.clear();
+
                 //run the game, will go to the game stage but won't start until server sends state update packet
                 runGame(window);
 
@@ -554,7 +559,7 @@ void ClientGameManager::sendGunshotsToServer() {
     }
 
     //check if the user shot any bullets and send any gunshot data to the server
-    if(userPlayer.getGunshotsToSend().size() == 0) {
+    if(userPlayer.getGun()->getBulletsForClients().size() == 0) {
 
         return;
     }
@@ -569,6 +574,37 @@ void ClientGameManager::sendGunshotsToServer() {
     userPlayer.clearGunshotQueue();
 
     client.sendToServer(packetToSend);
+}
+
+void ClientGameManager::sendDamageToServer() {
+
+    //don't send updates if game is over
+    if(matchEnded) {
+
+        return;
+    }
+
+    //don't send packet if usser hasn't damaged anyone
+    if(damageDealt.size() == 0) {
+
+        return;
+    }
+
+    sf::Packet packet;
+
+    packet << CLIENT_DAMAGE_REPORT;
+
+    //add all data to packet and send to server
+    for(auto& damage : damageDealt) {
+
+        packet << damage.playerId;
+        packet << damage.damage;
+    }
+
+    client.sendToServer(packet);
+
+    //erase all damages dealth
+    damageDealt.clear();
 }
 
 void ClientGameManager::handleServerUpdates() {
@@ -762,15 +798,60 @@ void ClientGameManager::handleBulletCollision() {
                                      return !block->getPassBullets();
                                      });
 
-        //handle collision with other players
-        bulletEntityCollision<InterpolatingPlayer>(bullet, connectedPlayers,
-                                                   [&](shared_ptr<InterpolatingPlayer> player)->bool {
 
-                                                    return !(player->getTeam() == userPlayer.getTeam()) && player->isAlive() && player->getFloor() == bullet->getFloor();
-                                                   });
+        playerBulletCollision(bullet);
+
+        //now prepare to send this bullet to server
+        userPlayer.getGun()->getBulletsForClients().push_back(bullet);
 
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
+    }
+}
+
+void ClientGameManager::playerBulletCollision(shared_ptr<Bullet> bullet) {
+
+    //determine the player that was first hit and handle collision with him
+    //default nearest collision is the shooter
+    unsigned idNearestPlayer = userPlayer.getId();
+    sf::Vector2f nearestCollisionPoint = bullet->getLine()->getEndPoint();
+
+    for(auto& player : connectedPlayers) {
+
+        if(player->getTeam() == userPlayer.getTeam() || !player->isAlive()) {
+
+            continue;
+        }
+
+        //if player and bullet aren't on same floor don't check collision
+        if(player->getFloor() != bullet->getFloor()) {
+
+            continue;
+        }
+
+        sf::FloatRect collisionBox = player->getCurrentHitbox();
+
+        //point of collision if there is one
+        sf::Vector2f collisionPoint(0, 0);
+
+        //if there is a collision determine if the player that was shot is the nearest player
+        if(checkCollision(collisionBox, bullet->getLine(), collisionPoint) &&
+            distanceToPoint(bullet->getLine()->getStartPoint(), collisionPoint) < distanceToPoint(bullet->getLine()->getStartPoint(), nearestCollisionPoint)) {
+
+            //this collision point is now the nearest point of collision so this player is the closest
+            idNearestPlayer = player->getId();
+            nearestCollisionPoint = collisionPoint;
+        }
+    }
+
+    //now collide with the nearest player if the nearest player is not the shooter
+    if(idNearestPlayer != userPlayer.getId()) {
+
+        //player was hit just make the line smaller and indicate it collided with something
+        bullet->setEndPoint(nearestCollisionPoint);
+        bullet->disableCollision();
+
+        damageDealt.push_back(BulletDamage(idNearestPlayer, bullet->getDamage()));
     }
 }
 
@@ -835,6 +916,8 @@ void ClientGameManager::setup(sf::RenderWindow& window) {
     //reset the user players stats
     userPlayer.resetStats();
     userPlayer.resetGun();
+
+    userPlayer.setFloor(OVERGROUND_FLOOR);
 
     waitingForOthers = true;
     matchEnded = false;
@@ -961,6 +1044,7 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
     sendInputsToServer();
     sendGunshotsToServer();
+    sendDamageToServer();
     handleServerUpdates();
 
     updateScoreboard(window);
@@ -1184,5 +1268,10 @@ void ClientGameManager::handleCollisions() {
     for(auto& giver : givers) {
 
         giver->setDrawMessage(giver->getCollisionBox().intersects(userPlayer.getCollisionBox()));
+
+        if(giver->getCollisionBox().intersects(userPlayer.getCollisionBox())) {
+
+            giver->handleRefillAmmo(userPlayer);
+        }
     }
 }

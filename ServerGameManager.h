@@ -88,6 +88,8 @@ class ServerGameManager : public GameManager {
         //handle a new keystate update from client
         void handlePlayerKeystate(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& statePacket);
 
+        void handleDamageReport(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& statePacket);
+
         //handle a player's gunfire packet
         void handlePlayerGunfire(std::tr1::shared_ptr<ConnectedPlayer> player, sf::Packet& inputPacket);
 

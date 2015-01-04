@@ -1,6 +1,7 @@
 #include "InterpolatingPlayer.h"
 #include "Gun.h"
 #include "math.h"
+#include "TeamManager.h"
 
 InterpolatingPlayer::InterpolatingPlayer():
     PlayerBase(),
@@ -19,6 +20,8 @@ void InterpolatingPlayer::setInterpolationRotation(const float& newRotation) {
 
     pastRotation = destinationRotation;
     destinationRotation = newRotation;
+
+    nameText.setColor(getTeamColor(getTeam()));
 }
 
 void InterpolatingPlayer::fireGun(const sf::Vector2f& bulletBegin, const sf::Vector2f& bulletEnd, const unsigned& floor) {

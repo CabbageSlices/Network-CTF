@@ -50,7 +50,11 @@ void setGunTo(PlayerBase& player, GunTypes gunType) {
     if(!isType(player.getGun(), gunType)) {
 
         player.setGun(createGun(gunType));
-        player.getGun()->playReloadSound();
+
+        if(player.checkPlaySounds()) {
+
+            player.getGun()->playReloadSound();
+        }
     }
 }
 
@@ -175,20 +179,39 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> kills >> deaths >> flagCaptures >> flagReturns;
 
-    player.setKills(kills);
-    player.setDeaths(deaths);
-    player.setCaptures(flagCaptures);
-    player.setReturns(flagReturns);
-
     unsigned short team_A_Score = 0;
     unsigned short team_B_Score = 0;
 
     updatePacket >> team_A_Score >> team_B_Score;
 
     //if either teams score is bigger on the server side than the client side it means someone scored so play score sound
-    if(scoreDisplay.getRedScore() < team_A_Score || scoreDisplay.getBlueScore() < team_B_Score) {
+    if(scoreDisplay.getRedScore() < team_A_Score) {
 
         player.playScoreSound();
+
+        if(player.getTeam() == TEAM_A_ID) {
+
+            scoreDisplay.drawAllyCapture();
+
+        } else {
+
+            scoreDisplay.drawEnemyCapture();
+        }
+
+    }
+
+    if(scoreDisplay.getBlueScore() < team_B_Score) {
+
+        player.playScoreSound();
+
+        if(player.getTeam() == TEAM_B_ID) {
+
+            scoreDisplay.drawAllyCapture();
+
+        } else {
+
+            scoreDisplay.drawEnemyCapture();
+        }
     }
 
     scoreDisplay.setRedScore(team_A_Score);
@@ -199,6 +222,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     ///apply to player
     player.handleServerUpdate(updatedState, floor, inputId);
+
+    player.setKills(kills);
+    player.setDeaths(deaths);
+    player.setCaptures(flagCaptures);
+    player.setReturns(flagReturns);
 
     int gunType = 0;
     updatePacket >> gunType;
@@ -279,11 +307,11 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     flagManager->teamAFlag()->setFloor(flagAFloor);
     flagManager->teamBFlag()->setFloor(flagBFloor);
-    
+
     //tell player if a flag is stolen, flag is stolen if its not at base
-    scoreDisplay.setAllyStolen(!flagManager->getFlag(userPlayer.getTeam())->isAtSpawn());
-    
-    scoreDisplay.setEnemyStolen(!flagManager->getFlag(get))
+    scoreDisplay.setEnemyStolen(!flagManager->getFlag(player.getTeam())->isAtSpawn());
+
+    scoreDisplay.setAllyStolen(!flagManager->getFlag(getOpposingTeam(player.getTeam()))->isAtSpawn());
 }
 
 void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlayer> >& players, const sf::Uint32& stateId, sf::Packet& updatePacket) {
@@ -492,18 +520,19 @@ void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const s
     //id the packet
     packet << PLAYER_GUNFIRE;
 
-    const vector<float> playerGunshotRotations = player.getGunshotsToSend();
+    vector<shared_ptr<Bullet> >& bullets = player.getGun()->getBulletsForClients();
 
-    packet << playerGunshotRotations.size();
+    for(auto& bullet : bullets) {
 
-    packet << deltaFraction;
+        sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
+        sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
 
-    packet << lastServerUpdate;
-
-    for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
-
-        packet << playerGunshotRotations[gunshotsCreated];
+        packet << beginPoint.x << beginPoint.y;
+        packet << endPoint.x << endPoint.y;
+        packet << bullet->getFloor();
     }
+
+    bullets.clear();
 }
 
 void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
@@ -513,25 +542,18 @@ void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& las
 
     packet >> packetId;
 
-    //read the number of gunshots fired
-    unsigned gunshots = 0;
+    while(!packet.endOfPacket()) {
 
-    packet >> gunshots;
+        sf::Vector2f beginPoint(0, 0);
+        sf::Vector2f endPoint(0, 0);
+        unsigned floor = 0;
 
-    packet >> deltaFraction;
+        packet >> beginPoint.x >> beginPoint.y;
+        packet >> endPoint.x >> endPoint.y;
+        packet >> floor;
 
-    packet >> lastServerUpdate;
-
-    //create gunshots for this player until there are no more gunshots left to created
-    for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {
-
-        float rotation = 0;
-
-        packet >> rotation;
-
-        player.fireGun(rotation);
-
-        player.setRotation(rotation);
+        player.getGun()->fire(beginPoint, endPoint, floor);
+        player.getGun()->sendLastBulletToClient();
     }
 }
 

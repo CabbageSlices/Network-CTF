@@ -3,6 +3,7 @@
 
 #include "GunTypes.h"
 #include "StaticObject.h"
+#include "GunHandlers.h"
 
 #include <map>
 
@@ -41,6 +42,8 @@ class GunGiver : public StaticObject {
 
         void setPosition(const sf::Vector2f& position);
         virtual void handleCollision(PlayerBase& collidingPlayer);
+
+        void handleRefillAmmo(PlayerBase& collidingPlayer);
 
         void drawMessage(sf::RenderWindow& window) {
 

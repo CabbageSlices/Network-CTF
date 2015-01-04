@@ -48,9 +48,9 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
         lineOfSight[0].texCoords = sf::Vector2f(0, 0);
         lineOfSight[1].texCoords = sf::Vector2f(100, 0);
 
-        lineTexture.loadFromFile("images\texture.png");
+        lineTexture.loadFromFile("images/texture.png");
 
-        texture.loadFromFile("images\character.png");
+        texture.loadFromFile("images/character.png");
         sprite.setTexture(texture);
 
         //default center for sprite based on character image
@@ -282,7 +282,7 @@ float Gun::fire() {
     createBullet(lineOfSight[0].position, bulletEndPoint, floor);
 
     //now queue the rotation so data can be sent to server later
-    queuedRotations.push_back(gunfireAngle);
+    ///queuedRotations.push_back(gunfireAngle);
 
     useAmmo();
 

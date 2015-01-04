@@ -243,10 +243,16 @@ class Gun {
 
         void playReloadSound() {
 
-            if(GLO_PLAY_SOUNDS) {
+            if(GLO_PLAY_SOUNDS && shouldPlaySounds) {
 
                 reloadSound.play();
             }
+        }
+        
+        //adds the last bullet created to the client bullet container so it can be sent to clients later
+        void sendLastBulletToClient() {
+            
+            bulletsForClients.push_back(bullets[bullets.size() - 1]);
         }
 
         virtual GunTypes getGunType();

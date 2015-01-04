@@ -31,3 +31,5 @@ const int VICTORY = 16;
 const int DEFEAT = 17;
 
 const int AT_END_SCREEN = 18;
+
+const int CLIENT_DAMAGE_REPORT = 19;

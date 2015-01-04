@@ -37,4 +37,6 @@ extern const int DEFEAT;
 //packet clients send to server to let the server know that the player is currently in the victory or defeat screen
 extern const int AT_END_SCREEN;
 
+extern const int CLIENT_DAMAGE_REPORT;
+
 #endif // PACKETIDENTIFICATION_H_INCLUDED

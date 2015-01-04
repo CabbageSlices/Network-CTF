@@ -17,7 +17,7 @@ class OnOffButton : public PredrawnButton {
 
     public:
 
-        OnOffButton();
+        OnOffButton(bool on);
         virtual ~OnOffButton() {
 
         }

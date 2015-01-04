@@ -119,7 +119,8 @@ void ScoreDisplay::initMessages() {
 
     allyCapturedFlag.setTexture(messageTexture);
     allyCapturedFlag.setTextureRect(sf::IntRect(1, 33, 382, 31));
-    allyCapturedFlag.setPosition(1024 / 2 - allyCapturedFlag.getGlobalBounds().width / 2, 768 - allyCapturedFlag.getGlobalBounds().height * 3);
+    allyCapturedFlag.setPosition(1024 / 2 - allyCapturedFlag.getGlobalBounds().width / 2,
+                                 scoreSprite.getGlobalBounds().top + scoreSprite.getGlobalBounds().height + allyCapturedFlag.getGlobalBounds().height);
 
     enemyStoleFlag.setTexture(messageTexture);
     enemyStoleFlag.setTextureRect(sf::IntRect(1, 65, 382, 31));
@@ -127,5 +128,6 @@ void ScoreDisplay::initMessages() {
 
     enemyCapturedFlag.setTexture(messageTexture);
     enemyCapturedFlag.setTextureRect(sf::IntRect(1, 97, 382, 31));
-    enemyCapturedFlag.setPosition(1024 / 2 - enemyCapturedFlag.getGlobalBounds().width / 2, 768 - enemyCapturedFlag.getGlobalBounds().height * 2);
+    enemyCapturedFlag.setPosition(1024 / 2 - enemyCapturedFlag.getGlobalBounds().width / 2,
+                                  scoreSprite.getGlobalBounds().top + scoreSprite.getGlobalBounds().height + enemyCapturedFlag.getGlobalBounds().height);
 }

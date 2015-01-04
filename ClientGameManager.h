@@ -28,6 +28,13 @@ class ClientGameManager: public GameManager {
 
         struct BulletDamage{
 
+            BulletDamage(unsigned id, int dmg):
+                playerId(id),
+                damage(dmg)
+                {
+
+                }
+
             unsigned playerId;
             int damage;
         };
@@ -134,6 +141,7 @@ class ClientGameManager: public GameManager {
 
         void sendInputsToServer();
         void sendGunshotsToServer();
+        void sendDamageToServer();
         void handleServerUpdates();
 
         void updateScoreboard(sf::RenderWindow& window);
@@ -143,6 +151,8 @@ class ClientGameManager: public GameManager {
         void updateStatDisplay();
 
         void handleBulletCollision();
+
+        void playerBulletCollision(std::tr1::shared_ptr<Bullet> bullet);
 
         void playerForegroundCollision();
 

@@ -16,10 +16,10 @@ GameManager::GameManager() :
     world(),
     headsUpDisplay(sf::Vector2u(1024, 768)),
     currentWindow(),
-    pointsToWinGame(2),
+    pointsToWinGame(1),
     exitGameLoop(false)
     {
-        world.load("untitled");
+        world.load("level/untitled");
         headsUpDisplay.getMinimap().setLevelSize(sf::Vector2f(3968, 1472));
     }
 
@@ -58,7 +58,7 @@ void GameManager::handleInputs(sf::Event& event, sf::RenderWindow& window) {
         this->handleComponentInputs(event, window);
     }
 
-    this->handleStateEvents();
+    this->handleStateEvents(window);
 }
 
 void GameManager::handleCommonInputs(sf::Event& event, sf::RenderWindow& window) {
@@ -95,11 +95,13 @@ void GameManager::drawWorld(sf::RenderWindow& window) {
 
     window.clear();
 
-    world.drawBackground(window, getFloor());
+    ///world.drawBackground(window, getFloor());
 
-    this->drawComponents(window);
+    ///this->drawComponents(window);
 
-    world.drawForeground(window, getFloor());
+    ///world.drawForeground(window, getFloor());
+
+    ///this->drawForeground(window);
 
     GameManager::drawUI(window);
 
@@ -113,10 +115,7 @@ void GameManager::setupCurrentWindow(sf::RenderWindow& window) {
 }
 
 void GameManager::setup(sf::RenderWindow& window) {
-    
-    //clear scoreboards so they draw the correct scores the next time players are created
-    score.clearScoreboard();
-    
+
     headsUpDisplay.handleScreenResize(window.getSize());
 
     setupCurrentWindow(window);
@@ -140,9 +139,9 @@ void GameManager::drawUI(sf::RenderWindow& window) {
     //all UI is drawn on the defualt window because they don't move along with the camera and always stay on the same spot on the screen
     window.setView(currentWindow);
 
-    headsUpDisplay.draw(window);
+    ///headsUpDisplay.draw(window);
 
-    GameManager::drawMinimap(window);
+    ///GameManager::drawMinimap(window);
 
     //derived class UI
     this->drawUI(window);

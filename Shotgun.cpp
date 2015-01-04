@@ -9,7 +9,7 @@ sf::SoundBuffer Shotgun::fireBuffer;
 sf::SoundBuffer Shotgun::reloadBuffer;
 
 Shotgun::Shotgun() :
-    Gun(15, 450, sf::milliseconds(1000), 18),
+    Gun(15, 325, sf::milliseconds(1000), 22),
     bulletsPerShot(6),
     bulletsFired(0),
     soundTimer(),
@@ -17,7 +17,7 @@ Shotgun::Shotgun() :
     {
         originToLine = sf::Vector2f(43, 2);
 
-        maxCurrentMagazine = 5;
+        maxCurrentMagazine = 2;
         maxTotalMagazine = 12;
         currentMagazine = maxCurrentMagazine;
         totalMagazine = maxTotalMagazine;

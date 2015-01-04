@@ -239,8 +239,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> currentAmmo >> totalAmmo;
 
-    player.getGun()->setCurrentAmmo(currentAmmo);
-    player.getGun()->setTotalAmmo(totalAmmo);
+    ///player.getGun()->setCurrentAmmo(currentAmmo);
+    ///player.getGun()->setTotalAmmo(totalAmmo);
 
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;
@@ -520,18 +520,19 @@ void createGunfirePacket(UserPlayer& player, const float& deltaFraction, const s
     //id the packet
     packet << PLAYER_GUNFIRE;
 
-    const vector<float> playerGunshotRotations = player.getGunshotsToSend();
+    vector<shared_ptr<Bullet> >& bullets = player.getGun()->getBulletsForClients();
 
-    packet << playerGunshotRotations.size();
+    for(auto& bullet : bullets) {
 
-    packet << deltaFraction;
+        sf::Vector2f beginPoint = bullet->getLine()->getStartPoint();
+        sf::Vector2f endPoint = bullet->getLine()->getEndPoint();
 
-    packet << lastServerUpdate;
-
-    for(unsigned gunshotsCreated = 0; gunshotsCreated < playerGunshotRotations.size(); gunshotsCreated++) {
-
-        packet << playerGunshotRotations[gunshotsCreated];
+        packet << beginPoint.x << beginPoint.y;
+        packet << endPoint.x << endPoint.y;
+        packet << bullet->getFloor();
     }
+
+    bullets.clear();
 }
 
 void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& lastServerUpdate, sf::Packet& packet) {
@@ -541,25 +542,18 @@ void readGunfirePacket(UserPlayer& player, float& deltaFraction, sf::Uint32& las
 
     packet >> packetId;
 
-    //read the number of gunshots fired
-    unsigned gunshots = 0;
+    while(!packet.endOfPacket()) {
 
-    packet >> gunshots;
+        sf::Vector2f beginPoint(0, 0);
+        sf::Vector2f endPoint(0, 0);
+        unsigned floor = 0;
 
-    packet >> deltaFraction;
+        packet >> beginPoint.x >> beginPoint.y;
+        packet >> endPoint.x >> endPoint.y;
+        packet >> floor;
 
-    packet >> lastServerUpdate;
-
-    //create gunshots for this player until there are no more gunshots left to created
-    for(unsigned createdShots = 0; createdShots < gunshots; createdShots++) {
-
-        float rotation = 0;
-
-        packet >> rotation;
-
-        player.fireGun(rotation);
-
-        player.setRotation(rotation);
+        player.getGun()->fire(beginPoint, endPoint, floor);
+        player.getGun()->sendLastBulletToClient();
     }
 }
 
