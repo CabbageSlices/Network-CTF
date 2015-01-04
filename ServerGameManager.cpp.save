@@ -695,6 +695,10 @@ void ServerGameManager::handleDamageReport(shared_ptr<ConnectedPlayer> player, s
 
                     player->player.setKills(player->player.getKills() + 1);
                 }
+                
+                //create a bullet from the shooters current position to the position of the player being hit
+                //that way the bullet actually looks like it hit the player
+                player->player.getGun()->fire(sf::Vector2f())
             }
         }
     }
@@ -960,6 +964,7 @@ void ServerGameManager::setup(sf::RenderWindow& window) {
         player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
         player->player.resetStats();
         player->player.resetGun();
+        player->player.setFloor(OVERGROUND_FLOOR);
     }
 
     //reset all scores

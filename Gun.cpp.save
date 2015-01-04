@@ -32,7 +32,7 @@ Gun::Gun(const int& damage, const float& maxDist, const sf::Time& firingDelay, c
     floor(OVERGROUND_FLOOR),
     bulletDamage(damage),
     maxCurrentMagazine(10),
-    maxTotalMagazine(90),
+    maxTotalMagazine(30),
     currentMagazine(maxCurrentMagazine),
     totalMagazine(maxTotalMagazine),
     reloading(false),

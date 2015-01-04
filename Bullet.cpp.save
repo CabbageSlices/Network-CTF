@@ -12,9 +12,9 @@ using std::tr1::shared_ptr;
 
 Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& originFloor, const int& bulletDamage) :
     line(bulletLine),
-    bulletTracer(sf::Vector2f(25, 2)),
+    bulletTracer(sf::Vector2f(20, 2)),
     tracerTravelDistance(0, 0),
-    LIFE_TIME(sf::milliseconds(400)),
+    LIFE_TIME(sf::milliseconds(250)),
     elapsedTime(sf::seconds(0)),
     tracerVelocity(0, 0),
     canCollide(true),
@@ -25,10 +25,10 @@ Bullet::Bullet(std::tr1::shared_ptr<LineSegment> bulletLine, const unsigned& ori
         tracerVelocity.y = (bulletLine->getEndPoint().y - bulletLine->getStartPoint().y) / LIFE_TIME.asSeconds();
 
         //if bullet moves too slow players will see themselves get hit before the bullet reaches them so make sure bullet travels fast enough
-        if(abs(tracerVelocity.x) < 800 || abs(tracerVelocity.y) < 800) {
+        if(abs(tracerVelocity.x) < 1400) {
 
-            tracerVelocity.x *= 1.6;
-            tracerVelocity.y *= 1.6;
+            tracerVelocity.x *= 1.8;
+            tracerVelocity.y *= 1.8;
         }
 
         bulletTracer.setPosition(bulletLine->getStartPoint());

@@ -4,7 +4,7 @@ sf::SoundBuffer Pistol::fireBuffer;
 sf::SoundBuffer Pistol::reloadBuffer;
 
 Pistol::Pistol() :
-    Gun(20, 600, sf::milliseconds(325), 1.5)
+    Gun(20, 500, sf::milliseconds(325), 1.5)
     {
         //load the texture for the ui
         uiTexture.loadFromFile("images/pistolUI.png");

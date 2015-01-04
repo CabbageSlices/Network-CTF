@@ -801,9 +801,6 @@ void ClientGameManager::handleBulletCollision() {
 
         playerBulletCollision(bullet);
 
-        //now prepare to send this bullet to server
-        userPlayer.getGun()->getBulletsForClients().push_back(bullet);
-
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
     }
@@ -852,6 +849,12 @@ void ClientGameManager::playerBulletCollision(shared_ptr<Bullet> bullet) {
         bullet->disableCollision();
 
         damageDealt.push_back(BulletDamage(idNearestPlayer, bullet->getDamage()));
+
+    } else {
+
+        //if the bullet didn't hit a player then send it to the server for drawing because it doesn't matter where its drawn on the server
+        //bullets that collide with a player aren't sent to server and instead the server will create a bullet from the shooter to the person being hit
+        userPlayer.getGun()->getBulletsForClients().push_back(bullet);
     }
 }
 

@@ -695,6 +695,13 @@ void ServerGameManager::handleDamageReport(shared_ptr<ConnectedPlayer> player, s
 
                     player->player.setKills(player->player.getKills() + 1);
                 }
+
+                //create a bullet from the shooters current position to the position of the player being hit
+                //that way the bullet actually looks like it hit the player
+                player->player.getGun()->fire(player->player.getDestinationPosition(), playerToHit->player.getDestinationPosition(), playerToHit->player.getFloor());
+
+                //prepare the last gunfire to send to client
+                player->player.getGun()->sendLastBulletToClient();
             }
         }
     }
