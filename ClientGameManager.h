@@ -24,6 +24,14 @@ class InterpolatingPlayer;
 
 class ClientGameManager: public GameManager {
 
+    public:
+
+        struct BulletDamage{
+
+            unsigned playerId;
+            int damage;
+        };
+
     private:
 
         //the current state of the game world determines what kind of actions are handled
@@ -32,6 +40,9 @@ class ClientGameManager: public GameManager {
             STATE_CONNECTING = 0,
             STATE_PLAYING
         };
+
+        //container of the id of all players that are hit on this update loop and the damage they received
+        std::vector<BulletDamage> damageDealt;
 
         //buttons on the end match screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > endMatchButtons;

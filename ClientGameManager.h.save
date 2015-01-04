@@ -32,6 +32,9 @@ class ClientGameManager: public GameManager {
             STATE_CONNECTING = 0,
             STATE_PLAYING
         };
+        
+        //container of the id of all players that are hit on this update loop and the damage they received
+        std::vector
 
         //buttons on the end match screen
         std::vector<std::tr1::shared_ptr<PredrawnButton> > endMatchButtons;
@@ -141,12 +144,12 @@ class ClientGameManager: public GameManager {
 
         void loadVictoryTexture(sf::Texture& textureToFill) {
 
-            textureToFill.loadFromFile("images\victory.png");
+            textureToFill.loadFromFile("images/victory.png");
         }
 
         void loadDefeatTexture(sf::Texture& textureToFill){
 
-            textureToFill.loadFromFile("images\defeat.png");
+            textureToFill.loadFromFile("images/defeat.png");
         }
 
         //go through all buttons and check if they're touching the mouse that way they darken out when mouse is hovering over them

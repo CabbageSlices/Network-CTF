@@ -131,6 +131,9 @@
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="networkTest.cpp" />
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="soundSettings.cpp" />
 		<Unit filename="soundSettings.h" />
 		<Extensions>

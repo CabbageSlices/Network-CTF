@@ -745,8 +745,8 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
         sf::FloatRect collisionBox = player->player.getCurrentHitbox();
 
         //the collision box has to be centered  at the pastposition because the past position is the center of the player
-        collisionBox.left = pastPosition.x - collisionBox.width / 2;
-        collisionBox.top = pastPosition.y - collisionBox.height / 2;
+        ///collisionBox.left = pastPosition.x - collisionBox.width / 2;
+        ///collisionBox.top = pastPosition.y - collisionBox.height / 2;
 
         //point of collision if there is one
         sf::Vector2f collisionPoint(0, 0);
@@ -765,7 +765,7 @@ void ServerGameManager::handleBulletCollision(shared_ptr<ConnectedPlayer> shooti
     if(nearestPlayer != shootingPlayer) {
 
         //player was hit just make the line smaller and indicate it collided with something
-        nearestPlayer->player.getHit(bullet->getDamage());
+        ///nearestPlayer->player.getHit(bullet->getDamage());
         bullet->setEndPoint(nearestCollisionPoint);
         bullet->disableCollision();
 
@@ -919,6 +919,7 @@ void ServerGameManager::setup(sf::RenderWindow& window) {
     //reset all player's stats as well and reset their guns as well
     for(auto& player : players) {
 
+        player->player.die();
         player->player.respawn(getGameWorld().getSpawnPoint(player->player.getTeam() ));
         player->player.resetStats();
         player->player.resetGun();

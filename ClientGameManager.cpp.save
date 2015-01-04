@@ -41,25 +41,25 @@ void controlsScreen(sf::RenderWindow& window) {
 
     //save the previous window
     sf::Texture background;
-    background.loadFromFile("images\defaultBackscreen.png");
+    background.loadFromFile("images/defaultBackscreen.png");
 
     sf::Sprite previousScreenSprite;
     previousScreenSprite.setTexture(background);
 
     //load the image for the credits
     sf::Texture controlsTexture;
-    controlsTexture.loadFromFile("images\controlsMenu.png");
+    controlsTexture.loadFromFile("images/controlsMenu.png");
 
     sf::Sprite controlsSprite;
     controlsSprite.setTexture(controlsTexture);
 
     //load the buttons
     vector<shared_ptr<PredrawnButton> > buttons;
-    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")));
 
     unsigned backButton = 0;
 
-    placeButtons("images\controlsMenu.png", buttons);
+    placeButtons("images/controlsMenu.png", buttons);
 
     sf::Event event;
 
@@ -142,29 +142,29 @@ ClientGameManager::ClientGameManager() :
         gameBgm.setVolume(20);
         gameBgm.setLoop(true);
 
-        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\continueButton.png")) );
+        endMatchButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/continueButton.png")) );
 
         //it doesn't matter if you place the buttons onto the victory or defeat screen since the buttons have to be in the same position for both
-        placeButtons("images\victory.png", endMatchButtons);
+        placeButtons("images/victory.png", endMatchButtons);
 
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\resumeButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\controlsButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\quitMatchButton.png")) );
-        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\quitButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/resumeButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/controlsButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitMatchButton.png")) );
+        pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/quitButton.png")) );
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
         pausedMenuButtons.push_back(shared_ptr<PredrawnButton>(new OnOffButton() ));
 
-        placeButtons("images\escapeMenu.png", pausedMenuButtons);
+        placeButtons("images/escapeMenu.png", pausedMenuButtons);
 
-        pausedTexture.loadFromFile("images\escapeMenu.png");
+        pausedTexture.loadFromFile("images/escapeMenu.png");
         pausedSprite.setTexture(pausedTexture);
 
-        controlsTexture.loadFromFile("images\controlsMenu.png");
+        controlsTexture.loadFromFile("images/controlsMenu.png");
         controlsSprite.setTexture(controlsTexture);
 
-        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images\backButton.png")) );
+        controlsButtons.push_back(shared_ptr<PredrawnButton>(new PredrawnButton("images/backButton.png")) );
 
-        placeButtons("images\controlsMenu.png", controlsButtons);
+        placeButtons("images/controlsMenu.png", controlsButtons);
 
         winSoundBuffer.loadFromFile("sounds/victory.wav");
         winSound.setBuffer(winSoundBuffer);
@@ -207,7 +207,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     //load the image of the game lobby
     sf::Texture lobbyTexture;
-    lobbyTexture.loadFromFile("images\lobby.png");
+    lobbyTexture.loadFromFile("images/lobby.png");
 
     sf::Sprite lobbySprite;
     lobbySprite.setTexture(lobbyTexture);
@@ -223,7 +223,7 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     //texture for the red and blue boxes
     sf::Texture teamBoxTexture;
-    teamBoxTexture.loadFromFile("images\teamSelect.png");
+    teamBoxTexture.loadFromFile("images/teamSelect.png");
 
     //clips for the red and blue team's colored boxes in the teamboxtexture
     sf::IntRect redClip(0, 0, 255, 41);
@@ -242,13 +242,13 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
     vector<shared_ptr<PredrawnButton> > buttons;
 
-    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images\switchTeams.png")));
-    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images\backButton.png")));
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images/switchTeams.png")));
+    buttons.push_back(shared_ptr<PredrawnButton> (new PredrawnButton("images/backButton.png")));
 
     unsigned switchTeams = 0;
     unsigned backButton = 1;
 
-    placeButtons("images\lobby.png", buttons);
+    placeButtons("images/lobby.png", buttons);
 
     sf::Event event;
 
@@ -380,6 +380,9 @@ void ClientGameManager::gameLobby(sf::RenderWindow& window, sf::Font& font, sf::
 
                 //disable current bgm so that the ingame bgm starts playing
                 lobbyBgm.stop();
+
+                //delete all previously connected players that way they can move to their spawns
+                connectedPlayers.clear();
 
                 //run the game, will go to the game stage but won't start until server sends state update packet
                 runGame(window);
@@ -771,6 +774,58 @@ void ClientGameManager::handleBulletCollision() {
 
         //disable the bullets collisoin since it should no longerb e able to collide
         bullet->disableCollision();
+    }
+}
+
+void ClientGameManager::playerBulletCollision(shared_ptr<Bullet> bullet) {
+
+    //determine the player that was first hit and handle collision with him
+    //default nearest collision is the shooter
+    unsigned idNearestPlayer = userPlayer.getId();
+    sf::Vector2f nearestCollisionPoint = bullet->getLine()->getEndPoint();
+
+    for(auto& player : connectedPlayers) {
+
+        if(player->player.getTeam() == userPlayer->player.getTeam() || !player->isAlive()) {
+
+            continue;
+        }
+
+        //if player and bullet aren't on same floor don't check collision
+        if(player->getFloor() != bullet->getFloor()) {
+
+            continue;
+        }
+
+        sf::FloatRect collisionBox = player->player.getCurrentHitbox();
+
+        //point of collision if there is one
+        sf::Vector2f collisionPoint(0, 0);
+
+        //if there is a collision determine if the player that was shot is the nearest player
+        if(checkCollision(collisionBox, bullet->getLine(), collisionPoint) &&
+            distanceToPoint(bullet->getLine()->getStartPoint(), collisionPoint) < distanceToPoint(bullet->getLine()->getStartPoint(), nearestCollisionPoint)) {
+
+            //this collision point is now the nearest point of collision so this player is the closest
+            nearestPlayer = player;
+            nearestCollisionPoint = collisionPoint;
+        }
+    }
+
+    //now collide with the nearest player if the nearest player is not the shooter
+    if(nearestPlayer != shootingPlayer) {
+
+        //player was hit just make the line smaller and indicate it collided with something
+        ///nearestPlayer->player.getHit(bullet->getDamage());
+        bullet->setEndPoint(nearestCollisionPoint);
+        bullet->disableCollision();
+
+        //if the player being hit died then increase the kill count for the shooter
+        //if the nearest player was hit it means he was alive before getting hit because of previous for loop
+        if(!nearestPlayer->player.isAlive()) {
+
+            shootingPlayer->player.setKills(shootingPlayer->player.getKills() + 1);
+        }
     }
 }
 

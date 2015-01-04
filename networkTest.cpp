@@ -47,8 +47,8 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-    clientTitleScreen(window);
-    ///serverTitleScreen(window);
+    ///clientTitleScreen(window);
+    serverTitleScreen(window);
 
     return 0;
 }
