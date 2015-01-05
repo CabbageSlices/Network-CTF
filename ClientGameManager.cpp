@@ -622,7 +622,7 @@ void ClientGameManager::handleServerUpdates() {
         //respond to the packet depending on the type of packet
         if(packetType == PLAYER_STATE_UPDATE) {
 
-            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, getScoreDisplay(), messageManager);
+            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, getScoreDisplay(), messageManager, pointsToWinGame);
 
 
         } else if(packetType == WORLD_STATE_UPDATE) {

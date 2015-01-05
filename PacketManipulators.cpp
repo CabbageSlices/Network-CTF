@@ -142,7 +142,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, UserPlayer& player,
     dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
-void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager, int scoreToWin) {
 
     sf::Uint32 inputId = 0;
 
@@ -254,7 +254,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     if(flagABase) {
 
         //if a flags at base on server, but not on the client that means the flag was returned to base, so play the score sound which is also the return to base sound
-        if(!flagManager->teamAFlag()->isAtSpawn()) {
+        //but don't play the sound if the game has been won
+        if(!flagManager->teamAFlag()->isAtSpawn() && team_A_Score > scoreToWin && team_B_Score > scoreToWin) {
 
             player.playScoreSound();
         }
@@ -264,7 +265,7 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     if(flagBBase) {
 
-        if(!flagManager->teamBFlag()->isAtSpawn()) {
+        if(!flagManager->teamBFlag()->isAtSpawn() && team_A_Score > scoreToWin && team_B_Score > scoreToWin) {
 
             player.playScoreSound();
         }

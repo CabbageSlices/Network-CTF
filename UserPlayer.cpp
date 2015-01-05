@@ -356,7 +356,8 @@ const float UserPlayer::getVelocity() const {
     //if player is holdign a sniper and aiming then reduce velocity
     float baseVelocity = 225;
 
-    float dampning = gun->getGunType() == SNIPER && gun->isAiming() ? 75 : 0;
+    float dampning = (gun->getGunType() == SNIPER && gun->isAiming())? 75 : 0;
+    dampning += flagBeingHeld.lock() ? 40 : 0;
     return baseVelocity - dampning;
 }
 

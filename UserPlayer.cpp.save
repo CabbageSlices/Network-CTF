@@ -26,9 +26,9 @@ UserPlayer::UserPlayer():
     keystateUpdateTimer(),
     keystateUpdateDelay(sf::milliseconds(60)),
     keystate(),
-    healthRecovered(23),
+    healthRecovered(10),
     regenerationTimer(),
-    regenerationDelay(sf::seconds(3))
+    regenerationDelay(sf::seconds(0.5))
     {
 
     }
@@ -263,6 +263,11 @@ void UserPlayer::regenerateHealth() {
         setHealth(getHealth() + healthRecovered);
         regenerationTimer.restart();
     }
+
+    if(health.isFull()) {
+
+        playRegenAnimation = false;
+    }
 }
 
 void UserPlayer::handleClientInput(Input& clientInput) {
@@ -349,9 +354,10 @@ PlayerBase::DrawingState UserPlayer::getDrawingState() {
 const float UserPlayer::getVelocity() const {
 
     //if player is holdign a sniper and aiming then reduce velocity
-    float baseVelocity = 25;
+    float baseVelocity = 225;
 
-    float dampning = gun->getGunType() == SNIPER && gun->isAiming() ? 75 : 0;
+    float dampning = (gun->getGunType() == SNIPER && gun->isAiming())? 75 : 0;
+    dampning += flagBeingHeld.lock()
     return baseVelocity - dampning;
 }
 

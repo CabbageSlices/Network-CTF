@@ -64,7 +64,7 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, UserPlaye
     =FLAG TEAM A FLOOR NUMBER
     -FLAG TEAM B FLOOR NUMBER
 **/
-void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager);
+void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager, int scoreToWin);
 
 //state update packet contains data about all players connected to server
 /**
