@@ -20,6 +20,13 @@ PlayerBase::PlayerBase():
     redIndicatorTexture(),
     blueIndicatorTexture(),
     flagIndicator(),
+    regenTexture(),
+    regenSprite(),
+    regenClips(),
+    regenFrame(0),
+    regenAnimationTimer(),
+    regenAnimationTime(sf::milliseconds(60)),
+    playRegenAnimation(false),
     playerId(0),
     teamId(1),
     pastHitBox(sf::Vector2f(31, 35)),
@@ -100,6 +107,10 @@ PlayerBase::PlayerBase():
         spawnSprite.setTexture(spawnTexture);
         spawnSprite.setTextureRect(spawnClips[0]);
         spawnSprite.setOrigin(spawnSprite.getGlobalBounds().width / 2, spawnSprite.getGlobalBounds().height / 2);
+
+        regenTexture.loadFromFile("images/regenAnimation.png");
+        regenSprite.setTexture(regenTexture);
+        regenSprite.setOrigin(25, 27);
     }
 
 PlayerBase::~PlayerBase() {
@@ -232,6 +243,8 @@ void PlayerBase::interpolate(const float& deltaFraction) {
     //set the position of the flag indicator now
     //position it over the health as well, so move it up by 10 pixels
     flagIndicator.setPosition(currentHitBox.getPosition().x - 14, currentHitBox.getGlobalBounds().top - flagIndicator.getGlobalBounds().height - 29);
+
+    regenSprite.setPosition(currentHitBox.getPosition());
 }
 
 void PlayerBase::stopInterpolation() {
@@ -242,6 +255,21 @@ void PlayerBase::stopInterpolation() {
 }
 
 void PlayerBase::animate() {
+
+    //animate the regen animation
+    if(regenAnimationTimer.getElapsedTime() > regenAnimationTime) {
+
+        regenAnimationTimer.restart();
+
+        ++regenFrame;
+
+        if(regenFrame >= regenClips.size()) {
+
+            regenFrame = 0;
+        }
+
+        regenSprite.setTextureRect(regenClips[regenFrame]);
+    }
 
     //if the player is running the dying animation then don't handle the animations as normal
     if(getDrawingState() == DYING || getDrawingState() == SPAWNING) {
@@ -336,6 +364,10 @@ void PlayerBase::draw(sf::RenderWindow& window, const unsigned& drawingFloor) {
         }
     }
 
+    if(playRegenAnimation) {
+
+        window.draw(regenSprite);
+    }
 }
 
 void PlayerBase::drawMinimap(sf::RenderWindow& window) {
@@ -608,6 +640,17 @@ void PlayerBase::setupClips() {
 
         spawnClips.push_back(deathClips[i]);
     }
+
+    regenClips.push_back(sf::IntRect(1, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(53, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(105, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(157, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(1, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(53, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(105, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(157, 58, 51, 56));
+
+    regenSprite.setTextureRect(regenClips[0]);
 }
 
 void PlayerBase::setPosition(const sf::Vector2f& position) {

@@ -1245,8 +1245,13 @@ void ClientGameManager::handleCollisions() {
 
     playerForegroundCollision();
 
+    userPlayer.setPlayRegenAnimation(getGameWorld().getSpawnArea(userPlayer.getTeam()).intersects(userPlayer.getCollisionBox()));
+
     //disable gun sounds for any other player thats not in the player screen
+    //handle collision between all palyers and their spawn zones so they can run the regen animation
     for(auto& player : connectedPlayers) {
+
+        player->setPlayRegenAnimation(getGameWorld().getSpawnArea(player->getTeam()).intersects(player->getCollisionBox()));
 
         player->setPlaySounds(player->getCollisionBox().intersects(camera.getCameraBounds()));
 

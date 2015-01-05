@@ -20,6 +20,13 @@ PlayerBase::PlayerBase():
     redIndicatorTexture(),
     blueIndicatorTexture(),
     flagIndicator(),
+    regenTexture(),
+    regenSprite(),
+    regenClips(),
+    regenFrame(0),
+    regenAnimationTimer(),
+    regenAnimationTime(sf::milliseconds(60)),
+    playRegenAnimation(false),
     playerId(0),
     teamId(1),
     pastHitBox(sf::Vector2f(31, 35)),
@@ -77,14 +84,14 @@ PlayerBase::PlayerBase():
         pastHitBox.setFillColor(sf::Color(0, 0, 255, 100));
         destinationHitBox.setFillColor(sf::Color(255, 0, 0, 100));
 
-        playerTexture.loadFromFile("images\character.png");
+        playerTexture.loadFromFile("images/character.png");
         playerSprite.setTexture(playerTexture);
 
         //default center based on image file of the character
         playerSprite.setOrigin(sf::Vector2f(22, 26));
 
-        redIndicatorTexture.loadFromFile("images\redFlagIndicator.png");
-        blueIndicatorTexture.loadFromFile("images\blueFlagIndicator.png");
+        redIndicatorTexture.loadFromFile("images/redFlagIndicator.png");
+        blueIndicatorTexture.loadFromFile("images/blueFlagIndicator.png");
 
         respawnBuffer.loadFromFile("sounds/respawn.wav");
         respawnSound.setBuffer(respawnBuffer);
@@ -95,11 +102,15 @@ PlayerBase::PlayerBase():
         scoreBuffer.loadFromFile("sounds/flagSound.wav");
         scoreSound.setBuffer(scoreBuffer);
 
-        spawnTexture.loadFromFile("images\spawn Animation.png");
+        spawnTexture.loadFromFile("images/spawn Animation.png");
 
         spawnSprite.setTexture(spawnTexture);
         spawnSprite.setTextureRect(spawnClips[0]);
         spawnSprite.setOrigin(spawnSprite.getGlobalBounds().width / 2, spawnSprite.getGlobalBounds().height / 2);
+
+        regenTexture.loadFromFile("images/regenAnimation.png");
+        regenSprite.setTexture(regenTexture);
+        regenSprite.setOrigin(25, 27);
     }
 
 PlayerBase::~PlayerBase() {
@@ -141,6 +152,8 @@ void PlayerBase::setTeam(const unsigned short& team) {
 
         flagIndicator.setTexture(blueIndicatorTexture);
     }
+
+
 
     flagIndicator.setScale(1.20, 1.20);
 
@@ -240,6 +253,14 @@ void PlayerBase::stopInterpolation() {
 }
 
 void PlayerBase::animate() {
+    
+    //animate the regen animation
+    if(regenAnimationTimer.getElapsedTime() > regenAnimationTime) {
+        
+        regenAnimationTimer.restart();
+        
+        frame+
+    }
 
     //if the player is running the dying animation then don't handle the animations as normal
     if(getDrawingState() == DYING || getDrawingState() == SPAWNING) {
@@ -396,6 +417,9 @@ void PlayerBase::respawn(const sf::Vector2f& spawnPosition) {
 
         respawnSound.play();
     }
+
+    gun->refillTotalAmmo();
+    gun->setCurrentAmmo(gun->getMaxCurrentAmmo());
 
     frame = 0;
     animationTimer.restart();
@@ -603,6 +627,17 @@ void PlayerBase::setupClips() {
 
         spawnClips.push_back(deathClips[i]);
     }
+
+    regenClips.push_back(sf::IntRect(1, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(53, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(105, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(157, 1, 51, 56));
+    regenClips.push_back(sf::IntRect(1, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(53, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(105, 58, 51, 56));
+    regenClips.push_back(sf::IntRect(157, 58, 51, 56));
+
+    regenSprite.setTextureRect(regenClips[0]);
 }
 
 void PlayerBase::setPosition(const sf::Vector2f& position) {

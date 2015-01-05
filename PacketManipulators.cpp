@@ -224,12 +224,6 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     ///apply to player
     player.handleServerUpdate(updatedState, floor, inputId);
 
-    if(player.getDeaths() < deaths) {
-
-        //player died so create a message
-        messageManager.createPlayerDied();
-    }
-
     player.setKills(kills);
     player.setDeaths(deaths);
     player.setCaptures(flagCaptures);

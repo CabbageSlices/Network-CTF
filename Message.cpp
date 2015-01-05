@@ -6,8 +6,8 @@ sf::Time Message::lifeTime = sf::seconds(5);
 sf::Texture Message::messages;
 bool Message::loadedTexture = false;
 
-const sf::IntRect Message::allySlainClip(19, 25, 203, 18);
-const sf::IntRect Message::enemySlainClip(17, 7, 244, 18);
+const sf::IntRect Message::allySlainClip(90, 256, 202, 14);
+const sf::IntRect Message::enemySlainClip(84, 224, 218, 14);
 const sf::IntRect Message::playerDiedClip(18, 72, 179, 18);
 const sf::IntRect Message::receivedKillClip(18, 54, 224, 18);
 

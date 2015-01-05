@@ -1,23 +1,237 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="GunGiver.h" open="1" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="StatDisplay.cpp" open="0" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="906" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="Bullet.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1099" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="LineSegment.h" open="0" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4588" topLine="79" />
+		</Cursor>
+	</File>
+	<File name="Message.cpp" open="1" top="1" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="282" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="GameWorld.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="354" topLine="72" />
+		</Cursor>
+	</File>
+	<File name="ConnectionManager.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="540" topLine="9" />
+		</Cursor>
+	</File>
+	<File name="MessageManager.cpp" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="623" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="MessageManager.h" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="629" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Minimap.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="298" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Gun.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8279" topLine="234" />
+		</Cursor>
+	</File>
+	<File name="OnOffButton.cpp" open="0" top="0" tabpos="35" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="293" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="GunGiver.cpp" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3074" topLine="73" />
+		</Cursor>
+	</File>
+	<File name="OnOffButton.h" open="0" top="0" tabpos="34" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="374" topLine="10" />
+		</Cursor>
+	</File>
+	<File name="GunGiver.h" open="0" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1245" topLine="29" />
 		</Cursor>
 	</File>
-	<File name="ServerGameManager.cpp" open="1" top="1" tabpos="8" split="2" active="1" splitpos="631" zoom_1="0" zoom_2="0">
+	<File name="PacketIdentification.cpp" open="0" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="26740" topLine="765" />
-			<Cursor2 position="27854" topLine="789" />
+			<Cursor1 position="978" topLine="1" />
 		</Cursor>
 	</File>
-	<File name="ServerGameManager.h" open="1" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Collision.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1902" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="PacketIdentification.h" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1314" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="PacketManipulators.cpp" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7335" topLine="215" />
+		</Cursor>
+	</File>
+	<File name="UserPlayer.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2399" topLine="20" />
+		</Cursor>
+	</File>
+	<File name="PacketManipulators.h" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3292" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="UserPlayer.h" open="0" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="295" topLine="171" />
+		</Cursor>
+	</File>
+	<File name="Collision.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1926" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="Pistol.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="687" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="HeadsUpDisplay.h" open="0" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="298" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ClientGameManager.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1071" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="Pistol.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="392" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ClientGameManager.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="32802" topLine="1048" />
+		</Cursor>
+	</File>
+	<File name="PlayerBase.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3745" topLine="125" />
+		</Cursor>
+	</File>
+	<File name="FlagManager.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3773" topLine="108" />
+		</Cursor>
+	</File>
+	<File name="networkTest.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1408" topLine="29" />
+		</Cursor>
+	</File>
+	<File name="PlayerBase.h" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3196" topLine="172" />
+		</Cursor>
+	</File>
+	<File name="PredrawnButton.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1744" topLine="29" />
+		</Cursor>
+	</File>
+	<File name="Input.cpp" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1282" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="resource.rc" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="72" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Gun.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="864" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="ScoreDisplay.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4365" topLine="104" />
+		</Cursor>
+	</File>
+	<File name="ScoreDisplay.h" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1354" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="InterpolatingPlayer.cpp" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="95" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Flag.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="658" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="PredrawnButton.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1827" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="Scoreboard.cpp" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="785" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="InterpolatingPlayer.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1622" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="ErrorMessage.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1821" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="ServerGameManager.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="631" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="23118" topLine="671" />
+		</Cursor>
+	</File>
+	<File name="Flag.cpp" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="858" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="ServerGameManager.h" open="0" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="302" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Shotgun.cpp" open="1" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Shotgun.cpp" open="0" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="439" topLine="0" />
 		</Cursor>
@@ -27,14 +241,24 @@
 			<Cursor1 position="1176" topLine="18" />
 		</Cursor>
 	</File>
-	<File name="Sniper.cpp" open="1" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="LevelManager.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="11387" topLine="372" />
+		</Cursor>
+	</File>
+	<File name="Sniper.cpp" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="273" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="HeadsUpDisplay.h" open="0" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="GameManager.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="298" topLine="0" />
+			<Cursor1 position="2330" topLine="97" />
+		</Cursor>
+	</File>
+	<File name="LevelManager.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6254" topLine="122" />
 		</Cursor>
 	</File>
 	<File name="Sniper.h" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -42,214 +266,9 @@
 			<Cursor1 position="1506" topLine="27" />
 		</Cursor>
 	</File>
-	<File name="ConnectionManager.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="540" topLine="9" />
-		</Cursor>
-	</File>
-	<File name="StatDisplay.cpp" open="0" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="906" topLine="17" />
-		</Cursor>
-	</File>
-	<File name="LineSegment.h" open="1" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4588" topLine="79" />
-		</Cursor>
-	</File>
-	<File name="Input.cpp" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1282" topLine="25" />
-		</Cursor>
-	</File>
-	<File name="Minimap.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="298" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="UserPlayer.h" open="1" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="295" topLine="171" />
-		</Cursor>
-	</File>
-	<File name="ClientGameManager.cpp" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4383" topLine="134" />
-		</Cursor>
-	</File>
-	<File name="ErrorMessage.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1821" topLine="27" />
-		</Cursor>
-	</File>
-	<File name="InterpolatingPlayer.cpp" open="1" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="95" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="OnOffButton.cpp" open="1" top="0" tabpos="35" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="293" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="InterpolatingPlayer.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1622" topLine="30" />
-		</Cursor>
-	</File>
-	<File name="OnOffButton.h" open="1" top="0" tabpos="34" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="374" topLine="10" />
-		</Cursor>
-	</File>
-	<File name="Flag.cpp" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="858" topLine="27" />
-		</Cursor>
-	</File>
-	<File name="networkTest.cpp" open="1" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1903" topLine="29" />
-		</Cursor>
-	</File>
-	<File name="Collision.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1902" topLine="33" />
-		</Cursor>
-	</File>
-	<File name="PacketIdentification.cpp" open="1" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="978" topLine="1" />
-		</Cursor>
-	</File>
-	<File name="Flag.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="658" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="resource.rc" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="72" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="PacketIdentification.h" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1314" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="FlagManager.cpp" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3773" topLine="108" />
-		</Cursor>
-	</File>
-	<File name="PacketManipulators.cpp" open="1" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7793" topLine="223" />
-		</Cursor>
-	</File>
-	<File name="PacketManipulators.h" open="1" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="693" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="LevelManager.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="11387" topLine="372" />
-		</Cursor>
-	</File>
-	<File name="Pistol.cpp" open="1" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="394" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="LevelManager.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6254" topLine="122" />
-		</Cursor>
-	</File>
-	<File name="Pistol.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="392" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="PlayerBase.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3745" topLine="125" />
-		</Cursor>
-	</File>
-	<File name="ForegroundObject.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ForegroundObject.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="410" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="UserPlayer.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="536" topLine="5" />
-		</Cursor>
-	</File>
-	<File name="PlayerBase.h" open="1" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="768" topLine="91" />
-		</Cursor>
-	</File>
-	<File name="Collision.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1926" topLine="33" />
-		</Cursor>
-	</File>
-	<File name="GameManager.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2330" topLine="97" />
-		</Cursor>
-	</File>
-	<File name="ClientGameManager.h" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4674" topLine="153" />
-		</Cursor>
-	</File>
-	<File name="PredrawnButton.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1827" topLine="34" />
-		</Cursor>
-	</File>
-	<File name="GameWorld.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="354" topLine="72" />
-		</Cursor>
-	</File>
-	<File name="PredrawnButton.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1744" topLine="29" />
-		</Cursor>
-	</File>
-	<File name="ScoreDisplay.cpp" open="1" top="0" tabpos="29" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4269" topLine="99" />
-		</Cursor>
-	</File>
-	<File name="Gun.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="840" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="ScoreDisplay.h" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1354" topLine="30" />
-		</Cursor>
-	</File>
-	<File name="Gun.h" open="1" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8213" topLine="222" />
-		</Cursor>
-	</File>
-	<File name="Scoreboard.cpp" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="785" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="GunGiver.cpp" open="1" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3074" topLine="73" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

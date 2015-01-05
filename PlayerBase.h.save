@@ -26,7 +26,8 @@ class PlayerBase {
 
             STANDING,
             WALKING,
-            DYING
+            DYING,
+            SPAWNING
         };
 
         //texture for the indicator that is drawn when player is holding a flag
@@ -35,6 +36,20 @@ class PlayerBase {
         sf::Texture blueIndicatorTexture;
 
         sf::Sprite flagIndicator;
+
+        //texture to use when player is healing
+        sf::Texture regenTexture;
+        sf::Sprite regenSprite;
+
+        //clips for each frame of teh regeneration animation
+        std::vector<sf::IntRect> regenClips;
+
+        unsigned regenFrame;
+
+        sf::Clock regenAnimationTimer;
+        sf::Time regenAnimationTime;
+
+        bool playRegenAnimation;
 
         //id of this player, supplied by the server
         int playerId;
@@ -66,6 +81,9 @@ class PlayerBase {
         //connect the player's team to an animation clip
         //key is player team, animation clips for that teams color
         std::map<unsigned short, std::vector<sf::IntRect> > clips;
+
+        bool canPlayDeathAnimation;
+        bool playSpawnAnimation;
 
         //texture, clip, and sprites for the spawn and death animations
         sf::Texture spawnTexture;
@@ -190,6 +208,12 @@ class PlayerBase {
         sf::FloatRect getCollisionBox() const;
 
         sf::FloatRect getDestinationBox() const;
+        
+        void setPlayRegenAnimation(bool shouldPlay) {
+            
+            //regeneration animation plays if player is in the regeneration zone and he has health to regen
+            playRegenAnimation = shouldPlay && health.getCurrentHealth() < health.get
+        }
 
         void move(const sf::Vector2f& offset);
 

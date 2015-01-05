@@ -24,6 +24,11 @@ class HealthBar {
 
         HealthBar(const float barWidth = 100, const float barHeight = 10, float outlineThickness = 0);
 
+        bool isFull() {
+
+            return currentHealth == maxHealth;
+        }
+
         void setCurrentHealth(const int& value);
         const int getCurrentHealth() const;
 

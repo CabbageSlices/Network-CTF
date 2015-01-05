@@ -263,6 +263,11 @@ void UserPlayer::regenerateHealth() {
         setHealth(getHealth() + healthRecovered);
         regenerationTimer.restart();
     }
+
+    if(health.isFull()) {
+
+        playRegenAnimation = false;
+    }
 }
 
 void UserPlayer::handleClientInput(Input& clientInput) {

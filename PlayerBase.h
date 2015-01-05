@@ -37,6 +37,20 @@ class PlayerBase {
 
         sf::Sprite flagIndicator;
 
+        //texture to use when player is healing
+        sf::Texture regenTexture;
+        sf::Sprite regenSprite;
+
+        //clips for each frame of teh regeneration animation
+        std::vector<sf::IntRect> regenClips;
+
+        unsigned regenFrame;
+
+        sf::Clock regenAnimationTimer;
+        sf::Time regenAnimationTime;
+
+        bool playRegenAnimation;
+
         //id of this player, supplied by the server
         int playerId;
 
@@ -194,6 +208,12 @@ class PlayerBase {
         sf::FloatRect getCollisionBox() const;
 
         sf::FloatRect getDestinationBox() const;
+
+        void setPlayRegenAnimation(bool shouldPlay) {
+
+            //regeneration animation plays if player is in the regeneration zone and he has health to regen
+            playRegenAnimation = shouldPlay && !health.isFull() && isAlive();
+        }
 
         void move(const sf::Vector2f& offset);
 
