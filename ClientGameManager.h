@@ -13,6 +13,7 @@
 #include "HeadsUpDisplay.h"
 
 #include "soundSettings.h"
+#include "MessageManager.h"
 
 #include <tr1/memory>
 #include <vector>
@@ -47,6 +48,8 @@ class ClientGameManager: public GameManager {
             STATE_CONNECTING = 0,
             STATE_PLAYING
         };
+
+        MessageManager messageManager;
 
         //container of the id of all players that are hit on this update loop and the damage they received
         std::vector<BulletDamage> damageDealt;

@@ -13,6 +13,7 @@ class InterpolatingPlayer;
 class FlagManager;
 class TeamManager;
 class ScoreDisplay;
+class MessageManager;
 
 //all of these functions are helper functions used to make packet creation and reading easier for the users
 
@@ -63,7 +64,7 @@ void createUpdatePacket(std::tr1::shared_ptr<FlagManager> flagManager, UserPlaye
     =FLAG TEAM A FLOOR NUMBER
     -FLAG TEAM B FLOOR NUMBER
 **/
-void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay);
+void applyPlayerUpdate(std::tr1::shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager);
 
 //state update packet contains data about all players connected to server
 /**
@@ -99,7 +100,7 @@ void createStateUpdate(const std::vector<std::tr1::shared_ptr<ServerGameManager:
 
 //assumes packet id has already beenread from the state packet, ignores any packet that is older thant he stateid given
 //returns true if data was used, false otherwise
-bool applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket);
+bool applyStateUpdate(std::tr1::shared_ptr<FlagManager> flagManager, std::vector<std::tr1::shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket, MessageManager& messageManager);
 
 //player firing data
 /**

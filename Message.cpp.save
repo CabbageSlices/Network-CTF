@@ -1,0 +1,28 @@
+#include "Message.h"
+
+using std::string;
+
+static sf::Time lifeTime = sf::seconds(5);
+static sf::Texture messages;
+static bool loadedTexture = false;
+
+const sf::IntRect allySlainClip(0, 0, 10, 10);
+co sf::IntRect enemySlainClip(0, 0, 10, 10);
+static sf::IntRect playerDiedClip(0, 0, 10, 10);
+static sf::IntRect receivedKillClip(0, 0, 10, 10);
+
+Message::Message():
+    sprite(),
+    timer()
+    {
+        //load statics if they haven't been loaded
+        if(!loadedTexture) {
+
+            messages.loadFromFile("messages.png");
+            loadedTexture = true;
+        }
+
+        text.setFont(font);
+        text.setString(str);
+        text.setScale(scale, scale);
+    }

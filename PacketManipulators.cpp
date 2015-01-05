@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include "Bullet.h"
+#include "MessageManager.h"
 #include "LineSegment.h"
 
 using std::cout;
@@ -141,7 +142,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, UserPlayer& player,
     dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
-void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager) {
 
     sf::Uint32 inputId = 0;
 
@@ -222,6 +223,12 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     ///apply to player
     player.handleServerUpdate(updatedState, floor, inputId);
+
+    if(player.getDeaths() < deaths) {
+
+        //player died so create a message
+        messageManager.createPlayerDied();
+    }
 
     player.setKills(kills);
     player.setDeaths(deaths);
@@ -362,7 +369,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     }
 }
 
-bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
+bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket, MessageManager& messageManager) {
 
     sf::Uint32 packetStateId = 0;
 
@@ -487,6 +494,19 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         if(respawned) {
 
             updatedPlayer->respawn(playerPosition);
+        }
+
+        if(updatedPlayer->getDeaths() < deaths) {
+
+            //player died so determine what team he was on in order to display the appropriate message
+            if(teamId == userPlayer.getTeam()) {
+
+                messageManager.createAllySlain();
+
+            } else {
+
+                messageManager.createEnemySlain();
+            }
         }
 
         updatedPlayer->setId(playerId);

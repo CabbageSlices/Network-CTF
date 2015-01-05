@@ -88,6 +88,10 @@
 		<Unit filename="LevelManager.h" />
 		<Unit filename="LineSegment.cpp" />
 		<Unit filename="LineSegment.h" />
+		<Unit filename="Message.cpp" />
+		<Unit filename="Message.h" />
+		<Unit filename="MessageManager.cpp" />
+		<Unit filename="MessageManager.h" />
 		<Unit filename="Minimap.cpp" />
 		<Unit filename="Minimap.h" />
 		<Unit filename="OnOffButton.cpp" />

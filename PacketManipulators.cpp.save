@@ -141,7 +141,7 @@ void createUpdatePacket(shared_ptr<FlagManager> flagManager, UserPlayer& player,
     dataDestination << flagManager->teamBFlag()->getFloor();
 }
 
-void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay) {
+void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, sf::Packet& updatePacket, ScoreDisplay& scoreDisplay, MessageManager& messageManager) {
 
     sf::Uint32 inputId = 0;
 
@@ -223,6 +223,18 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
     ///apply to player
     player.handleServerUpdate(updatedState, floor, inputId);
 
+    if(player.getKills() < kills) {
+
+        //player has killed someone so create a message
+        messageManager.createPlayerReceivedKill();
+    }
+
+    if(player.getDeaths() < deaths) {
+
+        //player died so create a message
+        messageManager.createPlayerDied();
+    }
+
     player.setKills(kills);
     player.setDeaths(deaths);
     player.setCaptures(flagCaptures);
@@ -239,8 +251,8 @@ void applyPlayerUpdate(shared_ptr<FlagManager> flagManager, UserPlayer& player, 
 
     updatePacket >> currentAmmo >> totalAmmo;
 
-    player.getGun()->setCurrentAmmo(currentAmmo);
-    player.getGun()->setTotalAmmo(totalAmmo);
+    ///player.getGun()->setCurrentAmmo(currentAmmo);
+    ///player.getGun()->setTotalAmmo(totalAmmo);
 
     //whether any team flags should be returned to base or dropped
     bool flagABase = false;
@@ -362,7 +374,7 @@ void createStateUpdate(const vector<shared_ptr<ServerGameManager::ConnectedPlaye
     }
 }
 
-bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket) {
+bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<InterpolatingPlayer> >& players, UserPlayer& userPlayer, sf::Uint32& stateId, sf::Packet& statePacket, MessageManager& messageManager) {
 
     sf::Uint32 packetStateId = 0;
 
@@ -487,6 +499,15 @@ bool applyStateUpdate(shared_ptr<FlagManager> flagManager, vector<shared_ptr<Int
         if(respawned) {
 
             updatedPlayer->respawn(playerPosition);
+        }
+        
+        if(updatedPlayer->getDeaths() < deaths) {
+            
+            //player died so determine what team he was on in order to display the appropriate message
+            if(teamId == userPlayer.getTeam()) {
+                
+                message
+            }
         }
 
         updatedPlayer->setId(playerId);

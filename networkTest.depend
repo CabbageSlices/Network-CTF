@@ -972,7 +972,7 @@
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 
-1420401317 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\bullet.cpp
+1420401703 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\bullet.cpp
 	"Bullet.h"
 	"LineSegment.h"
 	"math.h"
@@ -1034,7 +1034,7 @@
 
 1420336920 c:\users\nimesh\documents\github\network-ctf\network-ctf\packetidentification.h
 
-1419121158 c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.h
+1420415387 c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.h
 	"SFML/Network.hpp"
 	"ServerGameManager.h"
 	<vector>
@@ -1147,7 +1147,7 @@
 	<map>
 	"SFML/Graphics.hpp"
 
-1420398861 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
+1420416456 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.cpp
 	"ClientGameManager.h"
 	"PacketManipulators.h"
 	"PacketIdentification.h"
@@ -1169,7 +1169,7 @@
 	"ButtonPlacer.h"
 	"OnOffButton.h"
 
-1420337088 c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.h
+1420415321 c:\users\nimesh\documents\github\network-ctf\network-ctf\clientgamemanager.h
 	"SFML/System.hpp"
 	"SFML/Graphics.hpp"
 	"SFML/Audio.hpp"
@@ -1180,6 +1180,7 @@
 	"Scoreboard.h"
 	"HeadsUpDisplay.h"
 	"soundSettings.h"
+	"MessageManager.h"
 	<tr1/memory>
 	<vector>
 	<string>
@@ -1457,7 +1458,7 @@
 1420336920 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetidentification.cpp
 	"PacketIdentification.h"
 
-1420339300 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.cpp
+1420416568 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\packetmanipulators.cpp
 	"PacketManipulators.h"
 	"PacketIdentification.h"
 	"UserPlayer.h"
@@ -1471,6 +1472,7 @@
 	<string>
 	<iostream>
 	"Bullet.h"
+	"MessageManager.h"
 	"LineSegment.h"
 
 1420401608 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\pistol.cpp
@@ -1489,7 +1491,7 @@
 	"Scoreboard.h"
 	"PlayerBase.h"
 
-1420339061 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
+1420412514 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\scoredisplay.cpp
 	"ScoreDisplay.h"
 	"Conversion.h"
 
@@ -1578,4 +1580,21 @@
 	"soundSettings.h"
 
 1420316842 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\resource.rc
+
+1420416491 c:\users\nimesh\documents\github\network-ctf\network-ctf\messagemanager.h
+	"SFML/System.hpp"
+	"SFML/Graphics.hpp"
+	"Message.h"
+	<vector>
+
+1420413726 c:\users\nimesh\documents\github\network-ctf\network-ctf\message.h
+	"SFML/Graphics.hpp"
+	"SFML/System.hpp"
+	<string>
+
+1420416513 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\message.cpp
+	"Message.h"
+
+1420416536 source:c:\users\nimesh\documents\github\network-ctf\network-ctf\messagemanager.cpp
+	"MessageManager.h"
 

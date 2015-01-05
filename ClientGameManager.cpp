@@ -107,6 +107,7 @@ void controlsScreen(sf::RenderWindow& window) {
 
 ClientGameManager::ClientGameManager() :
     GameManager(),
+    messageManager(),
     damageDealt(),
     endMatchButtons(),
     pausedMenuButtons(),
@@ -621,12 +622,12 @@ void ClientGameManager::handleServerUpdates() {
         //respond to the packet depending on the type of packet
         if(packetType == PLAYER_STATE_UPDATE) {
 
-            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, getScoreDisplay());
+            applyPlayerUpdate(getFlagManager(), userPlayer, downloadedData, getScoreDisplay(), messageManager);
 
 
         } else if(packetType == WORLD_STATE_UPDATE) {
 
-            if(applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData)) {
+            if(applyStateUpdate(getFlagManager(), connectedPlayers, userPlayer, lastStateUpdateId, downloadedData, messageManager)) {
 
                 serverUpdateTime = stateUpdateTimer.restart();
 
@@ -1054,6 +1055,8 @@ void ClientGameManager::updateComponents(sf::RenderWindow& window) {
 
     updateStatDisplay();
 
+    messageManager.updateMessageList();
+
     //don't handle bullet collision once match is over
     if(matchEnded) {
 
@@ -1182,6 +1185,8 @@ void ClientGameManager::drawUI(sf::RenderWindow& window) {
             button->draw(window);
         }
     }
+
+    messageManager.drawMessages(window);
 
     //draw any messages the gun givers have
     getGameWorld().drawGunGiverMessages(window);

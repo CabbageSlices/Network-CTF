@@ -1,0 +1,29 @@
+#include "MessageManager.h"
+
+using std::vector;
+
+void MessageManager::updateMessageList() {
+
+    //get rid of any inactive message
+    for(unsigned id = 0; id < messages.size();) {
+
+        if(!messages[id].isActive()) {
+
+            messages.erase(messages.begin() + id);
+            continue;
+        }
+
+        //this message is active so position
+        messages[id].setPosition(initialPosition.x, initialPosition.y - messageHeight * id);
+
+        ++id;
+    }
+}
+
+void MessageManager::drawMessages(sf::RenderWindow& window) {
+
+    for(auto& message : messages) {
+
+        message.draw(window);
+    }
+}
