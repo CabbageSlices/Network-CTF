@@ -41,7 +41,7 @@ int main() {
 
     //load an icon for the window
     sf::Image iconImg;
-    iconImg.loadFromFile("images/ICON.png");
+    iconImg.loadFromFile("images/CLIENTICON.png");
 
     window.setIcon(iconImg.getSize().x, iconImg.getSize().y, iconImg.getPixelsPtr());
 
